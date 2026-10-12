@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffb2ba","on-secondary":"#47272d","on-primary-fixed-variant":"#871d35","secondary-container":"#633f45","primary-fixed":"#ffd9dc","secondary-fixed-dim":"#ebbac1","tertiary":"#d3c2c5","on-error-container":"#ffdad6","background":"#171213","on-surface":"#eae0e1","on-surface-variant":"#ddbfc1","outline":"#a58a8c","surface-dim":"#171213","on-primary-container":"#ffbec4","surface-container-highest":"#393334","surface-tint":"#ffb2ba","surface-container":"#231e1f","secondary":"#ebbac1","on-primary-fixed":"#400011","on-background":"#eae0e1","surface-bright":"#3d3839","surface-container-high":"#2e292a","inverse-on-surface":"#342f30","tertiary-container":"#615557","on-error":"#690005","on-secondary-container":"#dcacb3","error":"#ffb4ab","surface-container-low":"#1f1a1b","tertiary-fixed-dim":"#d3c2c5","on-secondary-fixed-variant":"#603d43","secondary-fixed":"#ffd9de","surface-container-lowest":"#110d0e","error-container":"#93000a","on-tertiary":"#382e30","tertiary-fixed":"#f0dee1","surface-variant":"#393334","outline-variant":"#564143","inverse-surface":"#eae0e1","surface":"#171213","inverse-primary":"#a6354b","on-secondary-fixed":"#2f1319","on-tertiary-fixed-variant":"#4f4446","primary-fixed-dim":"#ffb2ba","on-primary":"#670020","on-tertiary-container":"#dccacd","primary-container":"#9e2f45","on-tertiary-fixed":"#22191b"},borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},spacing:{"gutter":"1.5rem","margin-mobile":"1rem","margin-tablet":"2rem","margin":"3rem","space-xl":"2.5rem","space-sm":"0.5rem","space-xs":"0.25rem","space-md":"1rem","space-lg":"1.5rem","gutter-mobile":"0.75rem"},fontFamily:{"headline-xl-mobile":["Instrument Serif"],"code-xs":["JetBrains Mono"],"body-lg":["Instrument Sans"],"body-sm":["Instrument Sans"],"code-sm":["JetBrains Mono"],"headline-lg-mobile":["Instrument Serif"],"kpi-metric":["Instrument Serif"],"headline-lg":["Instrument Serif"],"label-md":["Instrument Sans"],"label-sm":["Instrument Sans"],"headline-xl":["Instrument Serif"],"headline-md":["Instrument Serif"],"body-md":["Instrument Sans"],"headline-sm":["Instrument Serif"]},fontSize:{"headline-xl-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.01em","fontWeight":"400"}],"code-xs":["10px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"500"}],"body-lg":["17px",{"lineHeight":"26px","fontWeight":"400"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"code-sm":["12px",{"lineHeight":"18px","letterSpacing":"-0.01em","fontWeight":"400"}],"headline-lg-mobile":["28px",{"lineHeight":"36px","letterSpacing":"0em","fontWeight":"400"}],"kpi-metric":["64px",{"lineHeight":"64px","letterSpacing":"-0.03em","fontWeight":"400"}],"headline-lg":["40px",{"lineHeight":"48px","letterSpacing":"-0.015em","fontWeight":"400"}],"label-md":["13px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-xl":["56px",{"lineHeight":"64px","letterSpacing":"-0.02em","fontWeight":"400"}],"headline-md":["28px",{"lineHeight":"36px","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"22px","fontWeight":"400"}],"headline-sm":["22px",{"lineHeight":"28px","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex flex-col justify-between py-6 px-4 shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col gap-6"><div class="px-3 flex items-center justify-between"><span class="font-headline-md text-headline-md text-on-surface tracking-tight">Sigilla</span><span class="font-code-xs text-code-xs text-outline uppercase tracking-widest">Atelier</span></div><div class="mx-2 px-3 py-2.5 rounded bg-surface-container flex items-center justify-between hover:bg-surface-container-high transition-colors cursor-pointer"><div class="flex items-center gap-2.5"><div class="w-2 h-2 rounded-full bg-primary"></div><div class="flex flex-col"><span class="font-label-md text-label-md text-on-surface leading-tight">Maison Démo</span><span class="font-code-xs text-code-xs text-outline">Organization</span></div></div><span class="material-symbols-outlined text-on-surface-variant text-[18px]">unfold_more</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary-container font-medium"><a class="flex items-center justify-between px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="agents" href="#"><div class="flex items-center gap-3"><span class="material-symbols-outlined text-[20px]">smart_toy</span><span class="font-label-md text-label-md">Agents</span></div></a><a class="flex items-center justify-between px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="conversations" href="#"><div class="flex items-center gap-3"><span class="material-symbols-outlined text-[20px]">forum</span><span class="font-label-md text-label-md">Conversations</span></div><span class="bg-secondary-container text-on-secondary-container font-code-xs text-code-xs px-2 py-0.5 rounded-full">2</span></a><a class="flex items-center justify-between px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="analytics" href="#"><div class="flex items-center gap-3"><span class="material-symbols-outlined text-[20px]">query_stats</span><span class="font-label-md text-label-md">Analytics</span></div></a><a aria-current="page" class="flex items-center justify-between px-3 py-2.5 rounded transition-colors bg-primary-container text-on-primary-container font-medium" data-path="settings" href="#"><div class="flex items-center gap-3"><span class="material-symbols-outlined text-[20px]">tune</span><span class="font-label-md text-label-md">Settings</span></div></a></nav></div><div class="px-2 pt-4 bg-surface-container-lowest flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col"><span class="font-label-md text-label-md text-on-surface leading-snug">Directeur</span><span class="font-code-xs text-code-xs text-outline">Private Client</span></div></div><span class="bg-primary-container text-on-primary-container font-code-xs text-code-xs px-2 py-0.5 rounded uppercase font-semibold tracking-wider">PRO</span></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-8"><div class="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant"><a class="hover:text-on-surface transition-colors" data-path="agents" href="#">Agents</a><span class="text-outline">/</span><span class="text-on-surface font-body-sm">Atelier Lune — Concierge</span><span class="text-outline">/</span><span class="text-primary font-medium font-body-sm">Settings</span></div><div class="flex items-center gap-4"><button class="w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[20px]">search</span></button><button class="w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="relative pt-16 bg-surface w-full min-h-screen px-8"><div class="flex flex-col w-full pb-16">
+<!-- Header Area -->
+<header class="flex flex-col gap-2 pt-6 pb-8 max-w-5xl">
+<div class="flex items-center gap-3">
+<span class="font-code-xs text-code-xs text-primary uppercase tracking-widest bg-primary-container/30 px-2.5 py-1 rounded">Maison Workspace Configuration</span>
+<span class="font-code-xs text-code-xs text-outline">v2.4.9</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Settings</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+      Manage your maison credentials, collaborative members, and security covenants for conversational concierge governance.
+    </p>
+</header>
+<!-- Horizontal Settings Navigation Tabs -->
+<div class="w-full max-w-5xl mb-10 overflow-x-auto scrollbar-none">
+<div class="flex items-center gap-8 min-w-max">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors pb-3" href="#">Profile</a>
+<a class="font-label-md text-label-md text-primary font-semibold pb-3 relative" href="#">
+        Organization &amp; members
+        <span class="absolute bottom-0 left-0 right-0 h-[2px] bg-primary rounded-full"></span>
+</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors pb-3" href="#">Billing</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors pb-3" href="#">API keys</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors pb-3" href="#">Integrations</a>
+</div>
+</div>
+<!-- Main Settings Column (~1000px) -->
+<div class="flex flex-col gap-10 w-full max-w-5xl">
+<!-- 1. ORGANIZATION PROFILE SECTION -->
+<section class="bg-surface-container rounded-lg p-7 flex flex-col gap-6 shadow-[0_12px_32px_rgba(0,0,0,0.35)] relative overflow-hidden">
+<!-- Background subtle decorative gradient glow -->
+<div class="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-primary/5 blur-3xl pointer-events-none"></div>
+<div class="flex items-start justify-between">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Maison Identity</h2>
+<span class="font-code-xs text-code-xs text-primary bg-surface-container-high px-2 py-0.5 rounded">sys_org_884a</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">The legal atelier entity and sovereign public subdomain endpoints.</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-[20px]">corporate_fare</span>
+</div>
+</div>
+<!-- Form Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+<!-- Field 1 -->
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Organization Name</label>
+<div class="bg-surface-container-low px-3.5 py-2.5 rounded flex items-center justify-between focus-within:ring-1 focus-within:ring-primary transition-all">
+<input class="bg-transparent font-body-md text-body-md text-on-surface focus:outline-none w-full" type="text" value="Maison Démo"/>
+<span class="material-symbols-outlined text-outline text-[18px]">verified</span>
+</div>
+</div>
+<!-- Field 2 -->
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Workspace Domain</label>
+<div class="bg-surface-container-low px-3.5 py-2.5 rounded flex items-center gap-2 focus-within:ring-1 focus-within:ring-primary transition-all">
+<span class="font-code-xs text-code-xs text-outline select-none">https://</span>
+<input class="bg-transparent font-code-sm text-code-sm text-on-surface focus:outline-none w-full" type="text" value="maison-demo.sigilla.app"/>
+</div>
+</div>
+<!-- Field 3 -->
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Primary Atelier Contact</label>
+<div class="bg-surface-container-low px-3.5 py-2.5 rounded flex items-center justify-between focus-within:ring-1 focus-within:ring-primary transition-all">
+<input class="bg-transparent font-body-md text-body-md text-on-surface focus:outline-none w-full" type="email" value="directeur@maison.fr"/>
+<span class="material-symbols-outlined text-outline text-[18px]">mail</span>
+</div>
+</div>
+</div>
+<!-- Action Row -->
+<div class="flex items-center justify-between pt-3">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#6FBF8E]"></span>
+<span class="font-code-xs text-code-xs text-outline">Metadata synchronised with Paris Primary Node</span>
+</div>
+<button class="px-5 py-2.5 rounded bg-surface-container-high hover:bg-surface-bright text-on-surface font-label-md text-label-md transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">save</span>
+          Save changes
+        </button>
+</div>
+</section>
+<!-- 2. MEMBERS & ACCESS SECTION -->
+<section class="bg-surface-container rounded-lg p-7 flex flex-col gap-6 shadow-[0_12px_32px_rgba(0,0,0,0.35)]">
+<!-- Section Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Members &amp; Permissions</h2>
+<span class="font-code-xs text-code-xs text-on-secondary-container bg-secondary-container px-2 py-0.5 rounded">3 of 5 seats filled</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Manage curators, private client liaisons, and concierge administrators.</p>
+</div>
+<!-- Bordeaux Fill Primary Button -->
+<button class="px-4 py-2.5 rounded bg-[#9E2F45] hover:bg-[#872538] text-[#F3ECE6] font-label-md text-label-md transition-colors flex items-center gap-2 shadow-sm self-start sm:self-auto cursor-pointer" id="toggle-invite-btn">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+          + Invite member
+        </button>
+</div>
+<!-- INLINE INVITE CARD (Open State) -->
+<div class="bg-surface-container-high rounded p-5 flex flex-col gap-4" id="invite-panel">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-[18px]">link</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">Invite collaborator by link</span>
+</div>
+<span class="font-code-xs text-code-xs text-outline">Expires in 7 days • Single-tenant token</span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
+<!-- Token Input -->
+<div class="lg:col-span-7 bg-surface-container-lowest px-3.5 py-2.5 rounded flex items-center justify-between overflow-hidden">
+<span class="font-code-sm text-code-sm text-primary select-all truncate">https://sigilla.app/join/maison-demo?token=sig_inv_88291f</span>
+<span class="material-symbols-outlined text-outline text-[16px] ml-2 shrink-0">key</span>
+</div>
+<!-- Role Dropdown -->
+<div class="lg:col-span-3 bg-surface-container-lowest px-3.5 py-2.5 rounded flex items-center justify-between cursor-pointer">
+<div class="flex flex-col">
+<span class="font-code-xs text-code-xs text-outline">Assignable Role</span>
+<span class="font-label-md text-label-md text-on-surface">Concierge Curator</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]">expand_more</span>
+</div>
+<!-- Action Button -->
+<div class="lg:col-span-2 flex">
+<button class="w-full py-2.5 px-3 bg-surface-container hover:bg-surface-bright text-on-surface font-label-md text-label-md rounded flex items-center justify-center gap-2 transition-all" id="copy-btn">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+<span id="copy-text">Copy link</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-2 text-outline">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+<span class="font-body-sm text-body-sm">Curators can view VIP telemetry, adjust conversational tone, but cannot delete audit ledgers.</span>
+</div>
+</div>
+<!-- MEMBERS TABLE -->
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="text-outline font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-3 px-4 font-semibold">Member</th>
+<th class="py-3 px-4 font-semibold">Role</th>
+<th class="py-3 px-4 font-semibold">Last active</th>
+<th class="py-3 px-4 font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high/40">
+<!-- Row 1: Owner -->
+<tr class="hover:bg-surface-container-high/40 transition-colors">
+<td class="py-4 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-on-primary font-label-md text-label-md font-semibold">
+                    D
+                  </div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-medium leading-snug">Directeur</span>
+<span class="font-code-xs text-code-xs text-outline">directeur@maison.fr</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface font-code-xs text-code-xs font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                  Owner
+                </span>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#6FBF8E]"></span>
+<span class="font-body-sm text-body-sm text-on-surface">Active now</span>
+</div>
+</td>
+<td class="py-4 px-4 text-right">
+<span class="font-code-sm text-code-sm text-outline select-none" title="Primary owner cannot be removed">—</span>
+</td>
+</tr>
+<!-- Row 2: Admin -->
+<tr class="hover:bg-surface-container-high/40 transition-colors">
+<td class="py-4 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-label-md text-label-md font-semibold">
+                    C
+                  </div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-medium leading-snug">Camille Vaneau</span>
+<span class="font-code-xs text-code-xs text-outline">camille@atelierlune.com</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="inline-flex items-center gap-2 bg-surface-container-high px-2.5 py-1 rounded cursor-pointer hover:bg-surface-bright transition-colors">
+<span class="font-code-xs text-code-xs text-on-surface">Admin</span>
+<span class="material-symbols-outlined text-[14px] text-outline">unfold_more</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="font-body-sm text-body-sm text-on-surface-variant font-code-sm">12m ago</span>
+</td>
+<td class="py-4 px-4 text-right">
+<div class="inline-flex items-center gap-2">
+<button class="px-2.5 py-1 text-on-surface-variant hover:text-error font-body-sm text-body-sm transition-colors rounded hover:bg-surface-container-high">
+                    Revoke
+                  </button>
+<button class="w-7 h-7 flex items-center justify-center rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Member -->
+<tr class="hover:bg-surface-container-high/40 transition-colors">
+<td class="py-4 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container font-label-md text-label-md font-semibold">
+                    J
+                  </div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-medium leading-snug">Julien Marc</span>
+<span class="font-code-xs text-code-xs text-outline">julien@atelierlune.com</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="inline-flex items-center gap-2 bg-surface-container-high px-2.5 py-1 rounded cursor-pointer hover:bg-surface-bright transition-colors">
+<span class="font-code-xs text-code-xs text-on-surface">Member</span>
+<span class="material-symbols-outlined text-[14px] text-outline">unfold_more</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="font-body-sm text-body-sm text-on-surface-variant font-code-sm">Yesterday</span>
+</td>
+<td class="py-4 px-4 text-right">
+<div class="inline-flex items-center gap-2">
+<button class="px-2.5 py-1 text-on-surface-variant hover:text-error font-body-sm text-body-sm transition-colors rounded hover:bg-surface-container-high">
+                    Revoke
+                  </button>
+<button class="w-7 h-7 flex items-center justify-center rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- 3. SECURITY & DOMAIN ENCLAVE -->
+<section class="bg-surface-container rounded-lg p-7 flex flex-col gap-6 shadow-[0_12px_32px_rgba(0,0,0,0.35)]">
+<div class="flex items-start justify-between">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Security &amp; Domain Enclave</h2>
+<span class="font-code-xs text-code-xs text-primary bg-primary-container/20 px-2 py-0.5 rounded">Compliance Ready</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Strict enclave authentication and forensic audit guarantees.</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+<!-- SSO Enforcement Tile -->
+<div class="bg-surface-container-low p-5 rounded flex flex-col justify-between gap-4">
+<div class="flex items-start justify-between gap-4">
+<div class="flex flex-col gap-1">
+<span class="font-label-md text-label-md text-on-surface font-medium">Require Google Workspace SSO</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Enforce SAML 2.0 federation for all collaborators under @maison.fr domains.</p>
+</div>
+<!-- Custom Accessible Toggle -->
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" id="sso-toggle" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-surface after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+<div class="flex items-center gap-2 pt-2 text-outline">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+<span class="font-code-xs text-code-xs">Enforced • 2-Factor Mandatory</span>
+</div>
+</div>
+<!-- Audit Log Export Tile -->
+<div class="bg-surface-container-low p-5 rounded flex flex-col justify-between gap-4">
+<div class="flex items-start justify-between gap-4">
+<div class="flex flex-col gap-1">
+<span class="font-label-md text-label-md text-on-surface font-medium">Cryptographic Audit Ledger</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Immutable ledger logs documenting all permission mutations and VIP room access.</p>
+</div>
+<span class="material-symbols-outlined text-outline text-[22px]">history_edu</span>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="font-code-xs text-code-xs text-outline">Format: JSON / CSV • SHA-256</span>
+<button class="px-3.5 py-1.5 bg-surface-container hover:bg-surface-bright text-on-surface font-label-md text-label-md rounded flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[16px]">download</span>
+              Export audit log
+            </button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+<script>
+  // Simple interaction for copying invite link
+  const copyBtn = document.getElementById('copy-btn');
+  const copyText = document.getElementById('copy-text');
+  if (copyBtn && copyText) {
+    copyBtn.addEventListener('click', () => {
+      const inviteUrl = "https://sigilla.app/join/maison-demo?token=sig_inv_88291f";
+      navigator.clipboard?.writeText(inviteUrl).then(() => {
+        copyText.textContent = "Copied!";
+        copyBtn.classList.add('bg-primary', 'text-on-primary');
+        setTimeout(() => {
+          copyText.textContent = "Copy link";
+          copyBtn.classList.remove('bg-primary', 'text-on-primary');
+        }, 2000);
+      }).catch(() => {
+        copyText.textContent = "Copied!";
+        setTimeout(() => { copyText.textContent = "Copy link"; }, 2000);
+      });
+    });
+  }
+
+  // Toggle invite panel visibility
+  const toggleBtn = document.getElementById('toggle-invite-btn');
+  const invitePanel = document.getElementById('invite-panel');
+  if (toggleBtn && invitePanel) {
+    toggleBtn.addEventListener('click', () => {
+      invitePanel.classList.toggle('hidden');
+    });
+  }
+</script></main></div></body></html>

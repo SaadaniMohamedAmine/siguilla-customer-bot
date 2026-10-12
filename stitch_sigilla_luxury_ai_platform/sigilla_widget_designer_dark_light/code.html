@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-tertiary": "#382e30", "tertiary-fixed": "#f0dee1", "tertiary": "#d3c2c5", "inverse-on-surface": "#342f30", "secondary-fixed-dim": "#ebbac1", "on-primary": "#670020", "inverse-surface": "#eae0e1", "primary": "#ffb2ba", "on-secondary": "#47272d", "on-secondary-container": "#dcacb3", "on-surface": "#eae0e1", "on-surface-variant": "#ddbfc1", "primary-fixed-dim": "#ffb2ba", "outline": "#a58a8c", "on-background": "#eae0e1", "surface-container-low": "#1f1a1b", "on-tertiary-fixed": "#22191b", "surface-container-highest": "#393334", "on-primary-fixed-variant": "#871d35", "inverse-primary": "#a6354b", "surface": "#171213", "on-secondary-fixed-variant": "#603d43", "secondary-fixed": "#ffd9de", "on-secondary-fixed": "#2f1319", "tertiary-container": "#615557", "error": "#ffb4ab", "secondary-container": "#633f45", "surface-dim": "#171213", "on-primary-container": "#ffbec4", "background": "#171213", "tertiary-fixed-dim": "#d3c2c5", "surface-variant": "#393334", "primary-container": "#9e2f45", "surface-container-high": "#2e292a", "on-error": "#690005", "surface-tint": "#ffb2ba", "on-error-container": "#ffdad6", "surface-container-lowest": "#110d0e", "on-primary-fixed": "#400011", "on-tertiary-container": "#dccacd", "on-tertiary-fixed-variant": "#4f4446", "primary-fixed": "#ffd9dc", "outline-variant": "#564143", "surface-container": "#231e1f", "surface-bright": "#3d3839", "secondary": "#ebbac1", "error-container": "#93000a" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "margin-mobile": "1rem", "space-md": "1rem", "space-xl": "2.5rem", "margin": "3rem", "gutter-mobile": "0.75rem", "space-sm": "0.5rem", "gutter": "1.5rem", "margin-tablet": "2rem", "space-xs": "0.25rem", "space-lg": "1.5rem" }, "fontFamily": { "headline-xl": [ "Instrument Serif" ], "body-md": [ "Instrument Sans" ], "headline-lg-mobile": [ "Instrument Serif" ], "label-md": [ "Instrument Sans" ], "code-xs": [ "JetBrains Mono" ], "headline-lg": [ "Instrument Serif" ], "label-sm": [ "Instrument Sans" ], "headline-sm": [ "Instrument Serif" ], "body-lg": [ "Instrument Sans" ], "headline-md": [ "Instrument Serif" ], "code-sm": [ "JetBrains Mono" ], "headline-xl-mobile": [ "Instrument Serif" ], "body-sm": [ "Instrument Sans" ], "kpi-metric": [ "Instrument Serif" ] }, "fontSize": { "headline-xl": [ "56px", { "lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "400" } ], "body-md": [ "14px", { "lineHeight": "22px", "fontWeight": "400" } ], "headline-lg-mobile": [ "28px", { "lineHeight": "36px", "letterSpacing": "0em", "fontWeight": "400" } ], "label-md": [ "13px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" } ], "code-xs": [ "10px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" } ], "headline-lg": [ "40px", { "lineHeight": "48px", "letterSpacing": "-0.015em", "fontWeight": "400" } ], "label-sm": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" } ], "headline-sm": [ "22px", { "lineHeight": "28px", "fontWeight": "400" } ], "body-lg": [ "17px", { "lineHeight": "26px", "fontWeight": "400" } ], "headline-md": [ "28px", { "lineHeight": "36px", "fontWeight": "400" } ], "code-sm": [ "12px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "400" } ], "headline-xl-mobile": [ "36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "400" } ], "body-sm": [ "12px", { "lineHeight": "18px", "fontWeight": "400" } ], "kpi-metric": [ "64px", { "lineHeight": "64px", "letterSpacing": "-0.03em", "fontWeight": "400" } ] } } } };</script></head><body class="bg-surface-container-lowest text-on-surface font-body-md text-body-md"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-dim z-50 flex flex-col justify-between border-r border-outline-variant/40"><div class="flex flex-col"><div class="h-16 px-gutter flex items-center border-b border-outline-variant/40"><span class="font-headline-md text-headline-md tracking-tight text-on-surface">Sigilla</span></div><div class="px-gutter py-space-sm border-b border-outline-variant/30"><button class="w-full flex items-center justify-between py-space-xs text-left group"><div class="flex flex-col"><span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Maison</span><span class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors">Maison Démo</span></div><span class="material-symbols-outlined text-[18px] text-outline group-hover:text-on-surface transition-colors">unfold_more</span></button></div><div class="px-space-md pt-space-lg"><nav class="flex flex-col gap-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-medium"><a aria-current="page" class="flex items-center justify-between px-space-md py-space-sm rounded-lg transition-colors group bg-primary-container text-on-primary-container font-medium" data-path="agents" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">smart_toy</span><span class="font-body-md text-body-md">Agents</span></div><span class="w-1.5 h-1.5 rounded-full bg-primary"></span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors group" data-path="conversations" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">forum</span><span class="font-body-md text-body-md">Conversations</span></div><span class="px-1.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-code-xs text-code-xs">2</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors group" data-path="analytics" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">monitoring</span><span class="font-body-md text-body-md">Analytics</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors group" data-path="settings" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">tune</span><span class="font-body-md text-body-md">Settings</span></div></a></nav></div></div><div class="p-space-md border-t border-outline-variant/40"><div class="flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col"><span class="font-label-md text-label-md text-on-surface leading-none">Directeur</span><span class="font-code-xs text-code-xs text-outline leading-tight">directeur@maison.fr</span></div></div><span class="px-2 py-0.5 rounded border border-outline-variant/60 font-code-xs text-code-xs uppercase tracking-wider text-secondary">Pro</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-dim/90 backdrop-blur-xl border-b border-outline-variant/40 z-40 flex items-center justify-between px-gutter"><div class="flex items-center gap-space-sm font-label-md text-label-md text-outline"><span class="hover:text-on-surface cursor-pointer transition-colors">Agents</span><span class="material-symbols-outlined text-[14px]">chevron_right</span><span class="text-on-surface">Atelier Lune — Concierge</span></div><div class="flex items-center gap-gutter"><div class="flex items-center gap-space-xs px-2.5 py-1 rounded-full bg-surface-container border border-outline-variant/40"><span class="w-1.5 h-1.5 rounded-full bg-[#6FBF8E]"></span><span class="font-code-xs text-code-xs text-on-surface uppercase tracking-wider">Live</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="w-full pt-16 bg-surface-container-lowest min-h-screen"><div class="flex flex-col w-full">
+<!-- Interactive Top Action Rail & Controls (Bridging into Shell) -->
+<div class="w-full bg-surface-container-low px-gutter py-space-sm flex items-center justify-between">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm uppercase tracking-wider text-outline">
+<span>Designer</span>
+<span class="text-outline-variant">/</span>
+<span class="text-on-surface">Embed Experience</span>
+</div>
+<div class="h-3 w-px bg-surface-container-highest"></div>
+<div class="flex items-center gap-space-xs font-code-xs text-code-xs text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-[#6FBF8E] animate-pulse"></span>
+<span>Version 2.4.1 Active</span>
+</div>
+</div>
+<!-- Theme Preview Toggle & Global Auxiliaries -->
+<div class="flex items-center gap-gutter">
+<!-- Dark / Light Preview Mode Switcher -->
+<div class="flex items-center p-0.5 rounded-full bg-surface-container-lowest">
+<button class="flex items-center gap-1.5 px-3 py-1 rounded-full text-primary font-label-sm text-label-sm transition-all bg-surface-container-high shadow-sm" id="preview-mode-dark" onclick="setPreviewTheme('dark')">
+<span class="material-symbols-outlined text-[14px]">dark_mode</span>
+<span>Dark</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1 rounded-full text-outline font-label-sm text-label-sm hover:text-on-surface transition-all" id="preview-mode-light" onclick="setPreviewTheme('light')">
+<span class="material-symbols-outlined text-[14px]">light_mode</span>
+<span>Light</span>
+</button>
+</div>
+<a class="flex items-center gap-space-xs font-label-sm text-label-sm text-secondary hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">menu_book</span>
+<span class="tracking-wide">Documentation</span>
+</a>
+</div>
+</div>
+<!-- Primary Workspace Canvas: 40% Configuration / 60% Interactive Vitrine -->
+<div class="grid grid-cols-12 w-full min-h-[calc(100vh-7rem)]">
+<!-- LEFT 40% (Cols 1-5): Inspector & Customizer Form -->
+<div class="col-span-12 lg:col-span-5 bg-surface-container-low flex flex-col justify-between">
+<div class="p-gutter space-y-space-xl overflow-y-auto max-h-[calc(100vh-12rem)]">
+<!-- Header Lead -->
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-code-xs text-code-xs uppercase tracking-widest text-primary">Surface Protocol</span>
+<span class="px-2 py-0.5 rounded font-code-xs text-code-xs bg-surface-container text-secondary">Draft Auto-Saved</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Widget Tailoring</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Calibrate client-facing conversational geometry, typography, and bordeaux chroma.</p>
+</div>
+<!-- Section 1: APPEARANCE -->
+<div class="space-y-space-md">
+<div class="flex items-center justify-between">
+<label class="font-label-sm text-label-sm uppercase tracking-widest text-outline">Appearance</label>
+<span class="font-code-xs text-code-xs text-outline-variant">CSS Variable: --sig-chroma</span>
+</div>
+<div class="bg-surface-container p-space-md rounded-lg space-y-space-md">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mb-2">Palette Signature</span>
+<div class="flex items-center gap-space-md">
+<!-- Bordeaux Swatch (Selected) -->
+<button class="swatch-btn group relative w-7 h-7 rounded-full bg-[#9E2F45] flex items-center justify-center p-0.5" data-color="#9E2F45" onclick="updateThemeColor('#9E2F45', this)" title="Maison Bordeaux">
+<span class="w-full h-full rounded-full ring-2 ring-primary ring-offset-2 ring-offset-surface-container"></span>
+</button>
+<!-- Midnight -->
+<button class="swatch-btn group relative w-7 h-7 rounded-full bg-[#171113] flex items-center justify-center" data-color="#171113" onclick="updateThemeColor('#171113', this)" title="Nocturne Midnight">
+<span class="w-2 h-2 rounded-full bg-outline-variant/30"></span>
+</button>
+<!-- Forest -->
+<button class="swatch-btn group relative w-7 h-7 rounded-full bg-[#2F7A4D] flex items-center justify-center" data-color="#2F7A4D" onclick="updateThemeColor('#2F7A4D', this)" title="Cyprès Forest">
+<span class="w-2 h-2 rounded-full bg-transparent"></span>
+</button>
+<!-- Marine -->
+<button class="swatch-btn group relative w-7 h-7 rounded-full bg-[#1B365D] flex items-center justify-center" data-color="#1B365D" onclick="updateThemeColor('#1B365D', this)" title="Abysse Marine">
+<span class="w-2 h-2 rounded-full bg-transparent"></span>
+</button>
+<!-- Plum -->
+<button class="swatch-btn group relative w-7 h-7 rounded-full bg-[#5B3256] flex items-center justify-center" data-color="#5B3256" onclick="updateThemeColor('#5B3256', this)" title="Prune Impériale">
+<span class="w-2 h-2 rounded-full bg-transparent"></span>
+</button>
+<!-- Amber -->
+<button class="swatch-btn group relative w-7 h-7 rounded-full bg-[#85590C] flex items-center justify-center" data-color="#85590C" onclick="updateThemeColor('#85590C', this)" title="Ambre Royal">
+<span class="w-2 h-2 rounded-full bg-transparent"></span>
+</button>
+</div>
+</div>
+<!-- Custom Hex Input -->
+<div class="flex items-center gap-space-md pt-space-xs">
+<div class="flex-1">
+<label class="font-label-sm text-label-sm text-outline block mb-1">Custom Hex Specification</label>
+<div class="flex items-center bg-surface-container-lowest px-3 py-2 rounded">
+<span class="w-4 h-4 rounded-full bg-[#9E2F45] mr-2 shadow-inner" id="color-indicator"></span>
+<input class="bg-transparent font-code-sm text-code-sm text-on-surface focus:outline-none w-full tracking-wider" id="hex-input" maxlength="7" oninput="manualHexChange(this.value)" type="text" value="#9E2F45"/>
+</div>
+</div>
+<div class="w-1/2">
+<label class="font-label-sm text-label-sm text-outline block mb-1">Launcher Orientation</label>
+<div class="grid grid-cols-2 p-0.5 rounded bg-surface-container-lowest">
+<button class="py-1.5 px-2 rounded font-code-xs text-code-xs transition-all bg-primary-container text-on-primary-container font-medium text-center" id="pos-btn-right" onclick="setLauncherPos('right')">
+                    Btm Right
+                  </button>
+<button class="py-1.5 px-2 rounded font-code-xs text-code-xs transition-all text-outline hover:text-on-surface text-center" id="pos-btn-left" onclick="setLauncherPos('left')">
+                    Btm Left
+                  </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 2: IDENTITY -->
+<div class="space-y-space-md">
+<label class="font-label-sm text-label-sm uppercase tracking-widest text-outline">Identity &amp; Persona</label>
+<div class="bg-surface-container p-space-md rounded-lg space-y-space-md">
+<!-- Avatar Upload Row -->
+<div class="flex items-center gap-gutter">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center shadow-md">
+<span class="font-headline-md text-headline-md text-on-primary-container leading-none select-none" id="preview-avatar-symbol">S</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-md text-label-md text-on-surface">Monogram Sigil</span>
+<div class="flex items-center gap-space-xs">
+<button class="px-2.5 py-1 rounded bg-surface-container-highest text-secondary hover:text-primary transition-colors font-code-xs text-code-xs" type="button">
+                    Upload Seal
+                  </button>
+<button class="px-2.5 py-1 rounded text-outline hover:text-on-surface transition-colors font-code-xs text-code-xs" type="button">
+                    Reset
+                  </button>
+</div>
+</div>
+</div>
+<!-- Display Name -->
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-outline">Concierge Moniker</label>
+<input class="w-full bg-surface-container-lowest px-3 py-2 rounded font-body-md text-body-md text-on-surface focus:outline-none" id="input-display-name" oninput="updateDisplayName(this.value)" type="text" value="Atelier Lune Concierge"/>
+</div>
+<!-- Subtitle -->
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-outline">Curatorial Domain (Subtitle)</label>
+<input class="w-full bg-surface-container-lowest px-3 py-2 rounded font-body-md text-body-md text-on-surface focus:outline-none" id="input-subtitle" oninput="updateSubtitle(this.value)" type="text" value="Haute Parfumerie &amp; Candles Advisor"/>
+</div>
+</div>
+</div>
+<!-- Section 3: MESSAGES -->
+<div class="space-y-space-md">
+<label class="font-label-sm text-label-sm uppercase tracking-widest text-outline">Salutations &amp; Dialogue</label>
+<div class="bg-surface-container p-space-md rounded-lg space-y-space-md">
+<!-- Welcome Greeting -->
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<label class="font-label-sm text-label-sm text-outline">Initial Proactive Greeting</label>
+<span class="font-code-xs text-code-xs text-outline-variant">Markdown OK</span>
+</div>
+<textarea class="w-full bg-surface-container-lowest px-3 py-2 rounded font-body-md text-body-md text-on-surface focus:outline-none resize-none" id="input-welcome" oninput="updateGreeting(this.value)" rows="2">Good evening. How may I help you today?</textarea>
+</div>
+<!-- Placeholder -->
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-outline">Field Cue (Placeholder)</label>
+<input class="w-full bg-surface-container-lowest px-3 py-2 rounded font-body-md text-body-md text-on-surface focus:outline-none" id="input-placeholder" oninput="updatePlaceholder(this.value)" type="text" value="Ask about orders, shipping or scents…"/>
+</div>
+</div>
+</div>
+<!-- Section 4: BRANDING -->
+<div class="space-y-space-md">
+<label class="font-label-sm text-label-sm uppercase tracking-widest text-outline">Provenance &amp; Attributions</label>
+<div class="bg-surface-container p-space-md rounded-lg flex items-center justify-between">
+<div class="flex flex-col gap-1 pr-4">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-on-surface">Show "Sealed by Sigilla"</span>
+<span class="px-1.5 py-0.5 rounded font-code-xs text-code-xs bg-secondary-container text-on-secondary-container">Pro</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">White-glove private deployment without sovereign platform watermark.</span>
+</div>
+<!-- Interactive Toggle Switch -->
+<button class="w-11 h-6 rounded-full p-0.5 transition-colors bg-primary-container relative inline-flex items-center cursor-pointer" id="toggle-sigilla" onclick="toggleBranding()">
+<span class="w-5 h-5 rounded-full bg-surface-bright shadow-sm transform translate-x-5 transition-transform" id="toggle-handle"></span>
+</button>
+</div>
+</div>
+</div>
+<!-- Sticky Commit Dock -->
+<div class="p-gutter bg-surface-container-low flex items-center justify-between">
+<button class="px-4 py-2 rounded font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+          Discard Draft
+        </button>
+<div class="flex items-center gap-space-sm">
+<button class="px-3 py-2 rounded bg-surface-container font-label-md text-label-md text-on-surface hover:bg-surface-container-high transition-colors" type="button">
+            Test Sandbox
+          </button>
+<button class="px-6 py-2 rounded bg-primary-container hover:bg-primary-container/90 text-on-primary-container font-label-md text-label-md shadow-md transition-all active:scale-[0.98] flex items-center gap-2" id="btn-publish" onclick="simulatePublish()">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span>Publish changes</span>
+</button>
+</div>
+</div>
+</div>
+<!-- RIGHT 60% (Cols 6-12): LIVE CLIENT PREVIEW ENVIRONMENT -->
+<div class="col-span-12 lg:col-span-7 bg-surface-container-lowest p-gutter flex flex-col gap-space-md">
+<!-- Vitrine Header & Viewport Switchers -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Client Surface Simulator</span>
+<span class="text-outline-variant font-code-xs text-code-xs">1440 × 900</span>
+</div>
+<div class="flex items-center gap-gutter">
+<!-- Viewport Mode Buttons -->
+<div class="flex items-center p-0.5 rounded bg-surface-container">
+<button class="px-3 py-1 rounded font-code-xs text-code-xs bg-surface-bright text-on-surface flex items-center gap-1 shadow-sm" id="viewport-desktop" onclick="setDeviceViewport('desktop')">
+<span class="material-symbols-outlined text-[14px]">desktop_windows</span>
+<span>Desktop</span>
+</button>
+<button class="px-3 py-1 rounded font-code-xs text-code-xs text-outline hover:text-on-surface flex items-center gap-1" id="viewport-mobile" onclick="setDeviceViewport('mobile')">
+<span class="material-symbols-outlined text-[14px]">smartphone</span>
+<span>Mobile</span>
+</button>
+</div>
+<!-- Snippet Copier -->
+<button class="flex items-center gap-1.5 px-3 py-1 rounded bg-surface-container-high hover:bg-surface-bright text-on-surface font-code-xs text-code-xs transition-colors group" onclick="copySnippet()">
+<span class="material-symbols-outlined text-[15px] text-primary group-hover:scale-110 transition-transform">code</span>
+<span id="copy-btn-text">Copy embed code</span>
+</button>
+</div>
+</div>
+<!-- Simulated Web Browser Vitrine -->
+<div class="w-full flex-1 rounded-xl overflow-hidden shadow-2xl flex flex-col bg-[#171213] transition-all duration-300" id="browser-container">
+<!-- Browser Chrome Bar -->
+<div class="w-full bg-[#1F1A1B] px-4 py-2.5 flex items-center gap-4">
+<!-- Mac Style Dots -->
+<div class="flex items-center gap-1.5">
+<div class="w-2.5 h-2.5 rounded-full bg-[#E56B6F]/50"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-[#E9B872]/50"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-[#6FBF8E]/50"></div>
+</div>
+<!-- URL / Status Address Pill -->
+<div class="flex-1 max-w-lg mx-auto bg-[#171213] rounded px-3 py-1 flex items-center justify-between text-outline">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[12px] text-[#6FBF8E]">lock</span>
+<span class="font-code-xs text-code-xs text-[#EAE0E1]/80 tracking-wide select-none">https://atelierlune.com/collection/nocturne</span>
+</div>
+<span class="material-symbols-outlined text-[12px] text-outline">refresh</span>
+</div>
+<!-- External Launch Mock -->
+<span class="material-symbols-outlined text-[16px] text-outline cursor-pointer hover:text-on-surface">open_in_new</span>
+</div>
+<!-- Simulated Luxury Merchant Showcase: Atelier Lune -->
+<div class="relative w-full flex-1 overflow-hidden flex flex-col justify-between p-gutter transition-colors duration-300 bg-[#171213] text-[#EAE0E1]" id="simulated-store-canvas">
+<!-- Mock Header Navigation -->
+<div class="w-full flex items-center justify-between pb-4 border-b border-white/5">
+<span class="font-headline-md text-headline-md tracking-wider font-normal">ATELIER LUNE</span>
+<div class="flex items-center gap-6 font-label-sm text-label-sm tracking-widest text-[#EAE0E1]/70 uppercase">
+<span class="cursor-pointer hover:text-white transition-colors">Haute Parfumerie</span>
+<span class="cursor-pointer hover:text-white transition-colors text-white">Bougies Cire</span>
+<span class="cursor-pointer hover:text-white transition-colors">Maison Privée</span>
+</div>
+<div class="flex items-center gap-4 text-sm">
+<span class="material-symbols-outlined text-[18px]">search</span>
+<span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+</div>
+</div>
+<!-- Product Hero Showcase Layout -->
+<div class="grid grid-cols-12 gap-gutter my-auto items-center py-6">
+<div class="col-span-12 md:col-span-6 relative group">
+<div class="w-full h-80 rounded-lg overflow-hidden bg-white/5 relative flex items-center justify-center">
+<img class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" data-alt="Ultra-luxury black minimalist candle jar with delicate gold typography Atelier Lune on raw slate slab, cinematic chiaroscuro warm spotlight in high jewelry atelier style, velvety plum-black ambient tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcDoYGPsefXEf8RzlEPGFUb1XOj0160Oi0yB1gPqLluzUMKbvbeYdvia3-NkT2X7QyV2IcNBYbdTdqr-LxosWgL0Yh4j0lSY0CFnzm0Wb_2Y_DZv-6Gxnx2odWegcp-Nv5A5E7zBTHf2f7RZ3AQFNjTjzsVdMLi6jag80Vt3ILFU73qYk419wOHkgpsHk5tktj5bb72L_leVYT36ITJj-_sr0syLrcHrof9m0XHOHuvOnASJ5F4UJAcg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#171213] via-transparent to-transparent opacity-60"></div>
+<div class="absolute top-4 left-4">
+<span class="px-2 py-0.5 rounded font-code-xs text-code-xs bg-black/60 backdrop-blur-md tracking-widest uppercase">Édition Limitée</span>
+</div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-6 space-y-4">
+<div class="space-y-1">
+<span class="font-code-xs text-code-xs uppercase tracking-widest text-primary">No. 04 / Série Noirceur</span>
+<h3 class="font-headline-lg text-headline-lg text-white font-normal leading-tight">Bois de Cèdre &amp; Iris</h3>
+<div class="flex items-baseline gap-2 pt-1">
+<span class="font-headline-sm text-headline-sm text-white">€85</span>
+<span class="font-code-xs text-code-xs text-outline">280g / 65h Combustion</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-[#EAE0E1]/70 leading-relaxed max-w-sm">
+                Coulée à la main dans notre atelier de Grasse. Cire végétale infusée de cèdre de l'Atlas sauvage, beurre d'iris florentin et accords résineux sombres.
+              </p>
+<div class="pt-2 flex items-center gap-3">
+<button class="px-6 py-2.5 rounded bg-white text-black font-label-md text-label-md hover:bg-neutral-200 transition-colors uppercase tracking-wider">
+                  Add to bag
+                </button>
+<button class="w-10 h-10 rounded flex items-center justify-center bg-white/5 hover:bg-white/10 text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">bookmark_border</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Mock Store Footer -->
+<div class="w-full pt-4 border-t border-white/5 flex items-center justify-between text-xs text-outline">
+<span>© 2025 Atelier Lune — Tous droits réservés.</span>
+<div class="flex gap-4 font-code-xs text-code-xs">
+<span>Expédition Gratuite dès €120</span>
+<span>·</span>
+<span>Emballage Fait Main</span>
+</div>
+</div>
+<!-- THE OPEN SIGILLA FLOATING WIDGET (Fully Dynamically Controlled) -->
+<div class="absolute bottom-6 right-6 w-96 max-w-[calc(100%-3rem)] rounded-xl overflow-hidden shadow-2xl flex flex-col z-30 transition-all duration-300 bg-[#201719]" id="sigilla-widget-frame">
+<!-- Widget Custom Header Bar -->
+<div class="px-4 py-3 bg-[#9E2F45] text-white flex items-center justify-between transition-colors duration-300" id="widget-header-strip">
+<div class="flex items-center gap-3">
+<div class="relative w-8 h-8 rounded-full bg-white/20 flex items-center justify-center overflow-hidden">
+<span class="font-headline-md text-headline-md text-white select-none" id="widget-monogram-display">S</span>
+<span class="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-[#6FBF8E] ring-1 ring-black"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-semibold text-white leading-tight" id="widget-title-display">Atelier Lune Concierge</span>
+<span class="font-code-xs text-code-xs text-white/80 leading-tight" id="widget-sub-display">Haute Parfumerie &amp; Candles Advisor</span>
+</div>
+</div>
+<!-- Header Controls -->
+<div class="flex items-center gap-1 text-white/80">
+<button class="w-6 h-6 flex items-center justify-center hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<button class="w-6 h-6 flex items-center justify-center hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+<!-- Dialogue Stream / Body -->
+<div class="p-4 space-y-3.5 max-h-72 overflow-y-auto bg-[#171113] text-[#EAE0E1] text-body-sm font-body-sm" id="widget-dialogue-body">
+<!-- System Timestamp -->
+<div class="text-center">
+<span class="font-code-xs text-code-xs text-outline px-2 py-0.5 rounded bg-white/5 uppercase tracking-wider">Aujourd'hui 19:42</span>
+</div>
+<!-- Bot Greeting -->
+<div class="flex items-start gap-2.5">
+<div class="w-6 h-6 rounded-full bg-[#9E2F45]/30 flex-shrink-0 flex items-center justify-center text-primary mt-0.5">
+<span class="material-symbols-outlined text-[13px]">arrow_back_ios_new</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container max-w-[85%] space-y-1 shadow-sm">
+<p class="font-body-sm text-body-sm text-on-surface" id="widget-welcome-display">Good evening. How may I help you today?</p>
+</div>
+</div>
+<!-- Visitor User Query -->
+<div class="flex justify-end">
+<div class="p-3 rounded-lg bg-[#2E292A] text-[#FAF6F2] max-w-[85%] shadow-sm">
+<p class="font-body-sm text-body-sm">Do your candles ship to Switzerland?</p>
+</div>
+</div>
+<!-- Bot Response with Sourced Citations & Provenance Seals -->
+<div class="flex items-start gap-2.5">
+<div class="w-6 h-6 rounded-full bg-[#9E2F45]/30 flex-shrink-0 flex items-center justify-center text-primary mt-0.5">
+<span class="material-symbols-outlined text-[13px]">arrow_back_ios_new</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container max-w-[85%] space-y-2 shadow-sm">
+<p class="font-body-sm text-body-sm text-on-surface leading-relaxed">
+                    Yes, we ship to Switzerland via Swiss Post Priority within 2–4 business days. All duties and VAT are calculated directly at checkout 
+                    <span class="inline-flex items-center px-1.5 py-0.2 rounded-full font-code-xs text-code-xs bg-[#9E2F45] text-white ml-0.5 font-medium cursor-pointer hover:opacity-90">[1]</span>
+<span class="inline-flex items-center px-1.5 py-0.2 rounded-full font-code-xs text-code-xs bg-[#9E2F45] text-white ml-0.5 font-medium cursor-pointer hover:opacity-90">[2]</span>.
+                  </p>
+<!-- Sealed Provenance Citation Footer -->
+<div class="pt-2 border-t border-outline-variant/30 flex items-center gap-1 font-code-xs text-code-xs text-secondary leading-tight">
+<span class="material-symbols-outlined text-[13px] text-primary">verified_user</span>
+<span>Sealed by 2 sources — Shipping Policy p.2 · faq</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Widget Composer Field -->
+<div class="p-3 bg-[#1F1A1B] flex items-center gap-2" id="widget-composer-bar">
+<input class="flex-1 bg-[#171213] text-on-surface placeholder:text-outline font-body-sm text-body-sm px-3 py-2 rounded focus:outline-none" id="widget-input-cue" placeholder="Ask about orders, shipping or scents…" type="text"/>
+<button class="w-8 h-8 rounded bg-[#9E2F45] hover:bg-[#872538] text-white flex items-center justify-center transition-colors" id="widget-send-btn">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+</button>
+</div>
+<!-- Watermark Footer (Conditional) -->
+<div class="px-3 py-1.5 bg-[#171213] flex items-center justify-center border-t border-white/5" id="widget-watermark-row">
+<span class="font-code-xs text-code-xs text-outline/70 flex items-center gap-1">
+<span class="material-symbols-outlined text-[11px] text-primary">token</span>
+<span>Sealed by <strong class="font-medium text-on-surface-variant font-headline-md tracking-wider">Sigilla</strong></span>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Dynamic State Controller for Widget Preview
+  let currentChroma = '#9E2F45';
+  let isWatermarkVisible = true;
+  let activeThemeMode = 'dark';
+  let activeViewport = 'desktop';
+
+  function updateThemeColor(colorHex, btnElem) {
+    currentChroma = colorHex;
+    document.getElementById('hex-input').value = colorHex;
+    document.getElementById('color-indicator').style.backgroundColor = colorHex;
+    
+    // Apply to preview widget
+    document.getElementById('widget-header-strip').style.backgroundColor = colorHex;
+    document.getElementById('widget-send-btn').style.backgroundColor = colorHex;
+    
+    // Update citation badges in the mock chat
+    const seals = document.querySelectorAll('#widget-dialogue-body span.font-code-xs.bg-\\[\\#9E2F45\\]');
+    seals.forEach(seal => {
+      seal.style.backgroundColor = colorHex;
+    });
+
+    // Update active ring on buttons
+    document.querySelectorAll('.swatch-btn').forEach(btn => {
+      const ringSpan = btn.querySelector('span');
+      if (ringSpan) {
+        ringSpan.className = 'w-2 h-2 rounded-full bg-transparent';
+      }
+    });
+
+    if (btnElem) {
+      const ring = btnElem.querySelector('span');
+      if (ring) {
+        ring.className = 'w-full h-full rounded-full ring-2 ring-primary ring-offset-2 ring-offset-surface-container';
+      }
+    }
+  }
+
+  function manualHexChange(val) {
+    if (/^#[0-9A-F]{6}$/i.test(val)) {
+      updateThemeColor(val, null);
+    }
+  }
+
+  function setLauncherPos(pos) {
+    const frame = document.getElementById('sigilla-widget-frame');
+    const btnRight = document.getElementById('pos-btn-right');
+    const btnLeft = document.getElementById('pos-btn-left');
+
+    if (pos === 'left') {
+      frame.classList.remove('right-6');
+      frame.classList.add('left-6');
+      btnLeft.className = 'py-1.5 px-2 rounded font-code-xs text-code-xs transition-all bg-primary-container text-on-primary-container font-medium text-center';
+      btnRight.className = 'py-1.5 px-2 rounded font-code-xs text-code-xs transition-all text-outline hover:text-on-surface text-center';
+    } else {
+      frame.classList.remove('left-6');
+      frame.classList.add('right-6');
+      btnRight.className = 'py-1.5 px-2 rounded font-code-xs text-code-xs transition-all bg-primary-container text-on-primary-container font-medium text-center';
+      btnLeft.className = 'py-1.5 px-2 rounded font-code-xs text-code-xs transition-all text-outline hover:text-on-surface text-center';
+    }
+  }
+
+  function updateDisplayName(text) {
+    document.getElementById('widget-title-display').textContent = text || 'Atelier Concierge';
+  }
+
+  function updateSubtitle(text) {
+    document.getElementById('widget-sub-display').textContent = text || 'Advisor';
+  }
+
+  function updateGreeting(text) {
+    document.getElementById('widget-welcome-display').textContent = text || 'Good evening. How may I assist?';
+  }
+
+  function updatePlaceholder(text) {
+    document.getElementById('widget-input-cue').placeholder = text;
+  }
+
+  function toggleBranding() {
+    isWatermarkVisible = !isWatermarkVisible;
+    const toggleBtn = document.getElementById('toggle-sigilla');
+    const toggleHandle = document.getElementById('toggle-handle');
+    const watermarkRow = document.getElementById('widget-watermark-row');
+
+    if (isWatermarkVisible) {
+      toggleBtn.className = 'w-11 h-6 rounded-full p-0.5 transition-colors bg-primary-container relative inline-flex items-center cursor-pointer';
+      toggleHandle.className = 'w-5 h-5 rounded-full bg-surface-bright shadow-sm transform translate-x-5 transition-transform';
+      watermarkRow.style.display = 'flex';
+    } else {
+      toggleBtn.className = 'w-11 h-6 rounded-full p-0.5 transition-colors bg-surface-container-highest relative inline-flex items-center cursor-pointer';
+      toggleHandle.className = 'w-5 h-5 rounded-full bg-surface-bright shadow-sm transform translate-x-0 transition-transform';
+      watermarkRow.style.display = 'none';
+    }
+  }
+
+  function setPreviewTheme(mode) {
+    activeThemeMode = mode;
+    const darkBtn = document.getElementById('preview-mode-dark');
+    const lightBtn = document.getElementById('preview-mode-light');
+    const store = document.getElementById('simulated-store-canvas');
+    const widgetBody = document.getElementById('widget-dialogue-body');
+    const composer = document.getElementById('widget-composer-bar');
+
+    if (mode === 'light') {
+      lightBtn.className = 'flex items-center gap-1.5 px-3 py-1 rounded-full text-on-primary-container font-label-sm text-label-sm transition-all bg-primary-container shadow-sm';
+      darkBtn.className = 'flex items-center gap-1.5 px-3 py-1 rounded-full text-outline font-label-sm text-label-sm hover:text-on-surface transition-all';
+      
+      // Transform client canvas into luminous light mode
+      store.style.backgroundColor = '#FAF6F2';
+      store.style.color = '#171213';
+      store.classList.remove('text-[#EAE0E1]');
+      store.classList.add('text-[#171213]');
+
+      // Switch widget interior into crisp light luxury mode
+      widgetBody.style.backgroundColor = '#FFFFFF';
+      widgetBody.style.color = '#171213';
+      composer.style.backgroundColor = '#F5EFEA';
+    } else {
+      darkBtn.className = 'flex items-center gap-1.5 px-3 py-1 rounded-full text-primary font-label-sm text-label-sm transition-all bg-surface-container-high shadow-sm';
+      lightBtn.className = 'flex items-center gap-1.5 px-3 py-1 rounded-full text-outline font-label-sm text-label-sm hover:text-on-surface transition-all';
+      
+      store.style.backgroundColor = '#171213';
+      store.classList.remove('text-[#171213]');
+      store.classList.add('text-[#EAE0E1]');
+
+      widgetBody.style.backgroundColor = '#171113';
+      widgetBody.style.color = '#EAE0E1';
+      composer.style.backgroundColor = '#1F1A1B';
+    }
+  }
+
+  function setDeviceViewport(view) {
+    activeViewport = view;
+    const dBtn = document.getElementById('viewport-desktop');
+    const mBtn = document.getElementById('viewport-mobile');
+    const container = document.getElementById('browser-container');
+
+    if (view === 'mobile') {
+      mBtn.className = 'px-3 py-1 rounded font-code-xs text-code-xs bg-surface-bright text-on-surface flex items-center gap-1 shadow-sm';
+      dBtn.className = 'px-3 py-1 rounded font-code-xs text-code-xs text-outline hover:text-on-surface flex items-center gap-1';
+      container.style.maxWidth = '420px';
+      container.style.margin = '0 auto';
+    } else {
+      dBtn.className = 'px-3 py-1 rounded font-code-xs text-code-xs bg-surface-bright text-on-surface flex items-center gap-1 shadow-sm';
+      mBtn.className = 'px-3 py-1 rounded font-code-xs text-code-xs text-outline hover:text-on-surface flex items-center gap-1';
+      container.style.maxWidth = '100%';
+      container.style.margin = '0';
+    }
+  }
+
+  function copySnippet() {
+    const textLabel = document.getElementById('copy-btn-text');
+    const codeSnippet = `<script src="https://cdn.sigilla.io/v2/loader.js" data-maison="atelier-lune" data-chroma="${currentChroma}" async><\/script>`;
+    
+    navigator.clipboard.writeText(codeSnippet).then(() => {
+      textLabel.textContent = 'Copied to clipboard!';
+      setTimeout(() => {
+        textLabel.textContent = 'Copy embed code';
+      }, 2400);
+    }).catch(() => {
+      textLabel.textContent = 'Copied!';
+      setTimeout(() => {
+        textLabel.textContent = 'Copy embed code';
+      }, 2000);
+    });
+  }
+
+  function simulatePublish() {
+    const btn = document.getElementById('btn-publish');
+    const origHTML = btn.innerHTML;
+    btn.innerHTML = `<span class="material-symbols-outlined text-[16px] animate-spin">refresh</span><span>Sealing live...</span>`;
+    btn.disabled = true;
+
+    setTimeout(() => {
+      btn.innerHTML = `<span class="material-symbols-outlined text-[16px]">check</span><span>Deployed live</span>`;
+      setTimeout(() => {
+        btn.innerHTML = origHTML;
+        btn.disabled = false;
+      }, 2000);
+    }, 900);
+  }
+</script></main></div></body></html>

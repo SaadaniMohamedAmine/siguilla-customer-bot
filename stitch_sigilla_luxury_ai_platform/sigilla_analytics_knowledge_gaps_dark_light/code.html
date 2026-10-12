@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-tertiary": "#382e30", "tertiary-fixed": "#f0dee1", "tertiary": "#d3c2c5", "inverse-on-surface": "#342f30", "secondary-fixed-dim": "#ebbac1", "on-primary": "#670020", "inverse-surface": "#eae0e1", "primary": "#ffb2ba", "on-secondary": "#47272d", "on-secondary-container": "#dcacb3", "on-surface": "#eae0e1", "on-surface-variant": "#ddbfc1", "primary-fixed-dim": "#ffb2ba", "outline": "#a58a8c", "on-background": "#eae0e1", "surface-container-low": "#1f1a1b", "on-tertiary-fixed": "#22191b", "surface-container-highest": "#393334", "on-primary-fixed-variant": "#871d35", "inverse-primary": "#a6354b", "surface": "#171213", "on-secondary-fixed-variant": "#603d43", "secondary-fixed": "#ffd9de", "on-secondary-fixed": "#2f1319", "tertiary-container": "#615557", "error": "#ffb4ab", "secondary-container": "#633f45", "surface-dim": "#171213", "on-primary-container": "#ffbec4", "background": "#171213", "tertiary-fixed-dim": "#d3c2c5", "surface-variant": "#393334", "primary-container": "#9e2f45", "surface-container-high": "#2e292a", "on-error": "#690005", "surface-tint": "#ffb2ba", "on-error-container": "#ffdad6", "surface-container-lowest": "#110d0e", "on-primary-fixed": "#400011", "on-tertiary-container": "#dccacd", "on-tertiary-fixed-variant": "#4f4446", "primary-fixed": "#ffd9dc", "outline-variant": "#564143", "surface-container": "#231e1f", "surface-bright": "#3d3839", "secondary": "#ebbac1", "error-container": "#93000a" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "margin-mobile": "1rem", "space-md": "1rem", "space-xl": "2.5rem", "margin": "3rem", "gutter-mobile": "0.75rem", "space-sm": "0.5rem", "gutter": "1.5rem", "margin-tablet": "2rem", "space-xs": "0.25rem", "space-lg": "1.5rem" }, "fontFamily": { "headline-xl": [ "Instrument Serif" ], "body-md": [ "Instrument Sans" ], "headline-lg-mobile": [ "Instrument Serif" ], "label-md": [ "Instrument Sans" ], "code-xs": [ "JetBrains Mono" ], "headline-lg": [ "Instrument Serif" ], "label-sm": [ "Instrument Sans" ], "headline-sm": [ "Instrument Serif" ], "body-lg": [ "Instrument Sans" ], "headline-md": [ "Instrument Serif" ], "code-sm": [ "JetBrains Mono" ], "headline-xl-mobile": [ "Instrument Serif" ], "body-sm": [ "Instrument Sans" ], "kpi-metric": [ "Instrument Serif" ] }, "fontSize": { "headline-xl": [ "56px", { "lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "400" } ], "body-md": [ "14px", { "lineHeight": "22px", "fontWeight": "400" } ], "headline-lg-mobile": [ "28px", { "lineHeight": "36px", "letterSpacing": "0em", "fontWeight": "400" } ], "label-md": [ "13px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" } ], "code-xs": [ "10px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" } ], "headline-lg": [ "40px", { "lineHeight": "48px", "letterSpacing": "-0.015em", "fontWeight": "400" } ], "label-sm": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" } ], "headline-sm": [ "22px", { "lineHeight": "28px", "fontWeight": "400" } ], "body-lg": [ "17px", { "lineHeight": "26px", "fontWeight": "400" } ], "headline-md": [ "28px", { "lineHeight": "36px", "fontWeight": "400" } ], "code-sm": [ "12px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "400" } ], "headline-xl-mobile": [ "36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "400" } ], "body-sm": [ "12px", { "lineHeight": "18px", "fontWeight": "400" } ], "kpi-metric": [ "64px", { "lineHeight": "64px", "letterSpacing": "-0.03em", "fontWeight": "400" } ] } } } };</script></head><body class="bg-surface-container-lowest text-on-surface font-body-md text-body-md"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-dim z-50 flex flex-col justify-between border-r border-outline-variant/40"><div class="flex flex-col"><div class="h-16 px-gutter flex items-center border-b border-outline-variant/40"><span class="font-headline-md text-headline-md tracking-tight text-on-surface">Sigilla</span></div><div class="px-gutter py-space-sm border-b border-outline-variant/30"><button class="w-full flex items-center justify-between py-space-xs text-left group"><div class="flex flex-col"><span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Maison</span><span class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors">Maison Démo</span></div><span class="material-symbols-outlined text-[18px] text-outline group-hover:text-on-surface transition-colors">unfold_more</span></button></div><div class="px-space-md pt-space-lg"><nav class="flex flex-col gap-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-medium"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors group" data-path="agents" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">smart_toy</span><span class="font-body-md text-body-md">Agents</span></div><span class="w-1.5 h-1.5 rounded-full bg-primary"></span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors group" data-path="conversations" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">forum</span><span class="font-body-md text-body-md">Conversations</span></div><span class="px-1.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-code-xs text-code-xs">2</span></a><a aria-current="page" class="flex items-center justify-between px-space-md py-space-sm rounded-lg transition-colors group bg-primary-container text-on-primary-container font-medium" data-path="analytics" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">monitoring</span><span class="font-body-md text-body-md">Analytics</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors group" data-path="settings" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">tune</span><span class="font-body-md text-body-md">Settings</span></div></a></nav></div></div><div class="p-space-md border-t border-outline-variant/40"><div class="flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col"><span class="font-label-md text-label-md text-on-surface leading-none">Directeur</span><span class="font-code-xs text-code-xs text-outline leading-tight">directeur@maison.fr</span></div></div><span class="px-2 py-0.5 rounded border border-outline-variant/60 font-code-xs text-code-xs uppercase tracking-wider text-secondary">Pro</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-dim/90 backdrop-blur-xl border-b border-outline-variant/40 z-40 flex items-center justify-between px-gutter"><div class="flex items-center gap-space-sm font-label-md text-label-md text-outline"><span class="hover:text-on-surface cursor-pointer transition-colors">Agents</span><span class="material-symbols-outlined text-[14px]">chevron_right</span><span class="text-on-surface">Atelier Lune — Concierge</span></div><div class="flex items-center gap-gutter"><div class="flex items-center gap-space-xs px-2.5 py-1 rounded-full bg-surface-container border border-outline-variant/40"><span class="w-1.5 h-1.5 rounded-full bg-[#6FBF8E]"></span><span class="font-code-xs text-code-xs text-on-surface uppercase tracking-wider">Live</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="w-full pt-16 bg-surface-container-lowest min-h-screen"><div class="flex flex-col w-full">
+<!-- Controls & Action Ribbon: Agent Selector, Time Pill, Theme Toggle -->
+<div class="w-full px-margin py-space-md flex flex-wrap items-center justify-between gap-space-md border-b border-outline-variant/30 bg-surface/50 backdrop-blur-md">
+<div class="flex items-center gap-space-md">
+<!-- Agent Selector Dropdown -->
+<div class="relative inline-block text-left" id="agent-dropdown-parent">
+<button class="inline-flex items-center gap-space-sm px-space-md py-1.5 rounded-lg bg-surface-container border border-outline-variant/60 text-on-surface hover:border-primary/50 transition-colors" id="agent-dropdown-btn" type="button">
+<span class="w-2 h-2 rounded-full bg-[#6FBF8E] animate-pulse"></span>
+<span class="font-label-md text-label-md tracking-tight font-medium" id="selected-agent-label">Atelier Lune — Concierge</span>
+<span class="material-symbols-outlined text-[16px] text-outline ml-1">expand_more</span>
+</button>
+<div class="hidden absolute left-0 mt-1.5 w-64 rounded-lg bg-surface-container-high border border-outline-variant shadow-xl z-50 py-1" id="agent-dropdown-menu">
+<div class="px-space-md py-1 text-outline font-code-xs text-code-xs uppercase tracking-wider">Agents Disponibles</div>
+<button class="w-full text-left px-space-md py-2 text-on-surface hover:bg-surface-container font-label-md text-label-md flex items-center justify-between" onclick="selectAgent('Atelier Lune — Concierge')" type="button">
+<span>Atelier Lune — Concierge</span>
+<span class="material-symbols-outlined text-[16px] text-primary">check</span>
+</button>
+<button class="w-full text-left px-space-md py-2 text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-md text-label-md flex items-center justify-between" onclick="selectAgent('Ledgerline — Help Center')" type="button">
+<span>Ledgerline — Help Center</span>
+</button>
+</div>
+</div>
+<!-- Time Window Segmented Control -->
+<div class="flex items-center bg-surface-container-lowest p-0.5 rounded-lg border border-outline-variant/40 font-code-xs text-code-xs">
+<button class="timeframe-btn px-3 py-1 rounded text-outline hover:text-on-surface transition-all" onclick="setTimeframe(this, '7d')" type="button">7d</button>
+<button class="timeframe-btn px-3 py-1 rounded bg-primary-container text-on-primary-container font-medium shadow-sm transition-all" onclick="setTimeframe(this, '30d')" type="button">30d</button>
+<button class="timeframe-btn px-3 py-1 rounded text-outline hover:text-on-surface transition-all" onclick="setTimeframe(this, '90d')" type="button">90d</button>
+</div>
+</div>
+<!-- Live Status & Visual Theme Toggle -->
+<div class="flex items-center gap-space-lg">
+<div class="hidden sm:flex items-center gap-space-xs font-code-xs text-code-xs text-outline">
+<span class="material-symbols-outlined text-[14px] text-secondary">verified</span>
+<span>Telemetry sync: Active</span>
+</div>
+<div class="flex items-center bg-surface-container p-0.5 rounded-lg border border-outline-variant/40">
+<button class="flex items-center gap-1.5 px-2.5 py-1 rounded text-on-surface bg-surface-container-high transition-all font-label-sm text-label-sm" id="theme-btn-dark" onclick="switchTheme('dark')" title="Theme Sombre">
+<span class="material-symbols-outlined text-[15px]">dark_mode</span>
+<span>Sombre</span>
+</button>
+<button class="flex items-center gap-1.5 px-2.5 py-1 rounded text-outline hover:text-on-surface transition-all font-label-sm text-label-sm" id="theme-btn-light" onclick="switchTheme('light')" title="Theme Clair">
+<span class="material-symbols-outlined text-[15px]">light_mode</span>
+<span>Clair</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Editorial Canvas Area -->
+<div class="w-full max-w-[1440px] mx-auto px-margin py-space-xl flex flex-col gap-space-xl">
+<!-- 1. Header with Architectural Cadence -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md border-b border-outline-variant/20 pb-space-lg">
+<div class="flex flex-col gap-space-xs max-w-2xl">
+<div class="flex items-center gap-space-sm">
+<span class="font-code-xs text-code-xs uppercase tracking-widest text-secondary font-medium">Cadence Telemetry</span>
+<span class="w-1 h-1 rounded-full bg-outline"></span>
+<span class="font-code-xs text-code-xs text-outline tracking-wider">Audit v4.2</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">Analytics &amp; Source Integrity</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Performance, citation telemetry, and knowledge gap resolution over the last 30 days.</p>
+</div>
+<div class="flex items-center gap-space-sm self-start md:self-auto">
+<button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-surface-container border border-outline-variant/50 text-on-surface hover:border-primary transition-all font-label-md text-label-md" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Export Ledger</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-primary-container text-on-primary-container hover:bg-on-primary-fixed-variant transition-all font-label-md text-label-md" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span>Inspect Guardrails</span>
+</button>
+</div>
+</div>
+<!-- 2. KPI Cards Row (Architectural Raised Vitrines) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- KPI 1 -->
+<div class="p-space-lg rounded-lg bg-surface-container border border-outline-variant/50 flex flex-col justify-between hover:border-outline transition-colors group">
+<div class="flex items-center justify-between text-outline group-hover:text-on-surface transition-colors">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Total Conversations</span>
+<span class="material-symbols-outlined text-[18px]">forum</span>
+</div>
+<div class="my-space-md">
+<span class="font-headline-lg text-headline-lg text-on-surface block tracking-tight font-normal">1,284</span>
+</div>
+<div class="flex items-center gap-1.5 font-code-xs text-code-xs text-[#6FBF8E]">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span class="font-medium">+12%</span>
+<span class="text-outline">vs last month</span>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="p-space-lg rounded-lg bg-surface-container border border-outline-variant/50 flex flex-col justify-between hover:border-outline transition-colors group">
+<div class="flex items-center justify-between text-outline group-hover:text-on-surface transition-colors">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Resolved Without A Human</span>
+<span class="material-symbols-outlined text-[18px]">auto_mode</span>
+</div>
+<div class="my-space-md">
+<span class="font-headline-lg text-headline-lg text-on-surface block tracking-tight font-normal">87%</span>
+</div>
+<div class="flex items-center gap-1.5 font-code-xs text-code-xs text-[#6FBF8E]">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+<span class="font-medium">+4 pts</span>
+<span class="text-outline">vs last month</span>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="p-space-lg rounded-lg bg-surface-container border border-outline-variant/50 flex flex-col justify-between hover:border-outline transition-colors group">
+<div class="flex items-center justify-between text-outline group-hover:text-on-surface transition-colors">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Satisfaction Rating</span>
+<span class="material-symbols-outlined text-[18px]">sentiment_satisfied</span>
+</div>
+<div class="my-space-md">
+<span class="font-headline-lg text-headline-lg text-on-surface block tracking-tight font-normal">94%</span>
+</div>
+<div class="flex items-center gap-1.5 font-code-xs text-code-xs text-[#6FBF8E]">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+<span class="font-medium">+1.2 pts</span>
+<span class="text-outline">net CSAT</span>
+</div>
+</div>
+<!-- KPI 4 -->
+<div class="p-space-lg rounded-lg bg-surface-container border border-outline-variant/50 flex flex-col justify-between hover:border-outline transition-colors group">
+<div class="flex items-center justify-between text-outline group-hover:text-on-surface transition-colors">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Fallback / Handoff Rate</span>
+<span class="material-symbols-outlined text-[18px]">swap_horiz</span>
+</div>
+<div class="my-space-md">
+<span class="font-headline-lg text-headline-lg text-on-surface block tracking-tight font-normal">6%</span>
+</div>
+<div class="flex items-center gap-1.5 font-code-xs text-code-xs text-[#6FBF8E]">
+<span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+<span class="font-medium">-2.1 pts</span>
+<span class="text-outline">graceful decline</span>
+</div>
+</div>
+</div>
+<!-- 3. Large Visual Area Chart — Conversations per day & Verification Ratio -->
+<div class="p-space-lg md:p-space-xl rounded-lg bg-surface-container border border-outline-variant/50 relative overflow-hidden">
+<!-- Header of Chart Card -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm mb-space-lg border-b border-outline-variant/20 pb-space-md">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Conversations per day (Last 30 days)</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Daily inquiry volume and factual verification integrity ratio</p>
+</div>
+<div class="flex items-center gap-space-md font-code-xs text-code-xs">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-0.5 bg-primary-container"></span>
+<span class="text-on-surface">Daily Volume</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-on-surface-variant">Citations Verified (&gt;90%)</span>
+</div>
+</div>
+</div>
+<!-- Area Chart SVG Container -->
+<div class="w-full relative h-[320px] select-none">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 1000 280">
+<defs>
+<lineargradient id="roseGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#9E2F45" stop-opacity="0.32"></stop>
+<stop offset="70%" stop-color="#E3B3BA" stop-opacity="0.08"></stop>
+<stop offset="100%" stop-color="#E3B3BA" stop-opacity="0.00"></stop>
+</lineargradient>
+<pattern height="20" id="grid-dots" patternunits="userSpaceOnUse" width="20">
+<circle cx="2" cy="2" fill="#a58a8c" fill-opacity="0.25" r="0.75"></circle>
+</pattern>
+</defs>
+<!-- Subtle Background Grid -->
+<rect fill="url(#grid-dots)" height="240" opacity="0.6" width="1000"></rect>
+<!-- Horizontal Hairlines -->
+<line opacity="0.4" stroke="#564143" stroke-dasharray="3 3" stroke-width="0.8" x1="0" x2="1000" y1="240" y2="240"></line>
+<line opacity="0.4" stroke="#564143" stroke-dasharray="3 3" stroke-width="0.8" x1="0" x2="1000" y1="180" y2="180"></line>
+<line opacity="0.4" stroke="#564143" stroke-dasharray="3 3" stroke-width="0.8" x1="0" x2="1000" y1="120" y2="120"></line>
+<line opacity="0.4" stroke="#564143" stroke-dasharray="3 3" stroke-width="0.8" x1="0" x2="1000" y1="60" y2="60"></line>
+<line opacity="0.4" stroke="#564143" stroke-dasharray="3 3" stroke-width="0.8" x1="0" x2="1000" y1="0" y2="0"></line>
+<!-- Gradient Area Path -->
+<path d="M 0 190
+                   C 60 185, 100 170, 150 160
+                   C 200 150, 240 180, 290 145
+                   C 340 110, 390 130, 440 115
+                   C 490 100, 540 135, 600 95
+                   C 660 60, 710 80, 770 55
+                   C 830 35, 880 70, 930 45
+                   C 960 35, 985 40, 1000 42
+                   L 1000 240 L 0 240 Z" fill="url(#roseGradient)"></path>
+<!-- Primary Bordeaux Stroke Curve -->
+<path d="M 0 190
+                   C 60 185, 100 170, 150 160
+                   C 200 150, 240 180, 290 145
+                   C 340 110, 390 130, 440 115
+                   C 490 100, 540 135, 600 95
+                   C 660 60, 710 80, 770 55
+                   C 830 35, 880 70, 930 45
+                   C 960 35, 985 40, 1000 42" fill="none" stroke="#9E2F45" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+<!-- Secondary Confidence hairline line -->
+<path d="M 0 205
+                   C 60 200, 100 185, 150 178
+                   C 200 170, 240 195, 290 162
+                   C 340 125, 390 145, 440 130
+                   C 490 115, 540 148, 600 108
+                   C 660 75, 710 95, 770 70
+                   C 830 50, 880 85, 930 60
+                   C 960 50, 985 55, 1000 58" fill="none" opacity="0.65" stroke="#ebbac1" stroke-dasharray="2 4" stroke-width="1"></path>
+<!-- Highlight Marker Pin Line at Oct 24 (x ≈ 770, y ≈ 55) -->
+<line stroke="#ffb2ba" stroke-dasharray="3 3" stroke-width="1.2" x1="770" x2="770" y1="0" y2="240"></line>
+<circle cx="770" cy="55" fill="#9E2F45" r="5" stroke="#ffffff" stroke-width="2"></circle>
+<circle cx="770" cy="55" fill="#ffb2ba" fill-opacity="0.25" r="10"></circle>
+</svg>
+<!-- Y-Axis Fixed Labels -->
+<div class="absolute left-0 top-0 h-[240px] flex flex-col justify-between -translate-x-full pr-2 font-code-xs text-code-xs text-outline pointer-events-none select-none">
+<span>80</span>
+<span>60</span>
+<span>40</span>
+<span>20</span>
+<span>0</span>
+</div>
+<!-- X-Axis Fixed Labels -->
+<div class="w-full flex items-center justify-between pt-2 border-t border-outline-variant/30 font-code-xs text-code-xs text-outline">
+<span>Oct 1</span>
+<span>Oct 8</span>
+<span>Oct 15</span>
+<span>Oct 22</span>
+<span>Oct 30</span>
+</div>
+<!-- Tooltip Pin at Oct 24 (Positioned relative to 77%) -->
+<div class="absolute left-[77%] top-[12px] -translate-x-1/2 pointer-events-none transition-transform duration-150">
+<div class="bg-surface-container-highest px-3 py-2 rounded-lg border border-primary/40 shadow-xl flex flex-col gap-0.5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold tracking-wide">Oct 24</span>
+</div>
+<div class="font-code-xs text-code-xs text-primary-fixed-dim">
+<strong class="text-on-surface">58</strong> conversations <span class="text-outline">·</span> <strong class="text-[#6FBF8E]">93%</strong> verified cite rate
+            </div>
+</div>
+</div>
+</div>
+</div>
+<!-- 4. Two Half-Width Panels: MOST CITED SOURCES & TOP INQUIRIES -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-lg">
+<!-- Left Panel: MOST CITED SOURCES -->
+<div class="p-space-lg rounded-lg bg-surface-container border border-outline-variant/50 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between border-b border-outline-variant/20 pb-space-sm mb-space-md">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Most Cited Sources</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Primary documents queried by the model to form verified citations</p>
+</div>
+<span class="material-symbols-outlined text-outline">dataset</span>
+</div>
+<!-- Citation Bars -->
+<div class="flex flex-col gap-space-md pt-space-xs">
+<!-- Source 1 -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between font-label-md text-label-md">
+<div class="flex items-center gap-space-xs text-on-surface font-medium">
+<span class="material-symbols-outlined text-[16px] text-secondary">picture_as_pdf</span>
+<span>Shipping Policy.pdf</span>
+</div>
+<div class="flex items-center gap-2 font-code-xs text-code-xs">
+<span class="text-on-surface font-semibold">412</span>
+<span class="text-outline">citations (42%)</span>
+</div>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 42%;"></div>
+</div>
+</div>
+<!-- Source 2 -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between font-label-md text-label-md">
+<div class="flex items-center gap-space-xs text-on-surface font-medium">
+<span class="material-symbols-outlined text-[16px] text-secondary">link</span>
+<span>atelierlune.com/faq</span>
+</div>
+<div class="flex items-center gap-2 font-code-xs text-code-xs">
+<span class="text-on-surface font-semibold">328</span>
+<span class="text-outline">citations (33%)</span>
+</div>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 33%;"></div>
+</div>
+</div>
+<!-- Source 3 -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between font-label-md text-label-md">
+<div class="flex items-center gap-space-xs text-on-surface font-medium">
+<span class="material-symbols-outlined text-[16px] text-secondary">description</span>
+<span>Care Guide — Notion</span>
+</div>
+<div class="flex items-center gap-2 font-code-xs text-code-xs">
+<span class="text-on-surface font-semibold">184</span>
+<span class="text-outline">citations (19%)</span>
+</div>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full bg-tertiary-container rounded-full" style="width: 19%;"></div>
+</div>
+</div>
+<!-- Source 4 -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between font-label-md text-label-md">
+<div class="flex items-center gap-space-xs text-on-surface font-medium">
+<span class="material-symbols-outlined text-[16px] text-secondary">picture_as_pdf</span>
+<span>Returns &amp; Exchanges.pdf</span>
+</div>
+<div class="flex items-center gap-2 font-code-xs text-code-xs">
+<span class="text-on-surface font-semibold">96</span>
+<span class="text-outline">citations (10%)</span>
+</div>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full bg-outline rounded-full" style="width: 10%;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-space-lg pt-space-sm border-t border-outline-variant/20 flex items-center justify-between">
+<span class="font-code-xs text-code-xs text-outline">Total citations recorded: 1,020</span>
+<a class="font-label-sm text-label-sm text-primary hover:underline underline-offset-4 flex items-center gap-1" href="#">
+<span>Manage Vector Corpus</span>
+<span class="material-symbols-outlined text-[14px]">arrow_outward</span>
+</a>
+</div>
+</div>
+<!-- Right Panel: TOP INQUIRIES -->
+<div class="p-space-lg rounded-lg bg-surface-container border border-outline-variant/50 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between border-b border-outline-variant/20 pb-space-sm mb-space-md">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Top Inquiries</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Frequently articulated client questions with citation confidence index</p>
+</div>
+<span class="material-symbols-outlined text-outline">psychology</span>
+</div>
+<!-- Top Queries Stack -->
+<div class="flex flex-col divide-y divide-outline-variant/20">
+<!-- Item 1 -->
+<div class="py-space-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm min-w-0">
+<span class="font-code-xs text-code-xs text-outline mt-0.5">01</span>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface font-medium truncate">Shipping destinations and Swiss customs</span>
+<span class="font-code-xs text-code-xs text-outline">342 inquiries handled</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-[#6FBF8E] border border-outline-variant/40 font-code-xs text-code-xs">100% cited</span>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="py-space-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm min-w-0">
+<span class="font-code-xs text-code-xs text-outline mt-0.5">02</span>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface font-medium truncate">Burn time and wick trimming care instructions</span>
+<span class="font-code-xs text-code-xs text-outline">218 inquiries handled</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-[#6FBF8E] border border-outline-variant/40 font-code-xs text-code-xs">100% cited</span>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="py-space-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm min-w-0">
+<span class="font-code-xs text-code-xs text-outline mt-0.5">03</span>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface font-medium truncate">Return window for unburned fragrances</span>
+<span class="font-code-xs text-code-xs text-outline">156 inquiries handled</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-[#6FBF8E] border border-outline-variant/40 font-code-xs text-code-xs">98% cited</span>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="py-space-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm min-w-0">
+<span class="font-code-xs text-code-xs text-outline mt-0.5">04</span>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface font-medium truncate">Sample discovery sets availability</span>
+<span class="font-code-xs text-code-xs text-outline">114 inquiries handled</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-[#6FBF8E] border border-outline-variant/40 font-code-xs text-code-xs">95% cited</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-space-lg pt-space-sm border-t border-outline-variant/20 flex items-center justify-between">
+<span class="font-code-xs text-code-xs text-outline">Average citation latency: 420ms</span>
+<span class="font-code-xs text-code-xs text-secondary">Zero hallucinations flagged</span>
+</div>
+</div>
+</div>
+<!-- 5. Full-Width Panel — UNANSWERED INQUIRIES -->
+<div class="p-space-lg md:p-space-xl rounded-lg bg-surface-container border border-outline-variant/50 flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm border-b border-outline-variant/20 pb-space-md">
+<div>
+<div class="flex items-center gap-space-sm">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Unanswered Inquiries — Add Knowledge to Cover</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Customer queries where the agent gracefully fell back due to unverified documentation.</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded bg-error-container/40 text-error border border-error/20 font-code-xs text-code-xs">
+            4 active gaps
+          </span>
+</div>
+</div>
+<!-- Structured Rows with Hairline Dividers -->
+<div class="flex flex-col divide-y divide-outline-variant/30">
+<!-- Gap Row 1 -->
+<div class="py-space-md flex flex-col sm:flex-row sm:items-center justify-between gap-space-md hover:bg-surface-container-high/40 px-space-sm rounded transition-colors group">
+<div class="flex items-start gap-space-md">
+<span class="material-symbols-outlined text-[20px] text-error mt-0.5">contact_support</span>
+<div class="flex flex-col">
+<span class="font-body-lg text-body-lg text-on-surface font-medium">“Do you offer corporate gifting discounts for orders over 100 units?”</span>
+<div class="flex items-center gap-space-sm mt-1 text-outline font-code-xs text-code-xs">
+<span>First observed: 12 days ago</span>
+<span>•</span>
+<span>Category: Commercial B2B</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-lg self-end sm:self-auto shrink-0">
+<div class="text-right">
+<span class="font-body-md text-body-md text-on-surface font-semibold block">24</span>
+<span class="font-code-xs text-code-xs text-outline">occurrences</span>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-highest border border-outline-variant/50 text-error font-code-xs text-code-xs uppercase tracking-wider">Uncovered</span>
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container border border-outline-variant/60 text-on-surface hover:border-primary hover:text-primary transition-all font-label-md text-label-md flex items-center gap-1 group-hover:border-primary" onclick="openAddSourceModal('Do you offer corporate gifting discounts for orders over 100 units?')" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>Add source</span>
+</button>
+</div>
+</div>
+<!-- Gap Row 2 -->
+<div class="py-space-md flex flex-col sm:flex-row sm:items-center justify-between gap-space-md hover:bg-surface-container-high/40 px-space-sm rounded transition-colors group">
+<div class="flex items-start gap-space-md">
+<span class="material-symbols-outlined text-[20px] text-error mt-0.5">contact_support</span>
+<div class="flex flex-col">
+<span class="font-body-lg text-body-lg text-on-surface font-medium">“Can the porcelain diffuser vessels be refilled at local boutiques?”</span>
+<div class="flex items-center gap-space-sm mt-1 text-outline font-code-xs text-code-xs">
+<span>First observed: 9 days ago</span>
+<span>•</span>
+<span>Category: Retail Concierge</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-lg self-end sm:self-auto shrink-0">
+<div class="text-right">
+<span class="font-body-md text-body-md text-on-surface font-semibold block">19</span>
+<span class="font-code-xs text-code-xs text-outline">occurrences</span>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-highest border border-outline-variant/50 text-error font-code-xs text-code-xs uppercase tracking-wider">Uncovered</span>
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container border border-outline-variant/60 text-on-surface hover:border-primary hover:text-primary transition-all font-label-md text-label-md flex items-center gap-1 group-hover:border-primary" onclick="openAddSourceModal('Can the porcelain diffuser vessels be refilled at local boutiques?')" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>Add source</span>
+</button>
+</div>
+</div>
+<!-- Gap Row 3 -->
+<div class="py-space-md flex flex-col sm:flex-row sm:items-center justify-between gap-space-md hover:bg-surface-container-high/40 px-space-sm rounded transition-colors group">
+<div class="flex items-start gap-space-md">
+<span class="material-symbols-outlined text-[20px] text-error mt-0.5">contact_support</span>
+<div class="flex flex-col">
+<span class="font-body-lg text-body-lg text-on-surface font-medium">“Are candle fragrances safe for households with cats?”</span>
+<div class="flex items-center gap-space-sm mt-1 text-outline font-code-xs text-code-xs">
+<span>First observed: 5 days ago</span>
+<span>•</span>
+<span>Category: Product Formulation</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-lg self-end sm:self-auto shrink-0">
+<div class="text-right">
+<span class="font-body-md text-body-md text-on-surface font-semibold block">15</span>
+<span class="font-code-xs text-code-xs text-outline">occurrences</span>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-highest border border-outline-variant/50 text-error font-code-xs text-code-xs uppercase tracking-wider">Uncovered</span>
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container border border-outline-variant/60 text-on-surface hover:border-primary hover:text-primary transition-all font-label-md text-label-md flex items-center gap-1 group-hover:border-primary" onclick="openAddSourceModal('Are candle fragrances safe for households with cats?')" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>Add source</span>
+</button>
+</div>
+</div>
+<!-- Gap Row 4 -->
+<div class="py-space-md flex flex-col sm:flex-row sm:items-center justify-between gap-space-md hover:bg-surface-container-high/40 px-space-sm rounded transition-colors group">
+<div class="flex items-start gap-space-md">
+<span class="material-symbols-outlined text-[20px] text-error mt-0.5">contact_support</span>
+<div class="flex flex-col">
+<span class="font-body-lg text-body-lg text-on-surface font-medium">“Do you accept Klarna or Clearpay payment installments?”</span>
+<div class="flex items-center gap-space-sm mt-1 text-outline font-code-xs text-code-xs">
+<span>First observed: 2 days ago</span>
+<span>•</span>
+<span>Category: Checkout &amp; Billing</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-lg self-end sm:self-auto shrink-0">
+<div class="text-right">
+<span class="font-body-md text-body-md text-on-surface font-semibold block">11</span>
+<span class="font-code-xs text-code-xs text-outline">occurrences</span>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-highest border border-outline-variant/50 text-error font-code-xs text-code-xs uppercase tracking-wider">Uncovered</span>
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container border border-outline-variant/60 text-on-surface hover:border-primary hover:text-primary transition-all font-label-md text-label-md flex items-center gap-1 group-hover:border-primary" onclick="openAddSourceModal('Do you accept Klarna or Clearpay payment installments?')" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>Add source</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Slide-Over Drawer for "Add Source" Action -->
+<div class="fixed inset-0 z-50 hidden" id="add-source-modal">
+<div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="closeAddSourceModal()"></div>
+<div class="absolute right-0 top-0 h-full w-full max-w-lg bg-surface-container border-l border-outline-variant p-space-xl flex flex-col justify-between shadow-2xl">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between border-b border-outline-variant/30 pb-space-sm">
+<div>
+<span class="font-code-xs text-code-xs uppercase tracking-wider text-secondary">Knowledge Resolution</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Attach Source Document</h3>
+</div>
+<button class="text-outline hover:text-on-surface" onclick="closeAddSourceModal()" type="button">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-space-md rounded bg-surface-container-high border border-outline-variant/50">
+<span class="font-label-sm text-label-sm text-outline block mb-1">Unresolved Client Query</span>
+<p class="font-body-md text-body-md text-on-surface italic font-serif" id="modal-query-target">“...”</p>
+</div>
+<div class="flex flex-col gap-space-sm">
+<label class="font-label-sm text-label-sm text-on-surface">Document Title / URL</label>
+<input class="w-full px-space-md py-2 rounded bg-surface border border-outline-variant text-on-surface focus:border-primary outline-none font-body-md text-body-md" placeholder="e.g. B2B Commercial Guidelines 2025.pdf" type="text"/>
+</div>
+<div class="flex flex-col gap-space-sm">
+<label class="font-label-sm text-label-sm text-on-surface">Explicit Policy Answer Snippet</label>
+<textarea class="w-full p-space-md rounded bg-surface border border-outline-variant text-on-surface focus:border-primary outline-none font-body-md text-body-md" placeholder="Enter verified text that the concierge will cite as ground truth..." rows="4"></textarea>
+</div>
+<div class="flex items-center gap-space-sm p-space-sm rounded bg-primary-container/20 border border-primary/20">
+<span class="material-symbols-outlined text-primary text-[20px]">shield</span>
+<span class="font-code-xs text-code-xs text-primary-fixed-dim">Zero-shot validation will re-index this query across all European regional clusters instantly.</span>
+</div>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-space-md border-t border-outline-variant/30">
+<button class="px-space-md py-2 rounded-lg bg-surface border border-outline-variant text-on-surface font-label-md text-label-md" onclick="closeAddSourceModal()" type="button">Cancel</button>
+<button class="px-space-md py-2 rounded-lg bg-primary-container text-on-primary-container hover:bg-on-primary-fixed-variant transition-all font-label-md text-label-md flex items-center gap-1.5" onclick="submitSource()" type="button">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+<span>Index &amp; Verify</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+    // Theme Switcher Logic (Toggles .dark on <html>)
+    function switchTheme(theme) {
+      const htmlEl = document.documentElement;
+      const darkBtn = document.getElementById('theme-btn-dark');
+      const lightBtn = document.getElementById('theme-btn-light');
+
+      if (theme === 'dark') {
+        htmlEl.classList.add('dark');
+        darkBtn.className = "flex items-center gap-1.5 px-2.5 py-1 rounded text-on-surface bg-surface-container-high transition-all font-label-sm text-label-sm";
+        lightBtn.className = "flex items-center gap-1.5 px-2.5 py-1 rounded text-outline hover:text-on-surface transition-all font-label-sm text-label-sm";
+      } else {
+        htmlEl.classList.remove('dark');
+        lightBtn.className = "flex items-center gap-1.5 px-2.5 py-1 rounded text-on-surface bg-surface-container-high transition-all font-label-sm text-label-sm";
+        darkBtn.className = "flex items-center gap-1.5 px-2.5 py-1 rounded text-outline hover:text-on-surface transition-all font-label-sm text-label-sm";
+      }
+    }
+
+    // Agent Dropdown Toggle
+    const dropdownBtn = document.getElementById('agent-dropdown-btn');
+    const dropdownMenu = document.getElementById('agent-dropdown-menu');
+    dropdownBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownMenu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', () => {
+      dropdownMenu.classList.add('hidden');
+    });
+
+    function selectAgent(name) {
+      document.getElementById('selected-agent-label').textContent = name;
+      dropdownMenu.classList.add('hidden');
+    }
+
+    // Timeframe switcher pill
+    function setTimeframe(btn, range) {
+      const buttons = document.querySelectorAll('.timeframe-btn');
+      buttons.forEach(b => {
+        b.className = "timeframe-btn px-3 py-1 rounded text-outline hover:text-on-surface transition-all";
+      });
+      btn.className = "timeframe-btn px-3 py-1 rounded bg-primary-container text-on-primary-container font-medium shadow-sm transition-all";
+    }
+
+    // Modal Interaction
+    function openAddSourceModal(query) {
+      document.getElementById('modal-query-target').textContent = `“${query}”`;
+      document.getElementById('add-source-modal').classList.remove('hidden');
+    }
+
+    function closeAddSourceModal() {
+      document.getElementById('add-source-modal').classList.add('hidden');
+    }
+
+    function submitSource() {
+      const btn = event.currentTarget;
+      btn.innerHTML = `<span class="material-symbols-outlined text-[16px] animate-spin">refresh</span><span>Indexing...</span>`;
+      setTimeout(() => {
+        btn.innerHTML = `<span class="material-symbols-outlined text-[16px]">check</span><span>Indexed!</span>`;
+        setTimeout(() => {
+          closeAddSourceModal();
+          btn.innerHTML = `<span class="material-symbols-outlined text-[16px]">sync</span><span>Index & Verify</span>`;
+        }, 700);
+      }, 1000);
+    }
+  </script>
+</div></main></div></body></html>

@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sigilla — Embeddable Concierge Widget System (8 States + Light Variant)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-serif: 'Instrument Serif', Georgia, serif;
+      --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    .font-serif { font-family: var(--font-serif); }
+    .font-sans { font-family: var(--font-sans); }
+    .font-mono { font-family: var(--font-mono); }
+    
+    /* Custom pulsing caret */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .animate-caret {
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 0.3; transform: scale(0.85); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+    .dot-1 { animation: pulse-dot 1.2s infinite ease-in-out; }
+    .dot-2 { animation: pulse-dot 1.2s infinite ease-in-out 0.2s; }
+    .dot-3 { animation: pulse-dot 1.2s infinite ease-in-out 0.4s; }
+
+    /* Custom smooth scrollbar */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(168, 153, 154, 0.25);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(168, 153, 154, 0.4);
+    }
+  </style>
+</head>
+<body class="bg-[#0A0708] text-[#F3ECE6] font-sans antialiased selection:bg-[#9E2F45] selection:text-[#F3ECE6] min-h-full">
+
+  <!-- TOP HEADER / NAV BAR -->
+  <header class="sticky top-0 z-50 border-b border-[#2E2225] bg-[#0E0A0B]/90 backdrop-blur-md px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-6">
+      <div class="flex items-center gap-3">
+        <span class="font-serif text-2xl tracking-wide text-[#F3ECE6]">Sigilla</span>
+        <span class="text-xs uppercase tracking-[0.16em] px-2 py-0.5 rounded border border-[#2E2225] text-[#A8999A] bg-[#171113]">Widget Specification</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-2 text-xs font-mono text-[#A8999A]">
+        <span>SPEC: 380×600px</span>
+        <span class="text-[#2E2225]">•</span>
+        <span>RADIUS: 20px</span>
+        <span class="text-[#2E2225]">•</span>
+        <span>AGENT: Atelier Lune Concierge</span>
+      </nav>
+    </div>
+    
+    <div class="flex items-center gap-3">
+      <!-- Jump to state selector -->
+      <div class="flex items-center gap-1.5 text-xs text-[#A8999A] mr-2">
+        <span class="w-2 h-2 rounded-full bg-[#6FBF8E]"></span>
+        <span class="font-mono">8 States + 1 Light Variant</span>
+      </div>
+      <a href="#state-8" class="text-xs font-medium px-3 py-1.5 rounded-full border border-[#2E2225] text-[#F3ECE6] hover:border-[#E3B3BA]/40 transition">Jump to Mobile</a>
+    </div>
+  </header>
+
+  <!-- INTRO BANNER -->
+  <section class="max-w-7xl mx-auto px-6 pt-10 pb-6 border-b border-[#2E2225]/60">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div>
+        <p class="text-xs font-mono tracking-widest text-[#E3B3BA] uppercase mb-2">ARCHIVAL FIDELITY • ATELIER LUNE DEPLOYMENT</p>
+        <h1 class="font-serif text-4xl md:text-5xl text-[#F3ECE6] tracking-tight">The Concierge Widget System</h1>
+        <p class="text-[#A8999A] text-sm md:text-base mt-2 max-w-2xl font-light leading-relaxed">
+          Embeddable client surface responding with authoritative citations sealed by documentation. Rendered bottom-right at 380×600px over the client's luxury storefront <span class="font-mono text-[#E3B3BA]">atelierlune.com</span>.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-2 text-xs font-mono">
+        <div class="px-3 py-1.5 rounded border border-[#2E2225] bg-[#171113] text-[#F3ECE6] flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-[#9E2F45]"></span>
+          <span>Bordeaux Accent: #9E2F45</span>
+        </div>
+        <div class="px-3 py-1.5 rounded border border-[#2E2225] bg-[#171113] text-[#F3ECE6] flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-[#E3B3BA]"></span>
+          <span>Rose Quartz: #E3B3BA</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN GRID OF STATES -->
+  <main class="max-w-7xl mx-auto px-6 py-12 space-y-20">
+
+    <!-- ========================================== -->
+    <!-- ROW 1: STATE 1 & STATE 2 -->
+    <!-- ========================================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      
+      <!-- STATE 1: CLOSED (LAUNCHER + TOOLTIP) -->
+      <div class="flex flex-col">
+        <div class="flex items-center justify-between mb-3 px-1">
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-[#201719] text-[#E3B3BA] border border-[#2E2225]">STATE 1</span>
+            <h3 class="font-medium text-sm text-[#F3ECE6]">Closed Launcher with Tooltip</h3>
+          </div>
+          <span class="text-xs text-[#A8999A] font-mono">56px Circle • Subtle Callout</span>
+        </div>
+
+        <!-- MOCKUP CONTAINER -->
+        <div class="relative w-full h-[580px] rounded-2xl border border-[#2E2225] overflow-hidden bg-[#FBF8F5] shadow-2xl flex flex-col justify-end p-8">
+          <!-- Background Storefront (Atelier Lune - Luxury Candle Store) -->
+          <div class="absolute inset-0 p-8 flex flex-col justify-between pointer-events-none filter blur-[1.5px] opacity-70 transition duration-300">
+            <!-- Store Nav -->
+            <div class="flex justify-between items-center border-b border-[#E8DED8] pb-4">
+              <div class="font-serif text-2xl tracking-wider text-[#1A1214]">ATELIER LUNE</div>
+              <div class="flex gap-6 text-xs uppercase tracking-widest text-[#6B5A5D]">
+                <span>Parfums d’Intérieur</span>
+                <span>Bougies Cire</span>
+                <span>Maison</span>
+              </div>
+              <div class="text-xs uppercase tracking-widest text-[#1A1214]">Panier (0)</div>
+            </div>
+            <!-- Store Hero -->
+            <div class="my-auto max-w-sm">
+              <span class="text-[10px] uppercase tracking-[0.2em] text-[#85590C]">Édition Limitée • 180g</span>
+              <h2 class="font-serif text-3xl text-[#1A1214] mt-1">Bougie Cuir & Encens Noir</h2>
+              <p class="text-xs text-[#6B5A5D] mt-2 leading-relaxed font-light">Cire végétale coulée à la main en Provence, mèche pur coton tressé. Note de tête safran sauvage et vétiver de Java.</p>
+              <div class="mt-4 font-mono text-xs text-[#1A1214]">CHF 145.00</div>
+            </div>
+            <!-- Store Footer snippet -->
+            <div class="text-[10px] text-[#A8999A] border-t border-[#E8DED8] pt-2">© 2025 Atelier Lune — Genève & Paris</div>
+          </div>
+
+          <!-- WIDGET CONTENT: STATE 1 -->
+          <div class="relative z-10 self-end flex flex-col items-end gap-3">
+            <!-- Tooltip Card -->
+            <div class="bg-[#171113] border border-[#2E2225] text-[#F3ECE6] rounded-xl px-4 py-3 shadow-[0_12px_32px_rgba(0,0,0,0.65)] max-w-[240px] flex items-start gap-2.5 animate-bounce-short">
+              <div class="w-1.5 h-1.5 rounded-full bg-[#6FBF8E] mt-1.5 shrink-0"></div>
+              <p class="text-xs text-[#F3ECE6] font-light leading-snug">
+                Questions about your order? Ask our concierge.
+              </p>
+            </div>
+            <!-- 56px Bordeaux Launcher Circle -->
+            <button class="w-14 h-14 rounded-full bg-[#9E2F45] hover:bg-[#872538] text-[#F3ECE6] shadow-[0_10px_25px_rgba(158,47,69,0.45)] border border-[#9E2F45] flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 group">
+              <span class="font-serif text-3xl font-normal select-none -translate-y-0.5">S</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATE 2: OPEN, WELCOME -->
+      <div class="flex flex-col">
+        <div class="flex items-center justify-between mb-3 px-1">
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-[#201719] text-[#E3B3BA] border border-[#2E2225]">STATE 2</span>
+            <h3 class="font-medium text-sm text-[#F3ECE6]">Open / Welcome & Starter Prompts</h3>
+          </div>
+          <span class="text-xs text-[#A8999A] font-mono">380×600px • First Touch</span>
+        </div>
+
+        <!-- MOCKUP CONTAINER -->
+        <div class="relative w-full h-[660px] rounded-2xl border border-[#2E2225] overflow-hidden bg-[#FBF8F5] shadow-2xl flex items-end justify-end p-6">
+          <!-- Background Storefront (Blurred) -->
+          <div class="absolute inset-0 p-8 flex flex-col justify-between pointer-events-none filter blur-[3px] opacity-40">
+            <div class="font-serif text-2xl tracking-wider text-[#1A1214]">ATELIER LUNE</div>
+            <div class="my-auto max-w-sm">
+              <h2 class="font-serif text-4xl text-[#1A1214]">Bougie Cuir & Encens Noir</h2>
+            </div>
+          </div>
+
+          <!-- WIDGET PANEL (380x600px) -->
+          <div class="relative z-10 w-[380px] h-[600px] rounded-[20px] bg-[#171113] border border-[#2E2225] shadow-[0_24px_60px_rgba(0,0,0,0.85)] flex flex-col overflow-hidden">
+            
+            <!-- Widget Header -->
+            <div class="px-5 py-4 border-b border-[#2E2225] bg-[#171113] flex items-center justify-between shrink-0">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-[#9E2F45] flex items-center justify-center text-[#F3ECE6] shadow-sm">
+                  <span class="font-serif text-xl select-none -translate-y-0.5">S</span>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-medium text-[#F3ECE6] tracking-tight">Atelier Lune Concierge</span>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#6FBF8E]"></span>
+                    <span class="text-[11px] text-[#A8999A]">Online</span>
+                  </div>
+                </div>
+              </div>
+              <button class="w-7 h-7 rounded-full flex items-center justify-center text-[#A8999A] hover:text-[#F3ECE6] hover:bg-[#201719] transition">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+
+            <!-- Widget Conversation Area -->
+            <div class="flex-1 p-5 overflow-y-auto space-y-4 flex flex-col justify-start">
+              <!-- Bot Welcome Message -->
+              <div class="flex flex-col items-start gap-1 max-w-[85%]">
+                <span class="text-[10px] font-mono text-[#A8999A] uppercase tracking-wider pl-1">Concierge • 21:04</span>
+                <div class="bg-[#201719] border border-[#2E2225] rounded-2xl rounded-tl-sm px-4 py-3 text-sm text-[#F3ECE6] font-light leading-relaxed">
+                  Good evening. How may I help you today?
+                </div>
+              </div>
+
+              <!-- Suggestion Chips -->
+              <div class="pt-2 space-y-2">
+                <span class="text-[11px] uppercase tracking-widest text-[#A8999A] pl-1 font-mono">Suggested Inquiries</span>
+                <div class="flex flex-wrap gap-2">
+                  <button class="text-xs px-3 py-1.5 rounded-full bg-[#201719] border border-[#2E2225] text-[#F3ECE6] hover:border-[#E3B3BA]/60 hover:text-[#E3B3BA] transition text-left">
+                    Shipping times
+                  </button>
+                  <button class="text-xs px-3 py-1.5 rounded-full bg-[#201719] border border-[#2E2225] text-[#F3ECE6] hover:border-[#E3B3BA]/60 hover:text-[#E3B3BA] transition text-left">
+                    Return policy
+                  </button>
+                  <button class="text-xs px-3 py-1.5 rounded-full bg-[#201719] border border-[#2E2225] text-[#F3ECE6] hover:border-[#E3B3BA]/60 hover:text-[#E3B3BA] transition text-left">
+                    Scent recommendations
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Input & Footer -->
+            <div class="p-4 border-t border-[#2E2225] bg-[#171113] shrink-0 space-y-2">
+              <div class="relative flex items-center">
+                <input type="text" placeholder="Ask about orders, shipping or scents…" class="w-full bg-[#201719] border border-[#2E2225] rounded-xl pl-3.5 pr-10 py-2.5 text-xs text-[#F3ECE6] placeholder-[#A8999A] focus:outline-none focus:border-[#E3B3BA]/50 transition">
+                <button class="absolute right-1.5 w-7 h-7 rounded-lg bg-[#9E2F45] hover:bg-[#872538] text-[#F3ECE6] flex items-center justify-center transition">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 14-7-7 14V12H5z"/></svg>
+                </button>
+              </div>
+              <div class="flex items-center justify-center gap-1.5 pt-1">
+                <span class="text-[10px] text-[#A8999A] font-light">Sealed by</span>
+                <span class="font-serif text-[11px] text-[#A8999A] tracking-wider">Sigilla</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- ROW 2: STATE 3 & STATE 4 -->
+    <!-- ========================================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      
+      <!-- STATE 3: STREAMING ANSWER -->
+      <div class="flex flex-col">
+        <div class="flex items-center justify-between mb-3 px-1">
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-[#201719] text-[#E3B3BA] border border-[#2E2225]">STATE 3</span>
+            <h3 class="font-medium text-sm text-[#F3ECE6]">Streaming Generation / Active Caret</h3>
+          </div>
+          <span class="text-xs text-[#A8999A] font-mono">Pulsing Dots • Token Stream</span>
+        </div>
+
+        <!-- MOCKUP CONTAINER -->
+        <div class="relative w-full h-[660px] rounded-2xl border border-[#2E2225] overflow-hidden bg-[#FBF8F5] shadow-2xl flex items-end justify-end p-6">
+          <div class="absolute inset-0 p-8 flex flex-col justify-between pointer-events-none filter blur-[3px] opacity-40">
+            <div class="font-serif text-2xl tracking-wider text-[#1A1214]">ATELIER LUNE</div>
+          </div>
+
+          <!-- WIDGET PANEL (380x600px) -->
+          <div class="relative z-10 w-[380px] h-[600px] rounded-[20px] bg-[#171113] border border-[#2E2225] shadow-[0_24px_60px_rgba(0,0,0,0.85)] flex flex-col overflow-hidden">
+            <!-- Header -->
+            <div class="px-5 py-4 border-b border-[#2E2225] bg-[#171113] flex items-center justify-between shrink-0">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-[#9E2F45] flex items-center justify-center text-[#F3ECE6]">
+                  <span class="font-serif text-xl select-none -translate-y-0.5">S</span>
+                </div>
+                <div>
+                  <div class="text-sm font-medium text-[#F3ECE6]">Atelier Lune Concierge</div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#6FBF8E]"></span>
+                    <span class="text-[11px] text-[#A8999A]">Retrieving documentation…</span>
+                  </div>
+                </div>
+              </div>
+              <button class="w-7 h-7 rounded-full flex items-center justify-center text-[#A8999A]">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+
+            <!-- Conversation -->
+            <div class="flex-1 p-5 overflow-y-auto space-y-4 flex flex-col">
+              <!-- Visitor Message (Right-aligned, raised surface) -->
+              <div class="flex flex-col items-end gap-1 self-end max-w-[85%]">
+                <span class="text-[10px] font-mono text-[#A8999A] uppercase tracking-wider pr-1">Visitor • 21:06</span>
+                <div class="bg-[#201719] border border-[#2E2225] rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-[#F3ECE6] font-normal leading-relaxed">
+                  Do your candles ship to Switzerland?
+                </div>
+              </div>
+
+              <!-- Bot Streaming Message -->
+              <div class="flex flex-col items-start gap-1 max-w-[90%]">
+                <div class="flex items-center gap-2 pl-1">
+                  <span class="text-[10px] font-mono text-[#A8999A] uppercase tracking-wider">Concierge</span>
+                  <div class="flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#9E2F45] dot-1"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#9E2F45] dot-2"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#9E2F45] dot-3"></span>
+                  </div>
+                </div>
+                <div class="bg-[#201719] border border-[#2E2225] rounded-2xl rounded-tl-sm px-4 py-3 text-sm text-[#F3ECE6] font-light leading-relaxed">
+                  Yes, we ship to Switzerland within 3 to 5 business days<span class="inline-block w-0.5 h-4 bg-[#E3B3BA] ml-1 align-middle animate-caret"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Input disabled during stream -->
+            <div class="p-4 border-t border-[#2E2225] bg-[#171113] shrink-0 space-y-2 opacity-80">
+              <div class="relative flex items-center">
+                <input disabled type="text" placeholder="Concierge is answering…" class="w-full bg-[#201719] border border-[#2E2225] rounded-xl pl-3.5 pr-10 py-2.5 text-xs text-[#A8999A] cursor-not-allowed">
+                <button disabled class="absolute right-1.5 w-7 h-7 rounded-lg bg-[#9E2F45]/60 text-[#F3ECE6] flex items-center justify-center">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 14-7-7 14V12H5z"/></svg>
+                </button>
+              </div>
+              <div class="text-center text-[10px] text-[#A8999A]">Sealed by <span class="font-serif">Sigilla</span></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- STATE 4: ANSWER WITH CITATIONS (SIGNATURE MOTIF) -->
+      <div class="flex flex-col">
+        <div class="flex items-center justify-between mb-3 px-1">
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-[#201719] text-[#E3B3BA] border border-[#2E2225]">STATE 4</span>
+            <h3 class="font-medium text-sm text-[#F3ECE6]">Answer with Citation Seals & Provenance</h3>
+          </div>
+          <span class="text-xs text-[#A8999A] font-mono">Bordeaux Seals • Rose Quartz Links</span>
+        </div>
+
+        <!-- MOCKUP CONTAINER -->
+        <div class="relative w-full h-[660px] rounded-2xl border border-[#2E2225] overflow-hidden bg-[#FBF8F5] shadow-2xl flex items-end justify-end p-6">
+          <div class="absolute inset-0 p-8 flex flex-col justify-between pointer-events-none filter blur-[3px] opacity-40">
+            <div class="font-serif text-2xl tracking-wider text-[#1A1214]">ATELIER LUNE</div>
+          </div>
+
+          <!-- WIDGET PANEL (380x600px) -->
+          <div class="relative z-10 w-[380px] h-[600px] rounded-[20px] bg-[#171113] border border-[#2E2225] shadow-[0_24px_60px_rgba(0,0,0,0.85)] flex flex-col overflow-hidden">
+            <!-- Header -->
+            <div class="px-5 py-4 border-b border-[#2E2225] bg-[#171113] flex items-center justify-between shrink-0">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-[#9E2F45] flex items-center justify-center text-[#F3ECE6]">
+                  <span class="font-serif text-xl select-none -translate-y-0.5">S</span>
+                </div>
+                <div>
+                  <div class="text-sm font-medium text-[#F3ECE6]">Atelier Lune Concierge</div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#6FBF8E]"></span>
+                    <span class="text-[11px] text-[#A8999A]">Online</span>
+                  </div>
+                </div>
+              </div>
+              <button class="w-7 h-7 rounded-full flex items-center justify-center text-[#A8999A] hover:text-[#F3ECE6]">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+
+            <!-- Conversation -->
+            <div class="flex-1 p-5 overflow-y-auto space-y-4 flex flex-col">
+              <!-- Visitor Message -->
+              <div class="flex flex-col items-end gap-1 self-end max-w-[85%]">
+                <span class="text-[10px] font-mono text-[#A8999A] uppercase tracking-wider pr-1">Visitor • 21:06</span>
+                <div class="bg-[#201719] border border-[#2E2225] rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-[#F3ECE6] font-normal leading-relaxed">
+                  Do your candles ship to Switzerland?
+                </div>
+              </div>
+
+              <!-- Bot Complete Answer with Citation Seals -->
+              <div class="flex flex-col items-start gap-2 max-w-[95%]">
+                <span class="text-[10px] font-mono text-[#A8999A] uppercase tracking-wider pl-1">Concierge • 21:07</span>
+                <div class="bg-[#201719] border border-[#2E2225] rounded-2xl rounded-tl-sm p-4 text-sm text-[#F3ECE6] font-light leading-relaxed space-y-3">
+                  <p>
+                    Yes, we ship to Switzerland within 3 to 5 business days
+                    <!-- Citation Seal 1 -->
+                    <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#9E2F45] text-[#F3ECE6] text-[10px] font-mono font-medium mx-1 align-baseline select-none">1</span>. 
+                    Duties are included at checkout
+                    <!-- Citation Seal 2 -->
+                    <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#9E2F45] text-[#F3ECE6] text-[10px] font-mono font-medium mx-1 align-baseline select-none">2</span>.
+                  </p>
+
+                  <!-- Provenance Section -->
+                  <div class="pt-2 border-t border-[#2E2225] space-y-1.5">
+                    <div class="text-[10px] uppercase tracking-widest text-[#A8999A] font-mono">Sealed by 2 sources</div>
+                    <div class="flex flex-col gap-1 text-xs">
+                      <a href="#" class="text-[#E3B3BA] hover:underline flex items-center gap-1.5 font-mono text-[11px]">
+                        <span class="w-3.5 h-3.5 rounded-full bg-[#9E2F45] text-[#F3ECE6] flex items-center justify-center text-[9px]">1</span>
+                        <span>Shipping Policy — p.2</span>
+                      </a>
+                      <a href="#" class="text-[#E3B3BA] hover:underline flex items-center gap-1.5 font-mono text-[11px]">
+                        <span class="w-3.5 h-3.5 rounded-full bg-[#9E2F45] text-[#F3ECE6] flex items-center justify-center text-[9px]">2</span>
+                        <span>atelierlune.com/faq</span>
+                      </a>
+                    </div>
+                  </div>
+
+                  <!-- Feedback buttons -->
+                  <div class="pt-2 flex items-center gap-2 border-t border-[#2E2225]/60">
+                    <span class="text-[10px] text-[#A8999A]">Was this helpful?</span>
+                    <button class="w-6 h-6 rounded flex items-center justify-center text-[#A8999A] hover:text-[#F3ECE6] hover:bg-[#171113] transition" title="Helpful">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h3Z"/></svg>
+                    </button>
+                    <button class="w-6 h-6 rounded flex items-center justify-center text-[#A8999A] hover:text-[#F3ECE6] hover:bg-[#171113] transition" title="Not helpful">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 14V2"/><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3Z"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Input & Footer -->
+            <div class="p-4 border-t border-[#2E2225] bg-[#171113] shrink-0 space-y-2">
+              <div class="relative flex items-center">
+                <input type="text" placeholder="Ask about orders, shipping or scents…" class="w-full bg-[#201719] border border-[#2E2225] rounded-xl pl-3.5 pr-10 py-2.5 text-xs text-[#F3ECE6] placeholder-[#A8999A] focus:outline-none focus:border-[#E3B3BA]/50 transition">
+                <button class="absolute right-1.5 w-7 h-7 rounded-lg bg-[#9E2F45] hover:bg-[#872538] text-[#F3ECE6] flex items-center justify-center transition">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 14-7-7 14V12H5z"/></svg>
+                </button>
+              </div>
+              <div class="text-center text-[10px] text-[#A8999A]">Sealed by <span class="font-serif">Sigilla</span></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- ROW 3: STATE 5 & STATE 6 -->
+    <!-- ========================================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      
+      <!-- STATE 5: FALLBACK + HANDOFF OFFER -->
+      <div class="flex flex-col">
+        <div class="flex items-center justify-between mb-3 px-1">
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-[#201719] text-[#E3B3BA] border border-[#2E2225]">STATE 5</span>
+            <h3 class="font-medium text-sm text-[#F3ECE6]">Fallback & Human Escalation Offer</h3>
+          </div>
+          <span class="text-xs text-[#A8999A] font-mono">Unverified Threshold • Handoff Card</span>
+        </div>
+
+        <!-- MOCKUP CONTAINER -->
+        <div class="relative w-full h-[660px] rounded-2xl border border-[#2E2225] overflow-hidden bg-[#FBF8F5] shadow-2xl flex items-end justify-end p-6">
+          <div class="absolute inset-0 p-8 flex flex-col justify-between pointer-events-none filter blur-[3px] opacity-40">
+            <div class="font-serif text-2xl tracking-wider text-[#1A1214]">ATELIER LUNE</div>
+          </div>
+
+          <!-- WIDGET PANEL (380x600px) -->
+          <div class="relative z-10 w-[380px] h-[600px] rounded-[20px] bg-[#171113] border border-[#2E2225] shadow-[0_24px_60px_rgba(0,0,0,0.85)] flex flex-col overflow-hidden">
+            <!-- Header -->
+            <div class="px-5 py-4 border-b border-[#2E2225] bg-[#171113] flex items-center justify-between shrink-0">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-[#9E2F45] flex items-center justify-center text-[#F3ECE6]">
+                  <span class="font-serif text-xl select-none -translate-y-0.5">S</span>
+                </div>
+                <div>
+                  <div class="text-sm font-medium text-[#F3ECE6]">Atelier Lune Concierge</div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#E0B05C]"></span>
+                    <span class="text-[11px] text-[#A8999A]">Awaiting escalation</span>
+                  </div>
+                </div>
+              </div>
+              <button class="w-7 h-7 rounded-full flex items-center justify-center text-[#A8999A] hover:text-[#F3ECE6]">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+
+            <!-- Conversation -->
+            <div class="flex-1 p-5 overflow-y-auto space-y-4 flex flex-col">
+              <!-- Visitor Message asking complex question -->
+              <div class="flex flex-col items-end gap-1 self-end max-w-[85%]">
+                <span class="text-[10px] font-mono text-[#A8999A] uppercase tracking-wider pr-1">Visitor • 21:12</span>
+                <div class="bg-[#201719] border border-[#2E2225] rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-[#F3ECE6] font-normal leading-relaxed">
+                  Can I engrave custom wedding dates directly into the porcelain lids?
+                </div>
+              </div>
+
+              <!-- Bot Fallback Message in Muted Italic -->
+              <div class="flex flex-col items-start gap-1 max-w-[95%]">
+                <span class="text-[10px] font-mono text-[#A8999A] uppercase tracking-wider pl-1">Concierge • 21:13</span>
+                <div class="bg-[#201719] border border-[#2E2225] rounded-2xl rounded-tl-sm p-4 text-sm leading-relaxed space-y-3">
+                  <p class="text-[#A8999A] italic font-light">
+                    I don't have a verified answer to that. Let me connect you with the team.
+                  </p>
+
+                  <!-- Refined Escalation Card -->
+                  <div class="p-3.5 rounded-xl bg-[#171113] border border-[#2E2225] space-y-2.5 not-italic">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[11px] uppercase tracking-wider font-mono text-[#E3B3BA]">Maison Escalation</span>
+                      <span class="text-[10px] text-[#A8999A]">Camille is on duty</span>
+                    </div>
+                    <input type="email" placeholder="Your email (optional)" class="w-full bg-[#201719] border border-[#2E2225] rounded-lg px-3 py-2 text-xs text-[#F3ECE6] placeholder-[#A8999A] focus:outline-none focus:border-[#E3B3BA]/50 transition">
+                    <button class="w-full py-2 rounded-lg bg-[#9E2F45] hover:bg-[#872538] text-xs font-medium text-[#F3ECE6] transition flex items-center justify-center gap-1.5 shadow-sm">
+                      <span>Talk to a human</span>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Input -->
+            <div class="p-4 border-t border-[#2E2225] bg-[#171113] shrink-0 space-y-2">
+              <div class="relative flex items-center">
+                <input type="text" placeholder="Or ask another question…" class="w-full bg-[#201719] border border-[#2E2225] rounded-xl pl-3.5 pr-10 py-2.5 text-xs text-[#F3ECE6] placeholder-[#A8999A] focus:outline-none focus:border-[#E3B3BA]/50 transition">
+                <button class="absolute right-1.5 w-7 h-7 rounded-lg bg-[#9E2F45] text-[#F3ECE6] flex items-center justify-center">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 14-7-7 14V12H5z"/></svg>
+                </button>
+              </div>
+              <div class="text-center text-[10px] text-[#A8999A]">Sealed by <span class="font-serif">Sigilla</span></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- STATE 6: HUMAN MODE -->
+      <div class="flex flex-col">
+        <div class="flex items-center justify-between mb-3 px-1">
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-[#201719] text-[#E3B3BA] border border-[#2E2225]">STATE 6</span>
+            <h3 class="font-medium text-sm text-[#F3ECE6]">Human Mode (Camille Joined)</h3>
+          </div>
+          <span class="text-xs text-[#A8999A] font-mono">System Divider • Photo Avatar</span>
+        </div>
+
+        <!-- MOCKUP CONTAINER -->
+        <div class="relative w-full h-[660px] rounded-2xl border border-[#2E2225] overflow-hidden bg-[#FBF8F5] shadow-2xl flex items-end justify-end p-6">
+          <div class="absolute inset-0 p-8 flex flex-col justify-between pointer-events-none filter blur-[3px] opacity-40">
+            <div class="font-serif text-2xl tracking-wider text-[#1A1214]">ATELIER LUNE</div>
+          </div>
+
+          <!-- WIDGET PANEL (380x600px) -->
+          <div class="relative z-10 w-[380px] h-[600px] rounded-[20px] bg-[#171113] border border-[#2E2225] shadow-[0_24px_60px_rgba(0,0,0,0.85)] flex flex-col overflow-hidden">
+            <!-- Header (Updated Subtitle: "With Camille · usually replies in minutes") -->
+            <div class="px-5 py-4 border-b border-[#2E2225] bg-[#171113] flex items-center justify-between shrink-0">
+              <div class="flex items-center gap-3">
+                <div class="relative">
+                  <!-- Photo Avatar for Camille -->
+                  <div class="w-8 h-8 rounded-full bg-[#E3B3BA] text-[#171113] font-serif text-sm font-semibold flex items-center justify-center border border-[#2E2225]">
+                    C
+                  </div>
+                  <span class="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-[#6FBF8E] ring-2 ring-[#171113]"></span>
+                </div>
+                <div>
+                  <div class="text-sm font-medium text-[#F3ECE6]">Atelier Lune Concierge</div>
+                  <div class="text-[11px] text-[#E3B3BA]">With Camille · usually replies in minutes</div>
+                </div>
+              </div>
+              <button class="w-7 h-7 rounded-full flex items-center justify-center text-[#A8999A] hover:text-[#F3ECE6]">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+
+            <!-- Conversation -->
+            <div class="flex-1 p-5 overflow-y-auto space-y-4 flex flex-col">
+              <!-- Visitor question -->
+              <div class="flex flex-col items-end gap-1 self-end max-w-[85%]">
+                <div class="bg-[#201719] border border-[#2E2225] rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-[#F3ECE6] font-normal leading-relaxed">
+                  Can I engrave custom wedding dates directly into the porcelain lids?
+                </div>
+              </div>
+
+              <!-- Centered System Divider -->
+              <div class="py-1 flex items-center gap-3 my-1">
+                <div class="flex-1 h-[1px] bg-[#2E2225]"></div>
+                <span class="text-[10px] font-mono uppercase tracking-widest text-[#A8999A] whitespace-nowrap">Camille from Atelier Lune joined</span>
+                <div class="flex-1 h-[1px] bg-[#2E2225]"></div>
+              </div>
+
+              <!-- Human Agent Message -->
+              <div class="flex flex-col items-start gap-1 max-w-[90%]">
+                <div class="flex items-center gap-1.5 pl-1">
+                  <span class="text-[10px] font-mono text-[#E3B3BA] uppercase tracking-wider">Camille · Maison Démo</span>
+                  <span class="text-[10px] text-[#A8999A]">• 21:15</span>
+                </div>
+                <div class="bg-[#201719] border border-[#2E2225] rounded-2xl rounded-tl-sm px-4 py-3 text-sm text-[#F3ECE6] font-light leading-relaxed">
+                  Bonsoir! Yes, for wedding orders over 40 vessels we offer custom diamond engraving on porcelain covers. Would you like me to reserve a catalogue consultation?
+                </div>
+              </div>
+            </div>
+
+            <!-- Input (Replying to Camille) -->
+            <div class="p-4 border-t border-[#2E2225] bg-[#171113] shrink-0 space-y-2">
+              <div class="relative flex items-center">
+                <input type="text" placeholder="Reply to Camille…" class="w-full bg-[#201719] border border-[#2E2225] rounded-xl pl-3.5 pr-10 py-2.5 text-xs text-[#F3ECE6] placeholder-[#A8999A] focus:outline-none focus:border-[#E3B3BA]/50 transition">
+                <button class="absolute right-1.5 w-7 h-7 rounded-lg bg-[#9E2F45] hover:bg-[#872538] text-[#F3ECE6] flex items-center justify-center transition">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 14-7-7 14V12H5z"/></svg>
+                </button>
+              </div>
+              <div class="text-center text-[10px] text-[#A8999A]">Encrypted conversation • Handled by Maison</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- ROW 4: STATE 7 & STATE 4 LIGHT VARIANT -->
+    <!-- ========================================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      
+      <!-- STATE 7: RESTING / QUOTA REACHED -->
+      <div class="flex flex-col">
+        <div class="flex items-center justify-between mb-3 px-1">
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-[#201719] text-[#E3B3BA] border border-[#2E2225]">STATE 7</span>
+            <h3 class="font-medium text-sm text-[#F3ECE6]">Resting / Quota Reached</h3>
+          </div>
+          <span class="text-xs text-[#A8999A] font-mono">Calm Dignity • Offline Capture</span>
+        </div>
+
+        <!-- MOCKUP CONTAINER -->
+        <div class="relative w-full h-[660px] rounded-2xl border border-[#2E2225] overflow-hidden bg-[#FBF8F5] shadow-2xl flex items-end justify-end p-6">
+          <div class="absolute inset-0 p-8 flex flex-col justify-between pointer-events-none filter blur-[3px] opacity-40">
+            <div class="font-serif text-2xl tracking-wider text-[#1A1214]">ATELIER LUNE</div>
+          </div>
+
+          <!-- WIDGET PANEL (380x600px) -->
+          <div class="relative z-10 w-[380px] h-[600px] rounded-[20px] bg-[#171113] border border-[#2E2225] shadow-[0_24px_60px_rgba(0,0,0,0.85)] flex flex-col overflow-hidden">
+            <!-- Header -->
+            <div class="px-5 py-4 border-b border-[#2E2225] bg-[#171113] flex items-center justify-between shrink-0">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-[#9E2F45] flex items-center justify-center text-[#F3ECE6]">
+                  <span class="font-serif text-xl select-none -translate-y-0.5">S</span>
+                </div>
+                <div>
+                  <div class="text-sm font-medium text-[#F3ECE6]">Atelier Lune Concierge</div>
+                  <div class="text-[11px] text-[#A8999A]">Dormant • Resumes tomorrow 08:00</div>
+                </div>
+              </div>
+              <button class="w-7 h-7 rounded-full flex items-center justify-center text-[#A8999A] hover:text-[#F3ECE6]">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+
+            <!-- Content: Calm Full-Panel State -->
+            <div class="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-6">
+              <!-- Thin Line Icon (Moon / Rest) -->
+              <div class="w-14 h-14 rounded-full bg-[#201719] border border-[#2E2225] flex items-center justify-center text-[#E3B3BA]">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                </svg>
+              </div>
+
+              <!-- Instrument Serif Heading -->
+              <div class="space-y-2">
+                <h3 class="font-serif text-2xl text-[#F3ECE6] tracking-tight">This assistant is resting for now.</h3>
+                <p class="text-xs text-[#A8999A] font-light max-w-xs leading-relaxed">
+                  Please leave your email and the team will reply personally.
+                </p>
+              </div>
+
+              <!-- Email capture form -->
+              <div class="w-full space-y-3 pt-2">
+                <input type="email" placeholder="client@domain.com" class="w-full bg-[#201719] border border-[#2E2225] rounded-xl px-4 py-3 text-xs text-[#F3ECE6] placeholder-[#A8999A] focus:outline-none focus:border-[#E3B3BA]/50 transition text-center">
+                <button class="w-full py-2.5 rounded-xl border border-[#2E2225] hover:border-[#E3B3BA]/60 bg-[#201719] text-xs font-medium text-[#F3ECE6] transition hover:text-[#E3B3BA]">
+                  Leave a message
+                </button>
+              </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="p-4 border-t border-[#2E2225] bg-[#171113] shrink-0 text-center text-[10px] text-[#A8999A]">
+              Sealed by <span class="font-serif">Sigilla</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- LIGHT-THEME VARIANT OF STATE 4 -->
+      <div class="flex flex-col">
+        <div class="flex items-center justify-between mb-3 px-1">
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-[#FAF6F2] text-[#8A2438] border border-[#E8DED8]">LIGHT THEME</span>
+            <h3 class="font-medium text-sm text-[#F3ECE6]">State 4 in Client Light Theme</h3>
+          </div>
+          <span class="text-xs text-[#A8999A] font-mono">Porcelain #FAF6F2 • Bordeaux #8A2438</span>
+        </div>
+
+        <!-- MOCKUP CONTAINER -->
+        <div class="relative w-full h-[660px] rounded-2xl border border-[#2E2225] overflow-hidden bg-[#FAF6F2] shadow-2xl flex items-end justify-end p-6">
+          <!-- Background Storefront (Light) -->
+          <div class="absolute inset-0 p-8 flex flex-col justify-between pointer-events-none filter blur-[3px] opacity-40">
+            <div class="font-serif text-2xl tracking-wider text-[#1A1214]">ATELIER LUNE</div>
+          </div>
+
+          <!-- WIDGET PANEL (380x600px) IN LIGHT THEME -->
+          <div class="relative z-10 w-[380px] h-[600px] rounded-[20px] bg-[#FFFFFF] border border-[#E8DED8] shadow-[0_24px_50px_rgba(26,18,20,0.16)] flex flex-col overflow-hidden text-[#1A1214]">
+            
+            <!-- Light Header -->
+            <div class="px-5 py-4 border-b border-[#E8DED8] bg-[#FFFFFF] flex items-center justify-between shrink-0">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-[#8A2438] flex items-center justify-center text-[#FFFFFF]">
+                  <span class="font-serif text-xl select-none -translate-y-0.5">S</span>
+                </div>
+                <div>
+                  <div class="text-sm font-medium text-[#1A1214]">Atelier Lune Concierge</div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#2F7A4D]"></span>
+                    <span class="text-[11px] text-[#6B5A5D]">Online</span>
+                  </div>
+                </div>
+              </div>
+              <button class="w-7 h-7 rounded-full flex items-center justify-center text-[#6B5A5D] hover:text-[#1A1214] hover:bg-[#F4EDE8] transition">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+
+            <!-- Light Conversation -->
+            <div class="flex-1 p-5 overflow-y-auto space-y-4 flex flex-col bg-[#FAF6F2]">
+              <!-- Visitor Message in light theme -->
+              <div class="flex flex-col items-end gap-1 self-end max-w-[85%]">
+                <span class="text-[10px] font-mono text-[#6B5A5D] uppercase tracking-wider pr-1">Visitor • 21:06</span>
+                <div class="bg-[#F4EDE8] border border-[#E8DED8] rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-[#1A1214] font-normal leading-relaxed">
+                  Do your candles ship to Switzerland?
+                </div>
+              </div>
+
+              <!-- Bot Complete Answer with Light Citation Seals -->
+              <div class="flex flex-col items-start gap-2 max-w-[95%]">
+                <span class="text-[10px] font-mono text-[#6B5A5D] uppercase tracking-wider pl-1">Concierge • 21:07</span>
+                <div class="bg-[#FFFFFF] border border-[#E8DED8] rounded-2xl rounded-tl-sm p-4 text-sm text-[#1A1214] font-light leading-relaxed space-y-3 shadow-sm">
+                  <p>
+                    Yes, we ship to Switzerland within 3 to 5 business days
+                    <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#8A2438] text-[#FFFFFF] text-[10px] font-mono font-medium mx-1 align-baseline select-none">1</span>. 
+                    Duties are included at checkout
+                    <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#8A2438] text-[#FFFFFF] text-[10px] font-mono font-medium mx-1 align-baseline select-none">2</span>.
+                  </p>
+
+                  <!-- Provenance Section Light -->
+                  <div class="pt-2 border-t border-[#E8DED8] space-y-1.5">
+                    <div class="text-[10px] uppercase tracking-widest text-[#6B5A5D] font-mono">Sealed by 2 sources</div>
+                    <div class="flex flex-col gap-1 text-xs">
+                      <a href="#" class="text-[#8A2438] hover:underline flex items-center gap-1.5 font-mono text-[11px]">
+                        <span class="w-3.5 h-3.5 rounded-full bg-[#8A2438] text-[#FFFFFF] flex items-center justify-center text-[9px]">1</span>
+                        <span>Shipping Policy — p.2</span>
+                      </a>
+                      <a href="#" class="text-[#8A2438] hover:underline flex items-center gap-1.5 font-mono text-[11px]">
+                        <span class="w-3.5 h-3.5 rounded-full bg-[#8A2438] text-[#FFFFFF] flex items-center justify-center text-[9px]">2</span>
+                        <span>atelierlune.com/faq</span>
+                      </a>
+                    </div>
+                  </div>
+
+                  <!-- Feedback buttons light -->
+                  <div class="pt-2 flex items-center gap-2 border-t border-[#E8DED8]">
+                    <span class="text-[10px] text-[#6B5A5D]">Was this helpful?</span>
+                    <button class="w-6 h-6 rounded flex items-center justify-center text-[#6B5A5D] hover:text-[#1A1214] hover:bg-[#F4EDE8] transition">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h3Z"/></svg>
+                    </button>
+                    <button class="w-6 h-6 rounded flex items-center justify-center text-[#6B5A5D] hover:text-[#1A1214] hover:bg-[#F4EDE8] transition">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 14V2"/><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3Z"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Input & Footer Light -->
+            <div class="p-4 border-t border-[#E8DED8] bg-[#FFFFFF] shrink-0 space-y-2">
+              <div class="relative flex items-center">
+                <input type="text" placeholder="Ask about orders, shipping or scents…" class="w-full bg-[#FAF6F2] border border-[#E8DED8] rounded-xl pl-3.5 pr-10 py-2.5 text-xs text-[#1A1214] placeholder-[#6B5A5D] focus:outline-none focus:border-[#8A2438]/50 transition">
+                <button class="absolute right-1.5 w-7 h-7 rounded-lg bg-[#8A2438] hover:bg-[#741D2F] text-[#FFFFFF] flex items-center justify-center transition">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 14-7-7 14V12H5z"/></svg>
+                </button>
+              </div>
+              <div class="text-center text-[10px] text-[#6B5A5D]">Sealed by <span class="font-serif">Sigilla</span></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- ROW 5: STATE 8 — FULL-SCREEN MOBILE FRAME -->
+    <!-- ========================================== -->
+    <div id="state-8" class="pt-6">
+      <div class="flex items-center justify-between mb-6 px-1">
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-xs px-2.5 py-1 rounded bg-[#201719] text-[#E3B3BA] border border-[#2E2225]">STATE 8</span>
+          <h2 class="font-serif text-2xl text-[#F3ECE6]">Mobile Responsive Viewport (390px Full-Screen Frame)</h2>
+        </div>
+        <span class="text-xs text-[#A8999A] font-mono">Mobile App Architecture • Fixed Bottom Pin</span>
+      </div>
+
+      <div class="w-full py-12 px-4 rounded-3xl border border-[#2E2225] bg-[#110D0E] flex flex-col items-center justify-center relative overflow-hidden">
+        <!-- Ambient bordeaux aura behind mobile mockup -->
+        <div class="absolute w-[500px] h-[500px] rounded-full bg-[#9E2F45]/10 filter blur-[90px] pointer-events-none"></div>
+
+        <!-- PHONE FRAME (390px wide) -->
+        <div class="relative w-[390px] h-[780px] rounded-[48px] bg-[#171113] border-[6px] border-[#2E2225] shadow-[0_30px_90px_rgba(0,0,0,0.95)] flex flex-col overflow-hidden">
+          
+          <!-- iOS Notch / Status Bar -->
+          <div class="pt-3 px-7 flex justify-between items-center text-[11px] font-mono text-[#F3ECE6] shrink-0 bg-[#171113]">
+            <span>21:07</span>
+            <!-- Speaker Ear-piece Notch -->
+            <div class="w-24 h-4 bg-[#2E2225] rounded-full"></div>
+            <div class="flex items-center gap-1.5">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+              <div class="w-4 h-2 border border-[#F3ECE6] rounded-sm p-0.5"><div class="w-full h-full bg-[#6FBF8E]"></div></div>
+            </div>
+          </div>
+
+          <!-- Mobile Top Navigation Bar -->
+          <div class="px-5 py-3.5 border-b border-[#2E2225] bg-[#171113] flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-3">
+              <button class="w-8 h-8 rounded-full flex items-center justify-center text-[#A8999A] hover:text-[#F3ECE6] -ml-1">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="w-8 h-8 rounded-lg bg-[#9E2F45] flex items-center justify-center text-[#F3ECE6]">
+                <span class="font-serif text-xl select-none -translate-y-0.5">S</span>
+              </div>
+              <div>
+                <div class="text-sm font-medium text-[#F3ECE6] leading-tight">Atelier Lune Concierge</div>
+                <div class="flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#6FBF8E]"></span>
+                  <span class="text-[10px] text-[#A8999A]">Online</span>
+                </div>
+              </div>
+            </div>
+            <button class="w-8 h-8 rounded-full flex items-center justify-center text-[#A8999A] hover:text-[#F3ECE6]">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          </div>
+
+          <!-- Mobile Conversation Scroll Area -->
+          <div class="flex-1 p-4 overflow-y-auto space-y-4 flex flex-col">
+            <!-- Timestamp -->
+            <div class="text-center">
+              <span class="text-[10px] font-mono text-[#A8999A] uppercase tracking-wider bg-[#201719] px-2.5 py-1 rounded-full border border-[#2E2225]">Today • 21:06</span>
+            </div>
+
+            <!-- Visitor message -->
+            <div class="flex flex-col items-end gap-1 self-end max-w-[88%]">
+              <div class="bg-[#201719] border border-[#2E2225] rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-[#F3ECE6] font-normal leading-relaxed">
+                Do your candles ship to Switzerland?
+              </div>
+            </div>
+
+            <!-- Bot response with citation seals -->
+            <div class="flex flex-col items-start gap-1.5 max-w-[95%]">
+              <div class="bg-[#201719] border border-[#2E2225] rounded-2xl rounded-tl-sm p-4 text-sm text-[#F3ECE6] font-light leading-relaxed space-y-3">
+                <p>
+                  Yes, we ship to Switzerland within 3 to 5 business days
+                  <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#9E2F45] text-[#F3ECE6] text-[10px] font-mono font-medium mx-1 align-baseline select-none">1</span>. 
+                  Duties are included at checkout
+                  <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#9E2F45] text-[#F3ECE6] text-[10px] font-mono font-medium mx-1 align-baseline select-none">2</span>.
+                </p>
+
+                <!-- Provenance card -->
+                <div class="pt-2 border-t border-[#2E2225] space-y-1.5">
+                  <div class="text-[10px] uppercase tracking-widest text-[#A8999A] font-mono">Sealed by 2 sources</div>
+                  <div class="flex flex-col gap-1 text-xs">
+                    <a href="#" class="text-[#E3B3BA] flex items-center gap-1.5 font-mono text-[11px]">
+                      <span class="w-3.5 h-3.5 rounded-full bg-[#9E2F45] text-[#F3ECE6] flex items-center justify-center text-[9px]">1</span>
+                      <span>Shipping Policy — p.2</span>
+                    </a>
+                    <a href="#" class="text-[#E3B3BA] flex items-center gap-1.5 font-mono text-[11px]">
+                      <span class="w-3.5 h-3.5 rounded-full bg-[#9E2F45] text-[#F3ECE6] flex items-center justify-center text-[9px]">2</span>
+                      <span>atelierlune.com/faq</span>
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Rating -->
+                <div class="pt-2 flex items-center gap-2 border-t border-[#2E2225]/60">
+                  <span class="text-[10px] text-[#A8999A]">Helpful?</span>
+                  <button class="w-6 h-6 rounded flex items-center justify-center text-[#A8999A]"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h3Z"/></svg></button>
+                  <button class="w-6 h-6 rounded flex items-center justify-center text-[#A8999A]"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 14V2"/><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3Z"/></svg></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Input Pinned Above Mobile Keyboard / Home Indicator -->
+          <div class="p-4 border-t border-[#2E2225] bg-[#171113] shrink-0 space-y-2">
+            <div class="relative flex items-center">
+              <input type="text" placeholder="Ask about orders or scents…" class="w-full bg-[#201719] border border-[#2E2225] rounded-xl pl-3.5 pr-10 py-3 text-xs text-[#F3ECE6] placeholder-[#A8999A] focus:outline-none focus:border-[#E3B3BA]/50 transition">
+              <button class="absolute right-1.5 w-8 h-8 rounded-lg bg-[#9E2F45] text-[#F3ECE6] flex items-center justify-center shadow-md">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 14-7-7 14V12H5z"/></svg>
+              </button>
+            </div>
+            <!-- Home Bar Indicator -->
+            <div class="w-32 h-1 bg-[#2E2225] rounded-full mx-auto mt-3"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- CODE & ATTRIBUTION FOOTER -->
+  <footer class="border-t border-[#2E2225] bg-[#0E0A0B] py-10 px-6 mt-16 text-center">
+    <div class="max-w-4xl mx-auto space-y-3">
+      <div class="font-serif text-xl tracking-wide text-[#F3ECE6]">Sigilla</div>
+      <p class="text-xs text-[#A8999A] font-light max-w-md mx-auto">
+        "Every answer, sealed by its source." Complete 8-state conversational architecture, calibrated for luxury maisons & mission-critical enterprises.
+      </p>
+      <div class="text-[11px] font-mono text-[#E3B3BA] pt-2">
+        Maison Démo • Atelier Lune Concierge Deployment • Design System 2.4.1
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

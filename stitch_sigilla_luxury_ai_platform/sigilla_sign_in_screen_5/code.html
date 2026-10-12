@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_blank" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Instrument+Sans:ital,wght@0,400..700;1,400..700&amp;family=JetBrains+Mono:wght@400..600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-secondary-fixed-variant": "#603d43",
+          "on-primary-fixed-variant": "#871d35",
+          "on-surface": "#eae0e1",
+          "error": "#ffb4ab",
+          "inverse-on-surface": "#342f30",
+          "on-tertiary": "#382e30",
+          "tertiary-container": "#615557",
+          "tertiary": "#d3c2c5",
+          "on-primary-container": "#ffbec4",
+          "primary-fixed-dim": "#ffb2ba",
+          "primary-fixed": "#ffd9dc",
+          "on-secondary-fixed": "#2f1319",
+          "background": "#171213",
+          "secondary-fixed": "#ffd9de",
+          "surface-container-high": "#2e292a",
+          "secondary-container": "#633f45",
+          "secondary-fixed-dim": "#ebbac1",
+          "surface-variant": "#393334",
+          "secondary": "#ebbac1",
+          "primary": "#ffb2ba",
+          "tertiary-fixed-dim": "#d3c2c5",
+          "on-primary": "#670020",
+          "surface-container-lowest": "#110d0e",
+          "on-error": "#690005",
+          "outline": "#a58a8c",
+          "surface": "#171213",
+          "on-tertiary-fixed-variant": "#4f4446",
+          "on-tertiary-fixed": "#22191b",
+          "on-secondary": "#47272d",
+          "surface-container": "#231e1f",
+          "surface-container-highest": "#393334",
+          "on-primary-fixed": "#400011",
+          "inverse-primary": "#a6354b",
+          "surface-tint": "#ffb2ba",
+          "surface-bright": "#3d3839",
+          "on-background": "#eae0e1",
+          "tertiary-fixed": "#f0dee1",
+          "primary-container": "#9e2f45",
+          "on-tertiary-container": "#dccacd",
+          "surface-dim": "#171213",
+          "outline-variant": "#564143",
+          "inverse-surface": "#eae0e1",
+          "error-container": "#93000a",
+          "on-secondary-container": "#dcacb3",
+          "on-surface-variant": "#ddbfc1",
+          "on-error-container": "#ffdad6",
+          "surface-container-low": "#1f1a1b"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "space-md": "1rem",
+          "margin-mobile": "1rem",
+          "space-xs": "0.25rem",
+          "space-sm": "0.5rem",
+          "margin": "3rem",
+          "gutter": "1.5rem",
+          "margin-tablet": "2rem",
+          "space-lg": "1.5rem",
+          "space-xl": "2.5rem",
+          "gutter-mobile": "0.75rem"
+        },
+        "fontFamily": {
+          "body-md": [
+            "Instrument Sans"
+          ],
+          "headline-md": [
+            "Instrument Serif"
+          ],
+          "headline-lg-mobile": [
+            "Instrument Serif"
+          ],
+          "headline-sm": [
+            "Instrument Serif"
+          ],
+          "code-sm": [
+            "JetBrains Mono"
+          ],
+          "code-xs": [
+            "JetBrains Mono"
+          ],
+          "headline-xl-mobile": [
+            "Instrument Serif"
+          ],
+          "body-lg": [
+            "Instrument Sans"
+          ],
+          "label-md": [
+            "Instrument Sans"
+          ],
+          "label-sm": [
+            "Instrument Sans"
+          ],
+          "kpi-metric": [
+            "Instrument Serif"
+          ],
+          "headline-xl": [
+            "Instrument Serif"
+          ],
+          "body-sm": [
+            "Instrument Sans"
+          ],
+          "headline-lg": [
+            "Instrument Serif"
+          ]
+        },
+        "fontSize": {
+          "body-md": [
+            "14px",
+            {
+              "lineHeight": "22px",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-md": [
+            "28px",
+            {
+              "lineHeight": "36px",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-lg-mobile": [
+            "28px",
+            {
+              "lineHeight": "36px",
+              "letterSpacing": "0em",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-sm": [
+            "22px",
+            {
+              "lineHeight": "28px",
+              "fontWeight": "400"
+            }
+          ],
+          "code-sm": [
+            "12px",
+            {
+              "lineHeight": "18px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "400"
+            }
+          ],
+          "code-xs": [
+            "10px",
+            {
+              "lineHeight": "14px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "500"
+            }
+          ],
+          "headline-xl-mobile": [
+            "36px",
+            {
+              "lineHeight": "44px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "400"
+            }
+          ],
+          "body-lg": [
+            "17px",
+            {
+              "lineHeight": "26px",
+              "fontWeight": "400"
+            }
+          ],
+          "label-md": [
+            "13px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "500"
+            }
+          ],
+          "label-sm": [
+            "11px",
+            {
+              "lineHeight": "14px",
+              "letterSpacing": "0.04em",
+              "fontWeight": "600"
+            }
+          ],
+          "kpi-metric": [
+            "64px",
+            {
+              "lineHeight": "64px",
+              "letterSpacing": "-0.03em",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-xl": [
+            "56px",
+            {
+              "lineHeight": "64px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "400"
+            }
+          ],
+          "body-sm": [
+            "12px",
+            {
+              "lineHeight": "18px",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-lg": [
+            "40px",
+            {
+              "lineHeight": "48px",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "400"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-surface-container-lowest font-body-md text-body-md text-on-surface antialiased flex flex-col min-h-screen"><header class="w-full border-b border-[#2E2225] bg-surface-container-lowest"><div class="h-16 max-w-7xl mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin flex items-center justify-between"><a class="font-headline-md text-headline-md text-on-surface tracking-tight hover:text-primary transition-colors" data-path="overview" href="#">Sigilla</a><div class="flex items-center gap-space-xs"><span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span><span class="font-code-xs text-code-xs text-outline uppercase tracking-wider">Secure Realm</span></div></div></header><main class="w-full flex-1 flex flex-col justify-center items-center px-margin-mobile py-space-xl bg-surface-container-lowest"><div class="flex flex-col w-full">
+<div class="w-full max-w-7xl mx-auto min-h-[calc(100vh-10rem)] flex items-stretch">
+<!-- Split Layout Container -->
+<div class="w-full grid grid-cols-1 lg:grid-cols-12 overflow-hidden shadow-2xl rounded-full">
+<!-- Left Panel (55% on desktop: 7 cols of 12 approx 58%) -->
+<div class="lg:col-span-7 bg-surface-container-lowest p-8 lg:p-16 flex flex-col justify-between relative overflow-hidden">
+<!-- Subtle Top-Lit Ambient Gradient Glow -->
+<div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-primary-container/10 blur-[100px] pointer-events-none"></div>
+<!-- Watermark Archival Citation Seal -->
+<div class="absolute right-4 bottom-12 md:bottom-20 w-80 h-80 md:w-96 md:h-96 pointer-events-none select-none opacity-30 text-outline">
+<svg class="w-full h-full animate-[spin_160s_linear_infinite]" fill="none" viewbox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+<!-- Concentric Hairline Astrolabe / Provenance Seal Rings -->
+<circle cx="200" cy="200" r="190" stroke="currentColor" stroke-dasharray="3 5" stroke-width="0.75"></circle>
+<circle cx="200" cy="200" r="172" stroke="currentColor" stroke-width="0.5"></circle>
+<circle cx="200" cy="200" r="148" stroke="currentColor" stroke-width="0.75"></circle>
+<circle cx="200" cy="200" r="110" stroke="currentColor" stroke-dasharray="1 7" stroke-width="0.5"></circle>
+<circle cx="200" cy="200" r="62" stroke="currentColor" stroke-width="0.75"></circle>
+<!-- Curated Radial Roman Markers & Hashes -->
+<g class="text-[9px] font-code-xs fill-current opacity-70">
+<text text-anchor="middle" x="200" y="38">XII · ORIGINE</text>
+<text text-anchor="middle" x="362" y="204">III · SCEAU</text>
+<text text-anchor="middle" x="200" y="372">VI · ARCHIVE</text>
+<text text-anchor="middle" x="38" y="204">IX · FIDELITAS</text>
+</g>
+<!-- Crosshairs & Archival Geometry -->
+<path d="M200 12 L200 70 M200 330 L200 388 M12 200 L70 200 M330 200 L388 200" stroke="currentColor" stroke-width="0.75"></path>
+<path d="M120 120 L280 280 M120 280 L280 120" stroke="currentColor" stroke-dasharray="4 6" stroke-width="0.3"></path>
+</svg>
+</div>
+<!-- Top Wordmark -->
+<div class="relative z-10 flex items-center justify-between">
+<span class="font-headline-md text-headline-md tracking-wider text-on-surface">Sigilla</span>
+<span class="lg:hidden font-code-xs text-code-xs uppercase tracking-widest text-outline">Atelier Access</span>
+</div>
+<!-- Center Editorial Quote Block -->
+<div class="relative z-10 my-16 lg:my-0 max-w-xl">
+<div class="inline-flex items-center gap-space-xs px-2.5 py-1 rounded bg-surface-container mb-space-lg">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="font-code-xs text-code-xs uppercase tracking-widest text-secondary">Epistemic Provenance</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface leading-[1.08] tracking-tight">
+            “Every answer, sealed by its source.”
+          </h1>
+<p class="mt-space-lg font-body-lg text-body-lg text-on-surface-variant max-w-md font-light leading-relaxed">
+            Calibrated AI concierge agents trained on archival documentation and provenance.
+          </p>
+<div class="mt-space-xl flex items-center gap-space-lg">
+<div class="flex flex-col">
+<span class="font-kpi-metric text-headline-md text-on-surface">99.8%</span>
+<span class="font-code-xs text-code-xs text-outline uppercase tracking-wider mt-0.5">Citation Accuracy</span>
+</div>
+<div class="w-px h-10 bg-surface-variant"></div>
+<div class="flex flex-col">
+<span class="font-kpi-metric text-headline-md text-on-surface">14 Maison</span>
+<span class="font-code-xs text-code-xs text-outline uppercase tracking-wider mt-0.5">Active Vitrines</span>
+</div>
+</div>
+</div>
+<!-- Bottom Metadata Pill -->
+<div class="relative z-10 flex items-center justify-between text-outline pt-space-md">
+<span class="font-code-xs text-code-xs tracking-wider uppercase">
+            Maison Démo Tier · Archival AI Concierge
+          </span>
+<span class="font-code-xs text-code-xs tracking-widest opacity-60">
+            PROV-V4.12
+          </span>
+</div>
+</div>
+<!-- Right Panel (45% on desktop: 5 cols of 12) -->
+<div class="lg:col-span-5 bg-surface p-6 sm:p-10 lg:p-12 flex flex-col justify-center items-center relative">
+<!-- Floating Subtle Highlight Accent -->
+<div class="w-full max-w-md">
+<!-- Form Header Card Envelope -->
+<div class="bg-surface-container rounded-xl p-8 sm:p-10 shadow-xl relative backdrop-blur-sm">
+<div class="mb-space-lg">
+<h2 class="font-headline-md text-headline-md text-on-surface">
+                Welcome back
+              </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 font-light">
+                Sign in to access your house agents and telemetry.
+              </p>
+</div>
+<!-- Single Sign-On Actions (Google & GitHub) -->
+<div class="grid grid-cols-2 gap-space-sm mb-space-lg">
+<!-- Google SSO -->
+<button class="group flex items-center justify-center gap-2.5 py-3 px-4 rounded bg-surface-container-high hover:bg-surface-bright transition-all duration-200" type="button">
+<svg class="w-4 h-4 text-on-surface transition-transform group-hover:scale-105" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24">
+<path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+<path d="M12 12h9"></path>
+</svg>
+<span class="font-label-md text-label-md text-on-surface">Google</span>
+</button>
+<!-- GitHub SSO -->
+<button class="group flex items-center justify-center gap-2.5 py-3 px-4 rounded bg-surface-container-high hover:bg-surface-bright transition-all duration-200" type="button">
+<svg class="w-4 h-4 text-on-surface transition-transform group-hover:scale-105" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24">
+<path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
+<path d="M9 18c-4.51 2-5-2-7-2"></path>
+</svg>
+<span class="font-label-md text-label-md text-on-surface">GitHub</span>
+</button>
+</div>
+<!-- Stylized Minimalist Divider -->
+<div class="relative flex items-center justify-center mb-space-lg">
+<div class="w-full h-px bg-surface-variant"></div>
+<span class="absolute bg-surface-container px-3 font-code-xs text-code-xs uppercase tracking-wider text-outline">or</span>
+</div>
+<!-- Credentials Form -->
+<form class="space-y-space-md" onsubmit="event.preventDefault();">
+<!-- Email Input -->
+<div>
+<label class="block font-label-sm text-label-sm tracking-[0.08em] uppercase text-outline mb-1.5" for="work-email">
+                  Work Email
+                </label>
+<div class="relative">
+<input class="w-full bg-surface-container-high text-on-surface placeholder:text-outline font-body-md text-body-md rounded px-4 py-3 focus:outline-none focus:bg-surface-bright transition-colors" id="work-email" type="email" value="directeur@maison.fr"/>
+<div class="absolute right-3.5 top-1/2 -translate-y-1/2 text-outline">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+</div>
+</div>
+</div>
+<!-- Password Input -->
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<label class="font-label-sm text-label-sm tracking-[0.08em] uppercase text-outline" for="auth-password">
+                    Password
+                  </label>
+<a class="font-label-sm text-label-sm text-secondary hover:underline transition-all" href="#">
+                    Forgot password?
+                  </a>
+</div>
+<div class="relative">
+<input class="w-full bg-surface-container-high text-on-surface font-body-md text-body-md rounded px-4 py-3 pr-11 focus:outline-none focus:bg-surface-bright transition-colors" id="auth-password" type="password" value="archival-key-token-9"/>
+<button aria-label="Toggle password visibility" class="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors p-1" id="toggle-password" type="button">
+<svg class="w-4 h-4" fill="none" id="eye-icon" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24">
+<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+<circle cx="12" cy="12" r="3"></circle>
+</svg>
+</button>
+</div>
+</div>
+<!-- Primary Submit Action -->
+<div class="pt-2">
+<button class="w-full bg-primary-container hover:bg-inverse-primary text-on-surface font-label-md text-label-md py-3.5 px-6 rounded transition-all duration-200 active:scale-[0.99] flex items-center justify-center gap-2 shadow-sm" type="submit">
+<span>Sign in</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</form>
+</div>
+<!-- Bottom Subtext & Live Demo Action -->
+<div class="mt-space-lg text-center flex flex-col items-center gap-space-sm">
+<p class="font-body-md text-body-md text-outline">
+              New to Sigilla? 
+              <a class="text-secondary font-medium hover:underline ml-1" href="#">Create an account</a>
+</p>
+<a class="inline-flex items-center gap-1.5 px-4 py-2 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface bg-transparent hover:bg-surface-container transition-all" href="#">
+<span>Explore the live demo</span>
+<span class="material-symbols-outlined text-[16px] text-secondary">chevron_right</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function initPasswordToggle() {
+    const toggleBtn = document.getElementById('toggle-password');
+    const pwdInput = document.getElementById('auth-password');
+    const eyeIcon = document.getElementById('eye-icon');
+
+    if (!toggleBtn || !pwdInput) return;
+
+    let visible = false;
+    toggleBtn.addEventListener('click', () => {
+      visible = !visible;
+      pwdInput.type = visible ? 'text' : 'password';
+      
+      if (visible) {
+        eyeIcon.innerHTML = `
+          <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/>
+          <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/>
+          <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/>
+          <line x1="2" x2="22" y1="2" y2="22"/>
+        `;
+      } else {
+        eyeIcon.innerHTML = `
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+          <circle cx="12" cy="12" r="3" />
+        `;
+      }
+    });
+  })();
+</script></main><footer class="w-full border-t border-[#2E2225] py-space-md"><div class="max-w-7xl mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin text-center"><span class="font-code-xs text-code-xs text-outline">© 2025 Sigilla Atelier · Cryptographic Protocol</span></div></footer></body></html>
