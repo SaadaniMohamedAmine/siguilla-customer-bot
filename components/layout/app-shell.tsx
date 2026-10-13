@@ -60,7 +60,10 @@ export function AppShell({
 
   async function switchOrg(organizationId: string) {
     await authClient.organization.setActive({ organizationId });
-    router.refresh();
+    // router.refresh() alone leaves useActiveOrganization()'s client-side cache stale
+    // until a full reload — force one so the switch is reflected immediately,
+    // staying on the current page rather than jumping back to /agents.
+    window.location.reload();
   }
 
   return (
