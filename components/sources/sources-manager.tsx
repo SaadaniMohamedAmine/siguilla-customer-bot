@@ -45,7 +45,7 @@ async function api<T>(url: string, init?: RequestInit): Promise<T> {
   return json.data as T;
 }
 
-export function SourcesManager({ chatbotId, plan }: { chatbotId: string; plan: string }) {
+export function SourcesManager({ chatbotId, plan, maxPdfMb }: { chatbotId: string; plan: string; maxPdfMb: number }) {
   const t = useTranslations("Sources");
   const tCommon = useTranslations("Common");
   const locale = useLocale();
@@ -199,6 +199,7 @@ export function SourcesManager({ chatbotId, plan }: { chatbotId: string; plan: s
         onOpenChange={setDrawerOpen}
         chatbotId={chatbotId}
         maxPagesPerSite={limits.pagesPerSite}
+        maxPdfMb={maxPdfMb}
         notionAllowed={limits.notion}
         onAdded={() => queryClient.invalidateQueries({ queryKey: ["sources", chatbotId] })}
       />
@@ -230,6 +231,7 @@ function AddSourceDrawer({
   onOpenChange,
   chatbotId,
   maxPagesPerSite,
+  maxPdfMb,
   notionAllowed,
   onAdded,
 }: {
@@ -237,11 +239,11 @@ function AddSourceDrawer({
   onOpenChange: (open: boolean) => void;
   chatbotId: string;
   maxPagesPerSite: number;
+  maxPdfMb: number;
   notionAllowed: boolean;
   onAdded: () => void;
 }) {
   const t = useTranslations("Sources");
-  const maxPdfMb = Number(process.env.NEXT_PUBLIC_MAX_PDF_MB ?? 10);
 
   const [uploading, setUploading] = React.useState(false);
   const [url, setUrl] = React.useState("");
