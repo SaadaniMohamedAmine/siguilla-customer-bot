@@ -1,0 +1,73 @@
+{
+  "Common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "back": "Back",
+    "delete": "Delete",
+    "copy": "Copy",
+    "copied": "Copied",
+    "retry": "Try again",
+    "loading": "Loading…",
+    "learnMore": "Learn more"
+  },
+  "Nav": {
+    "agents": "Agents",
+    "conversations": "Conversations",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "docs": "Docs",
+    "signOut": "Sign out",
+    "theme": "Theme",
+    "dark": "Dark",
+    "light": "Light",
+    "language": "Language"
+  },
+  "Auth": {
+    "signInTitle": "Welcome back",
+    "signInSubtitle": "Sign in to your agents and conversations.",
+    "signUpTitle": "Create your account",
+    "signUpSubtitle": "Your first agent is a few minutes away.",
+    "name": "Full name",
+    "email": "Work email",
+    "password": "Password",
+    "forgot": "Forgot password?",
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "or": "or",
+    "google": "Continue with Google",
+    "github": "Continue with GitHub",
+    "noAccount": "New to Sigilla?",
+    "createAccount": "Create an account",
+    "haveAccount": "Already have an account?",
+    "exploreDemo": "Explore the live demo",
+    "quote": "Every answer, sealed by its source.",
+    "forgotTitle": "Reset your password",
+    "forgotSubtitle": "We'll send a reset link to your email.",
+    "sendLink": "Send reset link",
+    "forgotSent": "If an account exists, a reset link is on its way.",
+    "resetTitle": "Choose a new password",
+    "resetSubmit": "Update password",
+    "resetDone": "Your password has been updated.",
+    "legal": "By creating an account, you agree to our {terms} and {privacy}.",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "strength": { "weak": "Weak", "fair": "Fair", "strong": "Strong" },
+    "errors": {
+      "invalid": "Email or password is incorrect.",
+      "exists": "An account with this email already exists.",
+      "generic": "Something went wrong on our side. Please try again."
+    }
+  },
+  "Errors": {
+    "notFoundTitle": "This page has left the house.",
+    "notFoundCta": "Return home",
+    "genericTitle": "Something went wrong on our side.",
+    "genericBody": "Please try again in a moment."
+  },
+  "Empty": {
+    "agentsTitle": "Your first agent awaits.",
+    "agentsBody": "Create an agent, add your documentation, and embed it in one line.",
+    "agentsCta": "Create an agent"
+  }
+}
