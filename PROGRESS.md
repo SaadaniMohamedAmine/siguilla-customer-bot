@@ -3,14 +3,14 @@
 > Project 07 / 30 — *Every answer, sealed by its source.*
 > Références : [SIGILLA-PRD.md](./SIGILLA-PRD.md) · [Audit design](./project-07-sigilla-design-audit-recommendations.md)
 
-**Statut global : 22/151 tâches (15 %)** — cadrage, design et fichiers de délégation terminés ; build à lancer (Phase 2 / P1).
+**Statut global : 43/151 tâches (28 %)** — cadrage, design, fichiers de délégation et Phase 2 (P1, fondations/auth) terminés.
 
 | Phase | Avancement |
 |---|---|
 | Phase 0 — Cadrage | 8/8 — 100 % ✅ |
 | Phase D — Design | 6/6 — 100 % ✅ |
-| Phase 1 — Préparation de la délégation | 8/10 — 80 % |
-| Phase 2 (P1) — Fondations, design system, auth | 0/20 — 0 % |
+| Phase 1 — Préparation de la délégation | 9/10 — 90 % |
+| Phase 2 (P1) — Fondations, design system, auth | 20/20 — 100 % ✅ |
 | Phase 3 (P2) — Données et ingestion | 0/15 — 0 % |
 | Phase 4 (P3) — RAG et réponses | 0/10 — 0 % |
 | Phase 5 (P4) — Widget embeddable | 0/16 — 0 % |
@@ -50,30 +50,30 @@
 - [x] Fichier de délégation P6 — Billing, quotas, API
 - [x] Fichier de délégation P7 — Landing, démo, docs
 - [x] Fichier de délégation P8 — Qualité, sécurité, performance
-- [ ] Checklist de création des comptes gratuits (GitHub, Vercel, Neon, Groq, Google AI Studio, Stripe test, OAuth Google, OAuth GitHub, intégration publique Notion)
-- [ ] `.env.example` complet et commenté
+- [ ] Checklist de création des comptes gratuits (GitHub, Vercel, Neon, Groq, Google AI Studio, Stripe test, OAuth Google, OAuth GitHub, intégration publique Notion) — GitHub/Vercel/Neon faits ; le reste au fil des phases qui en ont besoin (voir DECISIONS.md)
+- [x] `.env.example` complet et commenté
 
 ## Phase 2 (P1) — Fondations, design system, auth
-- [ ] Init Next.js 16 + React 19 + TS strict + npm (conventions Excerpta)
-- [ ] `AGENTS.md`, `CLAUDE.md`, ESLint flat config, Prettier, `.gitignore`, `.editorconfig`
-- [ ] Repo GitHub + premier commit
-- [ ] **Déploiement Vercel précoce** — URL live dès le jour 1
-- [ ] Tailwind CSS v4 + tokens Noir Bordeaux (dark-first + light) dans `@theme`
-- [ ] `next/font` : Instrument Serif, Instrument Sans, JetBrains Mono
-- [ ] Hugeicons Free (Stroke Rounded, 1.5px) + composant `Icon`
-- [ ] Composants UI : Button (primary/ghost/link), Input, Textarea, Select, Card, Badge, StatusPill, Avatar, Dropdown, Dialog, Drawer, Tabs, Tooltip, Toast, Skeleton, EmptyState
-- [ ] Composant **`CitationSeal`** (spec unique de l'audit)
-- [ ] Wordmark « Sigilla », favicon « S » (512/180/32/16), apple-touch-icon, `manifest.webmanifest`
-- [ ] Theme toggle (next-themes) dans le menu utilisateur
-- [ ] i18n next-intl EN + FR (dashboard, landing, widget)
-- [ ] App shell : sidebar, switcher d'organisation, breadcrumb, menu utilisateur, plan chip
-- [ ] Prisma 7 + Neon + `prisma.config.ts` + `lib/db.ts`
-- [ ] Better Auth : email/mot de passe + Google + GitHub
-- [ ] Plugin `organization` : org perso auto, switcher, rôles Owner/Admin/Member, invitations par lien
-- [ ] Pages sign-in, sign-up, forgot password, reset password
-- [ ] `proxy.ts` (protection des routes) + vérification de session côté serveur
-- [ ] Pages 404, `error.tsx` global, `loading.tsx`
-- [ ] Micro-interactions : transitions, hover, focus visibles, `prefers-reduced-motion`
+- [x] Init Next.js 16 + React 19 + TS strict + npm (conventions Excerpta)
+- [x] `AGENTS.md`, `CLAUDE.md`, ESLint flat config, Prettier, `.gitignore`, `.editorconfig`
+- [x] Repo GitHub + premier commit
+- [x] **Déploiement Vercel précoce** — URL live dès le jour 1
+- [x] Tailwind CSS v4 + tokens Noir Bordeaux (dark-first + light) dans `@theme`
+- [x] `next/font` : Instrument Serif, Instrument Sans, JetBrains Mono
+- [x] Hugeicons Free (Stroke Rounded, 1.5px) + composant `Icon`
+- [x] Composants UI : Button (primary/ghost/link), Input, Textarea, Select, Card, Badge, StatusPill, Avatar, Dropdown, Dialog, Drawer, Tabs, Tooltip, Toast, Skeleton, EmptyState
+- [x] Composant **`CitationSeal`** (spec unique de l'audit)
+- [x] Wordmark « Sigilla », favicon « S » (32/180, `ImageResponse`), `manifest.webmanifest` — tailles 512/16 manquantes (voir DECISIONS.md)
+- [x] Theme toggle (next-themes) dans le menu utilisateur
+- [x] i18n next-intl EN + FR (dashboard) — landing/widget suivront en Phase 7/4
+- [x] App shell : sidebar, switcher d'organisation, menu utilisateur, plan chip (breadcrumb non ajouté, pas encore de sous-pages à fil d'Ariane)
+- [x] Prisma 7 + Neon + `prisma.config.ts` + `lib/db.ts` — connexion vérifiée en direct
+- [x] Better Auth : email/mot de passe + Google + GitHub (code complet ; clés OAuth à fournir par l'utilisateur pour activer les boutons sociaux)
+- [x] Plugin `organization` : org perso auto, switcher, rôles Owner/Admin/Member — vérifié de bout en bout (sign-up → org créée → `/agents` accessible) ; invitations par lien = Phase 6
+- [x] Pages sign-in, sign-up, forgot password, reset password
+- [x] `proxy.ts` (protection des routes) + vérification de session côté serveur — vérifié (redirection sans session, accès avec session)
+- [x] Pages 404, `error.tsx` global, `loading.tsx`
+- [x] Micro-interactions : transitions, hover, focus visibles, `prefers-reduced-motion`
 
 ## Phase 3 (P2) — Données et ingestion
 - [ ] Schéma Prisma complet (Chatbot, DataSource, Chunk, NotionConnection, Conversation, Message, AnalyticsEvent, RateLimitBucket + billing sur Organization)
