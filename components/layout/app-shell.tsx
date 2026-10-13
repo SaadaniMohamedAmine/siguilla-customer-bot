@@ -76,13 +76,13 @@ export function AppShell({
           <DropdownMenu>
             <DropdownMenuTrigger className="flex w-full items-center justify-between rounded-sm border border-border bg-surface px-3 py-2 text-left hover:bg-surface-raised">
               <div>
-                <p className="label-caps">Maison</p>
+                <p className="label-caps">{t("organization")}</p>
                 <p className="text-body text-text">{activeOrg?.name ?? org.name}</p>
               </div>
               <Icon icon={UnfoldIcon} size={16} className="text-text-muted" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-[200px]">
-              <DropdownMenuLabel>Maison</DropdownMenuLabel>
+              <DropdownMenuLabel>{t("organization")}</DropdownMenuLabel>
               {(orgs ?? []).map((o) => (
                 <DropdownMenuItem key={o.id} onSelect={() => switchOrg(o.id)}>
                   {o.name}
