@@ -47,7 +47,7 @@ export const auth = betterAuth({
           const base = slugify(user.name || user.email.split("@")[0]) || "maison";
           await auth.api.createOrganization({
             body: {
-              name: `${user.name || "My"}'s Maison`,
+              name: `${user.name || "My"}'s Organization`,
               slug: `${base}-${user.id.slice(-6)}`,
               userId: user.id,
             },
