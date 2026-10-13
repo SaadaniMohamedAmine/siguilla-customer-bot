@@ -77,5 +77,49 @@
     "agentsTitle": "Votre premier agent vous attend.",
     "agentsBody": "Créez un agent, ajoutez votre documentation, et intégrez-le en une ligne.",
     "agentsCta": "Créer un agent"
+  },
+  "Sources": {
+    "title": "Sources",
+    "addSource": "Ajouter une source",
+    "empty": "Aucune source pour l'instant. Ajoutez un PDF, une URL ou une page Notion pour commencer.",
+    "columns": { "name": "Nom", "type": "Type", "status": "Statut", "counts": "Pages / Chunks", "synced": "Dernière synchro" },
+    "status": {
+      "ready": "Prêt",
+      "queued": "En attente",
+      "crawling": "Exploration {done}/{total}",
+      "embedding": "Vectorisation {done}/{total}",
+      "reading": "Lecture {done}/{total}",
+      "failed": "Échec"
+    },
+    "neverSynced": "Jamais",
+    "retry": "Réessayer",
+    "resync": "Resynchroniser",
+    "delete": "Supprimer",
+    "deleteConfirmTitle": "Supprimer cette source ?",
+    "deleteConfirmBody": "Ses segments seront supprimés et votre agent cessera de la citer.",
+    "drawerTitle": "Ajouter une source",
+    "pdfTitle": "Importer des PDF",
+    "pdfBody": "Glissez-déposez, ou parcourez vos fichiers.",
+    "pdfHint": "PDF uniquement, jusqu'à {max} Mo.",
+    "urlTitle": "Explorer un site web",
+    "urlPlaceholder": "https://exemple.com",
+    "urlHint": "Jusqu'à {max} pages, même domaine.",
+    "notionTitle": "Connecter Notion",
+    "notionConnect": "Connecter l'espace de travail",
+    "notionManage": "Gérer les pages",
+    "notionDisconnect": "Déconnecter",
+    "notionSearch": "Rechercher des pages…",
+    "notionAdd": "Ajouter {count} pages",
+    "notionProOnly": "Disponible avec Pro",
+    "errors": {
+      "sources_limit": "Votre forfait limite le nombre de sources. Passez à un forfait supérieur pour en ajouter.",
+      "notion_requires_pro": "Le connecteur Notion est disponible avec Pro et Team.",
+      "global_storage_full": "Le stockage est plein. Veuillez réessayer plus tard.",
+      "invalid_url": "Saisissez une URL valide.",
+      "file_too_large": "Ce fichier est trop volumineux.",
+      "unsupported_type": "Seuls les fichiers PDF sont pris en charge.",
+      "no_content": "Aucun contenu lisible n'a été trouvé.",
+      "processing_failed": "Une erreur est survenue lors du traitement de cette source."
+    }
   }
 }

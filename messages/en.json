@@ -77,5 +77,49 @@
     "agentsTitle": "Your first agent awaits.",
     "agentsBody": "Create an agent, add your documentation, and embed it in one line.",
     "agentsCta": "Create an agent"
+  },
+  "Sources": {
+    "title": "Sources",
+    "addSource": "Add source",
+    "empty": "No sources yet. Add a PDF, a URL or a Notion page to begin.",
+    "columns": { "name": "Name", "type": "Type", "status": "Status", "counts": "Pages / Chunks", "synced": "Last synced" },
+    "status": {
+      "ready": "Ready",
+      "queued": "Queued",
+      "crawling": "Crawling {done}/{total}",
+      "embedding": "Embedding {done}/{total}",
+      "reading": "Reading {done}/{total}",
+      "failed": "Failed"
+    },
+    "neverSynced": "Never",
+    "retry": "Retry",
+    "resync": "Resync",
+    "delete": "Delete",
+    "deleteConfirmTitle": "Delete this source?",
+    "deleteConfirmBody": "Its chunks will be removed and your agent will stop citing it.",
+    "drawerTitle": "Add a source",
+    "pdfTitle": "Upload PDFs",
+    "pdfBody": "Drag and drop, or browse your files.",
+    "pdfHint": "PDF only, up to {max} MB.",
+    "urlTitle": "Crawl a website",
+    "urlPlaceholder": "https://example.com",
+    "urlHint": "Up to {max} pages, same domain.",
+    "notionTitle": "Connect Notion",
+    "notionConnect": "Connect workspace",
+    "notionManage": "Manage pages",
+    "notionDisconnect": "Disconnect",
+    "notionSearch": "Search pages…",
+    "notionAdd": "Add {count} pages",
+    "notionProOnly": "Available on Pro",
+    "errors": {
+      "sources_limit": "Your plan allows a limited number of sources. Upgrade to add more.",
+      "notion_requires_pro": "The Notion connector is available on Pro and Team.",
+      "global_storage_full": "Storage is at capacity. Please try again later.",
+      "invalid_url": "Enter a valid URL.",
+      "file_too_large": "This file is too large.",
+      "unsupported_type": "Only PDF files are supported.",
+      "no_content": "No readable content was found.",
+      "processing_failed": "Something went wrong while processing this source."
+    }
   }
 }
