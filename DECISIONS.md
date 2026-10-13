@@ -35,8 +35,9 @@ Reporté — purement cosmétique, n'affecte aucun critère d'acceptation de la 
 **Breadcrumb de l'app shell non implémenté.**
 Il n'y a pour l'instant qu'un seul niveau de page par section (`/agents`, `/conversations`…), donc rien à fil d'Ariane. Sera ajouté avec les sous-pages d'agent (Phase 5).
 
-**Google/GitHub OAuth : code complet, clés non configurées.**
-`GOOGLE_CLIENT_ID/SECRET` et `GITHUB_CLIENT_ID/SECRET` sont vides dans `.env.local`. Les boutons de connexion sociale sont présents dans l'UI mais échoueront tant que l'utilisateur n'aura pas créé les applications OAuth correspondantes (Google Cloud Console, GitHub Developer Settings) et renseigné les clés. Le flow email/mot de passe, lui, est vérifié de bout en bout et fonctionne.
+**Google/GitHub OAuth : configuré et vérifié en local (2026-10-13).**
+Apps OAuth créées par l'utilisateur (Google Cloud Console, GitHub Developer Settings), clés renseignées dans `.env.local`. Vérifié : `POST /api/auth/sign-in/social` pour les deux providers renvoie une redirection valide (`accounts.google.com` / `github.com/login/oauth/authorize`) avec le bon `client_id` et `redirect_uri`. Le callback complet (retour après consentement) n'a pas été testé avec un vrai compte — nécessite un navigateur.
+Restant à faire : ajouter les mêmes clés dans les variables d'environnement Vercel (projet en prod), et ajouter l'URI de redirection prod (`https://siguilla-customer-bot.vercel.app/api/auth/callback/google` et `.../github`) dans les consoles Google/GitHub — GitHub n'autorise qu'une seule callback URL par app, donc soit on la remplace par l'URL prod, soit on crée une 2e app GitHub dédiée à la prod.
 
 **Test de bout en bout effectué manuellement (pas encore de suite Playwright — Phase 8) :**
 `npm run build && npm run start`, puis via `curl` : inscription (`POST /api/auth/sign-up/email`) → vérification en base (Prisma) que l'organisation personnelle et le membership `owner` sont créés → `GET /agents` avec le cookie de session → 200, état vide affiché → `GET /agents` sans cookie → 307 vers `/sign-in?redirect=%2Fagents`. Les comptes de test (`qa-test@…`, `qa-flow@…`, `qa-final@…`) restent en base Neon (environnement de dev, pas de données sensibles) ; à nettoyer avant le seed de démo (Phase 7).
