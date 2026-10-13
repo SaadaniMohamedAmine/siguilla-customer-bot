@@ -4,6 +4,20 @@
 
 ---
 
+## Phase 3 (P2) — Données et ingestion — 2026-10-13
+
+**Minimal CRUD Chatbot + page Sources ajoutés, hors spec stricte mais explicitement autorisés par le fichier de délégation** (§1 : « un CRUD Chatbot minimal pour pouvoir rattacher des sources »).
+`/agents` liste désormais les vrais agents de l'organisation (au lieu d'un état vide statique) et un dialogue « Create an agent » (nom uniquement) crée l'agent via `POST /api/chatbots` puis redirige vers sa page Sources. Le wizard complet en 3 étapes reste prévu pour la Phase 5 ; ceci n'est qu'un strict minimum pour pouvoir tester l'ingestion dès maintenant.
+
+**Test de bout en bout effectué (build + `npm run start`, via `curl`) :** connexion `test1@sigilla.app` → `POST /api/chatbots` (agent créé) → `POST /api/chatbots/:id/sources` avec `{ type: "url", url: "https://example.com" }` → statut passe à `queued` puis `failed` avec `error: "processing_failed"`, **comme attendu** : `GEMINI_API_KEY` n'est pas encore renseignée, donc l'étape d'embedding échoue — mais proprement (pas de crash, le statut et le message d'erreur sont corrects). Le crawl lui-même (découverte d'URL, extraction) a fonctionné jusqu'à cette étape. À reverifier avec succès une fois `GEMINI_API_KEY` (et `BLOB_READ_WRITE_TOKEN` pour les PDF) renseignées.
+
+**`as Prisma.InputJsonValue` ajouté sur les champs JSON (`cursor`, `progress`) dans `lib/ingestion/pipeline.ts`.**
+TypeScript n'arrivait pas à inférer correctement le type attendu par Prisma pour un objet construit par spread (`{ ...cursor, ...patch, keepHashes: [...keep], pagesDone }`) — erreur `Record<string, unknown>` non assignable à `JsonNull | InputJsonValue`. Cast explicite, comportement runtime inchangé.
+
+**Intégration publique Notion : pas encore créée.** Le code OAuth (connect/callback/pages/disconnect) est complet et prêt, mais `NOTION_CLIENT_ID`/`NOTION_CLIENT_SECRET` sont vides — le connecteur Notion ne pourra être testé qu'une fois l'intégration créée sur notion.so/my-integrations.
+
+---
+
 ## Phase 2 (P1) — Fondations, design system, auth — 2026-10-13
 
 **`prisma` pinné sur `7.10.0`, pas sur le tag npm `latest`.**
