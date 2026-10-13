@@ -11,6 +11,8 @@
     "format": "prettier --write .",
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
+    "db:vector": "tsx scripts/db-vector.ts",
+    "db:vector:index": "tsx scripts/db-vector.ts --index",
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts"
   },

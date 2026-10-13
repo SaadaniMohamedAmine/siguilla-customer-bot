@@ -92,6 +92,9 @@ model Organization {
   usagePeriodStart         DateTime  @default(now())
   isDemo                   Boolean   @default(false)
 
+  chatbots         Chatbot[]
+  notionConnection NotionConnection?
+
   @@unique([slug])
   @@map("organization")
 }
@@ -155,4 +158,136 @@ model Apikey {
   @@index([referenceId])
   @@index([key])
   @@map("apikey")
+}
+
+model Chatbot {
+  id                  String           @id @default(cuid())
+  organizationId      String
+  organization        Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name                String
+  description         String?
+  instructions        String?          @db.Text
+  publicKey           String           @unique // pk_xxx — exposé dans le snippet du widget
+  allowedDomains      String[]         @default([])
+  similarityThreshold Float            @default(0.75)
+  widgetConfig        Json             @default("{}")
+  status              String           @default("draft") // draft | live
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  dataSources         DataSource[]
+  chunks              Chunk[]
+  conversations       Conversation[]
+  events              AnalyticsEvent[]
+
+  @@index([organizationId])
+}
+
+model DataSource {
+  id            String    @id @default(cuid())
+  chatbotId     String
+  chatbot       Chatbot   @relation(fields: [chatbotId], references: [id], onDelete: Cascade)
+  type          String // pdf | url | notion
+  name          String
+  url           String? // url: point d'entrée du crawl ; pdf: null
+  blobUrl       String? // pdf
+  blobPathname  String?
+  notionPageIds String[]  @default([])
+  status        String    @default("queued") // queued | processing | ready | failed
+  progress      Json      @default("{}") // { done, total, phase } pour l'UI
+  cursor        Json      @default("{}") // état interne des lots enchaînés
+  pagesCount    Int       @default(0)
+  chunksCount   Int       @default(0)
+  contentHash   String?
+  lastSyncedAt  DateTime?
+  error         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  chunks        Chunk[]
+
+  @@index([chatbotId])
+}
+
+model Chunk {
+  id           String                      @id @default(cuid())
+  dataSourceId String
+  dataSource   DataSource                  @relation(fields: [dataSourceId], references: [id], onDelete: Cascade)
+  chatbotId    String
+  chatbot      Chatbot                     @relation(fields: [chatbotId], references: [id], onDelete: Cascade)
+  content      String                      @db.Text
+  embedding    Unsupported("vector(768)")?
+  sourceTitle  String
+  sourceUrl    String?
+  pageNumber   Int?
+  contentHash  String
+  createdAt    DateTime                    @default(now())
+
+  @@index([chatbotId])
+  @@index([dataSourceId])
+  @@unique([dataSourceId, contentHash])
+}
+
+model NotionConnection {
+  id             String       @id @default(cuid())
+  organizationId String       @unique
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  accessTokenEnc String       @db.Text // AES-256-GCM (iv:tag:ciphertext, base64)
+  workspaceId    String
+  workspaceName  String?
+  workspaceIcon  String?
+  createdAt      DateTime     @default(now())
+}
+
+model Conversation {
+  id             String    @id @default(cuid())
+  chatbotId      String
+  chatbot        Chatbot   @relation(fields: [chatbotId], references: [id], onDelete: Cascade)
+  visitorId      String
+  status         String    @default("bot") // bot | handoff_requested | human | resolved
+  visitorEmail   String?
+  pageUrl        String?
+  locale         String?
+  country        String? // depuis l'en-tête x-vercel-ip-country, jamais l'IP
+  agentName      String? // nom de l'humain qui a repris
+  fallbackStreak Int       @default(0)
+  lastMessageAt  DateTime  @default(now())
+  createdAt      DateTime  @default(now())
+  messages       Message[]
+
+  @@index([chatbotId, lastMessageAt])
+  @@index([chatbotId, status])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           String // visitor | bot | agent | system
+  content        String       @db.Text
+  citations      Json         @default("[]") // [{ index, chunkId, title, url, pageNumber, score }]
+  topScore       Float?
+  fallback       Boolean      @default(false)
+  provider       String? // groq | gemini
+  feedback       String? // up | down
+  createdAt      DateTime     @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  chatbotId String
+  chatbot   Chatbot  @relation(fields: [chatbotId], references: [id], onDelete: Cascade)
+  type      String // widget_open | message | feedback | handoff | fallback
+  metadata  Json     @default("{}")
+  createdAt DateTime @default(now())
+
+  @@index([chatbotId, type, createdAt])
+}
+
+model RateLimitBucket {
+  key     String   @id
+  count   Int      @default(0)
+  resetAt DateTime
+
+  @@index([resetAt])
 }
