@@ -11,6 +11,8 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { Icon } from "@/components/ui/icon";
 import { GoogleIcon, GithubIcon } from "@/lib/icons";
 
+type FieldErrors = { email?: string; password?: string };
+
 export default function SignInPage() {
   const t = useTranslations("Auth");
   const router = useRouter();
@@ -20,21 +22,34 @@ export default function SignInPage() {
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [error, setError] = React.useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = React.useState<FieldErrors>({});
+  const [formError, setFormError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
+
+  const validateEmail = React.useCallback(
+    (value: string) => {
+      if (!value.trim()) return t("validation.emailRequired");
+      return SignInSchema.shape.email.safeParse(value).success ? undefined : t("validation.emailInvalid");
+    },
+    [t],
+  );
+  const validatePassword = React.useCallback(
+    (value: string) => (value ? undefined : t("validation.passwordRequired")),
+    [t],
+  );
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError(null);
-    const parsed = SignInSchema.safeParse({ email, password });
-    if (!parsed.success) {
-      setError(t("errors.invalid"));
-      return;
-    }
+    setFormError(null);
+    const emailError = validateEmail(email);
+    const passwordError = validatePassword(password);
+    setFieldErrors({ email: emailError, password: passwordError });
+    if (emailError || passwordError) return;
+
     setLoading(true);
     const { error: authError } = await signIn.email({ email, password, callbackURL: redirectTo });
     setLoading(false);
-    if (authError) setError(t("errors.invalid"));
+    if (authError) setFormError(t("errors.invalid"));
     else router.push(redirectTo);
   }
 
@@ -70,28 +85,36 @@ export default function SignInPage() {
         <span className="h-px flex-1 bg-border" />
       </div>
 
-      <form onSubmit={onSubmit} className="flex flex-col gap-4">
+      <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
         <Input
           label={t("email")}
           type="email"
-          required
           autoComplete="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            if (fieldErrors.email) setFieldErrors((f) => ({ ...f, email: undefined }));
+          }}
+          onBlur={(e) => setFieldErrors((f) => ({ ...f, email: validateEmail(e.target.value) }))}
+          error={fieldErrors.email}
         />
         <div>
           <PasswordInput
             label={t("password")}
-            required
             autoComplete="current-password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              if (fieldErrors.password) setFieldErrors((f) => ({ ...f, password: undefined }));
+            }}
+            onBlur={(e) => setFieldErrors((f) => ({ ...f, password: validatePassword(e.target.value) }))}
+            error={fieldErrors.password}
           />
           <Link href="/forgot-password" className="mt-2 inline-block text-small text-link hover:underline">
             {t("forgot")}
           </Link>
         </div>
-        {error ? <p className="text-small text-error">{error}</p> : null}
+        {formError ? <p className="text-small text-error">{formError}</p> : null}
         <Button type="submit" className="w-full" loading={loading}>
           {t("signIn")}
         </Button>

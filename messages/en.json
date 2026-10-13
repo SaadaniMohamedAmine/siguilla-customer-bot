@@ -57,6 +57,13 @@
       "invalid": "Email or password is incorrect.",
       "exists": "An account with this email already exists.",
       "generic": "Something went wrong on our side. Please try again."
+    },
+    "validation": {
+      "nameRequired": "Please enter your name.",
+      "emailRequired": "Please enter your email.",
+      "emailInvalid": "Enter a valid email address.",
+      "passwordRequired": "Please enter your password.",
+      "passwordMin": "Use at least 8 characters."
     }
   },
   "Errors": {
