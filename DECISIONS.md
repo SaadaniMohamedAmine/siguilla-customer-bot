@@ -12,7 +12,11 @@
 **Test de bout en bout — succès complet (2026-10-13, après ajout de `GROQ_API_KEY` et `GEMINI_API_KEY`) :** connexion `test1@sigilla.app` → `POST /api/chatbots` → `POST /api/chatbots/:id/sources` avec `{ type: "url", url: "https://example.com" }` → statut `queued` → `ready` en ~5 s, `pagesCount: 1`, `chunksCount: 1`. Vérifié en base : le chunk a son `sourceTitle`/`sourceUrl` et un `embedding` non-null (vecteur 768d stocké dans pgvector). Pipeline complet (crawl → chunk → embed Gemini → stockage pgvector) validé de bout en bout.
 Premier essai (avant les clés) : statut `queued` → `failed` / `error: "processing_failed"`, comme attendu — confirmait que la gestion d'erreur à l'étape embedding est propre (pas de crash).
 
-**Clés encore manquantes pour une couverture 100%** : `BLOB_READ_WRITE_TOKEN` (upload PDF non testé) et `NOTION_CLIENT_ID`/`SECRET` (connecteur Notion non testé).
+**Vercel Blob store créé via le CLI** (`vercel blob create-store siguilla-customer-bot --access public`) et lié automatiquement au projet — `BLOB_READ_WRITE_TOKEN` posé sur Development/Preview/Production sans action manuelle sur le dashboard.
+
+**Upload PDF — succès complet (2026-10-13).** PDF minimal généré à la main (texte brut dans un flux PDF valide), uploadé directement sur Blob, ingéré via `POST /api/chatbots/:id/sources` → `status: "ready"`, `pagesCount: 1`, `chunksCount: 1`. Un premier essai avec un texte trop court (33 caractères, sous le seuil de 40 de `chunkSections`) a donné `status: "failed"` / `error: "no_content"` — confirme que le garde-fou anti-contenu-vide fonctionne proprement.
+
+**Clé restante** : `NOTION_CLIENT_ID`/`SECRET` (connecteur Notion non testé — nécessite la création d'une intégration publique sur notion.so/my-integrations).
 
 **`as Prisma.InputJsonValue` ajouté sur les champs JSON (`cursor`, `progress`) dans `lib/ingestion/pipeline.ts`.**
 TypeScript n'arrivait pas à inférer correctement le type attendu par Prisma pour un objet construit par spread (`{ ...cursor, ...patch, keepHashes: [...keep], pagesDone }`) — erreur `Record<string, unknown>` non assignable à `JsonNull | InputJsonValue`. Cast explicite, comportement runtime inchangé.
