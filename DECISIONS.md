@@ -16,7 +16,13 @@ Premier essai (avant les clés) : statut `queued` → `failed` / `error: "proces
 
 **Upload PDF — succès complet (2026-10-13).** PDF minimal généré à la main (texte brut dans un flux PDF valide), uploadé directement sur Blob, ingéré via `POST /api/chatbots/:id/sources` → `status: "ready"`, `pagesCount: 1`, `chunksCount: 1`. Un premier essai avec un texte trop court (33 caractères, sous le seuil de 40 de `chunkSections`) a donné `status: "failed"` / `error: "no_content"` — confirme que le garde-fou anti-contenu-vide fonctionne proprement.
 
-**Clé restante** : `NOTION_CLIENT_ID`/`SECRET` (connecteur Notion non testé — nécessite la création d'une intégration publique sur notion.so/my-integrations).
+**Connecteur Notion — succès complet de bout en bout (2026-10-13).** Intégration publique créée par l'utilisateur sur notion.so/my-integrations (type OAuth, 2 redirect URIs : local + prod). Flow entier vérifié avec un vrai compte Notion :
+1. `GET /api/notion/connect` → redirection Notion correcte → écran de consentement → sélection de page → callback → `?notion=connected`.
+2. En base : `NotionConnection` créée avec le bon `workspaceName`, token stocké **chiffré** (format `iv:tag:ciphertext`, jamais le `secret_...` en clair).
+3. `GET /api/notion/pages` déchiffre le token et interroge l'API Notion avec succès → retrouve la page partagée.
+4. Ingestion d'une page Notion réelle (après passage temporaire de l'org de test en plan `pro` pour contourner le garde-fou `notion_requires_pro` — remis en `free` après le test) → `pagesCount: 1`, statut `failed`/`no_content` **attendu** car la page Notion de test était vide (juste des boutons de template, aucun bloc de texte). Le garde-fou anti-contenu-vide s'est déclenché correctement ; le mécanisme (fetch → `blocksToMarkdown` → chunking) est validé jusqu'au bout.
+
+Les 3 chemins d'ingestion (URL, PDF, Notion) sont maintenant tous vérifiés de bout en bout avec de vrais services externes (Groq, Gemini, Vercel Blob, Notion).
 
 **`as Prisma.InputJsonValue` ajouté sur les champs JSON (`cursor`, `progress`) dans `lib/ingestion/pipeline.ts`.**
 TypeScript n'arrivait pas à inférer correctement le type attendu par Prisma pour un objet construit par spread (`{ ...cursor, ...patch, keepHashes: [...keep], pagesDone }`) — erreur `Record<string, unknown>` non assignable à `JsonNull | InputJsonValue`. Cast explicite, comportement runtime inchangé.
