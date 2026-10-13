@@ -1,0 +1,156 @@
+@import "tailwindcss";
+
+/* Ne jamais scanner les exports Stitch (classes MD3 / valeurs arbitraires) */
+@source not "../stitch_sigilla_luxury_ai_platform";
+@source not "../widget";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Light */
+:root {
+  --bg: #faf6f2;
+  --surface: #ffffff;
+  --surface-raised: #f4ede8;
+  --border: #e8ded8;
+  --text: #1a1214;
+  --text-muted: #6b5a5d;
+  --accent: #8a2438;
+  --accent-hover: #741d2f;
+  --on-accent: #ffffff;
+  --link: #8a2438;
+  --focus: #8a2438;
+  --tint: #f3dde1;
+  --success: #2f7a4d;
+  --warning: #85590c;
+  --error: #b3261e;
+  --shadow-lift: 0 16px 40px -12px rgb(26 18 20 / 0.18);
+}
+
+/* Dark (thème par défaut) */
+.dark {
+  --bg: #0e0a0b;
+  --surface: #171113;
+  --surface-raised: #201719;
+  --border: #2e2225;
+  --text: #f3ece6;
+  --text-muted: #a8999a;
+  --accent: #9e2f45;
+  --accent-hover: #872538;
+  --on-accent: #f3ece6;
+  --link: #e3b3ba;
+  --focus: #e3b3ba;
+  --tint: rgb(227 179 186 / 0.08);
+  --success: #6fbf8e;
+  --warning: #e0b05c;
+  --error: #e5675f;
+  --shadow-lift: 0 16px 40px -12px rgb(0 0 0 / 0.6);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-on-accent: var(--on-accent);
+  --color-link: var(--link);
+  --color-focus: var(--focus);
+  --color-tint: var(--tint);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+
+  --font-serif: var(--font-instrument-serif), Georgia, serif;
+  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+
+  --shadow-lift: var(--shadow-lift);
+
+  --text-display: 3.5rem;
+  --text-display--line-height: 4rem;
+  --text-display--letter-spacing: -0.02em;
+  --text-h1: 2.5rem;
+  --text-h1--line-height: 3rem;
+  --text-h1--letter-spacing: -0.015em;
+  --text-h2: 1.75rem;
+  --text-h2--line-height: 2.25rem;
+  --text-h3: 1.375rem;
+  --text-h3--line-height: 1.75rem;
+  --text-kpi: 3rem;
+  --text-kpi--line-height: 3rem;
+  --text-kpi--letter-spacing: -0.03em;
+  --text-body-lg: 1.0625rem;
+  --text-body-lg--line-height: 1.625rem;
+  --text-body: 0.875rem;
+  --text-body--line-height: 1.375rem;
+  --text-small: 0.75rem;
+  --text-small--line-height: 1.125rem;
+  --text-label: 0.6875rem;
+  --text-label--line-height: 0.875rem;
+  --text-label--letter-spacing: 0.08em;
+
+  --ease-lux: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    color-scheme: dark;
+  }
+  html:not(.dark) {
+    color-scheme: light;
+  }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--tint);
+    color: var(--text);
+  }
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+  html {
+    scrollbar-color: var(--border) transparent;
+    scrollbar-width: thin;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@utility label-caps {
+  font-family: var(--font-sans);
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  letter-spacing: var(--text-label--letter-spacing);
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+@utility hairline {
+  border-width: 1px;
+  border-color: var(--border);
+}
