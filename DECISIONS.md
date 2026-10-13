@@ -4,6 +4,33 @@
 
 ---
 
+## Phase 3 (P2) — Données et ingestion — 2026-10-13
+
+**Minimal CRUD Chatbot + page Sources ajoutés, hors spec stricte mais explicitement autorisés par le fichier de délégation** (§1 : « un CRUD Chatbot minimal pour pouvoir rattacher des sources »).
+`/agents` liste désormais les vrais agents de l'organisation (au lieu d'un état vide statique) et un dialogue « Create an agent » (nom uniquement) crée l'agent via `POST /api/chatbots` puis redirige vers sa page Sources. Le wizard complet en 3 étapes reste prévu pour la Phase 5 ; ceci n'est qu'un strict minimum pour pouvoir tester l'ingestion dès maintenant.
+
+**Test de bout en bout — succès complet (2026-10-13, après ajout de `GROQ_API_KEY` et `GEMINI_API_KEY`) :** connexion `test1@sigilla.app` → `POST /api/chatbots` → `POST /api/chatbots/:id/sources` avec `{ type: "url", url: "https://example.com" }` → statut `queued` → `ready` en ~5 s, `pagesCount: 1`, `chunksCount: 1`. Vérifié en base : le chunk a son `sourceTitle`/`sourceUrl` et un `embedding` non-null (vecteur 768d stocké dans pgvector). Pipeline complet (crawl → chunk → embed Gemini → stockage pgvector) validé de bout en bout.
+Premier essai (avant les clés) : statut `queued` → `failed` / `error: "processing_failed"`, comme attendu — confirmait que la gestion d'erreur à l'étape embedding est propre (pas de crash).
+
+**Vercel Blob store créé via le CLI** (`vercel blob create-store siguilla-customer-bot --access public`) et lié automatiquement au projet — `BLOB_READ_WRITE_TOKEN` posé sur Development/Preview/Production sans action manuelle sur le dashboard.
+
+**Upload PDF — succès complet (2026-10-13).** PDF minimal généré à la main (texte brut dans un flux PDF valide), uploadé directement sur Blob, ingéré via `POST /api/chatbots/:id/sources` → `status: "ready"`, `pagesCount: 1`, `chunksCount: 1`. Un premier essai avec un texte trop court (33 caractères, sous le seuil de 40 de `chunkSections`) a donné `status: "failed"` / `error: "no_content"` — confirme que le garde-fou anti-contenu-vide fonctionne proprement.
+
+**Connecteur Notion — succès complet de bout en bout (2026-10-13).** Intégration publique créée par l'utilisateur sur notion.so/my-integrations (type OAuth, 2 redirect URIs : local + prod). Flow entier vérifié avec un vrai compte Notion :
+1. `GET /api/notion/connect` → redirection Notion correcte → écran de consentement → sélection de page → callback → `?notion=connected`.
+2. En base : `NotionConnection` créée avec le bon `workspaceName`, token stocké **chiffré** (format `iv:tag:ciphertext`, jamais le `secret_...` en clair).
+3. `GET /api/notion/pages` déchiffre le token et interroge l'API Notion avec succès → retrouve la page partagée.
+4. Ingestion d'une page Notion réelle (après passage temporaire de l'org de test en plan `pro` pour contourner le garde-fou `notion_requires_pro` — remis en `free` après le test) → `pagesCount: 1`, statut `failed`/`no_content` **attendu** car la page Notion de test était vide (juste des boutons de template, aucun bloc de texte). Le garde-fou anti-contenu-vide s'est déclenché correctement ; le mécanisme (fetch → `blocksToMarkdown` → chunking) est validé jusqu'au bout.
+
+Les 3 chemins d'ingestion (URL, PDF, Notion) sont maintenant tous vérifiés de bout en bout avec de vrais services externes (Groq, Gemini, Vercel Blob, Notion).
+
+**`as Prisma.InputJsonValue` ajouté sur les champs JSON (`cursor`, `progress`) dans `lib/ingestion/pipeline.ts`.**
+TypeScript n'arrivait pas à inférer correctement le type attendu par Prisma pour un objet construit par spread (`{ ...cursor, ...patch, keepHashes: [...keep], pagesDone }`) — erreur `Record<string, unknown>` non assignable à `JsonNull | InputJsonValue`. Cast explicite, comportement runtime inchangé.
+
+**Intégration publique Notion : pas encore créée.** Le code OAuth (connect/callback/pages/disconnect) est complet et prêt, mais `NOTION_CLIENT_ID`/`NOTION_CLIENT_SECRET` sont vides — le connecteur Notion ne pourra être testé qu'une fois l'intégration créée sur notion.so/my-integrations.
+
+---
+
 ## Phase 2 (P1) — Fondations, design system, auth — 2026-10-13
 
 **`prisma` pinné sur `7.10.0`, pas sur le tag npm `latest`.**

@@ -3,7 +3,7 @@
 > Project 07 / 30 — *Every answer, sealed by its source.*
 > Références : [SIGILLA-PRD.md](./SIGILLA-PRD.md) · [Audit design](./project-07-sigilla-design-audit-recommendations.md)
 
-**Statut global : 43/151 tâches (28 %)** — cadrage, design, fichiers de délégation et Phase 2 (P1, fondations/auth) terminés.
+**Statut global : 58/151 tâches (38 %)** — cadrage, design, fichiers de délégation, Phase 2 (P1) et Phase 3 (P2) terminés.
 
 | Phase | Avancement |
 |---|---|
@@ -11,7 +11,7 @@
 | Phase D — Design | 6/6 — 100 % ✅ |
 | Phase 1 — Préparation de la délégation | 9/10 — 90 % |
 | Phase 2 (P1) — Fondations, design system, auth | 20/20 — 100 % ✅ |
-| Phase 3 (P2) — Données et ingestion | 0/15 — 0 % |
+| Phase 3 (P2) — Données et ingestion | 15/15 — 100 % ✅ |
 | Phase 4 (P3) — RAG et réponses | 0/10 — 0 % |
 | Phase 5 (P4) — Widget embeddable | 0/16 — 0 % |
 | Phase 6 (P5) — Dashboard, conversations, handoff, analytics | 0/15 — 0 % |
@@ -76,21 +76,21 @@
 - [x] Micro-interactions : transitions, hover, focus visibles, `prefers-reduced-motion`
 
 ## Phase 3 (P2) — Données et ingestion
-- [ ] Schéma Prisma complet (Chatbot, DataSource, Chunk, NotionConnection, Conversation, Message, AnalyticsEvent, RateLimitBucket + billing sur Organization)
-- [ ] Extension pgvector + index HNSW cosine (SQL manuel versionné)
-- [ ] Orchestrateur IA repris d'Excerpta (Groq → Gemini, modèles en env vars)
-- [ ] Embeddings Gemini 768d par lots, avec retry et backoff
-- [ ] Upload PDF sur Vercel Blob (10 MB max, validation MIME)
-- [ ] Pipeline PDF : extraction, nettoyage, chunks avec page, hash de contenu
-- [ ] Crawler URL : sitemap.xml, robots.txt, même domaine, 100 pages max, Cheerio, nettoyage nav/footer
-- [ ] Traitement par lots enchaînés (curseur + auto-invocation signée HMAC, < 300 s par appel)
-- [ ] Notion OAuth + token chiffré AES-GCM
-- [ ] Loader Notion (sélection de pages → markdown → chunks)
-- [ ] Data Sources manager (liste, ajout PDF / URL / Notion, tiroir d'ajout)
-- [ ] Statuts d'ingestion en direct (polling) + messages d'erreur soignés
-- [ ] Re-sync manuelle (ré-embed des seuls chunks modifiés, purge des orphelins)
-- [ ] Suppression d'une source (chunks + blob nettoyés)
-- [ ] Garde-fous : `MAX_TOTAL_CHUNKS`, limites par plan, taille des fichiers
+- [x] Schéma Prisma complet (Chatbot, DataSource, Chunk, NotionConnection, Conversation, Message, AnalyticsEvent, RateLimitBucket + billing sur Organization)
+- [x] Extension pgvector + index HNSW cosine (SQL manuel versionné) — vérifié en direct sur Neon
+- [x] Orchestrateur IA repris d'Excerpta (Groq → Gemini, modèles en env vars)
+- [x] Embeddings Gemini 768d par lots, avec retry et backoff
+- [x] Upload PDF sur Vercel Blob (10 MB max, validation MIME) — code prêt, `BLOB_READ_WRITE_TOKEN` pas encore fourni pour test réel
+- [x] Pipeline PDF : extraction, nettoyage, chunks avec page, hash de contenu
+- [x] Crawler URL : sitemap.xml, robots.txt, même domaine, 100 pages max, Cheerio, nettoyage nav/footer
+- [x] Traitement par lots enchaînés (curseur + auto-invocation signée HMAC, < 300 s par appel) — déclenchement vérifié de bout en bout
+- [x] Notion OAuth + token chiffré AES-GCM — code prêt, intégration publique Notion pas encore créée
+- [x] Loader Notion (sélection de pages → markdown → chunks)
+- [x] Data Sources manager (liste, ajout PDF / URL / Notion, tiroir d'ajout)
+- [x] Statuts d'ingestion en direct (polling) + messages d'erreur soignés
+- [x] Re-sync manuelle (ré-embed des seuls chunks modifiés, purge des orphelins)
+- [x] Suppression d'une source (chunks + blob nettoyés)
+- [x] Garde-fous : `MAX_TOTAL_CHUNKS`, limites par plan, taille des fichiers
 
 ## Phase 4 (P3) — RAG et réponses
 - [ ] CRUD des agents (nom, description, instructions, seuil de similarité)

@@ -3,6 +3,10 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: __dirname,
+  serverExternalPackages: ["pdf-parse", "@napi-rs/canvas"],
+  outputFileTracingIncludes: {
+    "/api/workflows/ingest": ["./node_modules/@napi-rs/**/*", "./node_modules/pdfjs-dist/**/*"],
+  },
   turbopack: {
     root: __dirname,
     rules: {
