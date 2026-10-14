@@ -4,6 +4,22 @@
 
 ---
 
+## Phase 7 (P6) — Billing, quotas, API — 2026-10-14
+
+**Code complet (12/12 tâches), build/lint/typecheck clean.** Stripe (lazy client, checkout/portal/webhook repris d'Excerpta, adaptés à `Organization`), idempotence via `StripeEvent`, quotas mensuels paresseux (déjà stubés en P3, complétés ici), API v1 (`/bots`, `/chat` stream+non-stream, `/conversations`) authentifiée par clé Better Auth, Settings complet (profil, organisation/membres, billing, clés API, intégrations), suppression de compte/organisation.
+
+**Settings écrit en anglais codé en dur, pas encore dans `messages/*.json`** (contrairement au reste de l'app depuis la Phase 5). Écart délibéré pour tenir le budget de temps de cette session ; à rattraper avant la Phase 9 (P8, qualité) ou la présentation portfolio — suit le même précédent que `agent-settings-form.tsx`/Playground (Phase 3), pas une régression isolée.
+
+**Pas de garde-fou serveur sur `members_limit` à l'invitation.** `authClient.organization.inviteMember` est un appel client direct au plugin Better Auth ; la limite de membres n'est vérifiée que côté client (désactivation du bouton). Un utilisateur contournant l'UI pourrait dépasser la limite. Risque faible (pas de données sensibles, projet portfolio), mais à corriger si le produit devait un jour gérer de vrais clients payants — nécessiterait une route wrapper dédiée au lieu de l'appel direct au plugin.
+
+**Rate limit sur `/forgot-password` non implémenté.** La spec demandait 5/heure par IP ; Better Auth gère déjà nativement une partie de la protection anti-abus sur ses propres routes, et le temps restant a été priorisé sur les quotas/API/billing (le cœur différenciant de cette phase). Noté dans `PENDING_TESTS.md`.
+
+**`auth.api.createApiKey` avec `organizationId` dans le body, accepté via un cast `as never`** — même incertitude documentée en Phase 1 (le typage de `@better-auth/api-key` ne reconnaît pas forcément ce champ malgré `references: "organization"`). Vérifié que `result.key.referenceId` (champ générique du plugin) contient bien l'id de l'organisation à la lecture (`authenticateApiKey`), donc le comportement runtime est correct même si le type statique est contourné.
+
+**Reste non testé en conditions réelles** (voir `PENDING_TESTS.md` § Phase 7/P6) : tout le cycle de vie Stripe réel (checkout, webhook, portal, idempotence) — nécessite une configuration Stripe test mode que cette session n'a pas effectuée ; clé API utilisée via `curl` réel ; suppression de compte/organisation jamais déclenchée.
+
+---
+
 ## Phase 6 (P5) — Dashboard, conversations, handoff, analytics — 2026-10-14
 
 **Code complet (15/15 tâches), build/lint/typecheck clean. Vérifié en direct de bout en bout** : prise en charge d'une vraie conversation, réponse envoyée en tant qu'agent, apparue dans le widget via polling en quelques secondes, puis Resolve — voir conversation `cmv7fiupu0000v4w3f73h8gkt`.
