@@ -171,6 +171,62 @@
     "avatarTooLarge": "L'image doit faire moins de 512 Ko.",
     "avatarUnsupported": "Seules les images PNG, JPG ou WebP sont prises en charge."
   },
+  "Billing": {
+    "plans": {
+      "free": {
+        "name": "Free",
+        "tagline": "Pour essayer Sigilla sur un seul site.",
+        "features": [
+          "1 agent",
+          "5 sources par agent",
+          "25 pages explorées par site",
+          "200 messages par mois",
+          "Transfert humain",
+          "Badge « Scellé par Sigilla »",
+          "1 membre"
+        ]
+      },
+      "pro": {
+        "name": "Pro",
+        "tagline": "Pour les boutiques et équipes SaaS en croissance.",
+        "features": [
+          "5 agents",
+          "25 sources par agent",
+          "100 pages explorées par site",
+          "2 000 messages par mois",
+          "Connecteur Notion",
+          "Accès API",
+          "Badge masquable",
+          "3 membres"
+        ]
+      },
+      "team": {
+        "name": "Team",
+        "tagline": "Pour les maisons avec plusieurs marques ou sites.",
+        "features": [
+          "15 agents",
+          "50 sources par agent",
+          "100 pages explorées par site",
+          "10 000 messages par mois",
+          "Connecteur Notion",
+          "Accès API",
+          "Badge masquable",
+          "10 membres"
+        ]
+      }
+    },
+    "currentPlan": "Forfait actuel",
+    "renewsOn": "Renouvelé le {date}",
+    "manageBilling": "Gérer la facturation",
+    "upgradeTo": "Passer à {plan}",
+    "usage": { "messages": "Messages", "agents": "Agents", "sources": "Sources", "members": "Membres" },
+    "demoBanner": "Mode démo — utilisez la carte de test 4242 4242 4242 4242",
+    "toastSuccess": "Votre forfait a été mis à jour.",
+    "toastCanceled": "Paiement annulé.",
+    "quotaWarning": "Vous avez utilisé 90 % des messages de ce mois.",
+    "quotaExceeded": "Vos agents sont au repos jusqu'au {date}.",
+    "upgrade": "Mettre à niveau"
+  },
   "Analytics": {
     "title": "Analytique",
     "allAgents": "Tous les agents",

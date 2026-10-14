@@ -55,6 +55,19 @@
 - [ ] Filtres conversations (negative feedback, unanswered) et période 7/30/90 — jamais exercés avec des données variées.
 - [ ] Recherche de messages (debounce) dans l'inbox.
 
+## Phase 7 (P6) — Billing, quotas, API
+
+- [ ] Upgrade Free → Pro réel avec la carte de test Stripe `4242 4242 4242 4242` (jamais testé — nécessite Stripe configuré en mode test : produits, prix, webhook).
+- [ ] Rejouer un webhook déjà traité (idempotence `StripeEvent`) — code écrit, jamais exercé avec un vrai event Stripe.
+- [ ] Portal : changement de plan Pro ↔ Team, annulation → retombée sur Free.
+- [ ] Quota : forcer `messageCount = limit` et vérifier l'état « resting » du widget + bannière dashboard + 429 sur `/api/v1/chat`.
+- [ ] Clé API : créée → `curl` avec `Authorization: Bearer sk_live_…` sur `/api/v1/bots` → révoquée → 401.
+- [ ] 61 appels/min avec la même clé API → 429 (rate limit jamais déclenché en test).
+- [ ] Invitation par lien acceptée par un 2e compte réel ; limite de membres respectée (actuellement seulement vérifiée côté client, pas de garde-fou serveur sur `inviteMember`).
+- [ ] Suppression d'organisation et de compte — jamais exécutée (chemin code relu, pas déclenché).
+- [ ] Grep `trial|SLA|VPC|webhooks?` sur les namespaces `Billing`/réglages — jamais exécuté.
+- [ ] Rate limit sur `/forgot-password` — pas implémenté (voir `DECISIONS.md`).
+
 ---
 
-*Phases suivantes (billing, landing…) : ajouter une section ici à la clôture de chaque phase, avant de passer à la suivante — ne pas attendre la fin du projet pour commencer à lister.*
+*Phases suivantes (landing…) : ajouter une section ici à la clôture de chaque phase, avant de passer à la suivante — ne pas attendre la fin du projet pour commencer à lister.*

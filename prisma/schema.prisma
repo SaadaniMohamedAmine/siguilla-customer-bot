@@ -291,3 +291,10 @@ model RateLimitBucket {
 
   @@index([resetAt])
 }
+
+/// Garde-fou d'idempotence pour les webhooks Stripe : un event.id déjà vu est ignoré.
+model StripeEvent {
+  id        String   @id // event.id
+  type      String
+  createdAt DateTime @default(now())
+}

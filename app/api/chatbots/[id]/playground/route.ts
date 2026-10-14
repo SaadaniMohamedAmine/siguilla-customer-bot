@@ -1,9 +1,10 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { requireOrgApi, toErrorResponse } from "@/lib/session";
+import { requireOrgApi, toErrorResponse, HttpError } from "@/lib/session";
 import { answer } from "@/lib/rag/answer";
 import { sseResponse } from "@/lib/rag/sse";
+import { rateLimit } from "@/lib/rate-limit";
 
 export const maxDuration = 60;
 const Body = z.object({
@@ -17,6 +18,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   try {
     const { id } = await params;
     const { org, user } = await requireOrgApi();
+    const rl = await rateLimit(`playground:${user.id}`, 20, 60_000);
+    if (!rl.ok) throw new HttpError(429, "rate_limited");
     const bot = await prisma.chatbot.findFirst({ where: { id, organizationId: org.id } });
     if (!bot) return Response.json({ error: "not_found" }, { status: 404 });
     const body = Body.parse(await request.json());

@@ -3,7 +3,7 @@
 > Project 07 / 30 — *Every answer, sealed by its source.*
 > Références : [SIGILLA-PRD.md](./SIGILLA-PRD.md) · [Audit design](./project-07-sigilla-design-audit-recommendations.md)
 
-**Statut global : 99/151 tâches (66 %)** — cadrage, design, fichiers de délégation, Phase 2 (P1), Phase 3 (P2), Phase 4 (P3), Phase 5 (P4) et Phase 6 (P5) terminés.
+**Statut global : 111/151 tâches (74 %)** — cadrage, design, fichiers de délégation, Phase 2 (P1), Phase 3 (P2), Phase 4 (P3), Phase 5 (P4), Phase 6 (P5) et Phase 7 (P6) terminés.
 
 | Phase | Avancement |
 |---|---|
@@ -15,7 +15,7 @@
 | Phase 4 (P3) — RAG et réponses | 10/10 — 100 % ✅ |
 | Phase 5 (P4) — Widget embeddable | 16/16 — 100 % ✅ |
 | Phase 6 (P5) — Dashboard, conversations, handoff, analytics | 15/15 — 100 % ✅ |
-| Phase 7 (P6) — Billing, quotas, API | 0/12 — 0 % |
+| Phase 7 (P6) — Billing, quotas, API | 12/12 — 100 % ✅ |
 | Phase 8 (P7) — Landing, démo, docs | 0/10 — 0 % |
 | Phase 9 (P8) — Qualité, sécurité, performance | 0/11 — 0 % |
 | Phase 10 — Déploiement et zéro maintenance | 0/10 — 0 % |
@@ -140,18 +140,18 @@
 - [x] Filtres 7 / 30 / 90 jours
 
 ## Phase 7 (P6) — Billing, quotas, API
-- [ ] Client Stripe lazy (repris d'Excerpta)
-- [ ] `billing/checkout` (par organisation)
-- [ ] `billing/portal`
-- [ ] `webhooks/stripe` (completed, updated, deleted) + idempotence
-- [ ] Plans Free / Pro / Team (0 / 12 / 39 $) + limites du PRD
-- [ ] Quotas avec reset mensuel sans cron
-- [ ] Messages de dépassement (widget « resting » + bannière + carte d'upgrade)
-- [ ] `rateLimit()` persistant Neon (upsert atomique + purge des entrées expirées)
-- [ ] Plugin Better Auth `apiKey` (création, affichage unique, révocation, préfixe)
-- [ ] API v1 (`/chat`, `/bots`, `/conversations`) + validation Zod + erreurs normalisées
-- [ ] Settings : profil, organisation et membres, billing, API keys, intégrations Notion
-- [ ] Suppression de compte et d'organisation (cascade propre)
+- [x] Client Stripe lazy (repris d'Excerpta)
+- [x] `billing/checkout` (par organisation)
+- [x] `billing/portal`
+- [x] `webhooks/stripe` (completed, updated, deleted) + idempotence
+- [x] Plans Free / Pro / Team (0 / 12 / 39 $) + limites du PRD
+- [x] Quotas avec reset mensuel sans cron
+- [x] Messages de dépassement (widget « resting » + bannière + carte d'upgrade)
+- [x] `rateLimit()` persistant Neon (upsert atomique + purge des entrées expirées)
+- [x] Plugin Better Auth `apiKey` (création, affichage unique, révocation, préfixe)
+- [x] API v1 (`/chat`, `/bots`, `/conversations`) + validation Zod + erreurs normalisées
+- [x] Settings : profil, organisation et membres, billing, API keys, intégrations Notion
+- [x] Suppression de compte et d'organisation (cascade propre)
 
 ## Phase 8 (P7) — Landing, démo, docs
 - [ ] Landing premium (hero, How it works, features, citation, CTA final)
