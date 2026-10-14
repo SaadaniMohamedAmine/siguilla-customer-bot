@@ -20,6 +20,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
     "check": "npm run lint && npm run typecheck && npm run test && npm run size"
   },
   "size-limit": [
@@ -69,6 +71,8 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.64.0",
     "@size-limit/file": "^14.2.0",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
@@ -85,6 +89,7 @@
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "prisma": "^7.10.0",
+    "serve": "^14.2.6",
     "size-limit": "^14.2.0",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
