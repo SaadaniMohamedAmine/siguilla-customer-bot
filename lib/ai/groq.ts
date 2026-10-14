@@ -1,7 +1,13 @@
 // lib/ai/groq.ts
 import Groq from "groq-sdk";
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY! });
+let groqSingleton: Groq | null = null;
+
+/** Lazy : évite d'instancier au chargement du module (build) avec une clé absente. */
+function getGroq(): Groq {
+  if (!groqSingleton) groqSingleton = new Groq({ apiKey: process.env.GROQ_API_KEY! });
+  return groqSingleton;
+}
 
 export const GROQ_MODEL = process.env.GROQ_MODEL || "openai/gpt-oss-120b";
 
@@ -11,7 +17,7 @@ export async function generateChatCompletion(
   messages: ChatMessage[],
   options?: { temperature?: number; maxTokens?: number },
 ): Promise<string> {
-  const completion = await groq.chat.completions.create({
+  const completion = await getGroq().chat.completions.create({
     model: GROQ_MODEL,
     messages,
     temperature: options?.temperature ?? 0.2,
@@ -34,7 +40,7 @@ export async function streamChatCompletion(
   messages: ChatMessage[],
   options?: { temperature?: number; maxTokens?: number },
 ): Promise<AsyncIterable<string>> {
-  const stream = await groq.chat.completions.create({
+  const stream = await getGroq().chat.completions.create({
     model: GROQ_MODEL,
     messages,
     temperature: options?.temperature ?? 0.2,
@@ -58,5 +64,3 @@ export function isGroqRateLimitOrServerError(error: unknown): boolean {
   if (typeof err.status === "number" && err.status >= 500) return true;
   return false;
 }
-
-export { groq };

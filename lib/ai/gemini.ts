@@ -4,7 +4,13 @@
 // deprecated @google/generative-ai.
 import { GoogleGenAI } from "@google/genai";
 
-const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+let genAISingleton: GoogleGenAI | null = null;
+
+/** Lazy : évite d'instancier au chargement du module (build) avec une clé absente. */
+function getGenAI(): GoogleGenAI {
+  if (!genAISingleton) genAISingleton = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+  return genAISingleton;
+}
 
 export const GEMINI_EMBEDDING_MODEL = process.env.GEMINI_EMBEDDING_MODEL || "gemini-embedding-2";
 export const GEMINI_CHAT_MODEL = process.env.GEMINI_CHAT_MODEL || "gemini-3.7-flash";
@@ -31,7 +37,7 @@ async function withRetry<T>(fn: () => Promise<T>, attempts = 4): Promise<T> {
 
 export async function generateEmbedding(text: string): Promise<number[]> {
   const response = await withRetry(() =>
-    genAI.models.embedContent({
+    getGenAI().models.embedContent({
       model: GEMINI_EMBEDDING_MODEL,
       contents: text,
       config: { outputDimensionality: EMBEDDING_OUTPUT_DIMENSIONALITY, taskType: "RETRIEVAL_DOCUMENT" },
@@ -57,7 +63,7 @@ export async function generateEmbeddingsBatch(texts: string[]): Promise<number[]
   for (let i = 0; i < texts.length; i += BATCH) {
     const slice = texts.slice(i, i + BATCH);
     const res = await withRetry(() =>
-      genAI.models.embedContent({
+      getGenAI().models.embedContent({
         model: GEMINI_EMBEDDING_MODEL,
         contents: slice.map((text) => ({ parts: [{ text }] })),
         config: { outputDimensionality: EMBEDDING_OUTPUT_DIMENSIONALITY, taskType: "RETRIEVAL_DOCUMENT" },
@@ -72,7 +78,7 @@ export async function generateEmbeddingsBatch(texts: string[]): Promise<number[]
 
 export async function generateQueryEmbedding(text: string): Promise<number[]> {
   const response = await withRetry(() =>
-    genAI.models.embedContent({
+    getGenAI().models.embedContent({
       model: GEMINI_EMBEDDING_MODEL,
       contents: text,
       config: { outputDimensionality: EMBEDDING_OUTPUT_DIMENSIONALITY, taskType: "RETRIEVAL_QUERY" },
@@ -117,7 +123,7 @@ function toGeminiChatInput(messages: ChatMessage[]): {
 
 export async function generateChatCompletion(messages: ChatMessage[]): Promise<string> {
   const { systemInstruction, history, lastText } = toGeminiChatInput(messages);
-  const chat = genAI.chats.create({
+  const chat = getGenAI().chats.create({
     model: GEMINI_CHAT_MODEL,
     config: systemInstruction ? { systemInstruction } : undefined,
     history,
@@ -128,7 +134,7 @@ export async function generateChatCompletion(messages: ChatMessage[]): Promise<s
 
 export async function* streamChatCompletion(messages: ChatMessage[]): AsyncGenerator<string> {
   const { systemInstruction, history, lastText } = toGeminiChatInput(messages);
-  const chat = genAI.chats.create({
+  const chat = getGenAI().chats.create({
     model: GEMINI_CHAT_MODEL,
     config: systemInstruction ? { systemInstruction } : undefined,
     history,
@@ -138,5 +144,3 @@ export async function* streamChatCompletion(messages: ChatMessage[]): AsyncGener
     if (chunk.text) yield chunk.text;
   }
 }
-
-export { genAI };
