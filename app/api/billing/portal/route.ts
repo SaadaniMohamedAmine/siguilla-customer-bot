@@ -12,7 +12,7 @@ export async function POST(_request: NextRequest) {
       customer: org.stripeCustomerId,
       return_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings?tab=billing`,
     });
-    return NextResponse.json({ url: portal.url });
+    return NextResponse.json({ data: { url: portal.url } });
   } catch (error) {
     return toErrorResponse(error);
   }

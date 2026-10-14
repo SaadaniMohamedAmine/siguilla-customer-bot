@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
         customer: org.stripeCustomerId!,
         return_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings?tab=billing`,
       });
-      return NextResponse.json({ url: portal.url });
+      return NextResponse.json({ data: { url: portal.url } });
     }
 
     let customerId = org.stripeCustomerId;
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       metadata: { organizationId: org.id, plan },
       subscription_data: { metadata: { organizationId: org.id } },
     });
-    return NextResponse.json({ url: session.url });
+    return NextResponse.json({ data: { url: session.url } });
   } catch (error) {
     return toErrorResponse(error);
   }
