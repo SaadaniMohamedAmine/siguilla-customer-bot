@@ -46,11 +46,13 @@ export function AppShell({
   org,
   user,
   plan,
+  messageUsage,
 }: {
   children: React.ReactNode;
   org: { id: string; name: string };
   user: { name: string; email: string; image?: string | null };
   plan: string;
+  messageUsage: { used: number; limit: number };
 }) {
   const t = useTranslations("Nav");
   const pathname = usePathname();
@@ -174,8 +176,42 @@ export function AppShell({
       </aside>
 
       <div className="flex-1">
-        <main className="mx-auto max-w-[1200px] px-10 py-10">{children}</main>
+        <main className="mx-auto max-w-[1200px] px-10 py-10">
+          <QuotaBanner usage={messageUsage} />
+          {children}
+        </main>
       </div>
+    </div>
+  );
+}
+
+function QuotaBanner({ usage }: { usage: { used: number; limit: number } }) {
+  const router = useRouter();
+  const ratio = usage.limit > 0 ? usage.used / usage.limit : 0;
+  if (ratio < 0.9) return null;
+  const exceeded = ratio >= 1;
+  const nextReset = new Date();
+  nextReset.setUTCMonth(nextReset.getUTCMonth() + 1, 1);
+  nextReset.setUTCHours(0, 0, 0, 0);
+
+  return (
+    <div
+      className={cn(
+        "text-small mb-6 flex items-center justify-between gap-4 rounded-sm border p-3",
+        exceeded ? "border-error/40 bg-error/10 text-error" : "border-warning/40 bg-warning/10 text-warning",
+      )}
+    >
+      <p>
+        {exceeded
+          ? `Your agents are resting until ${nextReset.toLocaleDateString()}.`
+          : "You've used 90% of this month's messages."}
+      </p>
+      <button
+        onClick={() => router.push("/settings?tab=billing")}
+        className="shrink-0 font-medium underline underline-offset-4"
+      >
+        Upgrade
+      </button>
     </div>
   );
 }
