@@ -101,8 +101,8 @@ function StepIdentity({
         }),
       });
       router.push(`/agents/new?step=2&id=${agentId}`);
-    } catch {
-      toast.error("Something went wrong on our side.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong on our side.");
     } finally {
       setSaving(false);
     }
@@ -188,8 +188,8 @@ function StepWidget({
       await api(`/api/chatbots/${id}`, { method: "PATCH", body: JSON.stringify({ status: "live" }) });
       toast.success(t("live"));
       router.push(`/agents/${id}`);
-    } catch {
-      toast.error("Something went wrong on our side.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong on our side.");
     } finally {
       setPublishing(false);
     }

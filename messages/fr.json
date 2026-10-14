@@ -50,9 +50,7 @@
     "resetTitle": "Choisissez un nouveau mot de passe",
     "resetSubmit": "Mettre à jour le mot de passe",
     "resetDone": "Votre mot de passe a été mis à jour.",
-    "legal": "En créant un compte, vous acceptez nos {terms} et notre {privacy}.",
-    "terms": "Conditions",
-    "privacy": "Confidentialité",
+    "legal": "En créant un compte, vous acceptez nos <terms>Conditions</terms> et notre <privacy>Confidentialité</privacy>.",
     "strength": { "weak": "Faible", "fair": "Correct", "strong": "Fort" },
     "errors": {
       "invalid": "L'email ou le mot de passe est incorrect.",

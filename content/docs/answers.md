@@ -6,9 +6,7 @@ When a visitor asks a question, Sigilla retrieves the 6 most relevant chunks fro
 
 Every agent has a similarity threshold (adjustable in Settings). If the best match scores below it, Sigilla skips the model call entirely and returns the fallback message — no hallucinated answer, no wasted request.
 
-## Citations
-
-Each sentence that uses a source is marked with a numbered seal. The seals link back to the exact page, URL, or PDF page number they came from.
+Citations are covered on their [own page](/docs/citations).
 
 ## Language
 

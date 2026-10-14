@@ -318,6 +318,7 @@ async function main() {
       "embed",
       "customize",
       "answers",
+      "citations",
       "handoff",
       "analytics",
       "api",

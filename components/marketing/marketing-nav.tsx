@@ -5,9 +5,11 @@ import { Wordmark } from "@/components/ui/wordmark";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { SunIcon, MoonIcon } from "@/lib/icons";
+import { useHydrated } from "@/lib/use-hydrated";
 
 export function MarketingNav() {
   const { theme, setTheme } = useTheme();
+  const mounted = useHydrated();
   return (
     <header className="border-border bg-bg/80 sticky top-0 z-40 border-b backdrop-blur-sm">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
@@ -31,7 +33,7 @@ export function MarketingNav() {
             aria-label="Toggle theme"
             className="text-text-muted hover:text-text"
           >
-            <Icon icon={theme === "dark" ? SunIcon : MoonIcon} size={18} />
+            <Icon icon={mounted && theme === "dark" ? SunIcon : MoonIcon} size={18} />
           </button>
           <Link href="/sign-in" className="text-body text-text-muted hover:text-text">
             Sign in

@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
+  // Loin du widget (toujours en bas-droite ou bas-gauche) pour qu'il n'intercepte pas ses clics en dev.
+  devIndicators: { position: "top-left" },
   outputFileTracingRoot: __dirname,
   serverExternalPackages: ["pdf-parse", "@napi-rs/canvas"],
   outputFileTracingIncludes: {
@@ -23,7 +25,7 @@ const nextConfig: NextConfig = {
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://lh3.googleusercontent.com https://avatars.githubusercontent.com https://*.public.blob.vercel-storage.com",
       "font-src 'self'",
-      "connect-src 'self' https://*.public.blob.vercel-storage.com https://vercel.com/api/blob",
+      "connect-src 'self' https://*.public.blob.vercel-storage.com https://vercel.com/api/blob/",
       "frame-src 'self'",
       "frame-ancestors 'self'",
       "form-action 'self' https://checkout.stripe.com https://billing.stripe.com",

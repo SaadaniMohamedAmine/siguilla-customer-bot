@@ -50,9 +50,7 @@
     "resetTitle": "Choose a new password",
     "resetSubmit": "Update password",
     "resetDone": "Your password has been updated.",
-    "legal": "By creating an account, you agree to our {terms} and {privacy}.",
-    "terms": "Terms",
-    "privacy": "Privacy",
+    "legal": "By creating an account, you agree to our <terms>Terms</terms> and <privacy>Privacy</privacy>.",
     "strength": { "weak": "Weak", "fair": "Fair", "strong": "Strong" },
     "errors": {
       "invalid": "Email or password is incorrect.",
