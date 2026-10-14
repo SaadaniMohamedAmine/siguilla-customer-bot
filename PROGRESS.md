@@ -3,7 +3,7 @@
 > Project 07 / 30 — *Every answer, sealed by its source.*
 > Références : [SIGILLA-PRD.md](./SIGILLA-PRD.md) · [Audit design](./project-07-sigilla-design-audit-recommendations.md)
 
-**Statut global : 111/151 tâches (74 %)** — cadrage, design, fichiers de délégation, Phase 2 (P1), Phase 3 (P2), Phase 4 (P3), Phase 5 (P4), Phase 6 (P5) et Phase 7 (P6) terminés.
+**Statut global : 120/151 tâches (79 %)** — cadrage, design, fichiers de délégation, Phase 2 (P1) à Phase 7 (P6) terminées, Phase 8 (P7) à 90 % (copy FR du marketing non fait).
 
 | Phase | Avancement |
 |---|---|
@@ -16,7 +16,7 @@
 | Phase 5 (P4) — Widget embeddable | 16/16 — 100 % ✅ |
 | Phase 6 (P5) — Dashboard, conversations, handoff, analytics | 15/15 — 100 % ✅ |
 | Phase 7 (P6) — Billing, quotas, API | 12/12 — 100 % ✅ |
-| Phase 8 (P7) — Landing, démo, docs | 0/10 — 0 % |
+| Phase 8 (P7) — Landing, démo, docs | 9/10 — 90 % |
 | Phase 9 (P8) — Qualité, sécurité, performance | 0/11 — 0 % |
 | Phase 10 — Déploiement et zéro maintenance | 0/10 — 0 % |
 | Phase 11 — Présentation portfolio | 0/8 — 0 % |
@@ -154,16 +154,16 @@
 - [x] Suppression de compte et d'organisation (cascade propre)
 
 ## Phase 8 (P7) — Landing, démo, docs
-- [ ] Landing premium (hero, How it works, features, citation, CTA final)
-- [ ] **Widget Sigilla réel sur la landing** (agent entraîné sur la doc Sigilla)
-- [ ] Seed « Maison Démo » (2 agents, sources, conversations dont 1 handoff, analytics sur 90 jours)
-- [ ] Accès démo en 1 clic, lecture seule, protégé contre l'abus
-- [ ] Pricing (+ bannière carte test Stripe) + FAQ
-- [ ] Docs : démarrage, embed, personnalisation, handoff, référence API
-- [ ] Pages privacy et terms (requises pour Notion OAuth)
+- [x] Landing premium (hero, How it works, features, citation, CTA final)
+- [x] **Widget Sigilla réel sur la landing** (agent entraîné sur la doc Sigilla)
+- [x] Seed « Maison Démo » (2 agents, sources, conversations dont 1 handoff, analytics sur 90 jours)
+- [x] Accès démo en 1 clic, lecture seule, protégé contre l'abus
+- [x] Pricing (+ bannière carte test Stripe) + FAQ
+- [x] Docs : démarrage, embed, personnalisation, handoff, référence API
+- [x] Pages privacy et terms (requises pour Notion OAuth)
 - [ ] Copy final EN + FR corrigé selon l'audit (aucune promesse hors scope)
-- [ ] SEO : metadata, Open Graph dynamique, `sitemap.ts`, `robots.ts`, JSON-LD
-- [ ] Bannières README dark / light
+- [x] SEO : metadata, Open Graph dynamique, `sitemap.ts`, `robots.ts`, JSON-LD
+- [x] Bannières README dark / light
 
 ## Phase 9 (P8) — Qualité, sécurité, performance
 - [ ] Tests Vitest : chunking, citations, fallback, quotas, rate limit, plans, crawler, webhooks Stripe

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="320" viewBox="0 0 1280 320">
+  <rect width="1280" height="320" fill="#0E0A0B" />
+  <text x="64" y="150" font-family="Instrument Serif, Georgia, serif" font-size="72" fill="#F3ECE6">Sigilla</text>
+  <rect x="66" y="172" width="260" height="1" fill="#9E2F45" />
+  <text x="64" y="220" font-family="Georgia, serif" font-size="24" fill="#A8999A">Every answer, sealed by its source.</text>
+</svg>

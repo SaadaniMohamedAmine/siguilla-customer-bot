@@ -68,6 +68,18 @@
 - [ ] Grep `trial|SLA|VPC|webhooks?` sur les namespaces `Billing`/réglages — jamais exécuté.
 - [ ] Rate limit sur `/forgot-password` — pas implémenté (voir `DECISIONS.md`).
 
+## Phase 8 (P7) — Landing, démo, docs
+
+- [ ] **Exécution réelle du seed** — jamais lancé (nécessite Stripe/Gemini configurés + `.env.local` pointant vers la base de prod). Vérifier la durée (<3 min visée), le nombre réel de conversations créées, et que `NEXT_PUBLIC_LANDING_BOT_KEY` fonctionne une fois copié sur Vercel.
+- [ ] Widget réel sur la landing répondant à une question sur Sigilla avec sceaux vers `/docs/*`.
+- [ ] `/demo` → dashboard Maison Démo en 1 clic, bandeau lecture seule visible, badge handoff « 1 » dans la sidebar.
+- [ ] `/atelier-lune` : « Do your candles ship to Switzerland? » (réponse avec sceau) et « Do you accept Klarna? » (fallback + carte handoff) jamais testés en navigateur réel.
+- [ ] **Garde-fou démo incomplet** (voir `DECISIONS.md`) : les routes Better Auth natives (invite membre, changement de rôle, renommage d'organisation, changement de mot de passe, suppression de compte) contournent le blocage `isDemo` — seules les routes API propres à Sigilla sont protégées. À corriger avant d'exposer la démo publiquement.
+- [ ] La plupart des toasts d'erreur affichent un message générique plutôt que « The demo is read-only. » renvoyé par le serveur.
+- [ ] Lighthouse (mobile, landing) — jamais mesuré.
+- [ ] OG image/sitemap/robots — jamais validés sur un outil externe (opengraph.xyz, etc.).
+- [ ] **FR non fait pour le marketing** (voir `DECISIONS.md`) : landing, pricing, docs (UI autour du contenu) sont en anglais codé en dur, pas dans `messages/*.json`. Le contenu des docs lui-même est EN-only par spec, mais l'UI autour (nav, labels) devrait être traduisible.
+
 ---
 
-*Phases suivantes (landing…) : ajouter une section ici à la clôture de chaque phase, avant de passer à la suivante — ne pas attendre la fin du projet pour commencer à lister.*
+*Phases suivantes (qualité/sécurité…) : ajouter une section ici à la clôture de chaque phase, avant de passer à la suivante — ne pas attendre la fin du projet pour commencer à lister.*
