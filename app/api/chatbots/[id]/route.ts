@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { prisma } from "@/lib/db";
 import { requireOrgApi, toErrorResponse, HttpError } from "@/lib/session";
 import { ChatbotUpdate } from "@/lib/validation/chatbot";
+import { parseWidgetConfig } from "@/lib/widget/config";
 
 async function loadOwnedChatbot(id: string, organizationId: string) {
   const chatbot = await prisma.chatbot.findFirst({ where: { id, organizationId } });
@@ -24,9 +25,12 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
   try {
     const { id } = await params;
     const { org } = await requireOrgApi({ write: true });
-    await loadOwnedChatbot(id, org.id);
+    const existing = await loadOwnedChatbot(id, org.id);
     const body = ChatbotUpdate.parse(await request.json());
-    const chatbot = await prisma.chatbot.update({ where: { id }, data: body });
+    const data = body.widgetConfig
+      ? { ...body, widgetConfig: parseWidgetConfig({ ...parseWidgetConfig(existing.widgetConfig), ...body.widgetConfig }) }
+      : body;
+    const chatbot = await prisma.chatbot.update({ where: { id }, data });
     return Response.json({ data: chatbot });
   } catch (error) {
     return toErrorResponse(error);

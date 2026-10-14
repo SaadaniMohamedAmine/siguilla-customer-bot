@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { WidgetConfig } from "@/lib/widget/config";
 
 export const ChatbotCreate = z.object({
   name: z.string().trim().min(2).max(60),
@@ -20,6 +21,7 @@ export const ChatbotUpdate = z.object({
     .max(10)
     .optional(),
   status: z.enum(["draft", "live"]).optional(),
+  widgetConfig: WidgetConfig.partial().optional(),
 });
 
 export const SourceCreate = z.discriminatedUnion("type", [
