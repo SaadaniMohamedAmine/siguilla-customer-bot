@@ -36,9 +36,23 @@ const FEATURES = [
   { title: "Under 5 KB", body: "A dependency-free widget that won't slow your site down." },
 ];
 
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Sigilla",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  offers: [
+    { "@type": "Offer", name: "Free", price: "0", priceCurrency: "USD" },
+    { "@type": "Offer", name: "Pro", price: "12", priceCurrency: "USD" },
+    { "@type": "Offer", name: "Team", price: "39", priceCurrency: "USD" },
+  ],
+};
+
 export default function LandingPage() {
   return (
     <div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
       <section className="relative overflow-hidden px-6 pt-20 pb-24">
         <div
           aria-hidden
