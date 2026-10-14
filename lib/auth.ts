@@ -4,6 +4,7 @@ import { nextCookies } from "better-auth/next-js";
 import { organization } from "better-auth/plugins";
 import { apiKey } from "@better-auth/api-key";
 import { prisma } from "@/lib/db";
+import { prepareAccountDeletion } from "@/lib/account";
 
 function slugify(input: string) {
   return input
@@ -39,6 +40,16 @@ export const auth = betterAuth({
     },
   },
   session: { expiresIn: 60 * 60 * 24 * 30, updateAge: 60 * 60 * 24 },
+  user: {
+    deleteUser: {
+      enabled: true,
+      // Transfère/supprime les organisations avant que Better Auth ne supprime l'utilisateur
+      // (sinon le cascade Prisma retirerait juste les memberships, sans gérer l'ownership).
+      beforeDelete: async (user) => {
+        await prepareAccountDeletion(user.id);
+      },
+    },
+  },
   databaseHooks: {
     user: {
       create: {
