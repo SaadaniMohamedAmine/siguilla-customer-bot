@@ -171,6 +171,62 @@
     "avatarTooLarge": "Image must be under 512 KB.",
     "avatarUnsupported": "Only PNG, JPG or WebP images are supported."
   },
+  "Billing": {
+    "plans": {
+      "free": {
+        "name": "Free",
+        "tagline": "For trying Sigilla on a single site.",
+        "features": [
+          "1 agent",
+          "5 sources per agent",
+          "25 pages crawled per website",
+          "200 messages per month",
+          "Human handoff",
+          "“Sealed by Sigilla” badge",
+          "1 team member"
+        ]
+      },
+      "pro": {
+        "name": "Pro",
+        "tagline": "For growing boutiques and SaaS teams.",
+        "features": [
+          "5 agents",
+          "25 sources per agent",
+          "100 pages crawled per website",
+          "2,000 messages per month",
+          "Notion connector",
+          "API access",
+          "Removable badge",
+          "3 team members"
+        ]
+      },
+      "team": {
+        "name": "Team",
+        "tagline": "For houses with several brands or sites.",
+        "features": [
+          "15 agents",
+          "50 sources per agent",
+          "100 pages crawled per website",
+          "10,000 messages per month",
+          "Notion connector",
+          "API access",
+          "Removable badge",
+          "10 team members"
+        ]
+      }
+    },
+    "currentPlan": "Current plan",
+    "renewsOn": "Renews on {date}",
+    "manageBilling": "Manage billing",
+    "upgradeTo": "Upgrade to {plan}",
+    "usage": { "messages": "Messages", "agents": "Agents", "sources": "Sources", "members": "Members" },
+    "demoBanner": "Demo mode — use test card 4242 4242 4242 4242",
+    "toastSuccess": "Your plan has been updated.",
+    "toastCanceled": "Checkout canceled.",
+    "quotaWarning": "You've used 90% of this month's messages.",
+    "quotaExceeded": "Your agents are resting until {date}.",
+    "upgrade": "Upgrade"
+  },
   "Analytics": {
     "title": "Analytics",
     "allAgents": "All agents",
