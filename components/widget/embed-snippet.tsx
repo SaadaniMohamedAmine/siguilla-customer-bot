@@ -19,8 +19,13 @@ export function EmbedSnippet({ publicKey, className }: { publicKey: string; clas
   }
 
   return (
-    <div className={cn("flex items-start gap-2 rounded-sm border border-border bg-surface-raised p-4", className)}>
-      <code className="flex-1 overflow-x-auto whitespace-pre font-mono text-small text-text">{snippet}</code>
+    <div
+      className={cn(
+        "border-border bg-surface-raised flex items-start gap-2 rounded-sm border p-4",
+        className,
+      )}
+    >
+      <code className="text-small text-text flex-1 overflow-x-auto font-mono whitespace-pre">{snippet}</code>
       <Button variant="ghost" size="icon" onClick={copy} aria-label="Copy embed code">
         <Icon icon={CopyIcon} size={16} />
       </Button>

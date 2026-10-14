@@ -14,6 +14,7 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     "stitch_sigilla_luxury_ai_platform/**",
     ".remember/**",
+    "public/widget/**",
   ]),
 ]);
 
