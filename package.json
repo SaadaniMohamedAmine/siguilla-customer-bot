@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run build:widget && next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
@@ -14,8 +14,16 @@
     "db:vector": "tsx scripts/db-vector.ts",
     "db:vector:index": "tsx scripts/db-vector.ts --index",
     "db:studio": "prisma studio",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "build:widget": "tsc -p widget/tsconfig.json && node widget/build.mjs",
+    "size": "npm run build:widget && size-limit"
   },
+  "size-limit": [
+    {
+      "path": "public/widget/v1.js",
+      "limit": "5 KB"
+    }
+  ],
   "dependencies": {
     "@better-auth/api-key": "^1.7.7",
     "@google/genai": "^2.29.1",
@@ -53,6 +61,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@size-limit/file": "^14.2.0",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
     "@types/pdf-parse": "^1.1.5",
@@ -60,12 +69,14 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "dotenv": "^18.0.7",
+    "esbuild": "^0.28.2",
     "eslint": "^9",
     "eslint-config-next": "16.4.0",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "prisma": "^7.10.0",
+    "size-limit": "^14.2.0",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
     "typescript": "^5"
