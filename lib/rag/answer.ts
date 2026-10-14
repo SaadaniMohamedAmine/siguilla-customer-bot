@@ -4,6 +4,7 @@ import { retrieve } from "./retrieve";
 import { buildMessages, MAX_QUESTION_CHARS } from "./prompt";
 import { extractCitations, sanitizeAnswer } from "./citations";
 import { fallbackMessage, FALLBACK_SENTINEL, HANDOFF_AFTER_FALLBACKS } from "./fallback";
+import { requestHandoff } from "@/lib/handoff";
 import type { StreamEvent, RetrievedChunk } from "./types";
 
 export type AnswerInput = {
@@ -26,15 +27,26 @@ export async function answer(input: AnswerInput): Promise<AnswerResult> {
 
   // Conversation : reprise si l'id appartient bien à ce bot et à ce visiteur, sinon création.
   let conversation = input.conversationId
-    ? await prisma.conversation.findFirst({ where: { id: input.conversationId, chatbotId: bot.id, visitorId: input.visitorId } })
+    ? await prisma.conversation.findFirst({
+        where: { id: input.conversationId, chatbotId: bot.id, visitorId: input.visitorId },
+      })
     : null;
   if (!conversation) {
     conversation = await prisma.conversation.create({
-      data: { chatbotId: bot.id, visitorId: input.visitorId, locale: input.locale, pageUrl: input.pageUrl, country: input.country },
+      data: {
+        chatbotId: bot.id,
+        visitorId: input.visitorId,
+        locale: input.locale,
+        pageUrl: input.pageUrl,
+        country: input.country,
+      },
     });
   } else if (conversation.status === "resolved") {
     // Un nouveau message d'un visiteur relance le bot.
-    conversation = await prisma.conversation.update({ where: { id: conversation.id }, data: { status: "bot" } });
+    conversation = await prisma.conversation.update({
+      where: { id: conversation.id },
+      data: { status: "bot" },
+    });
   }
 
   const history = await prisma.message.findMany({
@@ -44,9 +56,13 @@ export async function answer(input: AnswerInput): Promise<AnswerResult> {
     select: { role: true, content: true },
   });
 
-  await prisma.message.create({ data: { conversationId: conversation.id, role: "visitor", content: question } });
+  await prisma.message.create({
+    data: { conversationId: conversation.id, role: "visitor", content: question },
+  });
   if (input.channel !== "playground") {
-    await prisma.analyticsEvent.create({ data: { chatbotId: bot.id, type: "message", metadata: { channel: input.channel } } });
+    await prisma.analyticsEvent.create({
+      data: { chatbotId: bot.id, type: "message", metadata: { channel: input.channel } },
+    });
   }
 
   const convId = conversation.id;
@@ -57,7 +73,14 @@ export async function answer(input: AnswerInput): Promise<AnswerResult> {
     await prisma.conversation.update({ where: { id: convId }, data: { lastMessageAt: new Date() } });
     async function* humanMode(): AsyncGenerator<StreamEvent> {
       yield { type: "meta", conversationId: convId, fallback: false, topScore: null };
-      yield { type: "done", messageId: "", citations: [], fallback: false, provider: null, handoffSuggested: false };
+      yield {
+        type: "done",
+        messageId: "",
+        citations: [],
+        fallback: false,
+        provider: null,
+        handoffSuggested: false,
+      };
     }
     return { events: humanMode(), retrieved: [] };
   }
@@ -101,7 +124,8 @@ export async function answer(input: AnswerInput): Promise<AnswerResult> {
         full += piece;
         if (!released) {
           buffer += piece;
-          if (FALLBACK_SENTINEL.startsWith(buffer.trim()) && buffer.trim().length < FALLBACK_SENTINEL.length) continue;
+          if (FALLBACK_SENTINEL.startsWith(buffer.trim()) && buffer.trim().length < FALLBACK_SENTINEL.length)
+            continue;
           if (buffer.trim().startsWith(FALLBACK_SENTINEL)) break;
           released = true;
           yield { type: "token", value: buffer };
@@ -110,7 +134,12 @@ export async function answer(input: AnswerInput): Promise<AnswerResult> {
         yield { type: "token", value: piece };
       }
       // Réponse très courte terminée sans avoir été libérée (et qui n'est pas la sentinelle) : on l'émet.
-      if (!released && buffer && !buffer.trim().startsWith(FALLBACK_SENTINEL) && !FALLBACK_SENTINEL.startsWith(buffer.trim())) {
+      if (
+        !released &&
+        buffer &&
+        !buffer.trim().startsWith(FALLBACK_SENTINEL) &&
+        !FALLBACK_SENTINEL.startsWith(buffer.trim())
+      ) {
         yield { type: "token", value: buffer };
       }
     } catch (error) {
@@ -127,9 +156,20 @@ export async function answer(input: AnswerInput): Promise<AnswerResult> {
     const clean = sanitizeAnswer(full, retrieved);
     const citations = extractCitations(clean, retrieved);
     const msg = await prisma.message.create({
-      data: { conversationId: convId, role: "bot", content: clean, citations, topScore, fallback: false, provider },
+      data: {
+        conversationId: convId,
+        role: "bot",
+        content: clean,
+        citations,
+        topScore,
+        fallback: false,
+        provider,
+      },
     });
-    await prisma.conversation.update({ where: { id: convId }, data: { lastMessageAt: new Date(), fallbackStreak: 0 } });
+    await prisma.conversation.update({
+      where: { id: convId },
+      data: { lastMessageAt: new Date(), fallbackStreak: 0 },
+    });
     yield { type: "done", messageId: msg.id, citations, fallback: false, provider, handoffSuggested: false };
   }
 
@@ -143,8 +183,12 @@ export async function answer(input: AnswerInput): Promise<AnswerResult> {
       where: { id: convId },
       data: { lastMessageAt: new Date(), fallbackStreak: { increment: 1 } },
     });
+    const handoffSuggested = updated.fallbackStreak >= HANDOFF_AFTER_FALLBACKS;
     if (input.channel !== "playground") {
-      await prisma.analyticsEvent.create({ data: { chatbotId: bot.id, type: "fallback", metadata: { question } } });
+      await prisma.analyticsEvent.create({
+        data: { chatbotId: bot.id, type: "fallback", metadata: { question } },
+      });
+      if (handoffSuggested) await requestHandoff(convId, "auto");
     }
     yield {
       type: "done",
@@ -152,7 +196,7 @@ export async function answer(input: AnswerInput): Promise<AnswerResult> {
       citations: [],
       fallback: true,
       provider: null,
-      handoffSuggested: updated.fallbackStreak >= HANDOFF_AFTER_FALLBACKS,
+      handoffSuggested,
     };
   }
 
