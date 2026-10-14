@@ -170,5 +170,123 @@
     "embedTitle": "Code d'intégration",
     "avatarTooLarge": "L'image doit faire moins de 512 Ko.",
     "avatarUnsupported": "Seules les images PNG, JPG ou WebP sont prises en charge."
+  },
+  "Analytics": {
+    "title": "Analytique",
+    "allAgents": "Tous les agents",
+    "empty": "Les analytics apparaissent après vos premières conversations.",
+    "perDay": "Conversations par jour",
+    "citedSources": "Sources les plus citées",
+    "topQuestions": "Questions les plus posées",
+    "unanswered": "Questions sans réponse — ajoutez de la connaissance pour les couvrir",
+    "firstSeen": "Vue pour la première fois {date}",
+    "addSource": "Ajouter une source",
+    "kpi": {
+      "conversations": "Conversations",
+      "resolvedWithoutHuman": "Résolues sans humain",
+      "satisfaction": "Satisfaction",
+      "fallbackRate": "Taux de fallback"
+    }
+  },
+  "Agents": {
+    "title": "Agents",
+    "newAgent": "Nouvel agent",
+    "planLimit": "Votre forfait autorise {n} agent(s). Passez à un forfait supérieur pour en ajouter.",
+    "createCard": "Créer un nouvel agent",
+    "sources": "Sources",
+    "conversations30d": "Conversations (30j)",
+    "satisfaction30d": "Satisfaction (30j)",
+    "lastSync": "Dernière synchro",
+    "menu": {
+      "open": "Ouvrir",
+      "playground": "Playground",
+      "copyEmbed": "Copier le code d'intégration",
+      "delete": "Supprimer l'agent"
+    },
+    "deleteConfirmTitle": "Supprimer cet agent ?",
+    "deleteConfirmBody": "Saisissez {name} pour confirmer. Cette action est irréversible.",
+    "tabs": {
+      "overview": "Vue d'ensemble",
+      "sources": "Sources",
+      "playground": "Playground",
+      "widget": "Widget",
+      "conversations": "Conversations",
+      "analytics": "Analytique",
+      "settings": "Paramètres"
+    },
+    "draftBanner": "Cet agent est un brouillon. Publiez-le depuis l'onglet Widget pour répondre aux visiteurs.",
+    "overview": {
+      "recentConversations": "Conversations récentes",
+      "noneYet": "Aucune conversation pour l'instant.",
+      "knowledgeHealth": "Santé de la base",
+      "ready": "Prêtes",
+      "processing": "En traitement",
+      "failed": "Échecs",
+      "unanswered30d": "Questions sans réponse (30j)",
+      "viewAnalytics": "Voir les analytics",
+      "embed": "Intégration",
+      "customizeWidget": "Personnaliser le widget"
+    }
+  },
+  "Wizard": {
+    "stepIdentity": "Identité",
+    "stepSources": "Sources",
+    "stepWidget": "Widget et intégration",
+    "name": "Nom",
+    "description": "Description",
+    "instructions": "Instructions",
+    "instructionsHint": "Ton, périmètre, ce qu'il faut éviter.",
+    "instructionsPlaceholder": "Répondez en tant que concierge de {name}. Soyez chaleureux et concis. Ne négociez jamais les prix ; proposez un humain à la place.",
+    "skipForNow": "Passer pour l'instant",
+    "makeItLive": "Mettre en ligne",
+    "live": "Votre agent est en ligne.",
+    "addedSources": "Sources ajoutées"
+  },
+  "Conversations": {
+    "title": "Conversations",
+    "search": "Rechercher dans les messages…",
+    "allAgents": "Tous les agents",
+    "filters": {
+      "all": "Toutes",
+      "needsHuman": "Besoin d'un humain",
+      "negativeFeedback": "Retour négatif",
+      "unanswered": "Sans réponse",
+      "resolved": "Résolues"
+    },
+    "period7": "7j",
+    "period30": "30j",
+    "period90": "90j",
+    "loadMore": "Charger plus",
+    "empty": "Aucune conversation pour l'instant.",
+    "emptyBody": "Les conversations apparaîtront ici dès que votre agent commencera à répondre aux visiteurs.",
+    "noneFound": "Aucune conversation ne correspond à ces filtres.",
+    "selectOne": "Sélectionnez une conversation pour voir le fil.",
+    "visitor": "Visiteur #{id}",
+    "startedAt": "Démarrée le {date}",
+    "status": { "bot": "Bot", "needsHuman": "Besoin d'un humain", "human": "Humain", "resolved": "Résolue" },
+    "takeOver": "Prendre en charge",
+    "resolve": "Résoudre",
+    "composerPlaceholder": "Répondre en tant que {name}…",
+    "send": "Envoyer",
+    "botJoinedLabel": "{name}",
+    "system": {
+      "handoff_requested": "Transfert demandé",
+      "resolved": "Résolue",
+      "agent_joined": "{name} a rejoint"
+    },
+    "context": {
+      "title": "Contexte",
+      "email": "Email",
+      "notProvided": "Non fourni",
+      "pageOrigin": "Page d'origine",
+      "language": "Langue",
+      "country": "Pays",
+      "satisfaction": "Satisfaction",
+      "retrieval": "Recherche de la dernière réponse",
+      "topScore": "Meilleur score",
+      "noScore": "Pas encore de score",
+      "knowledgeGap": "Lacune détectée",
+      "addMissingKnowledge": "Ajouter la connaissance manquante"
+    }
   }
 }

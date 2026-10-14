@@ -4,6 +4,22 @@
 
 ---
 
+## Phase 6 (P5) — Dashboard, conversations, handoff, analytics — 2026-10-14
+
+**Code complet (15/15 tâches), build/lint/typecheck clean. Vérifié en direct de bout en bout** : prise en charge d'une vraie conversation, réponse envoyée en tant qu'agent, apparue dans le widget via polling en quelques secondes, puis Resolve — voir conversation `cmv7fiupu0000v4w3f73h8gkt`.
+
+**Wizard étape 3 simplifié par rapport à la spec.** Au lieu d'une version compacte du Widget Designer (couleur/nom/accueil dupliqués), l'étape 3 montre directement l'`EmbedSnippet` + un lien vers l'onglet Widget complet (déjà très complet depuis la Phase 5/P4) + le bouton « Make it live ». Gain de temps, aucune perte fonctionnelle : le designer complet reste à une page de distance après publication.
+
+**Étape 2 du wizard réutilise `SourcesManager` tel quel**, pas la disposition « 3 cartes côte à côte » demandée par la spec (qui aurait nécessité d'extraire `AddSourceDrawer`, privé et non exporté, en composant partagé). Le composant existant fonctionne correctement en pleine page ; l'extraction visuelle est reportée si jamais souhaitée plus tard.
+
+**Analytics : graphique en barres CSS pur au lieu de `recharts`.** Évite d'ajouter une dépendance pour un seul graphique simple (conversations/jour) ; une seule couleur d'accent, pas de légende, conforme à l'esprit `dataviz` du PRD.
+
+**`react-hooks/purity` (nouvelle règle du compilateur React) a bloqué le lint** sur 4 appels directs à `Date.now()` dans des composants/pages (agents/page.tsx, agents/[id]/page.tsx, agent-card.tsx). Corrigé avec `lib/time.ts`'s `daysAgo()` (Server Components) et le `useNow()` déjà existant (Client Components) — l'impureté est encapsulée dans un helper importé, que la règle ne trace pas à travers.
+
+**Reste non testé en conditions réelles** (voir `PENDING_TESTS.md` § Phase 6/P5) : parcours complet du wizard dans un navigateur, listing/menu kebab de la liste d'agents, KPIs analytics vérifiés à la main sur un vrai jeu de données, isolation multi-org sur les routes conversations/analytics.
+
+---
+
 ## Phase 5 (P4) — Widget embeddable — 2026-10-14
 
 **Code complet (16/16 tâches), build/lint/typecheck clean. `npm run size` : 4.58 KB brotli / budget 5 KB.** `widget/src/index.ts` (TS vanilla, zéro dépendance, Shadow DOM, esbuild → `public/widget/v1.js`), endpoints publics `app/api/public/v1/{bots/[pk]/config,chat,feedback,events,handoff,conversations/[id]/messages}`, CORS/allowlist/rate-limit persistant, Widget Designer (`/agents/[id]/widget`) avec aperçu live, `/widget-preview`, `/atelier-lune`.

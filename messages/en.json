@@ -170,5 +170,123 @@
     "embedTitle": "Embed snippet",
     "avatarTooLarge": "Image must be under 512 KB.",
     "avatarUnsupported": "Only PNG, JPG or WebP images are supported."
+  },
+  "Analytics": {
+    "title": "Analytics",
+    "allAgents": "All agents",
+    "empty": "Analytics appear after your first conversations.",
+    "perDay": "Conversations per day",
+    "citedSources": "Most cited sources",
+    "topQuestions": "Top questions",
+    "unanswered": "Unanswered questions — add knowledge to cover them",
+    "firstSeen": "First seen {date}",
+    "addSource": "Add source",
+    "kpi": {
+      "conversations": "Conversations",
+      "resolvedWithoutHuman": "Resolved without a human",
+      "satisfaction": "Satisfaction",
+      "fallbackRate": "Fallback rate"
+    }
+  },
+  "Agents": {
+    "title": "Agents",
+    "newAgent": "New agent",
+    "planLimit": "Your plan allows {n} agent(s). Upgrade to add more.",
+    "createCard": "Create a new agent",
+    "sources": "Sources",
+    "conversations30d": "Conversations (30d)",
+    "satisfaction30d": "Satisfaction (30d)",
+    "lastSync": "Last synced",
+    "menu": {
+      "open": "Open",
+      "playground": "Playground",
+      "copyEmbed": "Copy embed code",
+      "delete": "Delete agent"
+    },
+    "deleteConfirmTitle": "Delete this agent?",
+    "deleteConfirmBody": "Type {name} to confirm. This cannot be undone.",
+    "tabs": {
+      "overview": "Overview",
+      "sources": "Sources",
+      "playground": "Playground",
+      "widget": "Widget",
+      "conversations": "Conversations",
+      "analytics": "Analytics",
+      "settings": "Settings"
+    },
+    "draftBanner": "This agent is a draft. Publish it from the Widget tab to answer visitors.",
+    "overview": {
+      "recentConversations": "Recent conversations",
+      "noneYet": "No conversations yet.",
+      "knowledgeHealth": "Knowledge health",
+      "ready": "Ready",
+      "processing": "Processing",
+      "failed": "Failed",
+      "unanswered30d": "Unanswered questions (30d)",
+      "viewAnalytics": "View analytics",
+      "embed": "Embed",
+      "customizeWidget": "Customize widget"
+    }
+  },
+  "Wizard": {
+    "stepIdentity": "Identity",
+    "stepSources": "Sources",
+    "stepWidget": "Widget & embed",
+    "name": "Name",
+    "description": "Description",
+    "instructions": "Instructions",
+    "instructionsHint": "Tone, scope, what to avoid.",
+    "instructionsPlaceholder": "Answer as the {name} concierge. Be warm and concise. Never discuss pricing negotiations; offer a human instead.",
+    "skipForNow": "Skip for now",
+    "makeItLive": "Make it live",
+    "live": "Your agent is live.",
+    "addedSources": "Added sources"
+  },
+  "Conversations": {
+    "title": "Conversations",
+    "search": "Search messages…",
+    "allAgents": "All agents",
+    "filters": {
+      "all": "All",
+      "needsHuman": "Needs human",
+      "negativeFeedback": "Negative feedback",
+      "unanswered": "Unanswered",
+      "resolved": "Resolved"
+    },
+    "period7": "7d",
+    "period30": "30d",
+    "period90": "90d",
+    "loadMore": "Load more",
+    "empty": "No conversations yet.",
+    "emptyBody": "Conversations will appear here once your agent starts answering visitors.",
+    "noneFound": "No conversations match these filters.",
+    "selectOne": "Select a conversation to see the thread.",
+    "visitor": "Visitor #{id}",
+    "startedAt": "Started {date}",
+    "status": { "bot": "Bot", "needsHuman": "Needs human", "human": "Human", "resolved": "Resolved" },
+    "takeOver": "Take over",
+    "resolve": "Resolve",
+    "composerPlaceholder": "Reply as {name}…",
+    "send": "Send",
+    "botJoinedLabel": "{name}",
+    "system": {
+      "handoff_requested": "Handoff requested",
+      "resolved": "Resolved",
+      "agent_joined": "{name} joined"
+    },
+    "context": {
+      "title": "Context",
+      "email": "Email",
+      "notProvided": "Not provided",
+      "pageOrigin": "Origin page",
+      "language": "Language",
+      "country": "Country",
+      "satisfaction": "Satisfaction",
+      "retrieval": "Retrieval of the last answer",
+      "topScore": "Top score",
+      "noScore": "No score yet",
+      "knowledgeGap": "Knowledge gap detected",
+      "addMissingKnowledge": "Add missing knowledge"
+    }
   }
 }

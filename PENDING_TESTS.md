@@ -43,6 +43,18 @@
 - [ ] Page collée dans un site HTML statique externe (`npx serve` sur un autre port) avec un CSS agressif (`* { font-family: Comic Sans; color: red }`) pour prouver l'isolation Shadow DOM en conditions réelles (testé seulement en same-origin jusqu'ici).
 - [ ] Upload d'avatar (Vercel Blob) — code écrit, jamais exercé avec un vrai fichier.
 
+## Phase 6 (P5) — Dashboard, conversations, handoff, analytics
+
+- [x] Handoff complet de bout en bout (take over, réponse agent visible dans le widget en direct, resolve) — testé réellement.
+- [ ] Parcours complet du wizard (identité → sources → widget → Make it live) dans un vrai navigateur.
+- [ ] Liste des agents : métriques affichées correctement, menu kebab (Open/Playground/Copy embed/Delete), tooltip de limite de plan.
+- [ ] KPIs analytics vérifiés à la main sur un jeu de 10 conversations réelles (deltas, taux de fallback, satisfaction).
+- [ ] Isolation multi-org : un membre d'une autre org ne voit aucune conversation/analytics (403/404).
+- [ ] Déclenchement auto du handoff après exactement 2 fallbacks consécutifs (jamais déclenché manuellement en test, seulement le take-over manuel).
+- [ ] Email visiteur capturé visible dans le panneau contexte (jamais testé avec un vrai email saisi côté widget).
+- [ ] Filtres conversations (negative feedback, unanswered) et période 7/30/90 — jamais exercés avec des données variées.
+- [ ] Recherche de messages (debounce) dans l'inbox.
+
 ---
 
-*Phases suivantes (dashboard, billing, landing…) : ajouter une section ici à la clôture de chaque phase, avant de passer à la suivante — ne pas attendre la fin du projet pour commencer à lister.*
+*Phases suivantes (billing, landing…) : ajouter une section ici à la clôture de chaque phase, avant de passer à la suivante — ne pas attendre la fin du projet pour commencer à lister.*
