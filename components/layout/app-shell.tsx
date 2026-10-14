@@ -130,7 +130,7 @@ export function AppShell({
                   <span
                     className={cn(
                       "bg-accent text-on-accent min-w-5 rounded-full px-1.5 text-center font-mono text-[11px] leading-5",
-                      active && "bg-on-accent text-accent",
+                      active && "border border-on-accent bg-transparent",
                     )}
                   >
                     {pendingCount}
