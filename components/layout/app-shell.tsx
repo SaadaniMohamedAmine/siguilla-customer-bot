@@ -47,12 +47,14 @@ export function AppShell({
   user,
   plan,
   messageUsage,
+  isDemo,
 }: {
   children: React.ReactNode;
   org: { id: string; name: string };
   user: { name: string; email: string; image?: string | null };
   plan: string;
   messageUsage: { used: number; limit: number };
+  isDemo: boolean;
 }) {
   const t = useTranslations("Nav");
   const pathname = usePathname();
@@ -177,6 +179,7 @@ export function AppShell({
 
       <div className="flex-1">
         <main className="mx-auto max-w-[1200px] px-10 py-10">
+          {isDemo ? <DemoModeBanner /> : null}
           <QuotaBanner usage={messageUsage} />
           {children}
         </main>
@@ -211,6 +214,21 @@ function QuotaBanner({ usage }: { usage: { used: number; limit: number } }) {
         className="shrink-0 font-medium underline underline-offset-4"
       >
         Upgrade
+      </button>
+    </div>
+  );
+}
+
+function DemoModeBanner() {
+  const router = useRouter();
+  return (
+    <div className="border-link/40 bg-link/10 text-small text-link mb-6 flex items-center justify-between gap-4 rounded-sm border p-3">
+      <p>You&apos;re exploring a live demo. Changes are disabled.</p>
+      <button
+        onClick={() => router.push("/sign-up")}
+        className="shrink-0 font-medium underline underline-offset-4"
+      >
+        Start free
       </button>
     </div>
   );
