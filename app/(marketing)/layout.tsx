@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Script from "next/script";
 import { Wordmark } from "@/components/ui/wordmark";
 import { MarketingNav } from "@/components/marketing/marketing-nav";
 
@@ -56,6 +57,13 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
           © 2026 Sigilla — A portfolio project.
         </p>
       </footer>
+      {process.env.NEXT_PUBLIC_LANDING_BOT_KEY ? (
+        <Script
+          src="/widget/v1.js"
+          data-bot={process.env.NEXT_PUBLIC_LANDING_BOT_KEY}
+          strategy="lazyOnload"
+        />
+      ) : null}
     </div>
   );
 }
