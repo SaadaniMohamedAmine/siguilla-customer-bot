@@ -4,6 +4,19 @@
 
 ---
 
+## Phase 4 (P3) — RAG et réponses — 2026-10-14
+
+**Code complet (10/10 tâches), build/lint/typecheck clean.** `lib/rag/{types,retrieve,prompt,citations,fallback,answer,sse}.ts`, route `/api/chatbots/[id]/playground`, UI Playground (inspecteur de retrieval) + réglages agent (CRUD, seuil de similarité, domaines autorisés).
+
+**Bug réel trouvé et corrigé en testant :** `generateEmbeddingsBatch()` (Phase 2) passait les textes au SDK `@google/genai` sous forme de `string[]` brut — ce tableau correspond au type `PartUnion[]`, que l'API interprète comme **plusieurs parties d'un seul contenu**, et ne renvoie donc **qu'un seul embedding** au lieu d'un par texte. Ça n'avait jamais été détecté en Phase 2 car tous les tests ne portaient que sur des sources à 1 seul chunk. Trouvé en ingérant un vrai article Wikipedia (~30 chunks) pour tester la Phase 3. Fix : envelopper chaque texte dans son propre objet `{ parts: [{ text }] }` (type `Content[]`), ce qui donne bien N embeddings pour N textes.
+**Vérifié directement contre l'API Gemini** (hors pipeline, pour isoler le fix) : 10 textes envoyés → 10 embeddings reçus ; 50 textes envoyés → 50 embeddings reçus ; chacun 768 dimensions. Le fix est donc prouvé au niveau du SDK.
+
+**Re-vérification du pipeline complet bloquée par le quota gratuit Gemini (2026-10-14).** En diagnostiquant le bug ci-dessus (plusieurs appels directs au SDK avec 10/50/100 textes), le quota gratuit `embed_content_free_tier_requests` (100 req/min) a été épuisé. Pire : chaque nouvelle tentative de test passe par `withRetry()` qui réessaie 4 fois en cas de 429 — donc chaque « test pour voir si le quota est revenu » consommait lui-même 4 requêtes de plus, empêchant le quota de jamais se libérer tant que je retestais. Après avoir arrêté toute sollicitation, le délai annoncé restait bloqué autour de ~49s sur plusieurs minutes sans requête — possible quota journalier plutôt que par minute, ou fenêtre glissante plus longue que documentée. **Décision : arrêter de forcer le test maintenant** (le fix est déjà prouvé au niveau SDK) plutôt que de continuer à consommer le quota ; retester l'ingestion Wikipedia de bout en bout (statut `ready`, chunks > 1, tous avec embedding) une fois le quota naturellement reparti.
+
+**Reste non testé en conditions réelles (bloqué par le quota, pas par le code) :** ingestion complète d'une source multi-chunks de bout en bout (code → DB `ready`), une vraie question avec citation dans le Playground (navigateur), le déclenchement du fallback sur une question hors sujet, `handoffSuggested` après 2 fallbacks consécutifs.
+
+---
+
 ## Phase 3 (P2) — Données et ingestion — 2026-10-13
 
 **Minimal CRUD Chatbot + page Sources ajoutés, hors spec stricte mais explicitement autorisés par le fichier de délégation** (§1 : « un CRUD Chatbot minimal pour pouvoir rattacher des sources »).
