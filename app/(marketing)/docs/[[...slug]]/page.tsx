@@ -63,7 +63,7 @@ export default async function DocsPage({ params }: PageProps<"/docs/[[...slug]]"
               />
             ),
             p: (p) => <p className="text-body text-text-muted mt-4" {...p} />,
-            a: (p) => <a className="text-link hover:underline" {...p} />,
+            a: (p) => <a className="text-link underline underline-offset-2" {...p} />,
             ul: (p) => <ul className="text-body text-text-muted mt-4 ml-5 list-disc" {...p} />,
             li: (p) => <li className="mt-1" {...p} />,
             code: (p) =>

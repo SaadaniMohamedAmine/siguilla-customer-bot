@@ -126,6 +126,7 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
                 value={config.color}
                 onChange={(e) => /^#[0-9a-fA-F]{0,6}$/.test(e.target.value) && set("color", e.target.value)}
                 className="border-border bg-surface text-small text-text focus-visible:border-focus h-8 w-24 rounded-sm border px-2 font-mono focus-visible:outline-none"
+                aria-label={t("color")}
                 maxLength={7}
               />
             </div>
@@ -287,6 +288,7 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
               checked={config.showBadge}
               disabled={!canRemoveBadge}
               onCheckedChange={(v) => set("showBadge", v)}
+              aria-label={t("showBadge")}
             />
           </div>
         </Section>

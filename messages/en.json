@@ -227,6 +227,7 @@
   },
   "Analytics": {
     "title": "Analytics",
+    "filterByAgent": "Filter by agent",
     "allAgents": "All agents",
     "empty": "Analytics appear after your first conversations.",
     "perDay": "Conversations per day",
@@ -299,6 +300,8 @@
   "Conversations": {
     "title": "Conversations",
     "search": "Search messages…",
+    "filterByAgent": "Filter by agent",
+    "filterByPeriod": "Filter by period",
     "allAgents": "All agents",
     "filters": {
       "all": "All",

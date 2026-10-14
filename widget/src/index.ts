@@ -122,9 +122,11 @@ type Cfg = {
   const root = host.attachShadow({ mode: "open" });
   document.body.appendChild(host);
 
+  const contrast = (l1: number, l2: number) => (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
   const css = (c: Cfg) => {
     const dark = c.theme === "dark";
-    const on = lum(c.color) > 0.4 ? "#1A1214" : "#F3ECE6";
+    const bgLum = lum(c.color);
+    const on = contrast(bgLum, lum("#1A1214")) >= contrast(bgLum, lum("#FFFFFF")) ? "#1A1214" : "#FFFFFF";
     return `:host{--a:${c.color};--o:${on};--bg:${dark ? "#171113" : "#FFFFFF"};--r:${dark ? "#201719" : "#F4EDE8"};--b:${dark ? "#2E2225" : "#E8DED8"};--t:${dark ? "#F3ECE6" : "#1A1214"};--m:${dark ? "#A8999A" : "#6B5A5D"};--l:${dark ? "#E3B3BA" : "#8A2438"}}
 *{box-sizing:border-box;margin:0;font:400 14px/1.5 "Instrument Sans",ui-sans-serif,system-ui,sans-serif}
 button{cursor:pointer;border:0;background:none;color:inherit}

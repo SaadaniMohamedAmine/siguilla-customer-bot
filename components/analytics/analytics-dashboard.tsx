@@ -70,7 +70,7 @@ export function AnalyticsDashboard() {
         <h1 className="text-h1 text-text font-serif">{t("title")}</h1>
         <div className="flex gap-2">
           <Select value={agent || "__all"} onValueChange={(v) => setParam("agent", v === "__all" ? null : v)}>
-            <SelectTrigger className="text-small h-9 w-40">
+            <SelectTrigger className="text-small h-9 w-40" aria-label={t("filterByAgent")}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -204,12 +204,14 @@ export function AnalyticsDashboard() {
                         {t("firstSeen", { date: formatRelative(q.firstSeen, locale, now) ?? "" })} · {q.count}
                       </p>
                     </div>
-                    <Link
-                      href={`/agents/${agent}/sources`}
-                      className="text-small text-link shrink-0 hover:underline"
-                    >
-                      {t("addSource")}
-                    </Link>
+                    {agent ? (
+                      <Link
+                        href={`/agents/${agent}/sources`}
+                        className="text-small text-link shrink-0 underline underline-offset-2"
+                      >
+                        {t("addSource")}
+                      </Link>
+                    ) : null}
                   </li>
                 ))}
               </ul>

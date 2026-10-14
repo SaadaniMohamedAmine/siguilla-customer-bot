@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
 import { CopyIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
+import { useHydrated } from "@/lib/use-hydrated";
 
 export function EmbedSnippet({ publicKey, className }: { publicKey: string; className?: string }) {
-  const snippet = `<script src="${typeof window !== "undefined" ? window.location.origin : ""}/widget/v1.js" data-bot="${publicKey}" async></script>`;
+  const hydrated = useHydrated();
+  const snippet = `<script src="${hydrated ? window.location.origin : ""}/widget/v1.js" data-bot="${publicKey}" async></script>`;
 
   async function copy() {
     try {

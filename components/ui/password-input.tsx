@@ -38,7 +38,7 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(
             aria-pressed={visible}
             aria-label={visible ? "Hide password" : "Show password"}
             onClick={() => setVisible((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text"
+            className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-text-muted hover:text-text"
           >
             <Icon icon={visible ? EyeOffIcon : EyeIcon} size={18} />
           </button>

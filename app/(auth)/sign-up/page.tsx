@@ -155,12 +155,12 @@ export default function SignUpPage() {
         <p className="text-small text-text-muted">
           {t.rich("legal", {
             terms: (chunks) => (
-              <Link href="/terms" className="text-link hover:underline">
+              <Link href="/terms" className="text-link underline underline-offset-2">
                 {chunks}
               </Link>
             ),
             privacy: (chunks) => (
-              <Link href="/privacy" className="text-link hover:underline">
+              <Link href="/privacy" className="text-link underline underline-offset-2">
                 {chunks}
               </Link>
             ),
@@ -173,7 +173,7 @@ export default function SignUpPage() {
 
       <p className="mt-6 text-center text-small text-text-muted">
         {t("haveAccount")}{" "}
-        <Link href="/sign-in" className="text-link hover:underline">
+        <Link href="/sign-in" className="text-link underline underline-offset-2">
           {t("signIn")}
         </Link>
       </p>

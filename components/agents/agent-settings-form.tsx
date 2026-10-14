@@ -165,7 +165,7 @@ export function AgentSettingsForm({ chatbot }: { chatbot: Chatbot }) {
           <p className="text-body text-text">Live</p>
           <p className="text-small text-text-muted">Answers visitors when embedded.</p>
         </div>
-        <Switch checked={live} onCheckedChange={setLive} />
+        <Switch checked={live} onCheckedChange={setLive} aria-label="Live" />
       </div>
 
       <div>

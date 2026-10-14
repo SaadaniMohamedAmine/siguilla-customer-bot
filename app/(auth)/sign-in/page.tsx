@@ -122,7 +122,7 @@ export default function SignInPage() {
 
       <p className="mt-6 text-center text-small text-text-muted">
         {t("noAccount")}{" "}
-        <Link href="/sign-up" className="text-link hover:underline">
+        <Link href="/sign-up" className="text-link underline underline-offset-2">
           {t("createAccount")}
         </Link>
       </p>
