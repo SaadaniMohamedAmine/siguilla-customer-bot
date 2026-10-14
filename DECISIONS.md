@@ -4,6 +4,24 @@
 
 ---
 
+## Phase 8 (P7) — Landing, démo, docs — 2026-10-14
+
+**Code complet pour 9/10 tâches (build/lint/typecheck clean) ; la 10e (copy FR du marketing) n'a pas été faite.** Landing, pricing+FAQ, 9 pages de doc, 2 sites clients fictifs (Atelier Lune 6 pages, Ledgerline nouveau, 6 pages), seed « Maison Démo » avec ingestion réelle (vrais embeddings Gemini) et historique de 90 jours généré par PRNG déterministe, accès démo en 1 clic, pages légales, SEO complet (sitemap, robots, OG image, JSON-LD), bannières README.
+
+**Marketing en anglais codé en dur, pas de FR.** Contrairement au reste de l'app depuis la Phase 5, la landing, le pricing, et l'UI autour des docs (nav, « On this page », etc.) ne sont pas passés par `messages/*.json` + `useTranslations`. Le contenu markdown des docs/sites de démo est EN-only par la spec elle-même ; ce qui manque réellement est la traduction de l'UI de présentation. Écart assumé par manque de temps/budget sur une phase déjà très volumineuse (landing + pricing + 21 pages de contenu + seed + SEO) — à rattraper avant la Phase 11 (présentation portfolio), qui est le moment où ça compte le plus pour un recruteur francophone.
+
+**Volume de l'historique de démo réduit par rapport à la spec.** ~150 conversations Atelier Lune + 60 Ledgerline au lieu de ~1200 + 500 — l'algorithme (PRNG déterministe, tendance de croissance, creux le week-end, 15 % de fallback, feedback, 2 scénarios de handoff spécifiques) suit la spec à l'identique, seul le multiplicateur de volume a été réduit. Le rendu pour la démo (tendances visibles en analytics, au moins une conversation « Needs human » récente) reste fidèle aux critères d'acceptation.
+
+**Garde-fou démo (`isDemo`) incomplet, découvert en construisant `/demo`.** `requireOrgApi({write:true})` (posé en Phase 1) bloque bien toutes les routes API propres à Sigilla, mais les actions qui passent directement par les endpoints natifs de Better Auth — inviter un membre, changer un rôle, renommer l'organisation, changer de mot de passe, supprimer le compte — ne transitent jamais par `requireOrgApi` et contournent donc le blocage. Corriger ça proprement demanderait de comprendre en profondeur le système de hooks/middleware de Better Auth pour intercepter ses propres routes, ce qui n'a pas été fait faute de temps. Noté explicitement plutôt que silencieusement laissé de côté — à traiter avant toute exposition publique réelle de `/demo` (risque faible ici : aucune donnée sensible, projet portfolio, mais un visiteur malveillant pourrait par exemple renommer « Maison Démo » ou changer son propre rôle fictif).
+
+**La plupart des toasts d'erreur ne remontent pas le message exact du serveur.** `toErrorResponse` renvoie bien `{ error: "The demo is read-only." }` en 403, mais la majorité des composants (agent-wizard, agent-card, conversations-inbox…) catchent génériquement et affichent "Something went wrong on our side." quel que soit le message réel. Le blocage fonctionne (l'action échoue bien), seul le message affiché à l'utilisateur est insuffisamment spécifique.
+
+**Pas de police Instrument Serif embarquée dans l'OG image** — même choix qu'en Phase 2 pour `icon.tsx`/`apple-icon.tsx` (fallback `Georgia, serif`), cohérent, pas un nouvel écart.
+
+**Reste non testé en conditions réelles** (voir `PENDING_TESTS.md` § Phase 8/P7) : exécution réelle du script de seed (jamais lancé — nécessite Stripe/Gemini configurés), widget réel sur la landing, `/demo` en navigateur, Atelier Lune avec de vraies questions, Lighthouse, validation externe de l'OG image/sitemap/robots.
+
+---
+
 ## Phase 7 (P6) — Billing, quotas, API — 2026-10-14
 
 **Code complet (12/12 tâches), build/lint/typecheck clean.** Stripe (lazy client, checkout/portal/webhook repris d'Excerpta, adaptés à `Organization`), idempotence via `StripeEvent`, quotas mensuels paresseux (déjà stubés en P3, complétés ici), API v1 (`/bots`, `/chat` stream+non-stream, `/conversations`) authentifiée par clé Better Auth, Settings complet (profil, organisation/membres, billing, clés API, intégrations), suppression de compte/organisation.
