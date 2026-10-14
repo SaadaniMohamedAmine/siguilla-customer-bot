@@ -28,7 +28,7 @@ export default function TermsPage() {
           <h2 className="text-h3 text-text font-serif">Plan limits</h2>
           <p className="mt-2">
             Each plan has limits on agents, sources, crawled pages and monthly messages — see{" "}
-            <a href="/pricing" className="text-link hover:underline">
+            <a href="/pricing" className="text-link underline underline-offset-2">
               Pricing
             </a>
             .

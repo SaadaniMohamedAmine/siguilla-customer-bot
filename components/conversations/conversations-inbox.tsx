@@ -241,7 +241,7 @@ export function ConversationsInbox({
               value={agent || "__all"}
               onValueChange={(v) => setParam("agent", v === "__all" ? null : v)}
             >
-              <SelectTrigger className="text-small h-8 flex-1">
+              <SelectTrigger className="text-small h-8 flex-1" aria-label={t("filterByAgent")}>
                 <SelectValue placeholder={t("allAgents")} />
               </SelectTrigger>
               <SelectContent>
@@ -257,7 +257,7 @@ export function ConversationsInbox({
               value={period || "__all"}
               onValueChange={(v) => setParam("period", v === "__all" ? null : v)}
             >
-              <SelectTrigger className="text-small h-8 w-24">
+              <SelectTrigger className="text-small h-8 w-24" aria-label={t("filterByPeriod")}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

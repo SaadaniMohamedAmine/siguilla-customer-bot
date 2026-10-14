@@ -193,7 +193,11 @@ function ProfileTab({ user, isDemo }: { user: Props["user"]; isDemo: boolean }) 
       <Section title="Preferences">
         <div className="flex items-center justify-between">
           <p className="text-body text-text">Dark theme</p>
-          <Switch checked={theme === "dark"} onCheckedChange={(v) => setTheme(v ? "dark" : "light")} />
+          <Switch
+            checked={theme === "dark"}
+            onCheckedChange={(v) => setTheme(v ? "dark" : "light")}
+            aria-label="Dark theme"
+          />
         </div>
       </Section>
 
@@ -340,7 +344,7 @@ function OrganizationTab({
               <div className="flex items-center gap-2">
                 {role === "owner" && m.role !== "owner" ? (
                   <Select value={m.role} onValueChange={(v) => updateRole(m.id, v)}>
-                    <SelectTrigger className="text-small h-8 w-28">
+                    <SelectTrigger className="text-small h-8 w-28" aria-label={`Role for ${m.name}`}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -401,7 +405,7 @@ function OrganizationTab({
                     onChange={(e) => setInviteEmail(e.target.value)}
                   />
                   <Select value={inviteRole} onValueChange={setInviteRole}>
-                    <SelectTrigger className="text-small h-9 w-32">
+                    <SelectTrigger className="text-small h-9 w-32" aria-label="Role for new member">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>

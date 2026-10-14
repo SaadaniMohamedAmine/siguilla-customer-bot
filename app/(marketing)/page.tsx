@@ -100,7 +100,7 @@ export default function LandingPage() {
           {STEPS.map((s) => (
             <Reveal key={s.n}>
               <p className="text-link font-serif text-[40px] italic">{s.n}</p>
-              <h3 className="text-h3 text-text mt-2 font-serif">{s.title}</h3>
+              <h2 className="text-h3 text-text mt-2 font-serif">{s.title}</h2>
               <p className="text-body text-text-muted mt-2">{s.body}</p>
             </Reveal>
           ))}
@@ -112,7 +112,7 @@ export default function LandingPage() {
           {FEATURES.map((f) => (
             <Reveal key={f.title}>
               <div className="border-border bg-bg rounded-md border p-6">
-                <h3 className="text-h3 text-text font-serif">{f.title}</h3>
+                <h2 className="text-h3 text-text font-serif">{f.title}</h2>
                 <p className="text-body text-text-muted mt-2">{f.body}</p>
               </div>
             </Reveal>

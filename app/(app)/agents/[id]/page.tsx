@@ -105,7 +105,7 @@ export default async function AgentOverviewPage({ params }: PageProps<"/agents/[
           </div>
           <p className="text-small text-text-muted mt-4">
             {t("unanswered30d")}: <span className="text-text font-mono">{unanswered}</span>{" "}
-            <Link href={`/analytics?agent=${id}`} className="text-link hover:underline">
+            <Link href={`/analytics?agent=${id}`} className="text-link underline underline-offset-2">
               {t("viewAnalytics")}
             </Link>
           </p>

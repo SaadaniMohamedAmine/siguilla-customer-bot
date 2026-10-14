@@ -96,7 +96,7 @@ export function AgentCard({ agent, metrics }: { agent: Agent; metrics: Metrics }
 
         <Link href={`/agents/${agent.id}`} className="block">
           <CardHeader className="flex-row items-center justify-between space-y-0 pr-8">
-            <CardTitle>{agent.name}</CardTitle>
+            <CardTitle as="h2">{agent.name}</CardTitle>
             <StatusPill tone={agent.status === "live" ? "success" : "neutral"}>
               {agent.status === "live" ? "Live" : "Draft"}
             </StatusPill>

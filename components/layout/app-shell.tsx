@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
+import { useHydrated } from "@/lib/use-hydrated";
 import { api } from "@/lib/api";
 import { Wordmark } from "@/components/ui/wordmark";
 import { Avatar } from "@/components/ui/avatar";
@@ -60,6 +61,7 @@ export function AppShell({
   const pathname = usePathname();
   const router = useRouter();
   const { theme, setTheme } = useTheme();
+  const mounted = useHydrated();
   const locale = useLocale();
   const { data: orgs } = useListOrganizations();
   const { data: activeOrg } = useActiveOrganization();
@@ -130,7 +132,7 @@ export function AppShell({
                   <span
                     className={cn(
                       "bg-accent text-on-accent min-w-5 rounded-full px-1.5 text-center font-mono text-[11px] leading-5",
-                      active && "bg-on-accent text-accent",
+                      active && "border border-on-accent bg-transparent",
                     )}
                   >
                     {pendingCount}
@@ -153,7 +155,7 @@ export function AppShell({
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-[200px]">
               <DropdownMenuItem onSelect={() => setTheme(theme === "dark" ? "light" : "dark")}>
-                <Icon icon={theme === "dark" ? SunIcon : MoonIcon} size={16} />
+                <Icon icon={mounted && theme === "dark" ? SunIcon : MoonIcon} size={16} />
                 {theme === "dark" ? t("light") : t("dark")}
               </DropdownMenuItem>
               <DropdownMenuItem onSelect={() => changeLocale(locale === "en" ? "fr" : "en")}>

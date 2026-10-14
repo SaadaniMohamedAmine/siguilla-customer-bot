@@ -15,6 +15,7 @@ const eslintConfig = defineConfig([
     "stitch_sigilla_luxury_ai_platform/**",
     ".remember/**",
     "public/widget/**",
+    "coverage/**",
   ]),
 ]);
 

@@ -28,7 +28,7 @@ export function HeroWidgetMock() {
                 1
               </span>
             </p>
-            <p className="border-t border-[#E4D6CE] pt-2 text-[10px] text-[#8A7A7D]">
+            <p className="border-t border-[#E4D6CE] pt-2 text-[10px] text-[#6B5A5D]">
               Sealed by 2 sources — Shipping Policy · FAQ
             </p>
           </div>

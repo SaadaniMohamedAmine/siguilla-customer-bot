@@ -23,12 +23,12 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           <circle cx="100" cy="100" r="70" stroke="var(--border)" />
         </svg>
       </div>
-      <div className="flex flex-1 items-center justify-center p-6 lg:w-[45%]">
+      <main className="flex flex-1 items-center justify-center p-6 lg:w-[45%]">
         <div className="w-full max-w-[420px] lg:hidden">
           <Wordmark size="md" className="mb-8 block text-center" />
         </div>
         {children}
-      </div>
+      </main>
     </div>
   );
 }
