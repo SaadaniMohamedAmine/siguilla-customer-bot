@@ -1,3 +1,15 @@
+import * as React from "react";
+
+/** Horloge partagée qui tick toutes les `intervalMs` — base pour tout affichage de temps relatif. */
+export function useNow(intervalMs = 30_000) {
+  const [now, setNow] = React.useState(() => Date.now());
+  React.useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), intervalMs);
+    return () => clearInterval(id);
+  }, [intervalMs]);
+  return now;
+}
+
 /** Formatte une date ISO en temps relatif ("2 minutes ago"), recalculé toutes les 30s. */
 export function formatRelative(iso: string | Date | null, locale: string, now: number): string | null {
   if (!iso) return null;

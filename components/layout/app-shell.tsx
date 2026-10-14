@@ -2,8 +2,10 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
+import { api } from "@/lib/api";
 import { Wordmark } from "@/components/ui/wordmark";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -58,6 +60,17 @@ export function AppShell({
   const { data: orgs } = useListOrganizations();
   const { data: activeOrg } = useActiveOrganization();
 
+  const { data: pendingCount } = useQuery({
+    queryKey: ["pending-count"],
+    queryFn: () => api<{ count: number }>("/api/conversations/pending-count").then((d) => d.count),
+    refetchInterval: 10_000,
+  });
+
+  React.useEffect(() => {
+    const base = document.title.replace(/^\(\d+\)\s*/, "");
+    document.title = pendingCount ? `(${pendingCount}) ${base}` : base;
+  }, [pendingCount]);
+
   async function switchOrg(organizationId: string) {
     await authClient.organization.setActive({ organizationId });
     // router.refresh() alone leaves useActiveOrganization()'s client-side cache stale
@@ -68,7 +81,7 @@ export function AppShell({
 
   return (
     <div className="flex min-h-screen">
-      <aside className="sticky top-0 flex h-screen w-[248px] shrink-0 flex-col border-r border-border bg-bg">
+      <aside className="border-border bg-bg sticky top-0 flex h-screen w-[248px] shrink-0 flex-col border-r">
         <div className="p-6">
           <Link href="/agents">
             <Wordmark size="md" />
@@ -77,7 +90,7 @@ export function AppShell({
 
         <div className="px-6 pb-4">
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex w-full items-center justify-between rounded-sm border border-border bg-surface px-3 py-2 text-left hover:bg-surface-raised">
+            <DropdownMenuTrigger className="border-border bg-surface hover:bg-surface-raised flex w-full items-center justify-between rounded-sm border px-3 py-2 text-left">
               <div>
                 <p className="label-caps">{t("organization")}</p>
                 <p className="text-body text-text">{activeOrg?.name ?? org.name}</p>
@@ -103,24 +116,34 @@ export function AppShell({
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-2 rounded-sm px-3 py-2 text-body transition-colors",
+                  "text-body flex items-center gap-2 rounded-sm px-3 py-2 transition-colors",
                   active ? "bg-accent text-on-accent" : "text-text-muted hover:bg-surface hover:text-text",
                 )}
               >
                 <Icon icon={item.icon} size={18} />
-                {t(item.key)}
+                <span className="flex-1">{t(item.key)}</span>
+                {item.key === "conversations" && pendingCount ? (
+                  <span
+                    className={cn(
+                      "bg-accent text-on-accent min-w-5 rounded-full px-1.5 text-center font-mono text-[11px] leading-5",
+                      active && "bg-on-accent text-accent",
+                    )}
+                  >
+                    {pendingCount}
+                  </span>
+                ) : null}
               </Link>
             );
           })}
         </nav>
 
-        <div className="border-t border-border p-4">
+        <div className="border-border border-t p-4">
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex w-full items-center gap-3 rounded-sm p-2 text-left hover:bg-surface">
+            <DropdownMenuTrigger className="hover:bg-surface flex w-full items-center gap-3 rounded-sm p-2 text-left">
               <Avatar name={user.name} src={user.image} size={32} />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-body text-text">{user.name}</p>
-                <p className="truncate text-small text-text-muted">{user.email}</p>
+                <p className="text-body text-text truncate">{user.name}</p>
+                <p className="text-small text-text-muted truncate">{user.email}</p>
               </div>
               <Badge className="font-mono uppercase">{plan}</Badge>
             </DropdownMenuTrigger>
@@ -139,7 +162,9 @@ export function AppShell({
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onSelect={() => signOut({ fetchOptions: { onSuccess: () => router.push("/sign-in") } })}>
+              <DropdownMenuItem
+                onSelect={() => signOut({ fetchOptions: { onSuccess: () => router.push("/sign-in") } })}
+              >
                 <Icon icon={LogoutIcon} size={16} />
                 {t("signOut")}
               </DropdownMenuItem>

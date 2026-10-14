@@ -170,5 +170,52 @@
     "embedTitle": "Embed snippet",
     "avatarTooLarge": "Image must be under 512 KB.",
     "avatarUnsupported": "Only PNG, JPG or WebP images are supported."
+  },
+  "Conversations": {
+    "title": "Conversations",
+    "search": "Search messages…",
+    "allAgents": "All agents",
+    "filters": {
+      "all": "All",
+      "needsHuman": "Needs human",
+      "negativeFeedback": "Negative feedback",
+      "unanswered": "Unanswered",
+      "resolved": "Resolved"
+    },
+    "period7": "7d",
+    "period30": "30d",
+    "period90": "90d",
+    "loadMore": "Load more",
+    "empty": "No conversations yet.",
+    "emptyBody": "Conversations will appear here once your agent starts answering visitors.",
+    "noneFound": "No conversations match these filters.",
+    "selectOne": "Select a conversation to see the thread.",
+    "visitor": "Visitor #{id}",
+    "startedAt": "Started {date}",
+    "status": { "bot": "Bot", "needsHuman": "Needs human", "human": "Human", "resolved": "Resolved" },
+    "takeOver": "Take over",
+    "resolve": "Resolve",
+    "composerPlaceholder": "Reply as {name}…",
+    "send": "Send",
+    "botJoinedLabel": "{name}",
+    "system": {
+      "handoff_requested": "Handoff requested",
+      "resolved": "Resolved",
+      "agent_joined": "{name} joined"
+    },
+    "context": {
+      "title": "Context",
+      "email": "Email",
+      "notProvided": "Not provided",
+      "pageOrigin": "Origin page",
+      "language": "Language",
+      "country": "Country",
+      "satisfaction": "Satisfaction",
+      "retrieval": "Retrieval of the last answer",
+      "topScore": "Top score",
+      "noScore": "No score yet",
+      "knowledgeGap": "Knowledge gap detected",
+      "addMissingKnowledge": "Add missing knowledge"
+    }
   }
 }

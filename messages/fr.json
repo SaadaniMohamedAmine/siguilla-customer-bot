@@ -170,5 +170,52 @@
     "embedTitle": "Code d'intégration",
     "avatarTooLarge": "L'image doit faire moins de 512 Ko.",
     "avatarUnsupported": "Seules les images PNG, JPG ou WebP sont prises en charge."
+  },
+  "Conversations": {
+    "title": "Conversations",
+    "search": "Rechercher dans les messages…",
+    "allAgents": "Tous les agents",
+    "filters": {
+      "all": "Toutes",
+      "needsHuman": "Besoin d'un humain",
+      "negativeFeedback": "Retour négatif",
+      "unanswered": "Sans réponse",
+      "resolved": "Résolues"
+    },
+    "period7": "7j",
+    "period30": "30j",
+    "period90": "90j",
+    "loadMore": "Charger plus",
+    "empty": "Aucune conversation pour l'instant.",
+    "emptyBody": "Les conversations apparaîtront ici dès que votre agent commencera à répondre aux visiteurs.",
+    "noneFound": "Aucune conversation ne correspond à ces filtres.",
+    "selectOne": "Sélectionnez une conversation pour voir le fil.",
+    "visitor": "Visiteur #{id}",
+    "startedAt": "Démarrée le {date}",
+    "status": { "bot": "Bot", "needsHuman": "Besoin d'un humain", "human": "Humain", "resolved": "Résolue" },
+    "takeOver": "Prendre en charge",
+    "resolve": "Résoudre",
+    "composerPlaceholder": "Répondre en tant que {name}…",
+    "send": "Envoyer",
+    "botJoinedLabel": "{name}",
+    "system": {
+      "handoff_requested": "Transfert demandé",
+      "resolved": "Résolue",
+      "agent_joined": "{name} a rejoint"
+    },
+    "context": {
+      "title": "Contexte",
+      "email": "Email",
+      "notProvided": "Non fourni",
+      "pageOrigin": "Page d'origine",
+      "language": "Langue",
+      "country": "Pays",
+      "satisfaction": "Satisfaction",
+      "retrieval": "Recherche de la dernière réponse",
+      "topScore": "Meilleur score",
+      "noScore": "Pas encore de score",
+      "knowledgeGap": "Lacune détectée",
+      "addMissingKnowledge": "Ajouter la connaissance manquante"
+    }
   }
 }

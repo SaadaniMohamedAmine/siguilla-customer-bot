@@ -1,16 +1,7 @@
-import { EmptyState } from "@/components/ui/empty-state";
-import { ConversationIcon } from "@/lib/icons";
+import { requireOrgPage } from "@/lib/session";
+import { ConversationsInbox } from "@/components/conversations/conversations-inbox";
 
-export default function ConversationsPage() {
-  return (
-    <div>
-      <h1 className="font-serif text-h1 text-text">Conversations</h1>
-      <EmptyState
-        icon={ConversationIcon}
-        title="No conversations yet."
-        description="Conversations will appear here once your agent starts answering visitors."
-        className="mt-10"
-      />
-    </div>
-  );
+export default async function ConversationsPage() {
+  const { user } = await requireOrgPage();
+  return <ConversationsInbox currentUserName={user.name.split(" ")[0]} />;
 }
