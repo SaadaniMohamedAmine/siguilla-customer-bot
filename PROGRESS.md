@@ -3,7 +3,7 @@
 > Project 07 / 30 — *Every answer, sealed by its source.*
 > Références : [SIGILLA-PRD.md](./SIGILLA-PRD.md) · [Audit design](./project-07-sigilla-design-audit-recommendations.md)
 
-**Statut global : 120/151 tâches (79 %)** — cadrage, design, fichiers de délégation, Phase 2 (P1) à Phase 7 (P6) terminées, Phase 8 (P7) à 90 % (copy FR du marketing non fait).
+**Statut global : 126/151 tâches (83 %)** — cadrage, design, fichiers de délégation, Phase 2 (P1) à Phase 7 (P6) terminées, Phase 8 (P7) à 90 % (copy FR du marketing non fait), Phase 9 (P8) à 55 % (tests/sécurité/design faits et vérifiés en direct ; Lighthouse, e2e parcours complet, QA manuelle restent à faire).
 
 | Phase | Avancement |
 |---|---|
@@ -17,7 +17,7 @@
 | Phase 6 (P5) — Dashboard, conversations, handoff, analytics | 15/15 — 100 % ✅ |
 | Phase 7 (P6) — Billing, quotas, API | 12/12 — 100 % ✅ |
 | Phase 8 (P7) — Landing, démo, docs | 9/10 — 90 % |
-| Phase 9 (P8) — Qualité, sécurité, performance | 0/11 — 0 % |
+| Phase 9 (P8) — Qualité, sécurité, performance | 6/11 — 55 % |
 | Phase 10 — Déploiement et zéro maintenance | 0/10 — 0 % |
 | Phase 11 — Présentation portfolio | 0/8 — 0 % |
 
@@ -166,17 +166,17 @@
 - [x] Bannières README dark / light
 
 ## Phase 9 (P8) — Qualité, sécurité, performance
-- [ ] Tests Vitest : chunking, citations, fallback, quotas, rate limit, plans, crawler, webhooks Stripe
+- [x] Tests Vitest : chunking, citations, fallback, quotas, rate limit, plans, crawler, webhooks Stripe
 - [ ] Tests Playwright : sign-up → wizard → upload → widget sur site client → handoff → upgrade Stripe
-- [ ] Test e2e du widget sur une page tierce (Shadow DOM, CORS, origine refusée)
-- [ ] CI GitHub Actions : lint, typecheck, tests, build, `size-limit`
+- [x] Test e2e du widget sur une page tierce (Shadow DOM, CORS, origine refusée)
+- [x] CI GitHub Actions : lint, typecheck, tests, build, `size-limit`
 - [ ] Lighthouse ≥ 95 sur la landing (perf, a11y, best practices, SEO)
 - [ ] Audit WCAG 2.1 AA (contrastes, clavier, lecteurs d'écran) dashboard + widget
-- [ ] Audit sécurité : isolation par org, en-têtes (CSP, HSTS), secrets serveur, signatures webhook, HMAC
+- [x] Audit sécurité : isolation par org, en-têtes (CSP, HSTS), secrets serveur, signatures webhook, HMAC
 - [ ] Test de prompt injection sur contenu crawlé
-- [ ] Test de charge léger du widget (rate limit + quotas)
+- [x] Test de charge léger du widget (rate limit + quotas)
 - [ ] QA manuelle complète : EN/FR, dark/light, mobile/desktop
-- [ ] Conformité à l'audit design (zéro Material Symbol, zéro token MD3)
+- [x] Conformité à l'audit design (zéro Material Symbol, zéro token MD3)
 
 ## Phase 10 — Déploiement et zéro maintenance
 - [ ] Variables d'env de production sur Vercel

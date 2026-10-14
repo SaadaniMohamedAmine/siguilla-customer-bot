@@ -80,6 +80,21 @@
 - [ ] OG image/sitemap/robots — jamais validés sur un outil externe (opengraph.xyz, etc.).
 - [ ] **FR non fait pour le marketing** (voir `DECISIONS.md`) : landing, pricing, docs (UI autour du contenu) sont en anglais codé en dur, pas dans `messages/*.json`. Le contenu des docs lui-même est EN-only par spec, mais l'UI autour (nav, labels) devrait être traduisible.
 
+## Phase 9 (P8) — Qualité, sécurité, performance
+
+- [ ] **`journey.spec.ts`** (parcours complet sign-up → wizard → upload PDF → widget → handoff → resolve) — jamais écrit, nécessite `tests/fixtures/atelier-shipping.pdf` (jamais généré) et un timeout confortable (90s+).
+- [ ] **`billing.spec.ts`** (upgrade réel via Stripe Checkout test) — nécessite Stripe configuré (voir mémoire `project_sigilla_stripe_setup`).
+- [ ] **`demo.spec.ts`** (`/demo` → dashboard sans formulaire, bandeau lecture seule) — nécessite le seed exécuté (jamais fait).
+- [ ] **`landing.spec.ts`** (widget réel de la landing répond avec un sceau) — nécessite `NEXT_PUBLIC_LANDING_BOT_KEY` + le seed.
+- [ ] **Lighthouse** (mobile, `/`, `/pricing`, `/docs/getting-started`, `/sign-in`) — jamais mesuré, objectif ≥95/95/95/100.
+- [ ] **Audit WCAG complet** : dashboard entier (pas juste 4 pages publiques), les 8 états du widget, lecteur d'écran réel (VoiceOver/NVDA, 10 min).
+- [ ] **Injection indirecte** (contenu crawlé contenant la charge malveillante, pas juste la question du visiteur) — seule l'injection directe a été testée.
+- [ ] **`scripts/audit-tenancy.ts`** — pas écrit ; l'isolation a été vérifiée par revue manuelle ciblée + 1 test e2e sur 1 agent, pas un balayage systématique des ~34 routes.
+- [ ] **CI GitHub Actions** (`.github/workflows/ci.yml`) — écrit, jamais déclenché pour de vrai (nécessite un push vers le remote).
+- [ ] **`QA.md`** — matrice créée (16 parcours × dark/light × EN/FR × desktop/mobile), entièrement **non remplie**.
+- [ ] **securityheaders.com** — CSP/HSTS ajoutés et vérifiés sans erreur console en local, jamais validés sur l'outil externe (nécessite un déploiement public).
+- [ ] Couverture Vitest réelle de `lib/**` : ~27%, pas les 70% visés (voir `DECISIONS.md` pour la liste des modules couverts vs non couverts).
+
 ---
 
-*Phases suivantes (qualité/sécurité…) : ajouter une section ici à la clôture de chaque phase, avant de passer à la suivante — ne pas attendre la fin du projet pour commencer à lister.*
+*Phases suivantes (déploiement, portfolio…) : ajouter une section ici à la clôture de chaque phase, avant de passer à la suivante — ne pas attendre la fin du projet pour commencer à lister.*
