@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 
 export const metadata: Metadata = { title: "Atelier Lune", robots: { index: false, follow: false } };
 
@@ -9,7 +10,15 @@ function CandleIllustration() {
       <rect x="55" y="70" width="110" height="150" rx="6" fill="#231A1C" />
       <rect x="55" y="70" width="110" height="150" rx="6" fill="none" stroke="#9E2F45" strokeOpacity="0.35" />
       <rect x="72" y="92" width="76" height="40" fill="none" stroke="#D9B98C" strokeWidth="1" opacity="0.6" />
-      <text x="110" y="117" textAnchor="middle" fontSize="11" fill="#D9B98C" fontFamily="Georgia, serif" letterSpacing="2">
+      <text
+        x="110"
+        y="117"
+        textAnchor="middle"
+        fontSize="11"
+        fill="#D9B98C"
+        fontFamily="Georgia, serif"
+        letterSpacing="2"
+      >
         CUIR &amp; ENCENS
       </text>
       <rect x="98" y="48" width="8" height="26" rx="3" fill="#E8DAC4" />
@@ -23,12 +32,20 @@ export default function AtelierLunePage() {
   const publicKey = process.env.NEXT_PUBLIC_LANDING_BOT_KEY;
 
   return (
-    <div style={{ background: "#FAF6F2", color: "#1A1214", minHeight: "100vh", fontFamily: "Georgia, serif" }}>
-      <div style={{ background: "#231A1C", color: "#E8DAC4" }} className="px-4 py-2 text-center text-xs tracking-wide">
+    <div
+      style={{ background: "#FAF6F2", color: "#1A1214", minHeight: "100vh", fontFamily: "Georgia, serif" }}
+    >
+      <div
+        style={{ background: "#231A1C", color: "#E8DAC4" }}
+        className="px-4 py-2 text-center text-xs tracking-wide"
+      >
         Illustrative brand — Sigilla demo
       </div>
 
-      <header className="flex items-center justify-between px-8 py-6" style={{ borderBottom: "1px solid #E4D6CE" }}>
+      <header
+        className="flex items-center justify-between px-8 py-6"
+        style={{ borderBottom: "1px solid #E4D6CE" }}
+      >
         <span className="text-sm font-semibold tracking-[0.25em]">ATELIER LUNE</span>
         <nav className="flex gap-6 text-sm" style={{ color: "#6B5A5D" }}>
           <span>Candles</span>
@@ -42,7 +59,7 @@ export default function AtelierLunePage() {
           <CandleIllustration />
         </div>
         <div>
-          <p className="text-xs uppercase tracking-[0.2em]" style={{ color: "#8A2438" }}>
+          <p className="text-xs tracking-[0.2em] uppercase" style={{ color: "#8A2438" }}>
             New season
           </p>
           <h1 className="mt-2 text-3xl" style={{ lineHeight: 1.2 }}>
@@ -50,8 +67,8 @@ export default function AtelierLunePage() {
           </h1>
           <p className="mt-4 text-lg">CHF 145</p>
           <p className="mt-4 text-sm" style={{ color: "#6B5A5D", lineHeight: 1.7 }}>
-            Cire de soja, mèche en coton, 60 heures de combustion. Notes de cuir patiné, d&apos;encens noir et de bois de
-            santal — une évocation feutrée des ateliers genevois.
+            Cire de soja, mèche en coton, 60 heures de combustion. Notes de cuir patiné, d&apos;encens noir et
+            de bois de santal — une évocation feutrée des ateliers genevois.
           </p>
           <button
             type="button"
@@ -64,7 +81,7 @@ export default function AtelierLunePage() {
       </main>
 
       {publicKey ? (
-        <script src="/widget/v1.js" data-bot={publicKey} async />
+        <Script src="/widget/v1.js" data-bot={publicKey} strategy="afterInteractive" />
       ) : (
         <p className="px-8 pb-10 text-center text-xs" style={{ color: "#B08A8A" }}>
           Set NEXT_PUBLIC_LANDING_BOT_KEY (or publish a live agent) to preview the widget here.

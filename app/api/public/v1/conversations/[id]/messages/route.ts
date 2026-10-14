@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { originAllowed, corsHeaders, loadPublicBot } from "@/lib/public/cors";
+import { originAllowed, corsHeaders, loadPublicBot, effectiveOrigin } from "@/lib/public/cors";
 
 export async function OPTIONS(request: NextRequest) {
-  return new NextResponse(null, { status: 204, headers: corsHeaders(request.headers.get("origin")) });
+  return new NextResponse(null, { status: 204, headers: corsHeaders(effectiveOrigin(request)) });
 }
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const origin = request.headers.get("origin");
+  const origin = effectiveOrigin(request);
   const { id } = await params;
   const pk = request.nextUrl.searchParams.get("pk");
   const visitorId = request.nextUrl.searchParams.get("visitorId");

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { originAllowed, corsHeaders, loadPublicBot, clientIp } from "@/lib/public/cors";
+import { originAllowed, corsHeaders, loadPublicBot, clientIp, effectiveOrigin } from "@/lib/public/cors";
 import { rateLimit } from "@/lib/rate-limit";
 import { CHAT_PER_MINUTE, CHAT_PER_DAY } from "@/lib/public/limits";
 import { answer } from "@/lib/rag/answer";
@@ -31,12 +31,12 @@ function errorStream(code: "quota_exceeded" | "rate_limited") {
 }
 
 export async function OPTIONS(request: NextRequest) {
-  const origin = request.headers.get("origin");
+  const origin = effectiveOrigin(request);
   return new NextResponse(null, { status: 204, headers: corsHeaders(origin) });
 }
 
 export async function POST(request: NextRequest) {
-  const origin = request.headers.get("origin");
+  const origin = effectiveOrigin(request);
   let body: z.infer<typeof Body>;
   try {
     body = Body.parse(await request.json());

@@ -1,7 +1,14 @@
 /* Sigilla widget v1 — zéro dépendance. Intégration :
    <script src="https://<app>/widget/v1.js" data-bot="pk_xxx" async></script> */
 type Cite = { index: number; title: string; url: string | null; pageNumber: number | null };
-type Msg = { id?: string; role: "visitor" | "bot" | "agent" | "system"; content: string; citations?: Cite[]; fallback?: boolean; createdAt?: string };
+type Msg = {
+  id?: string;
+  role: "visitor" | "bot" | "agent" | "system";
+  content: string;
+  citations?: Cite[];
+  fallback?: boolean;
+  createdAt?: string;
+};
 type Cfg = {
   color: string;
   theme: "dark" | "light";
@@ -17,31 +24,48 @@ type Cfg = {
 };
 
 (() => {
+  const w = window as unknown as { __sigilla?: 1 };
   const script = document.currentScript as HTMLScriptElement | null;
   const pk = script?.dataset.bot;
-  if (!pk || (window as any).__sigilla) return;
-  (window as any).__sigilla = 1;
+  if (!pk || w.__sigilla) return;
+  w.__sigilla = 1;
   const api = new URL(script!.src).origin + "/api/public/v1/";
   const preview = script!.dataset.preview === "true";
   const fr = (navigator.language || "en").toLowerCase().startsWith("fr");
   const T = fr
     ? {
-        open: "Ouvrir l'assistant", close: "Fermer", send: "Envoyer",
+        open: "Ouvrir l'assistant",
+        close: "Fermer",
+        send: "Envoyer",
         sealed: (n: number) => `Scellé par ${n} source${n > 1 ? "s" : ""}`,
-        helpful: "Utile ?", human: "Parler à un humain", email: "Votre email (facultatif)",
+        helpful: "Utile ?",
+        human: "Parler à un humain",
+        email: "Votre email (facultatif)",
         joined: (n: string) => `${n} a rejoint la conversation`,
         resting: "Cet assistant se repose pour le moment.",
-        restingSub: "Laissez votre email, l'équipe vous répondra personnellement.", leave: "Laisser un message",
-        online: "En ligne", err: "Un souci de connexion. Réessayez.", sent: "Merci. L'équipe revient vers vous.", by: "Scellé par Sigilla",
+        restingSub: "Laissez votre email, l'équipe vous répondra personnellement.",
+        leave: "Laisser un message",
+        online: "En ligne",
+        err: "Un souci de connexion. Réessayez.",
+        sent: "Merci. L'équipe revient vers vous.",
+        by: "Scellé par Sigilla",
       }
     : {
-        open: "Open assistant", close: "Close", send: "Send",
+        open: "Open assistant",
+        close: "Close",
+        send: "Send",
         sealed: (n: number) => `Sealed by ${n} source${n > 1 ? "s" : ""}`,
-        helpful: "Helpful?", human: "Talk to a human", email: "Your email (optional)",
+        helpful: "Helpful?",
+        human: "Talk to a human",
+        email: "Your email (optional)",
         joined: (n: string) => `${n} joined`,
         resting: "This assistant is resting for now.",
-        restingSub: "Please leave your email and the team will reply personally.", leave: "Leave a message",
-        online: "Online", err: "Connection issue. Please try again.", sent: "Thank you. The team will be in touch.", by: "Sealed by Sigilla",
+        restingSub: "Please leave your email and the team will reply personally.",
+        leave: "Leave a message",
+        online: "Online",
+        err: "Connection issue. Please try again.",
+        sent: "Thank you. The team will be in touch.",
+        by: "Sealed by Sigilla",
       };
 
   const store = (() => {
@@ -60,7 +84,9 @@ type Cfg = {
     }
   })();
   const state = {
-    visitorId: (saved.v as string) || (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2) + Date.now()),
+    visitorId:
+      (saved.v as string) ||
+      (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2) + Date.now()),
     conversationId: (saved.c as string) || (null as string | null),
     status: "bot",
     agentName: "",
@@ -85,7 +111,11 @@ type Cfg = {
     });
     return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
   };
-  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
+  const esc = (s: string) =>
+    s.replace(
+      /[&<>"']/g,
+      (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!,
+    );
 
   const host = document.createElement("div");
   host.style.cssText = "all:initial;position:fixed;z-index:2147483000;bottom:20px";
@@ -134,9 +164,14 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
     return t.content.firstElementChild as HTMLElement;
   };
 
+  // Certains modèles répondent avec des crochets pleine-largeur 【1】 au lieu de [1] : on
+  // reconnaît les deux pour ne jamais laisser un marqueur de citation s'afficher brut.
   const renderText = (text: string, cites: Cite[] = []) => {
     const ok = new Set(cites.map((c) => c.index));
-    return esc(text).replace(/\[(\d{1,2})\]/g, (_, n) => (ok.has(+n) || !cites.length ? `<span class="sl" aria-label="Source ${n}">${n}</span>` : ""));
+    return esc(text).replace(/\[(\d{1,2})\]|【(\d{1,2})】/g, (_, a, b) => {
+      const n = a ?? b;
+      return ok.has(+n) || !cites.length ? `<span class="sl" aria-label="Source ${n}">${n}</span>` : "";
+    });
   };
   const sources = (cites: Cite[]) =>
     !cites.length
@@ -144,7 +179,9 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
       : `<div class="src">${T.sealed(cites.length)}${cites
           .map((c) => {
             const lbl = esc(c.title + (c.pageNumber ? " — p." + c.pageNumber : ""));
-            return c.url && /^https?:/.test(c.url) ? `<a href="${esc(c.url)}" target="_blank" rel="noopener">${c.index} · ${lbl}</a>` : `<span>${c.index} · ${lbl}</span>`;
+            return c.url && /^https?:/.test(c.url)
+              ? `<a href="${esc(c.url)}" target="_blank" rel="noopener">${c.index} · ${lbl}</a>`
+              : `<span>${c.index} · ${lbl}</span>`;
           })
           .join("")}</div>`;
 
@@ -155,7 +192,9 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
     }
     const cls = m.role === "visitor" ? "v" : m.role === "agent" ? "ag" : "bt" + (m.fallback ? " fb" : "");
     const who = m.role === "agent" ? `<span class="w">${esc(state.agentName || "Team")}</span>` : "";
-    const node = el(`<div class="m ${cls}">${who}${renderText(m.content, m.citations)}${m.role === "bot" ? sources(m.citations || []) : ""}</div>`);
+    const node = el(
+      `<div class="m ${cls}">${who}${renderText(m.content, m.citations)}${m.role === "bot" ? sources(m.citations || []) : ""}</div>`,
+    );
     if (m.role === "bot" && m.id && !m.fallback) node.appendChild(feedback(m.id));
     feed.appendChild(node);
     feed.scrollTop = feed.scrollHeight;
@@ -164,7 +203,9 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
   };
 
   const feedback = (id: string) => {
-    const w = el(`<div class="fbk">${T.helpful} <button aria-pressed="false" aria-label="👍">👍</button><button aria-pressed="false" aria-label="👎">👎</button></div>`);
+    const w = el(
+      `<div class="fbk">${T.helpful} <button aria-pressed="false" aria-label="👍">👍</button><button aria-pressed="false" aria-label="👎">👎</button></div>`,
+    );
     w.querySelectorAll("button").forEach((b, i) =>
       b.addEventListener("click", () => {
         w.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", "false"));
@@ -175,10 +216,17 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
     return w;
   };
 
-  const post = (p: string, body: unknown) => fetch(api + p, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+  const post = (p: string, body: unknown) =>
+    fetch(api + p, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(body),
+    });
 
   const handoffCard = () => {
-    const c = el(`<div class="card"><input type="email" placeholder="${T.email}" aria-label="${T.email}"><button class="pr">${T.human}</button></div>`);
+    const c = el(
+      `<div class="card"><input type="email" placeholder="${T.email}" aria-label="${T.email}"><button class="pr">${T.human}</button></div>`,
+    );
     c.querySelector("button")!.addEventListener("click", async () => {
       const email = (c.querySelector("input") as HTMLInputElement).value.trim() || undefined;
       await post("handoff", { pk, conversationId: state.conversationId, visitorId: state.visitorId, email });
@@ -191,7 +239,13 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
   };
 
   const resting = () => {
-    panel.querySelector(".f")!.replaceWith(el(`<div class="rest"><h3>${T.resting}</h3><p>${T.restingSub}</p><input type="email" placeholder="${T.email}"><button class="pr">${T.leave}</button></div>`));
+    panel
+      .querySelector(".f")!
+      .replaceWith(
+        el(
+          `<div class="rest"><h3>${T.resting}</h3><p>${T.restingSub}</p><input type="email" placeholder="${T.email}"><button class="pr">${T.leave}</button></div>`,
+        ),
+      );
     panel.querySelector(".i")?.remove();
   };
 
@@ -204,8 +258,22 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
     feed.appendChild(node);
     let text = "";
     try {
-      const res = await post("chat", { pk, question: q, visitorId: state.visitorId, conversationId: state.conversationId, locale: navigator.language, pageUrl: location.href });
-      const reader = res.body!.getReader();
+      const res = await post("chat", {
+        pk,
+        question: q,
+        visitorId: state.visitorId,
+        conversationId: state.conversationId,
+        locale: navigator.language,
+        pageUrl: location.href,
+      });
+      if (!res.ok || !res.body) {
+        node.remove();
+        addMsg({ role: "bot", content: T.err, fallback: true });
+        state.busy = false;
+        input?.focus();
+        return;
+      }
+      const reader = res.body.getReader();
       const dec = new TextDecoder();
       let buf = "";
       for (;;) {
@@ -229,7 +297,14 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
           }
           if (e.type === "done") {
             node.remove();
-            if (e.messageId) addMsg({ role: "bot", id: e.messageId, content: text, citations: e.citations, fallback: e.fallback });
+            if (e.messageId)
+              addMsg({
+                role: "bot",
+                id: e.messageId,
+                content: text,
+                citations: e.citations,
+                fallback: e.fallback,
+              });
             if (e.fallback) handoffCard();
           }
           if (e.type === "error") {
@@ -251,7 +326,9 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
   async function poll() {
     if (!state.conversationId) return;
     try {
-      const r = await fetch(`${api}conversations/${state.conversationId}/messages?pk=${pk}&visitorId=${state.visitorId}&after=${encodeURIComponent(state.last)}`);
+      const r = await fetch(
+        `${api}conversations/${state.conversationId}/messages?pk=${pk}&visitorId=${state.visitorId}&after=${encodeURIComponent(state.last)}`,
+      );
       if (r.ok) {
         const d = await r.json();
         if (d.agentName && d.agentName !== state.agentName) {
@@ -266,7 +343,8 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
       }
     } catch {}
     clearTimeout(timer);
-    if (state.open && (state.status === "handoff_requested" || state.status === "human")) timer = window.setTimeout(poll, 3000);
+    if (state.open && (state.status === "handoff_requested" || state.status === "human"))
+      timer = window.setTimeout(poll, 3000);
   }
 
   function openPanel() {
@@ -329,7 +407,9 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
 
   async function restore() {
     try {
-      const r = await fetch(`${api}conversations/${state.conversationId}/messages?pk=${pk}&visitorId=${state.visitorId}&after=`);
+      const r = await fetch(
+        `${api}conversations/${state.conversationId}/messages?pk=${pk}&visitorId=${state.visitorId}&after=`,
+      );
       if (!r.ok) {
         state.conversationId = null;
         persist();

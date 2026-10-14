@@ -1,18 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { originAllowed, corsHeaders, loadPublicBot, clientIp } from "@/lib/public/cors";
+import { originAllowed, corsHeaders, loadPublicBot, clientIp, effectiveOrigin } from "@/lib/public/cors";
 import { rateLimit } from "@/lib/rate-limit";
 import { MISC_PER_MINUTE } from "@/lib/public/limits";
 
 const Body = z.object({ pk: z.string(), type: z.literal("widget_open") });
 
 export async function OPTIONS(request: NextRequest) {
-  return new NextResponse(null, { status: 204, headers: corsHeaders(request.headers.get("origin")) });
+  return new NextResponse(null, { status: 204, headers: corsHeaders(effectiveOrigin(request)) });
 }
 
 export async function POST(request: NextRequest) {
-  const origin = request.headers.get("origin");
+  const origin = effectiveOrigin(request);
   let body: z.infer<typeof Body>;
   try {
     body = Body.parse(await request.json());

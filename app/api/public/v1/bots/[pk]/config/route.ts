@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { originAllowed, corsHeaders, loadPublicBot } from "@/lib/public/cors";
+import { originAllowed, corsHeaders, loadPublicBot, effectiveOrigin } from "@/lib/public/cors";
 import { rateLimit } from "@/lib/rate-limit";
 import { CONFIG_PER_MINUTE } from "@/lib/public/limits";
 import { parseWidgetConfig } from "@/lib/widget/config";
 import { getPlanLimits } from "@/lib/billing/plans";
 
 export async function OPTIONS(request: NextRequest, { params }: { params: Promise<{ pk: string }> }) {
-  const origin = request.headers.get("origin");
+  const origin = effectiveOrigin(request);
   const { pk } = await params;
   const bot = await loadPublicBot(pk);
   if (!bot || !originAllowed(origin, bot.allowedDomains)) return new NextResponse(null, { status: 403 });
@@ -14,7 +14,7 @@ export async function OPTIONS(request: NextRequest, { params }: { params: Promis
 }
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ pk: string }> }) {
-  const origin = request.headers.get("origin");
+  const origin = effectiveOrigin(request);
   const { pk } = await params;
   const bot = await loadPublicBot(pk);
   const appHost = new URL(process.env.NEXT_PUBLIC_APP_URL!).host;

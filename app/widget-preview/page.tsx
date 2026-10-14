@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Script from "next/script";
 import { requireOrgPage } from "@/lib/session";
 import { prisma } from "@/lib/db";
 
@@ -14,7 +15,15 @@ export default async function WidgetPreviewPage({ searchParams }: PageProps<"/wi
   if (!chatbot) notFound();
 
   return (
-    <div style={{ position: "fixed", inset: 0, overflow: "auto", background: "#FAF6F2", fontFamily: "Georgia, serif" }}>
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        overflow: "auto",
+        background: "#FAF6F2",
+        fontFamily: "Georgia, serif",
+      }}
+    >
       <div style={{ padding: "64px 32px", maxWidth: 640, margin: "0 auto", color: "#1A1214" }}>
         <p style={{ textTransform: "uppercase", letterSpacing: "0.12em", fontSize: 12, color: "#8A7A7D" }}>
           Preview canvas
@@ -24,7 +33,7 @@ export default async function WidgetPreviewPage({ searchParams }: PageProps<"/wi
           This neutral page exists only to preview your widget as a visitor would see it on your own site.
         </p>
       </div>
-      <script src="/widget/v1.js" data-bot={publicKey} data-preview="true" async />
+      <Script src="/widget/v1.js" data-bot={publicKey} data-preview="true" strategy="afterInteractive" />
     </div>
   );
 }

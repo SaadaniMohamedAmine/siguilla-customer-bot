@@ -1,5 +1,22 @@
 import { prisma } from "@/lib/db";
 
+/**
+ * Un `fetch()` same-origin en GET n'envoie pas de header `Origin` (tainting "basic",
+ * hors spec Fetch). Sans ce fallback sur `Referer`, l'aperçu live (`/widget-preview`,
+ * même origine que l'app) serait rejeté comme s'il venait d'une origine inconnue.
+ */
+export function effectiveOrigin(request: Request): string | null {
+  const origin = request.headers.get("origin");
+  if (origin) return origin;
+  const referer = request.headers.get("referer");
+  if (!referer) return null;
+  try {
+    return new URL(referer).origin;
+  } catch {
+    return null;
+  }
+}
+
 export function originAllowed(origin: string | null, allowedDomains: string[]): boolean {
   if (!origin) return false;
   let host: string;
@@ -14,7 +31,9 @@ export function originAllowed(origin: string | null, allowedDomains: string[]): 
     return process.env.NODE_ENV !== "production" || allowedDomains.some((d) => d.startsWith("localhost"));
   if (allowedDomains.length === 0) return true; // non restreint (le dashboard affiche un avertissement)
   const hostname = host.split(":")[0];
-  return allowedDomains.some((d) => (d.startsWith("*.") ? hostname === d.slice(2) || hostname.endsWith(d.slice(1)) : hostname === d));
+  return allowedDomains.some((d) =>
+    d.startsWith("*.") ? hostname === d.slice(2) || hostname.endsWith(d.slice(1)) : hostname === d,
+  );
 }
 
 export function corsHeaders(origin: string | null): HeadersInit {
