@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireOrgPage } from "@/lib/session";
 import { prisma } from "@/lib/db";
 import { StatusPill } from "@/components/ui/status-pill";
+import { AgentNav } from "@/components/agents/agent-nav";
 
 export default async function AgentLayout({ children, params }: LayoutProps<"/agents/[id]">) {
   const { id } = await params;
@@ -17,6 +18,7 @@ export default async function AgentLayout({ children, params }: LayoutProps<"/ag
           {chatbot.status === "live" ? "Live" : "Draft"}
         </StatusPill>
       </div>
+      <AgentNav agentId={chatbot.id} />
       {children}
     </div>
   );
