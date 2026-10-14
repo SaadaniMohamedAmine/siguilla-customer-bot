@@ -17,18 +17,32 @@
 
 ## Phase 4 (P3) — RAG et réponses
 
-- [ ] **Pipeline d'ingestion multi-chunks de bout en bout** — bloqué le 2026-10-14 par l'épuisement du quota gratuit Gemini (`embed_content_free_tier_requests`, annoncé "~100/min" mais voir plus bas) pendant le diagnostic d'un bug (voir `DECISIONS.md`). Le fix lui-même est prouvé au niveau SDK (10→10, 50→50 embeddings), mais le pipeline complet (ingestion réelle → statut `ready`, chunks > 1, aucun embedding null) doit être reconfirmé.
-  - **À RETENTER EN PREMIER à la prochaine session** (probablement après minuit UTC, voir ci-dessous).
-  - Agent de test déjà prêt : chatbot `cmv78snow0000gow3jzmor4ay` ("RAG Test"), source `cmv78svfn0001gow3ixcb1rh6` (Wikipedia Capybara, ~30 chunks). Relancer juste `POST /api/sources/cmv78svfn0001gow3ixcb1rh6/resync` (après sign-in test1) et vérifier `status: "ready"`.
-  - **Constat du 2026-10-14** : malgré 3 minutes complètes sans AUCUN appel, le délai annoncé par l'API restait bloqué à ~44-49s à chaque nouvelle tentative — incohérent avec un quota "par minute" qui devrait se vider avec le temps qui passe. Hypothèse la plus probable : quota **journalier** (reset probablement à minuit UTC), malgré le nom trompeur `...PerMinute...` dans l'identifiant du quota Google. Donc inutile de réessayer avant le lendemain si ça a été épuisé un jour donné.
-  - **Piège à éviter** : ne pas re-tester via des scripts qui rappellent l'API en boucle — `withRetry()` (`lib/ai/gemini.ts`) retente 4× sur un 429, donc chaque script de "vérification" consomme lui-même 4-5× plus de quota et peut faire croire que "ça ne se vide jamais". Faire **un seul** test à la fois, jamais en boucle rapprochée.
-- [ ] **Question réelle dans le Playground** (navigateur) sur un agent avec de vraies sources → réponse citée correctement, sceau cliquable, `SealedBy` avec les bonnes sources.
+- [x] **Pipeline bout en bout avec vraies sources, en conditions réelles (via le widget, Phase 4)** — 2026-10-14 : quota Gemini visiblement reconstitué (plus bloqué). Testé `cmv78snow0000gow3jzmor4ay` ("RAG Test", source Wikipedia Capybara) via `/widget-preview` : réponse streamée, 2 citations correctes avec liens Wikipedia, bloc « Scellé par N sources », feedback 👍/👎 affiché. **Bug réel trouvé et corrigé au passage** : voir `DECISIONS.md` (crochets pleine-largeur 【n】 vs `[n]`).
+- [ ] **Pipeline d'ingestion multi-chunks de bout en bout** (le flux d'ingestion lui-même — crawl/PDF → chunks → embeddings) reste à reconfirmer spécifiquement, indépendamment du test de réponse ci-dessus qui portait sur une source déjà `ready`.
+- [ ] **Question réelle dans le Playground** (UI dashboard, pas juste le widget) sur un agent avec de vraies sources → réponse citée correctement, sceau cliquable, `SealedBy` avec les bonnes sources.
 - [ ] **Question hors sujet** → fallback déclenché, **aucun appel LLM** (vérifiable via les logs — le score sous le seuil doit court-circuiter avant `streamAnswer`).
 - [ ] **`handoffSuggested` après 2 fallbacks consécutifs** sur la même conversation.
 - [ ] Injection de prompt (« ignore previous instructions… ») → pas de fuite du system prompt, réponse refusée ou fallback.
 - [ ] Mémoire de conversation : question de suivi qui dépend du contexte précédent → réponse cohérente.
 - [ ] Un agent d'une autre organisation → 404 sur `/playground`.
 
+## Phase 5 (P4) — Widget embeddable
+
+- [x] Widget monté en Shadow DOM, isolation CSS vérifiée visuellement (pas de style hérité/fui).
+- [x] Flux complet Designer → aperçu live (`postMessage`, < 200 ms) → Publish → widget réel reflète la config.
+- [x] Chat SSE + citations + feedback + bloc sources, testés via `/widget-preview` avec une vraie réponse RAG.
+- [x] `npm run size` : 4.58 KB brotli / 5 KB budget.
+- [ ] **8 états visuels du LOT 2** — seuls fermé/tooltip, accueil+suggestions, streaming, citations et feedback ont été vus. Pas testés : fallback + carte handoff, mode humain (divider « X joined »), quota (« resting »), mobile plein écran < 480px.
+- [ ] **Origine non autorisée** → 403, widget ne se monte pas (jamais testé avec un vrai domaine hors liste).
+- [ ] **Rate limit** : 21 messages/minute depuis la même IP → 21e refusé.
+- [ ] **A11y clavier complet** : Tab → launcher, Entrée ouvre, focus piégé, Échap ferme et rend le focus (le code existe, non testé interactivement — testé uniquement via `element.click()` direct, pas au clavier réel).
+- [ ] **Rechargement de page** → conversation restaurée depuis `localStorage` + endpoint messages (code existe, non testé).
+- [ ] **Navigation privée** (localStorage bloqué) → le widget fonctionne quand même (try/catch présent, non testé en conditions réelles).
+- [ ] **Contraste auto** sur une couleur claire (ex. `#E0B05C`) → texte en encre foncée (seules des couleurs sombres ont été testées).
+- [ ] `/atelier-lune` : jamais ouverte avec une vraie clé publique (`NEXT_PUBLIC_LANDING_BOT_KEY` non définie en dev) — layout/illustration visuels non vérifiés dans un navigateur.
+- [ ] Page collée dans un site HTML statique externe (`npx serve` sur un autre port) avec un CSS agressif (`* { font-family: Comic Sans; color: red }`) pour prouver l'isolation Shadow DOM en conditions réelles (testé seulement en same-origin jusqu'ici).
+- [ ] Upload d'avatar (Vercel Blob) — code écrit, jamais exercé avec un vrai fichier.
+
 ---
 
-*Phases suivantes (widget, dashboard, billing, landing…) : ajouter une section ici à la clôture de chaque phase, avant de passer à la suivante — ne pas attendre la fin du projet pour commencer à lister.*
+*Phases suivantes (dashboard, billing, landing…) : ajouter une section ici à la clôture de chaque phase, avant de passer à la suivante — ne pas attendre la fin du projet pour commencer à lister.*

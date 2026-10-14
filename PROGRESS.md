@@ -3,7 +3,7 @@
 > Project 07 / 30 — *Every answer, sealed by its source.*
 > Références : [SIGILLA-PRD.md](./SIGILLA-PRD.md) · [Audit design](./project-07-sigilla-design-audit-recommendations.md)
 
-**Statut global : 58/151 tâches (38 %)** — cadrage, design, fichiers de délégation, Phase 2 (P1) et Phase 3 (P2) terminés.
+**Statut global : 84/151 tâches (56 %)** — cadrage, design, fichiers de délégation, Phase 2 (P1), Phase 3 (P2), Phase 4 (P3) et Phase 5 (P4) terminés.
 
 | Phase | Avancement |
 |---|---|
@@ -12,8 +12,8 @@
 | Phase 1 — Préparation de la délégation | 9/10 — 90 % |
 | Phase 2 (P1) — Fondations, design system, auth | 20/20 — 100 % ✅ |
 | Phase 3 (P2) — Données et ingestion | 15/15 — 100 % ✅ |
-| Phase 4 (P3) — RAG et réponses | 0/10 — 0 % |
-| Phase 5 (P4) — Widget embeddable | 0/16 — 0 % |
+| Phase 4 (P3) — RAG et réponses | 10/10 — 100 % ✅ |
+| Phase 5 (P4) — Widget embeddable | 16/16 — 100 % ✅ |
 | Phase 6 (P5) — Dashboard, conversations, handoff, analytics | 0/15 — 0 % |
 | Phase 7 (P6) — Billing, quotas, API | 0/12 — 0 % |
 | Phase 8 (P7) — Landing, démo, docs | 0/10 — 0 % |
@@ -93,34 +93,34 @@
 - [x] Garde-fous : `MAX_TOTAL_CHUNKS`, limites par plan, taille des fichiers
 
 ## Phase 4 (P3) — RAG et réponses
-- [ ] CRUD des agents (nom, description, instructions, seuil de similarité)
-- [ ] Retrieval pgvector (top 6, filtré par agent)
-- [ ] Prompt système Sigilla + instructions de l'agent + contexte numéroté
-- [ ] Streaming des réponses (fallback Groq → Gemini avant le 1er octet)
-- [ ] Citations `[n]` → titre + URL/page, rendues en `CitationSeal`
-- [ ] Fallback « I don't have a verified answer » sous le seuil, sans appel LLM
-- [ ] Garde-fous : contexte uniquement, langue du visiteur, anti-injection, longueur max
-- [ ] Mémoire courte de conversation (derniers échanges)
-- [ ] Persistance Conversation / Message (scores, provider, fallback)
-- [ ] Playground interne + inspecteur de retrieval (scores, chunks, curseur de seuil)
+- [x] CRUD des agents (nom, description, instructions, seuil de similarité)
+- [x] Retrieval pgvector (top 6, filtré par agent)
+- [x] Prompt système Sigilla + instructions de l'agent + contexte numéroté
+- [x] Streaming des réponses (fallback Groq → Gemini avant le 1er octet)
+- [x] Citations `[n]` → titre + URL/page, rendues en `CitationSeal`
+- [x] Fallback « I don't have a verified answer » sous le seuil, sans appel LLM
+- [x] Garde-fous : contexte uniquement, langue du visiteur, anti-injection, longueur max
+- [x] Mémoire courte de conversation (derniers échanges)
+- [x] Persistance Conversation / Message (scores, provider, fallback)
+- [x] Playground interne + inspecteur de retrieval (scores, chunks, curseur de seuil)
 
 ## Phase 5 (P4) — Widget embeddable
-- [ ] Source `widget/` TypeScript vanilla, zéro dépendance
-- [ ] Build esbuild → `public/widget/v1.js` (IIFE, minifié)
-- [ ] `size-limit` bloquant en CI (≤ 5 KB gzip)
-- [ ] Shadow DOM (isolation CSS totale)
-- [ ] Endpoint public de config de l'agent
-- [ ] Chat SSE + rendu des citations
-- [ ] `visitorId` persistant (localStorage avec try/catch)
-- [ ] 8 états fidèles au LOT 2 (fermé, accueil, streaming, citations, fallback, mode humain, quota, mobile plein écran)
-- [ ] Feedback 👍 / 👎 par réponse
-- [ ] Sécurité : allowlist `Origin`, CORS, rate limit clé publique + IP
-- [ ] A11y : focus trap, Esc, ARIA live, clavier, `reduced-motion`
-- [ ] Contraste automatique du texte selon la couleur du client
-- [ ] Widget designer (couleur, avatar, position, accueil, placeholder, badge, style d'en-tête)
-- [ ] Aperçu live desktop / mobile dans le dashboard
-- [ ] Snippet d'embed en une ligne + bouton copier
-- [ ] Page de test « site client » Atelier Lune (démo + tests e2e)
+- [x] Source `widget/` TypeScript vanilla, zéro dépendance
+- [x] Build esbuild → `public/widget/v1.js` (IIFE, minifié)
+- [x] `size-limit` bloquant en CI (≤ 5 KB gzip)
+- [x] Shadow DOM (isolation CSS totale)
+- [x] Endpoint public de config de l'agent
+- [x] Chat SSE + rendu des citations
+- [x] `visitorId` persistant (localStorage avec try/catch)
+- [x] 8 états fidèles au LOT 2 (fermé, accueil, streaming, citations, fallback, mode humain, quota, mobile plein écran)
+- [x] Feedback 👍 / 👎 par réponse
+- [x] Sécurité : allowlist `Origin`, CORS, rate limit clé publique + IP
+- [x] A11y : focus trap, Esc, ARIA live, clavier, `reduced-motion`
+- [x] Contraste automatique du texte selon la couleur du client
+- [x] Widget designer (couleur, avatar, position, accueil, placeholder, badge, style d'en-tête)
+- [x] Aperçu live desktop / mobile dans le dashboard
+- [x] Snippet d'embed en une ligne + bouton copier
+- [x] Page de test « site client » Atelier Lune (démo + tests e2e)
 
 ## Phase 6 (P5) — Dashboard, conversations, handoff, analytics
 - [ ] Liste des agents + état vide
