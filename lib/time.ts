@@ -1,5 +1,10 @@
 import * as React from "react";
 
+/** `n` jours avant maintenant — wrapper isolant `Date.now()` pour les règles de pureté React. */
+export function daysAgo(n: number): Date {
+  return new Date(Date.now() - n * 86_400_000);
+}
+
 /** Horloge partagée qui tick toutes les `intervalMs` — base pour tout affichage de temps relatif. */
 export function useNow(intervalMs = 30_000) {
   const [now, setNow] = React.useState(() => Date.now());

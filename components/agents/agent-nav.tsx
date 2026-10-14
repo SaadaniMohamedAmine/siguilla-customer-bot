@@ -1,32 +1,44 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 const TABS = [
-  { href: "sources", label: "Sources" },
-  { href: "playground", label: "Playground" },
-  { href: "widget", label: "Widget" },
-  { href: "settings", label: "Settings" },
+  { key: "overview", href: "" },
+  { key: "sources", href: "sources" },
+  { key: "playground", href: "playground" },
+  { key: "widget", href: "widget" },
+  { key: "conversations", href: "/conversations" },
+  { key: "analytics", href: "/analytics" },
+  { key: "settings", href: "settings" },
 ] as const;
 
 export function AgentNav({ agentId }: { agentId: string }) {
+  const t = useTranslations("Agents.tabs");
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   return (
-    <nav className="mb-6 flex gap-6 border-b border-border">
+    <nav className="border-border mb-6 flex flex-wrap gap-6 border-b">
       {TABS.map((tab) => {
-        const href = `/agents/${agentId}/${tab.href}`;
-        const active = pathname === href;
+        const external = tab.href.startsWith("/");
+        const href = external
+          ? `${tab.href}?agent=${agentId}`
+          : `/agents/${agentId}${tab.href ? `/${tab.href}` : ""}`;
+        const active = external
+          ? pathname === tab.href && searchParams.get("agent") === agentId
+          : pathname === href;
         return (
           <Link
-            key={tab.href}
+            key={tab.key}
             href={href}
             className={cn(
-              "-mb-px border-b py-3 text-body transition-colors",
-              active ? "border-link text-text" : "border-transparent text-text-muted hover:text-text",
+              "text-body -mb-px border-b py-3 whitespace-nowrap transition-colors",
+              active ? "border-link text-text" : "text-text-muted hover:text-text border-transparent",
             )}
           >
-            {tab.label}
+            {t(tab.key)}
           </Link>
         );
       })}

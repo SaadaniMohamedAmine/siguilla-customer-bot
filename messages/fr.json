@@ -171,6 +171,77 @@
     "avatarTooLarge": "L'image doit faire moins de 512 Ko.",
     "avatarUnsupported": "Seules les images PNG, JPG ou WebP sont prises en charge."
   },
+  "Analytics": {
+    "title": "Analytique",
+    "allAgents": "Tous les agents",
+    "empty": "Les analytics apparaissent après vos premières conversations.",
+    "perDay": "Conversations par jour",
+    "citedSources": "Sources les plus citées",
+    "topQuestions": "Questions les plus posées",
+    "unanswered": "Questions sans réponse — ajoutez de la connaissance pour les couvrir",
+    "firstSeen": "Vue pour la première fois {date}",
+    "addSource": "Ajouter une source",
+    "kpi": {
+      "conversations": "Conversations",
+      "resolvedWithoutHuman": "Résolues sans humain",
+      "satisfaction": "Satisfaction",
+      "fallbackRate": "Taux de fallback"
+    }
+  },
+  "Agents": {
+    "title": "Agents",
+    "newAgent": "Nouvel agent",
+    "planLimit": "Votre forfait autorise {n} agent(s). Passez à un forfait supérieur pour en ajouter.",
+    "createCard": "Créer un nouvel agent",
+    "sources": "Sources",
+    "conversations30d": "Conversations (30j)",
+    "satisfaction30d": "Satisfaction (30j)",
+    "lastSync": "Dernière synchro",
+    "menu": {
+      "open": "Ouvrir",
+      "playground": "Playground",
+      "copyEmbed": "Copier le code d'intégration",
+      "delete": "Supprimer l'agent"
+    },
+    "deleteConfirmTitle": "Supprimer cet agent ?",
+    "deleteConfirmBody": "Saisissez {name} pour confirmer. Cette action est irréversible.",
+    "tabs": {
+      "overview": "Vue d'ensemble",
+      "sources": "Sources",
+      "playground": "Playground",
+      "widget": "Widget",
+      "conversations": "Conversations",
+      "analytics": "Analytique",
+      "settings": "Paramètres"
+    },
+    "draftBanner": "Cet agent est un brouillon. Publiez-le depuis l'onglet Widget pour répondre aux visiteurs.",
+    "overview": {
+      "recentConversations": "Conversations récentes",
+      "noneYet": "Aucune conversation pour l'instant.",
+      "knowledgeHealth": "Santé de la base",
+      "ready": "Prêtes",
+      "processing": "En traitement",
+      "failed": "Échecs",
+      "unanswered30d": "Questions sans réponse (30j)",
+      "viewAnalytics": "Voir les analytics",
+      "embed": "Intégration",
+      "customizeWidget": "Personnaliser le widget"
+    }
+  },
+  "Wizard": {
+    "stepIdentity": "Identité",
+    "stepSources": "Sources",
+    "stepWidget": "Widget et intégration",
+    "name": "Nom",
+    "description": "Description",
+    "instructions": "Instructions",
+    "instructionsHint": "Ton, périmètre, ce qu'il faut éviter.",
+    "instructionsPlaceholder": "Répondez en tant que concierge de {name}. Soyez chaleureux et concis. Ne négociez jamais les prix ; proposez un humain à la place.",
+    "skipForNow": "Passer pour l'instant",
+    "makeItLive": "Mettre en ligne",
+    "live": "Votre agent est en ligne.",
+    "addedSources": "Sources ajoutées"
+  },
   "Conversations": {
     "title": "Conversations",
     "search": "Rechercher dans les messages…",
