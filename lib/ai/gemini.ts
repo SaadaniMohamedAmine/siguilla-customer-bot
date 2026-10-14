@@ -42,7 +42,15 @@ export async function generateEmbedding(text: string): Promise<number[]> {
   return values;
 }
 
-/** Jusqu'à 50 textes par appel (à ajuster si l'API impose une autre limite — lire l'erreur). */
+/**
+ * Jusqu'à 50 textes par appel (limite réelle vérifiée empiriquement — l'API répond bien
+ * 1:1 à 50, voir DECISIONS.md). Chaque texte DOIT être enveloppé dans son propre objet
+ * `{ parts: [{ text }] }` : passer un tableau de strings brutes (`contents: string[]`,
+ * qui correspond au type `PartUnion[]` du SDK) fait que l'API traite tout le tableau
+ * comme les parts d'UN SEUL contenu et ne renvoie qu'un seul embedding — bug réel trouvé
+ * en testant la Phase 3 (le crawl Wikipedia produisait plusieurs chunks, et l'ingestion
+ * échouait silencieusement avec "Gemini batch embedding size mismatch").
+ */
 export async function generateEmbeddingsBatch(texts: string[]): Promise<number[][]> {
   const out: number[][] = [];
   const BATCH = 50;
@@ -51,7 +59,7 @@ export async function generateEmbeddingsBatch(texts: string[]): Promise<number[]
     const res = await withRetry(() =>
       genAI.models.embedContent({
         model: GEMINI_EMBEDDING_MODEL,
-        contents: slice,
+        contents: slice.map((text) => ({ parts: [{ text }] })),
         config: { outputDimensionality: EMBEDDING_OUTPUT_DIMENSIONALITY, taskType: "RETRIEVAL_DOCUMENT" },
       }),
     );
