@@ -3,7 +3,7 @@
 > Project 07 / 30 — *Every answer, sealed by its source.*
 > Références : [SIGILLA-PRD.md](./SIGILLA-PRD.md) · [Audit design](./project-07-sigilla-design-audit-recommendations.md)
 
-**Statut global : 84/151 tâches (56 %)** — cadrage, design, fichiers de délégation, Phase 2 (P1), Phase 3 (P2), Phase 4 (P3) et Phase 5 (P4) terminés.
+**Statut global : 99/151 tâches (66 %)** — cadrage, design, fichiers de délégation, Phase 2 (P1), Phase 3 (P2), Phase 4 (P3), Phase 5 (P4) et Phase 6 (P5) terminés.
 
 | Phase | Avancement |
 |---|---|
@@ -14,7 +14,7 @@
 | Phase 3 (P2) — Données et ingestion | 15/15 — 100 % ✅ |
 | Phase 4 (P3) — RAG et réponses | 10/10 — 100 % ✅ |
 | Phase 5 (P4) — Widget embeddable | 16/16 — 100 % ✅ |
-| Phase 6 (P5) — Dashboard, conversations, handoff, analytics | 0/15 — 0 % |
+| Phase 6 (P5) — Dashboard, conversations, handoff, analytics | 15/15 — 100 % ✅ |
 | Phase 7 (P6) — Billing, quotas, API | 0/12 — 0 % |
 | Phase 8 (P7) — Landing, démo, docs | 0/10 — 0 % |
 | Phase 9 (P8) — Qualité, sécurité, performance | 0/11 — 0 % |
@@ -123,21 +123,21 @@
 - [x] Page de test « site client » Atelier Lune (démo + tests e2e)
 
 ## Phase 6 (P5) — Dashboard, conversations, handoff, analytics
-- [ ] Liste des agents + état vide
-- [ ] Wizard 3 étapes (identité → sources → widget & embed)
-- [ ] Vue d'ensemble de l'agent (KPIs, santé de la base, carte embed)
-- [ ] Conversations : liste filtrable (statut, date, feedback, fallback, besoin d'un humain)
-- [ ] Conversation : détail, citations, scores, panneau de contexte
-- [ ] Polling live (3 s) des vues conversations
-- [ ] Human handoff : bouton visiteur + déclenchement auto après 2 fallbacks
-- [ ] Handoff : capture email visiteur (optionnelle)
-- [ ] Handoff : réponse agent humain + polling widget + « Resolve »
-- [ ] Badge des handoffs en attente dans la sidebar
-- [ ] Événements analytics (widget_open, message, feedback, handoff, fallback)
-- [ ] KPIs (conversations, résolution sans humain, satisfaction, taux de fallback)
-- [ ] Graphique conversations / jour + top questions
-- [ ] Sources les plus citées + questions sans réponse (bouton « Add source »)
-- [ ] Filtres 7 / 30 / 90 jours
+- [x] Liste des agents + état vide
+- [x] Wizard 3 étapes (identité → sources → widget & embed)
+- [x] Vue d'ensemble de l'agent (KPIs, santé de la base, carte embed)
+- [x] Conversations : liste filtrable (statut, date, feedback, fallback, besoin d'un humain)
+- [x] Conversation : détail, citations, scores, panneau de contexte
+- [x] Polling live (3 s) des vues conversations
+- [x] Human handoff : bouton visiteur + déclenchement auto après 2 fallbacks
+- [x] Handoff : capture email visiteur (optionnelle)
+- [x] Handoff : réponse agent humain + polling widget + « Resolve »
+- [x] Badge des handoffs en attente dans la sidebar
+- [x] Événements analytics (widget_open, message, feedback, handoff, fallback)
+- [x] KPIs (conversations, résolution sans humain, satisfaction, taux de fallback)
+- [x] Graphique conversations / jour + top questions
+- [x] Sources les plus citées + questions sans réponse (bouton « Add source »)
+- [x] Filtres 7 / 30 / 90 jours
 
 ## Phase 7 (P6) — Billing, quotas, API
 - [ ] Client Stripe lazy (repris d'Excerpta)
