@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 const MAX_MS = 10000;
-const MIN_MS = 700;
+const MIN_MS = 1000;
 
 /** Loader (4 barres) affiché pendant le passage d'une page à l'autre, au moins MIN_MS pour rester perceptible. */
 export function NavigationLoader() {
