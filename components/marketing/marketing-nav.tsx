@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
@@ -7,7 +7,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Wordmark } from "@/components/ui/wordmark";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import { GlobeIcon, SunIcon, MoonIcon } from "@/lib/icons";
+import { CloseIcon, GlobeIcon, SunIcon, MoonIcon } from "@/lib/icons";
 import { changeLocale } from "@/lib/actions/locale";
 import { useHydrated } from "@/lib/use-hydrated";
 import { cn } from "@/lib/utils";
@@ -25,6 +25,7 @@ export function MarketingNav() {
   // Le menu mobile est ouvert tant qu'on est sur la page où il a été ouvert (se referme tout seul à la navigation).
   const [openAt, setOpenAt] = useState<string | null>(null);
   const open = openAt === pathname;
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     let raf = 0;
@@ -47,6 +48,7 @@ export function MarketingNav() {
     };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
+    closeRef.current?.focus();
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
@@ -72,51 +74,141 @@ export function MarketingNav() {
   const solid = scrolled || open;
 
   return (
-    <header
-      className={cn(
-        "border-border sticky top-0 z-40 border-b transition-[background-color,box-shadow,backdrop-filter] duration-300",
-        solid ? "bg-bg/90 shadow-[0_10px_30px_-18px_rgb(0_0_0/0.7)] backdrop-blur-md" : "bg-bg/40 backdrop-blur-sm",
-      )}
-    >
-      <div
+    <>
+      <header
         className={cn(
-          "anim-keep mx-auto flex max-w-5xl items-center justify-between px-6 transition-[padding] duration-300",
-          scrolled ? "py-2.5" : "py-4",
+          "border-border sticky top-0 z-40 border-b transition-[background-color,box-shadow,backdrop-filter] duration-300",
+          solid
+            ? "bg-bg/90 shadow-[0_10px_30px_-18px_rgb(0_0_0/0.7)] backdrop-blur-md"
+            : "bg-bg/40 backdrop-blur-sm",
         )}
       >
-        <Link href="/" onClick={() => setOpenAt(null)}>
-          <Wordmark size="md" />
-        </Link>
+        <div
+          className={cn(
+            "anim-keep mx-auto flex max-w-5xl items-center justify-between px-6 transition-[padding] duration-300",
+            scrolled ? "py-2.5" : "py-4",
+          )}
+        >
+          <Link href="/" onClick={() => setOpenAt(null)}>
+            <Wordmark size="md" />
+          </Link>
 
-        <nav className="text-body text-text-muted hidden items-center gap-6 sm:flex" aria-label={t("main")}>
+          <nav className="text-body text-text-muted hidden items-center gap-6 sm:flex" aria-label={t("main")}>
+            {links.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={l.onClick}
+                aria-current={l.active ? "page" : undefined}
+                className={cn(
+                  "anim-keep group relative py-1 transition-colors duration-200",
+                  l.active ? "text-text" : "hover:text-text",
+                )}
+              >
+                {l.label}
+                <span
+                  aria-hidden
+                  className={cn(
+                    "anim-keep bg-accent absolute -bottom-0.5 left-0 h-0.5 w-full origin-left transition-transform duration-300 ease-[var(--ease-lux)]",
+                    l.active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
+                  )}
+                />
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => changeLocale(otherLocale)}
+              aria-label={t("switchTo")}
+              className={cn(iconBtn, "text-small")}
+            >
+              <Icon icon={GlobeIcon} size={16} />
+              <span className="uppercase">{otherLocale}</span>
+            </button>
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              aria-label={t("toggleTheme")}
+              className={iconBtn}
+            >
+              <Icon icon={mounted && theme === "dark" ? SunIcon : MoonIcon} size={18} />
+            </button>
+            <Link
+              href="/sign-in"
+              className="text-body text-text-muted hover:text-text hidden transition-colors sm:inline"
+            >
+              {t("signIn")}
+            </Link>
+            <Link href="/sign-up" className="hidden sm:block">
+              <Button size="sm">{t("startFree")}</Button>
+            </Link>
+
+            <button
+              type="button"
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              aria-label={open ? t("closeMenu") : t("openMenu")}
+              onClick={() => setOpenAt(open ? null : pathname)}
+              className="anim-keep relative -mr-1 size-8 sm:hidden"
+            >
+              <span className="bg-text absolute top-[10px] left-1.5 h-px w-5" />
+              <span className="bg-text absolute top-4 left-1.5 h-px w-5" />
+              <span className="bg-text absolute top-[22px] left-1.5 h-px w-5" />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Tiroir mobile : hors du <header> (le backdrop-filter y piégerait les éléments fixed). */}
+      <div
+        aria-hidden
+        onClick={() => setOpenAt(null)}
+        className={cn(
+          "anim-keep fixed inset-0 z-[2147483100] bg-black/55 backdrop-blur-[2px] transition-opacity duration-300 sm:hidden",
+          open ? "opacity-100" : "pointer-events-none opacity-0",
+        )}
+      />
+      <aside
+        id="mobile-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label={t("main")}
+        inert={!open}
+        className={cn(
+          "anim-keep border-border bg-surface fixed inset-y-0 right-0 z-[2147483101] flex w-[min(78vw,320px)] flex-col border-l px-6 shadow-[var(--shadow-lift)] transition-transform duration-300 ease-[var(--ease-lux)] sm:hidden",
+          open ? "translate-x-0" : "translate-x-full",
+        )}
+      >
+        <div className="flex h-[60px] items-center justify-end">
+          <button
+            ref={closeRef}
+            type="button"
+            aria-label={t("closeMenu")}
+            onClick={() => setOpenAt(null)}
+            className="anim-keep text-text-muted hover:text-text -mr-1 flex size-8 items-center justify-center transition-colors"
+          >
+            <Icon icon={CloseIcon} size={20} />
+          </button>
+        </div>
+
+        <nav className="mt-4 flex flex-col gap-5" aria-label={t("main")}>
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              onClick={l.onClick}
+              onClick={l.onClick ?? (() => setOpenAt(null))}
               aria-current={l.active ? "page" : undefined}
               className={cn(
-                "anim-keep group relative py-1 transition-colors duration-200",
-                l.active ? "text-text" : "hover:text-text",
+                "anim-keep text-body transition-colors",
+                l.active ? "text-link" : "text-text hover:text-link",
               )}
             >
               {l.label}
-              <span
-                aria-hidden
-                className={cn(
-                  "anim-keep bg-accent absolute -bottom-0.5 left-0 h-0.5 w-full origin-left transition-transform duration-300 ease-[var(--ease-lux)]",
-                  l.active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
-                )}
-              />
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-4">
-          <button onClick={() => changeLocale(otherLocale)} aria-label={t("switchTo")} className={cn(iconBtn, "text-small")}>
-            <Icon icon={GlobeIcon} size={16} />
-            <span className="uppercase">{otherLocale}</span>
-          </button>
+        <div className="border-border my-6 flex items-center gap-3 border-t pt-6">
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             aria-label={t("toggleTheme")}
@@ -124,74 +216,29 @@ export function MarketingNav() {
           >
             <Icon icon={mounted && theme === "dark" ? SunIcon : MoonIcon} size={18} />
           </button>
-          <Link href="/sign-in" className="text-body text-text-muted hover:text-text hidden transition-colors sm:inline">
-            {t("signIn")}
-          </Link>
-          <Link href="/sign-up" className="hidden sm:block">
-            <Button size="sm">{t("startFree")}</Button>
-          </Link>
-
           <button
-            type="button"
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            aria-label={open ? t("closeMenu") : t("openMenu")}
-            onClick={() => setOpenAt(open ? null : pathname)}
-            className="anim-keep relative -mr-1 size-8 sm:hidden"
+            onClick={() => changeLocale(otherLocale)}
+            aria-label={t("switchTo")}
+            className="anim-keep border-border bg-surface-raised text-text text-small hover:border-accent inline-flex items-center gap-1.5 rounded-full border px-3 py-1 uppercase transition-colors"
           >
-            <span
-              className={cn(
-                "anim-keep bg-text absolute left-1.5 h-px w-5 transition-all duration-300 ease-[var(--ease-lux)]",
-                open ? "top-4 rotate-45" : "top-[11px]",
-              )}
-            />
-            <span
-              className={cn(
-                "anim-keep bg-text absolute left-1.5 h-px w-5 transition-all duration-300 ease-[var(--ease-lux)]",
-                open ? "top-4 -rotate-45" : "top-[19px]",
-              )}
-            />
+            <Icon icon={GlobeIcon} size={14} />
+            {otherLocale}
           </button>
         </div>
-      </div>
 
-      <div
-        id="mobile-menu"
-        inert={!open}
-        className={cn(
-          "anim-keep grid transition-[grid-template-rows,opacity] duration-300 ease-[var(--ease-lux)] sm:hidden",
-          open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
-        )}
-      >
-        <div className="overflow-hidden">
-          <nav className="border-border mx-6 flex flex-col border-t pt-4 pb-6" aria-label={t("main")}>
-            {links.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                onClick={l.onClick ?? (() => setOpenAt(null))}
-                aria-current={l.active ? "page" : undefined}
-                className={cn(
-                  "anim-keep border-border text-h3 border-b py-3 font-serif transition-colors",
-                  l.active ? "text-link" : "text-text",
-                )}
-              >
-                {l.label}
-              </Link>
-            ))}
-            <div className="mt-6 flex flex-col gap-3">
-              <Link href="/sign-in" onClick={() => setOpenAt(null)}>
-                <Button variant="ghost" className="w-full">
-                  {t("signIn")}
-                </Button>
-              </Link>
-              <Link href="/sign-up" onClick={() => setOpenAt(null)}>
-                <Button className="w-full">{t("startFree")}</Button>
-              </Link>
-            </div>
-          </nav>
+        <div className="flex flex-col gap-4">
+          <Link
+            href="/sign-in"
+            onClick={() => setOpenAt(null)}
+            className="text-body text-text hover:text-link transition-colors"
+          >
+            {t("signIn")}
+          </Link>
+          <Link href="/sign-up" onClick={() => setOpenAt(null)}>
+            <Button className="w-full">{t("startFree")}</Button>
+          </Link>
         </div>
-      </div>
-    </header>
+      </aside>
+    </>
   );
 }
