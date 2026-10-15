@@ -1,7 +1,13 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/marketing/reveal";
+import { FeatureCard } from "@/components/marketing/feature-card";
+import { Icon } from "@/components/ui/icon";
+import { ArrowRightIcon } from "@/lib/icons";
 import { HeroWidgetMock } from "@/components/marketing/hero-widget-mock";
+
+const CTA = "group anim-keep hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]";
+const at = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
 
 const BRANDS = ["Atelier Lune", "Ledgerline", "Maison Verdant", "Aurelia Haute", "Vendôme & Cie"];
 
@@ -61,19 +67,33 @@ export default function LandingPage() {
         />
         <div className="relative mx-auto grid max-w-5xl gap-12 lg:grid-cols-2 lg:items-center">
           <div>
-            <p className="label-caps text-link">AI SUPPORT, WITH SOURCES</p>
+            <p className="label-caps text-link hero-in anim-keep" style={at(100)}>
+              AI SUPPORT, WITH SOURCES
+            </p>
             <h1 className="text-text mt-4 font-serif text-[44px] leading-[1.05] lg:text-[72px]">
-              Support, answered <span className="text-link block italic">with distinction.</span>
+              <span className="hero-in anim-keep block" style={at(220)}>
+                Support, answered
+              </span>
+              <span className="text-link hero-blur anim-keep block italic" style={at(420)}>
+                with distinction.
+              </span>
             </h1>
-            <p className="text-body-lg text-text-muted mt-6 max-w-md">
+            <p className="text-body-lg text-text-muted hero-in anim-keep mt-6 max-w-md" style={at(650)}>
               No-code AI support agents, trained on your docs and embedded anywhere in one line.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="hero-in anim-keep mt-8 flex flex-wrap gap-3" style={at(800)}>
               <Link href="/sign-up">
-                <Button size="lg">Start free</Button>
+                <Button size="lg" className={CTA}>
+                  Start free
+                  <Icon
+                    icon={ArrowRightIcon}
+                    size={16}
+                    className="anim-keep transition-transform duration-200 group-hover:translate-x-1"
+                  />
+                </Button>
               </Link>
               <Link href="/demo">
-                <Button size="lg" variant="ghost">
+                <Button size="lg" variant="ghost" className={CTA}>
                   Explore the live demo
                 </Button>
               </Link>
@@ -97,8 +117,8 @@ export default function LandingPage() {
 
       <section id="how" className="px-6 py-24">
         <div className="mx-auto grid max-w-5xl gap-10 sm:grid-cols-3">
-          {STEPS.map((s) => (
-            <Reveal key={s.n}>
+          {STEPS.map((s, i) => (
+            <Reveal key={s.n} delay={i * 120}>
               <p className="text-link font-serif text-[40px] italic">{s.n}</p>
               <h2 className="text-h3 text-text mt-2 font-serif">{s.title}</h2>
               <p className="text-body text-text-muted mt-2">{s.body}</p>
@@ -109,12 +129,9 @@ export default function LandingPage() {
 
       <section className="bg-surface px-6 py-24">
         <div className="mx-auto grid max-w-5xl gap-6 sm:grid-cols-2">
-          {FEATURES.map((f) => (
-            <Reveal key={f.title}>
-              <div className="border-border bg-bg rounded-md border p-6">
-                <h2 className="text-h3 text-text font-serif">{f.title}</h2>
-                <p className="text-body text-text-muted mt-2">{f.body}</p>
-              </div>
+          {FEATURES.map((f, i) => (
+            <Reveal key={f.title} delay={i * 100} className="h-full">
+              <FeatureCard title={f.title} body={f.body} />
             </Reveal>
           ))}
         </div>
@@ -138,10 +155,17 @@ export default function LandingPage() {
           <h2 className="text-h1 text-text font-serif">Your first agent is a few minutes away.</h2>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link href="/sign-up">
-              <Button size="lg">Start free</Button>
+              <Button size="lg" className={CTA}>
+                  Start free
+                  <Icon
+                    icon={ArrowRightIcon}
+                    size={16}
+                    className="anim-keep transition-transform duration-200 group-hover:translate-x-1"
+                  />
+                </Button>
             </Link>
             <Link href="/demo">
-              <Button size="lg" variant="ghost">
+              <Button size="lg" variant="ghost" className={CTA}>
                 Explore the live demo
               </Button>
             </Link>

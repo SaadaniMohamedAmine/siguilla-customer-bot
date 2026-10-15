@@ -139,8 +139,8 @@
     scrollbar-width: thin;
   }
   @media (prefers-reduced-motion: reduce) {
-    /* .wave-bar exclu : le loader doit rester animé, sinon il paraît figé. */
-    *:not(.wave-bar),
+    /* .wave-bar / .anim-keep exclus : le loader et les animations de la home restent animés malgré prefers-reduced-motion. */
+    *:not(.wave-bar):not(.anim-keep),
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
@@ -190,4 +190,45 @@ html:has([data-splash]) {
 @keyframes loader-fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* Animations de la home */
+@keyframes hero-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-blur {
+  from { opacity: 0; transform: translateY(14px); filter: blur(10px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+@keyframes mock-fade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes mock-type {
+  from { opacity: 0; clip-path: inset(0 100% 0 0); }
+  1% { opacity: 1; }
+  to { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+@keyframes mock-dots {
+  0% { opacity: 0; }
+  12%, 88% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes mock-dot {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(-3px); opacity: 1; }
+}
+@keyframes mock-stamp {
+  0% { opacity: 0; transform: scale(2.4); }
+  60% { opacity: 1; transform: scale(0.88); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.hero-in {
+  opacity: 0;
+  animation: hero-in 750ms var(--ease-lux) calc(var(--d, 0ms) + 700ms) both;
+}
+.hero-blur {
+  opacity: 0;
+  animation: hero-blur 900ms var(--ease-lux) calc(var(--d, 0ms) + 700ms) both;
 }
