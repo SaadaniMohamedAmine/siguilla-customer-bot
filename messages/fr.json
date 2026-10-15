@@ -1,4 +1,21 @@
 {
+  "Footer": {
+    "tagline": "Chaque réponse, scellée par sa source.",
+    "product": "Produit",
+    "how": "Comment ça marche",
+    "pricing": "Tarifs",
+    "docs": "Docs",
+    "demo": "Démo live",
+    "legal": "Légal",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "getStarted": "Commencer",
+    "signIn": "Se connecter",
+    "startFree": "Démarrer gratuitement",
+    "builtBy": "Créé par",
+    "rights": "© 2026 Sigilla",
+    "backToTop": "Haut de page"
+  },
   "Home": {
     "promiseQuote": "Chaque réponse, scellée par sa source.",
     "promiseLabel": "LA PROMESSE SIGILLA",

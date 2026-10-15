@@ -1,4 +1,21 @@
 {
+  "Footer": {
+    "tagline": "Every answer, sealed by its source.",
+    "product": "Product",
+    "how": "How it works",
+    "pricing": "Pricing",
+    "docs": "Docs",
+    "demo": "Live demo",
+    "legal": "Legal",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "getStarted": "Get started",
+    "signIn": "Sign in",
+    "startFree": "Start free",
+    "builtBy": "Built by",
+    "rights": "© 2026 Sigilla",
+    "backToTop": "Back to top"
+  },
   "Home": {
     "promiseQuote": "Every answer, sealed by its source.",
     "promiseLabel": "THE SIGILLA PROMISE",
