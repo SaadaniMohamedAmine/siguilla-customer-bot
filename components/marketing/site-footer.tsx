@@ -30,7 +30,7 @@ export async function SiteFooter() {
   const t = await getTranslations("Footer");
   const authorUrl = process.env.NEXT_PUBLIC_AUTHOR_URL;
   return (
-    <footer className="border-border relative overflow-hidden border-t px-6 pt-16">
+    <footer className="border-border relative overflow-hidden border-t px-6 pt-16 pb-0">
       <div className="relative z-10 mx-auto max-w-5xl">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
           <Reveal>
@@ -76,12 +76,11 @@ export async function SiteFooter() {
         </div>
       </div>
 
-      <span
-        aria-hidden
-        className="text-text pointer-events-none absolute inset-x-0 bottom-0 z-0 translate-y-[38%] text-center font-serif text-[clamp(6rem,24vw,20rem)] leading-none whitespace-nowrap opacity-[0.035] select-none"
-      >
-        Sigilla
-      </span>
+      <div aria-hidden className="relative mx-auto h-[clamp(4rem,11vw,9.5rem)] max-w-5xl overflow-hidden select-none">
+        <span className="text-text pointer-events-none absolute inset-x-0 top-0 block text-center font-serif text-[clamp(6rem,24vw,20rem)] leading-[0.85] whitespace-nowrap opacity-[0.05]">
+          Sigilla
+        </span>
+      </div>
     </footer>
   );
 }

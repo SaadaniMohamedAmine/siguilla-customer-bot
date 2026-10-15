@@ -16,6 +16,55 @@
     "rights": "© 2026 Sigilla",
     "backToTop": "Haut de page"
   },
+  "Pricing": {
+    "eyebrow": "TARIFS",
+    "title": "Des offres simples. Des réponses exceptionnelles.",
+    "subtitle": "Ancrez chaque réponse dans votre documentation.",
+    "testMode": "Mode démo — les paiements utilisent le mode test de Stripe. Carte :",
+    "mostChosen": "Le plus choisi",
+    "month": "/mois",
+    "startFree": "Démarrer gratuitement",
+    "upgradeTo": "Passer à {plan}",
+    "compareTitle": "Comparer les offres",
+    "compareFeature": "Fonctionnalité",
+    "rowAgents": "Agents",
+    "rowSources": "Sources par agent",
+    "rowPages": "Pages explorées par site",
+    "rowMessages": "Messages par mois",
+    "rowMembers": "Membres de l'équipe",
+    "rowHandoff": "Passage à un humain",
+    "rowNotion": "Connecteur Notion",
+    "rowApi": "Accès API",
+    "rowBadge": "Badge « Sealed by Sigilla » retirable",
+    "included": "Inclus",
+    "notIncluded": "Non inclus",
+    "honestTitle": "Comment les réponses restent honnêtes",
+    "honestBody": "Sous un seuil de similarité que vous contrôlez, votre agent refuse de répondre et propose un humain à la place.",
+    "faqTitle": "Questions fréquentes",
+    "readDocs": "Lire la documentation",
+    "faq": [
+      {
+        "q": "Comment fonctionnent les citations ?",
+        "a": "Chaque réponse s'appuie sur les sources que vous avez connectées. Chaque phrase qui utilise une source reçoit un sceau numéroté qui renvoie à la page ou à l'URL exacte."
+      },
+      {
+        "q": "Que se passe-t-il quand la réponse n'est pas dans mes docs ?",
+        "a": "Votre agent refuse plutôt que d'inventer, et propose de faire intervenir un humain de votre équipe."
+      },
+      {
+        "q": "Quelles sources puis-je connecter ?",
+        "a": "Des PDF, des sites jusqu'à 100 pages par site, et des espaces Notion (Pro et Team)."
+      },
+      {
+        "q": "Puis-je retirer le badge « Sealed by Sigilla » ?",
+        "a": "Oui, avec les offres Pro et Team."
+      },
+      {
+        "q": "Est-ce un vrai produit ?",
+        "a": "Sigilla est un projet de portfolio. Les paiements passent par le mode test de Stripe ; aucun débit réel."
+      }
+    ]
+  },
   "Home": {
     "promiseQuote": "Chaque réponse, scellée par sa source.",
     "promiseLabel": "LA PROMESSE SIGILLA",

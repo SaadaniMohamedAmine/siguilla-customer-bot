@@ -16,6 +16,55 @@
     "rights": "© 2026 Sigilla",
     "backToTop": "Back to top"
   },
+  "Pricing": {
+    "eyebrow": "PRICING",
+    "title": "Simple plans. Exceptional answers.",
+    "subtitle": "Ground every answer in your documentation.",
+    "testMode": "Demo mode — payments use Stripe test mode. Card:",
+    "mostChosen": "Most chosen",
+    "month": "/month",
+    "startFree": "Start free",
+    "upgradeTo": "Upgrade to {plan}",
+    "compareTitle": "Compare plans",
+    "compareFeature": "Feature",
+    "rowAgents": "Agents",
+    "rowSources": "Sources per agent",
+    "rowPages": "Pages crawled per website",
+    "rowMessages": "Messages per month",
+    "rowMembers": "Team members",
+    "rowHandoff": "Human handoff",
+    "rowNotion": "Notion connector",
+    "rowApi": "API access",
+    "rowBadge": "Removable “Sealed by Sigilla” badge",
+    "included": "Included",
+    "notIncluded": "Not included",
+    "honestTitle": "How answers stay honest",
+    "honestBody": "Below a similarity threshold you control, your agent declines to answer and offers a human instead.",
+    "faqTitle": "Frequently asked questions",
+    "readDocs": "Read the docs",
+    "faq": [
+      {
+        "q": "How do citations work?",
+        "a": "Every answer is grounded in the sources you connected. Each sentence that uses a source gets a numbered seal linking back to the exact page or URL."
+      },
+      {
+        "q": "What happens when the answer isn't in my docs?",
+        "a": "Your agent declines rather than guessing, and offers to bring in a human from your team."
+      },
+      {
+        "q": "Which sources can I connect?",
+        "a": "PDFs, websites up to 100 pages per site, and Notion workspaces (Pro and Team)."
+      },
+      {
+        "q": "Can I remove the “Sealed by Sigilla” badge?",
+        "a": "Yes, on Pro and Team."
+      },
+      {
+        "q": "Is this a real product?",
+        "a": "Sigilla is a portfolio project. Payments run in Stripe test mode; no real charges."
+      }
+    ]
+  },
   "Home": {
     "promiseQuote": "Every answer, sealed by its source.",
     "promiseLabel": "THE SIGILLA PROMISE",
