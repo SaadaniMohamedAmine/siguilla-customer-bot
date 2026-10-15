@@ -16,6 +16,18 @@
     "rights": "© 2026 Sigilla",
     "backToTop": "Haut de page"
   },
+  "SiteNav": {
+    "main": "Navigation principale",
+    "product": "Produit",
+    "pricing": "Tarifs",
+    "docs": "Docs",
+    "signIn": "Se connecter",
+    "startFree": "Démarrer gratuitement",
+    "toggleTheme": "Changer de thème",
+    "switchTo": "Changer de langue",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
+  },
   "ErrorPage": {
     "eyebrow": "ERREUR INATTENDUE",
     "home": "Retour à l'accueil",

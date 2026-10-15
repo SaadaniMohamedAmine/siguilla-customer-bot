@@ -16,6 +16,18 @@
     "rights": "© 2026 Sigilla",
     "backToTop": "Back to top"
   },
+  "SiteNav": {
+    "main": "Main navigation",
+    "product": "Product",
+    "pricing": "Pricing",
+    "docs": "Docs",
+    "signIn": "Sign in",
+    "startFree": "Start free",
+    "toggleTheme": "Toggle theme",
+    "switchTo": "Switch language",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
   "ErrorPage": {
     "eyebrow": "UNEXPECTED ERROR",
     "home": "Return home",
