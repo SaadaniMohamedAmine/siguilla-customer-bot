@@ -113,8 +113,8 @@ export default function LandingPage() {
           }}
         >
           <div className="anim-keep marquee-track flex w-max items-center group-hover:[animation-play-state:paused]">
-            {[0, 1].map((copy) => (
-              <ul key={copy} aria-hidden={copy === 1 || undefined} className="flex shrink-0 items-center">
+            {[0, 1, 2, 3].map((copy) => (
+              <ul key={copy} aria-hidden={copy > 0 || undefined} className="flex shrink-0 items-center">
                 {BRANDS.map((b) => (
                   <li key={b} className="flex items-center">
                     <span className="text-text-muted hover:text-text px-8 font-serif text-[22px] transition-colors duration-300">

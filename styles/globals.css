@@ -234,7 +234,7 @@ html:has([data-splash]) {
 }
 @keyframes marquee {
   from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  to { transform: translateX(-25%); }
 }
 .marquee-track {
   animation: marquee 35s linear infinite;
