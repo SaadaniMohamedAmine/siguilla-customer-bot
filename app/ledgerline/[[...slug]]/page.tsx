@@ -36,13 +36,13 @@ export default async function LedgerlinePage({ params }: PageProps<"/ledgerline/
       </header>
 
       <div className="mx-auto grid max-w-4xl gap-8 px-8 py-12 sm:grid-cols-[200px_1fr]">
-        <nav className="flex flex-col gap-1 text-sm">
+        <nav className="page-in anim-keep flex flex-col gap-1 text-sm">
           {pages.map((p) => (
             <Link
               key={p.slug}
               href={`/ledgerline/${p.slug}`}
-              className="rounded-sm px-2 py-1.5"
-              style={page === p.slug ? { background: "#EEF2F7", color: "#1F3A5F" } : { color: "#64748B" }}
+              className="anim-keep rounded-sm px-2 py-1.5 transition-colors duration-200 hover:bg-slate-50"
+              style={page === p.slug ? { background: "#EEF2F7", color: "#1F3A5F", boxShadow: "inset 2px 0 0 #1F3A5F" } : { color: "#64748B" }}
             >
               {p.title}
             </Link>
@@ -50,17 +50,18 @@ export default async function LedgerlinePage({ params }: PageProps<"/ledgerline/
         </nav>
 
         {!page ? (
-          <div>
+          <div className="page-in anim-keep">
             <h1 className="text-2xl font-semibold" style={{ color: "#1F3A5F" }}>
               How can we help?
             </h1>
             <p className="mt-2 text-slate-600">Invoicing, bank sync, VAT and account help for Ledgerline.</p>
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              {pages.map((p) => (
+              {pages.map((p, i) => (
                 <Link
                   key={p.slug}
                   href={`/ledgerline/${p.slug}`}
-                  className="rounded-md border border-slate-200 p-4 hover:border-slate-300"
+                  className="hero-in anim-keep rounded-md border border-slate-200 p-4 transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-[#1F3A5F] hover:shadow-md"
+                  style={{ "--d": `${150 + i * 70}ms` } as React.CSSProperties}
                 >
                   <p className="font-medium" style={{ color: "#1F3A5F" }}>
                     {p.title}
@@ -74,7 +75,7 @@ export default async function LedgerlinePage({ params }: PageProps<"/ledgerline/
             const content = getDemoContent("ledgerline", page);
             if (!content) notFound();
             return (
-              <article className="text-sm text-slate-600" style={{ lineHeight: 1.8 }}>
+              <article className="page-in anim-keep text-sm text-slate-600" style={{ lineHeight: 1.8 }}>
                 <p className="text-xs font-medium tracking-wide text-slate-400 uppercase">
                   {getDemoPageTitle("ledgerline", page)}
                 </p>

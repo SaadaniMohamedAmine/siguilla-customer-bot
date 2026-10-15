@@ -269,3 +269,13 @@ html:has([data-splash]) {
 @keyframes spin-slow {
   to { transform: rotate(360deg); }
 }
+@keyframes flicker {
+  0%, 100% { transform: scale(1, 1); opacity: 1; }
+  20% { transform: scale(0.94, 1.06) rotate(-1.5deg); opacity: 0.92; }
+  45% { transform: scale(1.04, 0.97) rotate(1deg); opacity: 1; }
+  70% { transform: scale(0.97, 1.04) rotate(-0.8deg); opacity: 0.94; }
+}
+@keyframes candle-glow {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(1.08); }
+}

@@ -15,21 +15,22 @@ function CandleIllustration() {
       <ellipse cx="110" cy="236" rx="70" ry="14" fill="#1A1214" opacity="0.08" />
       <rect x="55" y="70" width="110" height="150" rx="6" fill="#231A1C" />
       <rect x="55" y="70" width="110" height="150" rx="6" fill="none" stroke="#9E2F45" strokeOpacity="0.35" />
-      <rect x="72" y="92" width="76" height="40" fill="none" stroke="#D9B98C" strokeWidth="1" opacity="0.6" />
+      <rect x="64" y="92" width="92" height="40" fill="none" stroke="#D9B98C" strokeWidth="1" opacity="0.6" />
       <text
         x="110"
         y="117"
         textAnchor="middle"
-        fontSize="11"
+        fontSize="8.5"
         fill="#D9B98C"
         fontFamily="Georgia, serif"
-        letterSpacing="2"
+        letterSpacing="1.2"
       >
         CUIR &amp; ENCENS
       </text>
       <rect x="98" y="48" width="8" height="26" rx="3" fill="#E8DAC4" />
-      <path d="M102 24c6 8 6 14 0 20-6-6-6-12 0-20z" fill="#E8A23D" />
-      <path d="M102 30c3 5 3 8 0 11-3-3-3-6 0-11z" fill="#FCE2A1" />
+      <ellipse cx="102" cy="34" rx="22" ry="26" fill="#E8A23D" className="anim-keep" style={{ animation: "candle-glow 3s ease-in-out infinite", transformBox: "fill-box", transformOrigin: "center" }} opacity="0.35" />
+      <path d="M102 24c6 8 6 14 0 20-6-6-6-12 0-20z" fill="#E8A23D" className="anim-keep" style={{ animation: "flicker 2.4s ease-in-out infinite", transformBox: "fill-box", transformOrigin: "50% 100%" }} />
+      <path d="M102 30c3 5 3 8 0 11-3-3-3-6 0-11z" fill="#FCE2A1" className="anim-keep" style={{ animation: "flicker 1.8s ease-in-out infinite reverse", transformBox: "fill-box", transformOrigin: "50% 100%" }} />
     </svg>
   );
 }
@@ -44,9 +45,9 @@ function Header() {
         ATELIER LUNE
       </Link>
       <nav className="flex gap-6 text-sm" style={{ color: "#6B5A5D" }}>
-        <Link href="/atelier-lune/shipping">Shipping</Link>
-        <Link href="/atelier-lune/returns">Returns</Link>
-        <Link href="/atelier-lune/faq">FAQ</Link>
+        <Link href="/atelier-lune/shipping" className="link-draw anim-keep">Shipping</Link>
+        <Link href="/atelier-lune/returns" className="link-draw anim-keep">Returns</Link>
+        <Link href="/atelier-lune/faq" className="link-draw anim-keep">FAQ</Link>
       </nav>
     </header>
   );
@@ -66,25 +67,27 @@ export default async function AtelierLunePage({ params }: PageProps<"/atelier-lu
 
       {!page ? (
         <main className="mx-auto grid max-w-4xl gap-10 px-8 py-16 md:grid-cols-2">
-          <div className="mx-auto aspect-square w-full max-w-sm">
+          <div className="hero-in anim-keep mx-auto aspect-square w-full max-w-sm" style={{ "--d": "0ms" } as React.CSSProperties}>
             <CandleIllustration />
           </div>
           <div>
-            <p className="text-xs tracking-[0.2em] uppercase" style={{ color: "#8A2438" }}>
+            <p className="hero-in anim-keep text-xs tracking-[0.2em] uppercase" style={{ color: "#8A2438", "--d": "150ms" } as React.CSSProperties}>
               New season
             </p>
-            <h1 className="mt-2 text-3xl" style={{ lineHeight: 1.2 }}>
+            <h1 className="hero-in anim-keep mt-2 text-3xl" style={{ lineHeight: 1.2, "--d": "250ms" } as React.CSSProperties}>
               Bougie Cuir &amp; Encens Noir
             </h1>
-            <p className="mt-4 text-lg">145 CHF / 135 €</p>
-            <p className="mt-4 text-sm" style={{ color: "#6B5A5D", lineHeight: 1.7 }}>
+            <p className="hero-in anim-keep mt-4 text-lg" style={{ "--d": "350ms" } as React.CSSProperties}>
+              145 CHF / 135 €
+            </p>
+            <p className="hero-in anim-keep mt-4 text-sm" style={{ color: "#6B5A5D", lineHeight: 1.7, "--d": "450ms" } as React.CSSProperties}>
               Rapeseed and beeswax blend, cotton wick, 60-hour burn time. Notes of patinated leather, black
               incense and sandalwood.
             </p>
             <button
               type="button"
-              className="mt-6 rounded-sm px-6 py-3 text-sm"
-              style={{ background: "#9E2F45", color: "#F3ECE6" }}
+              className="hero-in anim-keep mt-6 rounded-sm px-6 py-3 text-sm transition-[transform,filter] duration-200 hover:-translate-y-0.5 hover:brightness-110 active:scale-[0.98]"
+              style={{ background: "#9E2F45", color: "#F3ECE6", "--d": "550ms" } as React.CSSProperties}
             >
               Add to cart
             </button>
