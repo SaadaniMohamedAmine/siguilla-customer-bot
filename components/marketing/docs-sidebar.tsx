@@ -15,17 +15,16 @@ type Group = { key: "start" | "widget" | "concepts" | "reference"; items: { slug
 export function DocsSidebar({
   groups,
   index,
-  defaultSlug,
 }: {
   groups: Group[];
   index: DocSearchEntry[];
-  defaultSlug: string;
 }) {
   const t = useTranslations("Docs");
   const pathname = usePathname();
-  const current = pathname.split("/")[2] ?? defaultSlug;
+  const current = pathname.split("/")[2] ?? null;
   const [open, setOpen] = useState(false);
-  const currentTitle = groups.flatMap((g) => g.items).find((i) => i.slug === current)?.title ?? t("browse");
+  const currentTitle =
+    groups.flatMap((g) => g.items).find((i) => i.slug === current)?.title ?? (current === null ? t("overview") : t("browse"));
 
   return (
     <aside className="lg:sticky lg:top-24 lg:self-start">
@@ -52,6 +51,17 @@ export function DocsSidebar({
         aria-label={t("browse")}
         className={cn("mt-6 flex-col gap-6 lg:flex", open ? "flex" : "hidden")}
       >
+        <Link
+          href="/docs"
+          onClick={() => setOpen(false)}
+          aria-current={current === null ? "page" : undefined}
+          className={cn(
+            "anim-keep text-small block rounded-sm px-3 py-1.5 transition-colors duration-200",
+            current === null ? "bg-tint text-text" : "text-text-muted hover:text-text hover:bg-surface",
+          )}
+        >
+          {t("overview")}
+        </Link>
         {groups.map((g) => (
           <div key={g.key}>
             <p className="label-caps mb-2 px-3">{t(`groups.${g.key}`)}</p>

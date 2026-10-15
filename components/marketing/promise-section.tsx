@@ -5,7 +5,7 @@ import { ArrowRightIcon, SealIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
 /** Ouvre le widget de la page en cliquant son lanceur (shadow DOM ouvert) ; sans effet s'il n'est pas monté. */
-function openConcierge() {
+export function openConcierge() {
   const hosts = document.querySelectorAll<HTMLElement>("body > div");
   for (const h of hosts) {
     if (!h.style.cssText.includes("2147483000")) continue;

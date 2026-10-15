@@ -22,7 +22,15 @@ function score(e: DocSearchEntry, terms: string[]) {
 }
 
 /** Palette de recherche locale (⌘K / Ctrl+K) sur l'index généré côté serveur à partir des pages Markdown. */
-export function DocsSearch({ index, className }: { index: DocSearchEntry[]; className?: string }) {
+export function DocsSearch({
+  index,
+  className,
+  hotkey = true,
+}: {
+  index: DocSearchEntry[];
+  className?: string;
+  hotkey?: boolean;
+}) {
   const t = useTranslations("Docs");
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -31,6 +39,7 @@ export function DocsSearch({ index, className }: { index: DocSearchEntry[]; clas
   const listRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
+    if (!hotkey) return;
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
@@ -39,7 +48,7 @@ export function DocsSearch({ index, className }: { index: DocSearchEntry[]; clas
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [hotkey]);
 
   const results = useMemo(() => {
     const terms = q.toLowerCase().split(/\s+/).filter(Boolean);

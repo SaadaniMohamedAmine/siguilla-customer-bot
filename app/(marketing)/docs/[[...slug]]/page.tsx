@@ -9,6 +9,7 @@ import { CodeBlock } from "@/components/marketing/code-block";
 import { DocBlockquote } from "@/components/marketing/doc-callout";
 import { DocHeading } from "@/components/marketing/doc-heading";
 import { DocsToc } from "@/components/marketing/docs-toc";
+import { DocsHome } from "@/components/marketing/docs-home";
 import { Icon } from "@/components/ui/icon";
 import { ArrowLeftIcon, ArrowRightIcon } from "@/lib/icons";
 
@@ -18,13 +19,15 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<"/docs/[[...slug]]">): Promise<Metadata> {
   const { slug } = await params;
-  const page = slug?.[0] ?? DOCS_ORDER[0];
+  if (!slug || slug.length === 0) return { title: "Docs" };
+  const page = slug[0];
   return { title: `${getDocTitle(page)} — Docs` };
 }
 
 export default async function DocsPage({ params }: PageProps<"/docs/[[...slug]]">) {
   const { slug } = await params;
-  const page = slug?.[0] ?? DOCS_ORDER[0];
+  if (!slug || slug.length === 0) return <DocsHome />;
+  const page = slug[0];
   const content = getDocContent(page);
   if (!content) notFound();
   const t = await getTranslations("Docs");
