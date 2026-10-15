@@ -115,6 +115,14 @@ export function MarketingNav() {
                 />
               </Link>
             ))}
+            {/* Lien classique : /demo ouvre une session de démonstration, pas de préchargement. */}
+            <a
+              href="/demo"
+              className="anim-keep hover:text-text relative inline-flex items-center gap-1.5 py-1 transition-colors duration-200"
+            >
+              <span aria-hidden className="bg-accent size-1.5 rounded-full" />
+              {t("demo")}
+            </a>
           </nav>
 
           <div className="flex items-center gap-4">
@@ -206,6 +214,10 @@ export function MarketingNav() {
               {l.label}
             </Link>
           ))}
+          <a href="/demo" className="anim-keep text-body text-text hover:text-link inline-flex items-center gap-2 transition-colors">
+            <span aria-hidden className="bg-accent size-1.5 rounded-full" />
+            {t("demo")}
+          </a>
         </nav>
 
         <div className="border-border my-6 flex items-center gap-3 border-t pt-6">

@@ -17,6 +17,7 @@
     "backToTop": "Haut de page"
   },
   "SiteNav": {
+    "demo": "Démo",
     "main": "Navigation principale",
     "product": "Produit",
     "pricing": "Tarifs",
@@ -208,6 +209,14 @@
     "mockSealed": "Scellé par 2 sources — {shipping} · FAQ"
   },
   "Home": {
+    "seeEyebrow": "VOYEZ-LE EN ACTION",
+    "seeTitle": "Le concierge, installé sur des sites réalistes.",
+    "seeBody": "Explorez deux marques fictives et posez n'importe quelle question à leur concierge.",
+    "seeOpen": "Ouvrir le site",
+    "atelierTag": "Bougies de luxe",
+    "ledgerTag": "Logiciel de comptabilité",
+    "atelierDesc": "Une boutique dont le concierge répond aux questions de livraison, de retours et d'entretien, avec ses sources.",
+    "ledgerDesc": "Un centre d'aide dont l'assistant répond aux questions de facturation, de TVA et de synchronisation bancaire.",
     "heroEyebrow": "SUPPORT IA, AVEC SOURCES",
     "heroLine1": "Un support qui répond",
     "heroLine2": "avec distinction.",
@@ -518,6 +527,8 @@
     },
     "draftBanner": "Cet agent est un brouillon. Publiez-le depuis l'onglet Widget pour répondre aux visiteurs.",
     "overview": {
+      "viewOnSite": "Voir cet agent en action sur son site",
+      "viewOnSiteBody": "Ouvrez la marque fictive où ce concierge est installé (nouvel onglet).",
       "recentConversations": "Conversations récentes",
       "noneYet": "Aucune conversation pour l'instant.",
       "knowledgeHealth": "Santé de la base",

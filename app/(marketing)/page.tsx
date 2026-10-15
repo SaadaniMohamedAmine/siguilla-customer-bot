@@ -18,7 +18,13 @@ import { HeroWidgetMock } from "@/components/marketing/hero-widget-mock";
 const CTA = "group anim-keep hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]";
 const at = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
 
-const BRANDS = ["Atelier Lune", "Ledgerline", "Maison Verdant", "Aurelia Haute", "Vendôme & Cie"];
+const BRANDS: { name: string; href?: string }[] = [
+  { name: "Atelier Lune", href: "/atelier-lune" },
+  { name: "Ledgerline", href: "/ledgerline" },
+  { name: "Maison Verdant" },
+  { name: "Aurelia Haute" },
+  { name: "Vendôme & Cie" },
+];
 
 const FEATURES = [
   { icon: SealIcon, visual: <CitedVisual /> },
@@ -103,10 +109,18 @@ export default async function LandingPage() {
             {[0, 1, 2, 3].map((copy) => (
               <ul key={copy} aria-hidden={copy > 0 || undefined} className="flex shrink-0 items-center">
                 {BRANDS.map((b) => (
-                  <li key={b} className="flex items-center">
-                    <span className="text-text-muted hover:text-text px-8 font-serif text-[22px] transition-colors duration-300">
-                      {b}
-                    </span>
+                  <li key={b.name} className="flex items-center">
+                    {b.href ? (
+                      <Link
+                        href={b.href}
+                        tabIndex={copy > 0 ? -1 : undefined}
+                        className="anim-keep text-text-muted hover:text-link px-8 font-serif text-[22px] underline decoration-transparent decoration-1 underline-offset-8 transition-colors duration-300 hover:decoration-current"
+                      >
+                        {b.name}
+                      </Link>
+                    ) : (
+                      <span className="text-text-muted px-8 font-serif text-[22px]">{b.name}</span>
+                    )}
                     <span aria-hidden className="bg-accent size-1 rotate-45" />
                   </li>
                 ))}
@@ -131,6 +145,74 @@ export default async function LandingPage() {
             {FEATURES.map((f, i) => (
               <Reveal key={features[i].title} delay={i * 100} className="h-full">
                 <FeatureCard title={features[i].title} body={features[i].body} icon={f.icon} visual={f.visual} />
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-surface px-6 py-24">
+        <div className="mx-auto max-w-5xl">
+          <Reveal className="text-center">
+            <p className="label-caps text-link">{t("seeEyebrow")}</p>
+            <h2 className="text-h1 text-text mx-auto mt-3 max-w-2xl font-serif">{t("seeTitle")}</h2>
+            <p className="text-body-lg text-text-muted mx-auto mt-4 max-w-xl">{t("seeBody")}</p>
+          </Reveal>
+          <div className="mt-14 grid gap-6 md:grid-cols-2">
+            {[
+              {
+                href: "/atelier-lune",
+                name: "Atelier Lune",
+                tag: t("atelierTag"),
+                desc: t("atelierDesc"),
+                bg: "linear-gradient(135deg, #F3E4D2, #FAF6F2)",
+                ink: "#1A1214",
+                accent: "#9E2F45",
+                font: "Georgia, serif",
+              },
+              {
+                href: "/ledgerline",
+                name: "Ledgerline",
+                tag: t("ledgerTag"),
+                desc: t("ledgerDesc"),
+                bg: "linear-gradient(135deg, #2C5282, #1F3A5F)",
+                ink: "#FFFFFF",
+                accent: "#7DD3FC",
+                font: "system-ui, sans-serif",
+              },
+            ].map((c, i) => (
+              <Reveal key={c.name} delay={i * 120} className="h-full">
+                <Link
+                  href={c.href}
+                  className="anim-keep group border-border block h-full overflow-hidden rounded-lg border transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[var(--shadow-lift)]"
+                >
+                  <div className="relative h-48 p-6" style={{ background: c.bg, color: c.ink, fontFamily: c.font }}>
+                    <p className="text-xs tracking-[0.25em] uppercase opacity-70">{c.tag}</p>
+                    <p className="mt-2 text-3xl">{c.name}</p>
+                    <span
+                      className="absolute right-5 bottom-5 flex size-11 items-center justify-center rounded-full text-sm text-white shadow-lg"
+                      style={{ background: "#9E2F45", fontFamily: "Georgia, serif" }}
+                    >
+                      S
+                    </span>
+                    <span
+                      aria-hidden
+                      className="anim-keep absolute right-5 bottom-5 size-11 rounded-full border-2"
+                      style={{ borderColor: c.accent, animation: "ping-soft 2.4s ease-out infinite" }}
+                    />
+                  </div>
+                  <div className="bg-bg flex items-center justify-between gap-4 p-5">
+                    <p className="text-body text-text-muted">{c.desc}</p>
+                    <span className="text-small text-link inline-flex shrink-0 items-center gap-1.5 font-medium">
+                      {t("seeOpen")}
+                      <Icon
+                        icon={ArrowRightIcon}
+                        size={14}
+                        className="anim-keep transition-transform duration-200 group-hover:translate-x-1"
+                      />
+                    </span>
+                  </div>
+                </Link>
               </Reveal>
             ))}
           </div>

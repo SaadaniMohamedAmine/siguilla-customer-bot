@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Icon } from "@/components/ui/icon";
-import { ArrowLeftIcon, SealIcon } from "@/lib/icons";
+import { ArrowLeftIcon, ArrowRightIcon, SealIcon } from "@/lib/icons";
 
 /** Bandeau Sigilla en haut des sites fictifs : indique que la marque est illustrative et que le concierge est propulsé par Sigilla. */
 export function DemoBanner() {
@@ -21,6 +21,19 @@ export function DemoBanner() {
           <span className="text-[#A8999A]"> · Illustrative brand — the concierge in the corner is powered by Sigilla.</span>
         </span>
       </p>
+      <div className="flex flex-wrap items-center gap-2">
+      {/* Lien classique : /demo est une route qui ouvre une session de démo, on évite tout préchargement. */}
+      <a
+        href="/demo"
+        className="group inline-flex items-center gap-1.5 rounded-full border border-[#2E2225] px-3 py-1 transition-colors duration-200 hover:border-[#9E2F45]"
+      >
+        Open the demo dashboard
+        <Icon
+          icon={ArrowRightIcon}
+          size={13}
+          className="text-[#E3B3BA] transition-transform duration-200 group-hover:translate-x-0.5"
+        />
+      </a>
       <Link
         href="/"
         className="group inline-flex items-center gap-1.5 rounded-full border border-[#2E2225] px-3 py-1 transition-colors duration-200 hover:border-[#9E2F45]"
@@ -32,6 +45,7 @@ export function DemoBanner() {
         />
         Back to Sigilla
       </Link>
+      </div>
     </div>
   );
 }

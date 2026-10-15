@@ -17,6 +17,7 @@
     "backToTop": "Back to top"
   },
   "SiteNav": {
+    "demo": "Demo",
     "main": "Main navigation",
     "product": "Product",
     "pricing": "Pricing",
@@ -208,6 +209,14 @@
     "mockSealed": "Sealed by 2 sources — {shipping} · FAQ"
   },
   "Home": {
+    "seeEyebrow": "SEE IT IN ACTION",
+    "seeTitle": "The concierge, installed on real-looking sites.",
+    "seeBody": "Explore two illustrative brands and ask their concierge anything.",
+    "seeOpen": "Open the live site",
+    "atelierTag": "Luxury candles",
+    "ledgerTag": "Accounting software",
+    "atelierDesc": "A boutique whose concierge answers shipping, returns and care questions, with sources.",
+    "ledgerDesc": "A help center whose assistant answers invoicing, VAT and bank sync questions.",
     "heroEyebrow": "AI SUPPORT, WITH SOURCES",
     "heroLine1": "Support, answered",
     "heroLine2": "with distinction.",
@@ -518,6 +527,8 @@
     },
     "draftBanner": "This agent is a draft. Publish it from the Widget tab to answer visitors.",
     "overview": {
+      "viewOnSite": "See this agent live on its site",
+      "viewOnSiteBody": "Open the illustrative brand where this concierge is installed (new tab).",
       "recentConversations": "Recent conversations",
       "noneYet": "No conversations yet.",
       "knowledgeHealth": "Knowledge health",
