@@ -7,10 +7,12 @@ import { cn } from "@/lib/utils";
 export function DocHeading({
   level,
   id,
+  prefix,
   children,
 }: {
   level: 2 | 3;
   id: string;
+  prefix?: React.ReactNode;
   children: React.ReactNode;
 }) {
   const t = useTranslations("Docs");
@@ -37,6 +39,7 @@ export function DocHeading({
         level === 2 ? "text-h2 mt-12" : "text-h3 mt-8",
       )}
     >
+      {prefix}
       {children}
       <a
         href={`#${id}`}

@@ -16,6 +16,67 @@
     "rights": "© 2026 Sigilla",
     "backToTop": "Haut de page"
   },
+  "Legal": {
+    "eyebrow": "LÉGAL",
+    "lastUpdated": "Dernière mise à jour",
+    "alsoRead": "À lire aussi",
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "updated": "15 octobre 2026",
+      "intro": "Ce que Sigilla collecte, qui nous aide à le faire fonctionner, et comment vous gardez le contrôle de vos données.",
+      "glanceTitle": "En bref",
+      "glance": [
+        "Nous ne vendons jamais vos données.",
+        "Aucun cookie publicitaire, aucun suivi inter-sites.",
+        "Vous pouvez supprimer votre compte et votre organisation à tout moment depuis les Paramètres."
+      ],
+      "processTitle": "Ce que nous traitons",
+      "processBody": "Les informations de votre compte (nom, e-mail), le contenu des sources que vous importez ou connectez (PDF, pages explorées, pages Notion), les conversations de vos visiteurs avec vos agents, et une adresse e-mail facultative qu'un visiteur peut laisser en demandant un humain.",
+      "subTitle": "Sous-traitants",
+      "colService": "Service",
+      "colRole": "Rôle",
+      "processors": [
+        {
+          "name": "Vercel",
+          "role": "Hébergement et stockage de fichiers"
+        },
+        {
+          "name": "Neon",
+          "role": "Base de données"
+        },
+        {
+          "name": "Groq · Google Gemini",
+          "role": "Génération des réponses et embeddings"
+        },
+        {
+          "name": "Stripe",
+          "role": "Paiements (mode test uniquement)"
+        },
+        {
+          "name": "Notion",
+          "role": "Uniquement si vous connectez un espace"
+        }
+      ],
+      "dontTitle": "Ce que nous ne faisons pas",
+      "dontBody": "Nous ne vendons jamais vos données et n'utilisons pas de cookies publicitaires.",
+      "widgetTitle": "Le widget",
+      "widgetBody": "Le widget intégrable stocke un identifiant de visiteur aléatoire dans le <code>localStorage</code> du navigateur de vos visiteurs afin de poursuivre une conversation entre les rechargements de page. Aucun suivi inter-sites.",
+      "deleteTitle": "Suppression de vos données",
+      "deleteBody": "Vous pouvez supprimer votre compte et votre organisation à tout moment depuis les Paramètres.",
+      "contactTitle": "Contact"
+    },
+    "terms": {
+      "title": "Conditions d'utilisation",
+      "updated": "15 octobre 2026",
+      "intro": "Les règles d'utilisation de Sigilla.",
+      "acceptableTitle": "Utilisation acceptable",
+      "acceptableBody": "N'importez pas et n'explorez pas de contenu illégal, contrefait, ou que vous n'avez pas le droit d'utiliser.",
+      "limitsTitle": "Limites des offres",
+      "limitsBody": "Chaque offre a des limites sur les agents, les sources, les pages explorées et les messages mensuels — voir <pricing>Tarifs</pricing>.",
+      "changesTitle": "Modifications",
+      "changesBody": "Ces conditions peuvent être mises à jour de temps à autre."
+    }
+  },
   "Docs": {
     "search": "Rechercher dans les docs",
     "searchPlaceholder": "Rechercher dans la documentation…",

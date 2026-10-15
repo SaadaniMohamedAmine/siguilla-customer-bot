@@ -16,6 +16,67 @@
     "rights": "© 2026 Sigilla",
     "backToTop": "Back to top"
   },
+  "Legal": {
+    "eyebrow": "LEGAL",
+    "lastUpdated": "Last updated",
+    "alsoRead": "Also read",
+    "privacy": {
+      "title": "Privacy Policy",
+      "updated": "October 15, 2026",
+      "intro": "What Sigilla collects, who helps us run it, and how you stay in control of your data.",
+      "glanceTitle": "At a glance",
+      "glance": [
+        "We never sell your data.",
+        "No advertising cookies, no cross-site tracking.",
+        "You can delete your account and organization at any time from Settings."
+      ],
+      "processTitle": "What we process",
+      "processBody": "Your account details (name, email), the content of the sources you upload or connect (PDFs, crawled pages, Notion pages), conversations your visitors have with your agents, and an optional email address a visitor may leave when requesting a human.",
+      "subTitle": "Sub-processors",
+      "colService": "Service",
+      "colRole": "Role",
+      "processors": [
+        {
+          "name": "Vercel",
+          "role": "Hosting and file storage"
+        },
+        {
+          "name": "Neon",
+          "role": "Database"
+        },
+        {
+          "name": "Groq · Google Gemini",
+          "role": "Answer generation and embeddings"
+        },
+        {
+          "name": "Stripe",
+          "role": "Payments (test mode only)"
+        },
+        {
+          "name": "Notion",
+          "role": "Only if you connect a workspace"
+        }
+      ],
+      "dontTitle": "What we don't do",
+      "dontBody": "We never sell your data, and we don't use advertising cookies.",
+      "widgetTitle": "The widget",
+      "widgetBody": "The embeddable widget stores a random visitor identifier in your visitors' browser <code>localStorage</code> to keep a conversation going across page reloads. No cross-site tracking.",
+      "deleteTitle": "Deleting your data",
+      "deleteBody": "You can delete your account and organization at any time from Settings.",
+      "contactTitle": "Contact"
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "updated": "October 15, 2026",
+      "intro": "The rules for using Sigilla.",
+      "acceptableTitle": "Acceptable use",
+      "acceptableBody": "Don't upload or crawl content that is illegal, infringing, or that you don't have the right to use.",
+      "limitsTitle": "Plan limits",
+      "limitsBody": "Each plan has limits on agents, sources, crawled pages and monthly messages — see <pricing>Pricing</pricing>.",
+      "changesTitle": "Changes",
+      "changesBody": "These terms may be updated from time to time."
+    }
+  },
   "Docs": {
     "search": "Search docs",
     "searchPlaceholder": "Search the documentation…",
