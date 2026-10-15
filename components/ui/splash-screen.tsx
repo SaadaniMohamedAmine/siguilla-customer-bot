@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Wordmark } from "@/components/ui/wordmark";
 
-const MIN_MS = 900;
+const MIN_MS = 1000;
 const FADE_MS = 500;
 
 /** Écran de chargement affiché au chargement / rechargement complet de la page (pas à la navigation interne). */
@@ -51,10 +51,11 @@ export function SplashScreen() {
 
   return (
     <div
+      data-splash
       role="status"
       aria-live="polite"
       aria-label={t("loading")}
-      className={`fixed inset-0 z-[100] flex items-center justify-center bg-bg transition-opacity ease-[var(--ease-lux)] ${
+      className={`fixed inset-0 z-[2147483647] flex items-center justify-center bg-bg transition-opacity ease-[var(--ease-lux)] ${
         phase === "leaving" ? "pointer-events-none opacity-0" : "opacity-100"
       }`}
       style={{ transitionDuration: `${FADE_MS}ms`, transitionDelay: phase === "leaving" ? "150ms" : "0ms" }}
