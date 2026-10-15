@@ -56,3 +56,41 @@ export function slugifyHeading(text: string): string {
     .trim()
     .replace(/\s+/g, "-");
 }
+
+/** Groupes de la sidebar ; `key` correspond à Docs.groups.* dans messages/. */
+export const DOC_GROUPS: { key: "start" | "widget" | "concepts" | "reference"; slugs: (typeof DOCS_ORDER)[number][] }[] = [
+  { key: "start", slugs: ["getting-started", "sources"] },
+  { key: "widget", slugs: ["embed", "customize"] },
+  { key: "concepts", slugs: ["answers", "citations", "handoff", "analytics"] },
+  { key: "reference", slugs: ["api", "plans"] },
+];
+
+export type DocSearchEntry = { slug: string; page: string; heading: string | null; id: string | null; text: string };
+
+function plain(md: string) {
+  return md
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/[*_>#|-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Index de recherche local (une entrée par page et par section `##`), calculé côté serveur à partir des .md. */
+export function getDocSearchIndex(): DocSearchEntry[] {
+  const out: DocSearchEntry[] = [];
+  for (const slug of DOCS_ORDER) {
+    const md = getDocContent(slug);
+    if (!md) continue;
+    const page = getDocTitle(slug);
+    const parts = md.split(/^##\s+/m);
+    out.push({ slug, page, heading: null, id: null, text: plain(parts[0].replace(/^#\s+.*$/m, "")).slice(0, 220) });
+    for (const part of parts.slice(1)) {
+      const nl = part.indexOf("\n");
+      const heading = part.slice(0, nl).trim();
+      out.push({ slug, page, heading, id: slugifyHeading(heading), text: plain(part.slice(nl)).slice(0, 220) });
+    }
+  }
+  return out;
+}

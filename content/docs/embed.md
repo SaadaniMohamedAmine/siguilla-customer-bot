@@ -8,11 +8,15 @@ Copy the one-line snippet from the Widget tab and paste it before `</body>`:
 
 ## Allowed domains
 
-For security, set the domains where your widget is allowed to appear (Settings on the agent, or the Widget tab). Leave it empty during testing — the dashboard shows a warning that your widget can be embedded anywhere until you restrict it.
+For security, set the domains where your widget is allowed to appear (Settings on the agent, or the Widget tab). Leave it empty during testing.
+
+> **Warning** — until you restrict the allowed domains, your widget can be embedded anywhere. The dashboard shows a warning while the list is empty.
 
 ## Caching
 
 The widget's configuration is cached for 60 seconds. Changes you publish from the Widget designer can take up to a minute to reach visitors already on your site.
+
+> **Tip** — refresh the page after a minute to see your latest widget changes.
 
 ## Content Security Policy
 

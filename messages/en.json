@@ -16,6 +16,25 @@
     "rights": "© 2026 Sigilla",
     "backToTop": "Back to top"
   },
+  "Docs": {
+    "search": "Search docs",
+    "searchPlaceholder": "Search the documentation…",
+    "searchHint": "Type to search pages and sections. Use the arrow keys and Enter to open a result.",
+    "noResults": "No results for “{q}”.",
+    "browse": "Browse docs",
+    "onThisPage": "On this page",
+    "previous": "Previous",
+    "next": "Next",
+    "pagination": "Documentation pages",
+    "copyLink": "Copy link to this section",
+    "linkCopied": "Copied",
+    "groups": {
+      "start": "Start",
+      "widget": "Widget",
+      "concepts": "Concepts",
+      "reference": "Reference"
+    }
+  },
   "Pricing": {
     "eyebrow": "PRICING",
     "title": "Simple plans. Exceptional answers.",

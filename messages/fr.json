@@ -16,6 +16,25 @@
     "rights": "© 2026 Sigilla",
     "backToTop": "Haut de page"
   },
+  "Docs": {
+    "search": "Rechercher dans les docs",
+    "searchPlaceholder": "Rechercher dans la documentation…",
+    "searchHint": "Tapez pour chercher des pages et des sections. Utilisez les flèches et Entrée pour ouvrir un résultat.",
+    "noResults": "Aucun résultat pour « {q} ».",
+    "browse": "Parcourir les docs",
+    "onThisPage": "Sur cette page",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "pagination": "Pages de documentation",
+    "copyLink": "Copier le lien vers cette section",
+    "linkCopied": "Copié",
+    "groups": {
+      "start": "Démarrer",
+      "widget": "Widget",
+      "concepts": "Concepts",
+      "reference": "Référence"
+    }
+  },
   "Pricing": {
     "eyebrow": "TARIFS",
     "title": "Des offres simples. Des réponses exceptionnelles.",

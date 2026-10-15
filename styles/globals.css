@@ -251,3 +251,6 @@ html:has([data-splash]) {
   0%, 100% { transform: translateX(-50%) translateY(0); }
   50% { transform: translateX(-46%) translateY(10px); }
 }
+.page-in {
+  animation: mock-fade 500ms var(--ease-lux) both;
+}
