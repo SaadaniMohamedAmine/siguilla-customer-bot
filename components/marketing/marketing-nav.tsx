@@ -7,8 +7,10 @@ import { useLocale, useTranslations } from "next-intl";
 import { Wordmark } from "@/components/ui/wordmark";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import { CloseIcon, GlobeIcon, SunIcon, MoonIcon } from "@/lib/icons";
+import { CloseIcon, SunIcon, MoonIcon } from "@/lib/icons";
 import { changeLocale } from "@/lib/actions/locale";
+import { LanguageSwitcher } from "@/components/ui/language-switcher";
+import { locales } from "@/i18n/locales";
 import { useHydrated } from "@/lib/use-hydrated";
 import { cn } from "@/lib/utils";
 
@@ -70,7 +72,6 @@ export function MarketingNav() {
     { href: "/pricing", label: t("pricing"), active: pathname === "/pricing" },
     { href: "/docs", label: t("docs"), active: pathname.startsWith("/docs") },
   ];
-  const otherLocale = locale === "en" ? "fr" : "en";
   const solid = scrolled || open;
 
   return (
@@ -126,14 +127,7 @@ export function MarketingNav() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => changeLocale(otherLocale)}
-              aria-label={t("switchTo")}
-              className={cn(iconBtn, "text-small")}
-            >
-              <Icon icon={GlobeIcon} size={16} />
-              <span className="uppercase">{otherLocale}</span>
-            </button>
+            <LanguageSwitcher />
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               aria-label={t("toggleTheme")}
@@ -228,14 +222,26 @@ export function MarketingNav() {
           >
             <Icon icon={mounted && theme === "dark" ? SunIcon : MoonIcon} size={18} />
           </button>
-          <button
-            onClick={() => changeLocale(otherLocale)}
+          <div
+            role="group"
             aria-label={t("switchTo")}
-            className="anim-keep border-border bg-surface-raised text-text text-small hover:border-accent inline-flex items-center gap-1.5 rounded-full border px-3 py-1 uppercase transition-colors"
+            className="border-border bg-surface-raised inline-flex rounded-full border p-0.5"
           >
-            <Icon icon={GlobeIcon} size={14} />
-            {otherLocale}
-          </button>
+            {locales.map((l) => (
+              <button
+                key={l}
+                type="button"
+                aria-pressed={l === locale}
+                onClick={() => l !== locale && changeLocale(l)}
+                className={cn(
+                  "anim-keep text-small rounded-full px-3 py-1 uppercase transition-colors duration-200",
+                  l === locale ? "bg-accent text-on-accent" : "text-text-muted hover:text-text",
+                )}
+              >
+                {l}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="flex flex-col gap-4">

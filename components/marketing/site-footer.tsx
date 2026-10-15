@@ -2,7 +2,8 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Wordmark } from "@/components/ui/wordmark";
 import { Reveal } from "@/components/marketing/reveal";
-import { BackToTop, LocaleSwitch } from "@/components/marketing/footer-actions";
+import { BackToTop } from "@/components/marketing/footer-actions";
+import { LanguageSwitcher } from "@/components/ui/language-switcher";
 
 /** Lien de footer : soulignement accent qui se dessine au survol (span réel, pas de pseudo-élément). */
 function FooterLink({ href, children, external }: { href: string; children: React.ReactNode; external?: boolean }) {
@@ -76,7 +77,7 @@ export async function SiteFooter() {
         <div className="border-border mt-14 flex flex-wrap items-center justify-between gap-4 border-t py-6">
           <p className="text-small text-text-muted">{t("rights")}</p>
           <div className="flex items-center gap-6">
-            <LocaleSwitch />
+            <LanguageSwitcher side="top" />
             <BackToTop label={t("backToTop")} />
           </div>
         </div>

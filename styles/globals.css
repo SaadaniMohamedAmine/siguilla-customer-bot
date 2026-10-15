@@ -279,3 +279,21 @@ html:has([data-splash]) {
   0%, 100% { opacity: 0.35; transform: scale(1); }
   50% { opacity: 0.55; transform: scale(1.08); }
 }
+@keyframes menu-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+}
+@keyframes menu-in-up {
+  from { opacity: 0; transform: translateY(6px) scale(0.97); }
+}
+@keyframes menu-out {
+  to { opacity: 0; transform: translateY(-4px) scale(0.97); }
+}
+.menu-anim[data-state="open"] {
+  animation: menu-in 200ms var(--ease-lux) both;
+}
+.menu-anim[data-state="open"][data-side="top"] {
+  animation-name: menu-in-up;
+}
+.menu-anim[data-state="closed"] {
+  animation: menu-out 130ms ease-in both;
+}

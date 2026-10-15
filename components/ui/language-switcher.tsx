@@ -1,0 +1,79 @@
+"use client";
+import { useTransition } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Icon } from "@/components/ui/icon";
+import { CheckIcon, ChevronDownIcon, GlobeIcon } from "@/lib/icons";
+import { changeLocale } from "@/lib/actions/locale";
+import { locales, type Locale } from "@/i18n/locales";
+import { cn } from "@/lib/utils";
+
+const NAMES: Record<Locale, string> = { en: "English", fr: "Français" };
+
+/** Sélecteur de langue : pastille (globe + code + chevron) qui ouvre un menu aux couleurs du thème. */
+export function LanguageSwitcher({
+  side = "bottom",
+  align = "end",
+  className,
+}: {
+  side?: "top" | "bottom";
+  align?: "start" | "center" | "end";
+  className?: string;
+}) {
+  const locale = useLocale() as Locale;
+  const t = useTranslations("SiteNav");
+  const [pending, startTransition] = useTransition();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        aria-label={t("switchTo")}
+        className={cn(
+          "anim-keep group border-border bg-surface-raised text-text hover:border-accent text-small data-[state=open]:border-accent inline-flex h-8 items-center gap-1.5 rounded-full border pr-2.5 pl-3 transition-colors duration-200 outline-none",
+          pending && "opacity-70",
+          className,
+        )}
+      >
+        <Icon icon={GlobeIcon} size={15} className="text-link" />
+        <span className="font-medium uppercase">{locale}</span>
+        <Icon
+          icon={ChevronDownIcon}
+          size={14}
+          className="anim-keep text-text-muted transition-transform duration-300 group-data-[state=open]:rotate-180"
+        />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        side={side}
+        align={align}
+        sideOffset={8}
+        className="menu-anim anim-keep border-border min-w-[180px] rounded-md p-1.5"
+      >
+        {locales.map((l) => {
+          const active = l === locale;
+          return (
+            <DropdownMenuItem
+              key={l}
+              onSelect={() => {
+                if (!active) startTransition(() => changeLocale(l));
+              }}
+              className={cn("anim-keep justify-between rounded-sm py-2 transition-colors", active && "bg-tint")}
+            >
+              <span className="flex items-center gap-2.5">
+                <span
+                  className={cn(
+                    "border-border flex h-6 w-8 items-center justify-center rounded-sm border font-mono text-[10px] uppercase",
+                    active ? "border-accent text-link" : "text-text-muted",
+                  )}
+                >
+                  {l}
+                </span>
+                <span className={cn(active && "font-medium")}>{NAMES[l]}</span>
+              </span>
+              {active ? <Icon icon={CheckIcon} size={16} className="text-link" /> : null}
+            </DropdownMenuItem>
+          );
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
