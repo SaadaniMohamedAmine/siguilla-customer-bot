@@ -1,39 +1,21 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { ConnectVisual, EmbedVisual, HandoffVisual, ShapeVisual } from "@/components/marketing/step-visuals";
 
-const STEPS = [
-  {
-    n: "01",
-    title: "Connect your sources",
-    body: "Upload PDFs, crawl your website or connect Notion. Sigilla reads, splits and indexes everything.",
-    visual: <ConnectVisual />,
-  },
-  {
-    n: "02",
-    title: "Shape your agent",
-    body: "Give it a name, a tone and boundaries. Choose your colors and welcome message.",
-    visual: <ShapeVisual />,
-  },
-  {
-    n: "03",
-    title: "Embed in one line",
-    body: "Paste one script tag. Under 5 KB, isolated from your styles.",
-    visual: <EmbedVisual />,
-  },
-  {
-    n: "04",
-    title: "Your team steps in",
-    body: "Unanswered questions land in your inbox with the full conversation attached.",
-    visual: <HandoffVisual />,
-  },
-];
+const VISUALS = [<ConnectVisual key="1" />, <ShapeVisual key="2" />, <EmbedVisual key="3" />, <HandoffVisual key="4" />];
 
 const STEP_MS = 700;
 
 /** Trois étapes reliées par une ligne qui se dessine au scroll ; chaque étape s'allume quand la ligne l'atteint. */
 export function HowItWorks({ eyebrow, title }: { eyebrow: string; title: string }) {
+  const t = useTranslations("Home");
+  const STEPS = (t.raw("steps") as { title: string; body: string }[]).map((st, i) => ({
+    ...st,
+    n: String(i + 1).padStart(2, "0"),
+    visual: VISUALS[i],
+  }));
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 

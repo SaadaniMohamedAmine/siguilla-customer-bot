@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/ui/icon";
 import { SealIcon } from "@/lib/icons";
 
@@ -20,39 +21,42 @@ const Seal = ({ n }: { n: number }) => (
   </span>
 );
 
-export function CitedVisual() {
+export async function CitedVisual() {
+  const t = await getTranslations("HomeVisuals");
   return (
     <Frame>
       <p className="text-text text-[12px] leading-5">
-        Delivery takes 3–5 days
-        <Seal n={1} /> and duties are added at checkout
+        {t("cited1")}
+        <Seal n={1} /> {t("cited2")}
         <Seal n={2} />.
       </p>
       <div className="text-text-muted flex items-center gap-1.5 font-mono text-[10px]">
         <Icon icon={SealIcon} size={12} className="text-link" />
-        <span className="truncate">1 Shipping Policy · 2 FAQ</span>
+        <span className="truncate">1 {t("shipping")} · 2 FAQ</span>
       </div>
     </Frame>
   );
 }
 
-export function HandoffFeatureVisual() {
+export async function HandoffFeatureVisual() {
+  const t = await getTranslations("HomeVisuals");
   return (
     <Frame>
       <p className="border-border bg-bg text-text-muted w-fit rounded-sm border px-2.5 py-1.5 text-[12px]">
-        I can&apos;t find that in your docs.
+        {t("cantFind")}
       </p>
       <div className="flex items-center gap-2">
         <span className="text-warning border-warning/40 rounded-full border px-2 py-0.5 text-[9px] tracking-wide uppercase">
-          Handoff
+          {t("handoff")}
         </span>
-        <span className="text-text-muted text-[11px]">Bringing in your team…</span>
+        <span className="text-text-muted text-[11px]">{t("bringing")}</span>
       </div>
     </Frame>
   );
 }
 
-export function AnalyticsVisual() {
+export async function AnalyticsVisual() {
+  const t = await getTranslations("HomeVisuals");
   const bars = [35, 55, 42, 70, 50, 85, 62];
   return (
     <Frame>
@@ -67,22 +71,23 @@ export function AnalyticsVisual() {
           />
         ))}
       </div>
-      <p className="text-text-muted font-mono text-[10px]">12 unanswered · 94% resolved</p>
+      <p className="text-text-muted font-mono text-[10px]">{t("analytics")}</p>
     </Frame>
   );
 }
 
-export function SizeVisual() {
+export async function SizeVisual() {
+  const t = await getTranslations("HomeVisuals");
   return (
     <Frame>
       <div className="text-text flex items-baseline justify-between font-mono text-[11px]">
-        <span>4.5 KB</span>
-        <span className="text-text-muted">limit 5 KB</span>
+        <span>{t("size")}</span>
+        <span className="text-text-muted">{t("limit")}</span>
       </div>
       <div className="bg-border h-1.5 overflow-hidden rounded-full">
         <span className="anim-keep bg-accent block h-full w-0 rounded-full transition-[width] duration-[1400ms] ease-[var(--ease-lux)] group-data-[inview=true]:w-[90%]" />
       </div>
-      <p className="text-text-muted font-mono text-[10px]">0 dependencies · isolated in Shadow DOM</p>
+      <p className="text-text-muted font-mono text-[10px]">{t("deps")}</p>
     </Frame>
   );
 }

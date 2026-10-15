@@ -1,10 +1,13 @@
+import { getTranslations } from "next-intl/server";
+
 // Décalage : la page démarre sous le splash / loader de navigation (~0,8 à 1 s).
 const BASE = 700;
 const at = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
 const fade = (ms: number) => ({ animation: `mock-fade 600ms var(--ease-lux) ${ms + BASE}ms both` }) as React.CSSProperties;
 
 /** Mock du widget : la conversation se joue seule (chronologie 100 % CSS, sans JS). */
-export function HeroWidgetMock() {
+export async function HeroWidgetMock() {
+  const t = await getTranslations("HomeVisuals");
   return (
     <div
       className="hero-in anim-keep border-border overflow-hidden rounded-lg border shadow-[var(--shadow-lift)]"
@@ -17,7 +20,7 @@ export function HeroWidgetMock() {
         <span className="text-text-muted ml-3 font-mono text-[11px]">atelierlune.com</span>
       </div>
       <div className="relative h-[360px] bg-[#FAF6F2] p-6">
-        <p className="text-[11px] tracking-[0.2em] text-[#8A2438] uppercase">New season</p>
+        <p className="text-[11px] tracking-[0.2em] text-[#8A2438] uppercase">{t("newSeason")}</p>
         <p className="mt-2 font-serif text-2xl text-[#1A1214]">Bougie Cuir &amp; Encens Noir</p>
 
         <div
@@ -35,7 +38,7 @@ export function HeroWidgetMock() {
               className="anim-keep self-end rounded-md bg-[#F4EDE8] px-2.5 py-1.5 text-[12px] text-[#1A1214]"
               style={{ animation: `mock-type 800ms steps(28, end) ${1700 + BASE}ms both` }}
             >
-              Do your candles ship to Switzerland?
+              {t("mockQ")}
             </p>
 
             <div className="relative">
@@ -56,7 +59,7 @@ export function HeroWidgetMock() {
                 className="anim-keep rounded-md border border-[#E4D6CE] bg-white px-2.5 py-1.5 text-[12px] text-[#1A1214]"
                 style={fade(3800)}
               >
-                Yes — 3–5 business days, duties and VAT calculated at checkout
+                {t("mockA")}
                 <span
                   className="bg-accent text-on-accent anim-keep mx-[2px] inline-flex h-3.5 w-3.5 items-center justify-center rounded-full font-mono text-[9px]"
                   style={{ animation: `mock-stamp 500ms cubic-bezier(0.2, 0.9, 0.3, 1.2) ${4300 + BASE}ms both` }}
@@ -67,7 +70,7 @@ export function HeroWidgetMock() {
             </div>
 
             <p className="anim-keep border-t border-[#E4D6CE] pt-2 text-[10px] text-[#6B5A5D]" style={fade(4600)}>
-              Sealed by 2 sources — Shipping Policy · FAQ
+              {t("mockSealed", { shipping: t("shipping") })}
             </p>
           </div>
         </div>

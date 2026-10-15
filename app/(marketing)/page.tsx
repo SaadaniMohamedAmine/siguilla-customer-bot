@@ -21,30 +21,10 @@ const at = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
 const BRANDS = ["Atelier Lune", "Ledgerline", "Maison Verdant", "Aurelia Haute", "Vendôme & Cie"];
 
 const FEATURES = [
-  {
-    title: "Cited answers",
-    body: "Every sentence points to the page or URL it came from.",
-    icon: SealIcon,
-    visual: <CitedVisual />,
-  },
-  {
-    title: "Human handoff",
-    body: "When the answer isn't in your docs, your agent says so and brings in your team.",
-    icon: HumanIcon,
-    visual: <HandoffFeatureVisual />,
-  },
-  {
-    title: "Conversation analytics",
-    body: "See what customers ask, what's answered, and what's missing from your docs.",
-    icon: AnalyticsIcon,
-    visual: <AnalyticsVisual />,
-  },
-  {
-    title: "Under 5 KB",
-    body: "A dependency-free widget that won't slow your site down.",
-    icon: FlashIcon,
-    visual: <SizeVisual />,
-  },
+  { icon: SealIcon, visual: <CitedVisual /> },
+  { icon: HumanIcon, visual: <HandoffFeatureVisual /> },
+  { icon: AnalyticsIcon, visual: <AnalyticsVisual /> },
+  { icon: FlashIcon, visual: <SizeVisual /> },
 ];
 
 const JSON_LD = {
@@ -62,6 +42,7 @@ const JSON_LD = {
 
 export default async function LandingPage() {
   const t = await getTranslations("Home");
+  const features = t.raw("features") as { title: string; body: string }[];
   return (
     <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
@@ -74,23 +55,23 @@ export default async function LandingPage() {
         <div className="relative mx-auto grid max-w-5xl gap-12 lg:grid-cols-2 lg:items-center">
           <div>
             <p className="label-caps text-link hero-in anim-keep" style={at(100)}>
-              AI SUPPORT, WITH SOURCES
+              {t("heroEyebrow")}
             </p>
             <h1 className="text-text mt-4 font-serif text-[44px] leading-[1.05] lg:text-[72px]">
               <span className="hero-in anim-keep block" style={at(220)}>
-                Support, answered
+                {t("heroLine1")}
               </span>
               <span className="text-link hero-blur anim-keep block italic" style={at(420)}>
-                with distinction.
+                {t("heroLine2")}
               </span>
             </h1>
             <p className="text-body-lg text-text-muted hero-in anim-keep mt-6 max-w-md" style={at(650)}>
-              No-code AI support agents, trained on your docs and embedded anywhere in one line.
+              {t("heroBody")}
             </p>
             <div className="hero-in anim-keep mt-8 flex flex-wrap gap-3" style={at(800)}>
               <Link href="/sign-up">
                 <Button size="lg" className={CTA}>
-                  Start free
+                  {t("startFree")}
                   <Icon
                     icon={ArrowRightIcon}
                     size={16}
@@ -100,7 +81,7 @@ export default async function LandingPage() {
               </Link>
               <Link href="/demo">
                 <Button size="lg" variant="ghost" className={CTA}>
-                  Explore the live demo
+                  {t("exploreDemo")}
                 </Button>
               </Link>
             </div>
@@ -110,7 +91,7 @@ export default async function LandingPage() {
       </section>
 
       <section className="border-border border-y py-10">
-        <p className="label-caps text-text-muted text-center">Built for houses like</p>
+        <p className="label-caps text-text-muted text-center">{t("brandsLabel")}</p>
         <div
           className="group relative mt-6 overflow-hidden"
           style={{
@@ -133,7 +114,7 @@ export default async function LandingPage() {
             ))}
           </div>
         </div>
-        <p className="text-small text-text-muted/70 mt-6 text-center">Illustrative brands</p>
+        <p className="text-small text-text-muted/70 mt-6 text-center">{t("brandsNote")}</p>
       </section>
 
       <section id="how" className="scroll-mt-16 px-6 py-24">
@@ -148,8 +129,8 @@ export default async function LandingPage() {
           </Reveal>
           <div className="mt-14 grid gap-6 sm:grid-cols-2">
             {FEATURES.map((f, i) => (
-              <Reveal key={f.title} delay={i * 100} className="h-full">
-                <FeatureCard title={f.title} body={f.body} icon={f.icon} visual={f.visual} />
+              <Reveal key={features[i].title} delay={i * 100} className="h-full">
+                <FeatureCard title={features[i].title} body={features[i].body} icon={f.icon} visual={f.visual} />
               </Reveal>
             ))}
           </div>
@@ -184,7 +165,7 @@ export default async function LandingPage() {
               <div className="mt-8 flex flex-wrap justify-center gap-3">
                 <Link href="/sign-up">
                   <Button size="lg" className={CTA}>
-                    Start free
+                    {t("startFree")}
                     <Icon
                       icon={ArrowRightIcon}
                       size={16}
@@ -194,7 +175,7 @@ export default async function LandingPage() {
                 </Link>
                 <Link href="/demo">
                   <Button size="lg" variant="ghost" className={CTA}>
-                    Explore the live demo
+                    {t("exploreDemo")}
                   </Button>
                 </Link>
               </div>

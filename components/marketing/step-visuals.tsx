@@ -1,3 +1,5 @@
+"use client";
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { CheckIcon } from "@/lib/icons";
 
@@ -20,13 +22,14 @@ function Frame({ children, label }: { children: React.ReactNode; label?: string 
 }
 
 export function ConnectVisual() {
+  const t = useTranslations("HomeVisuals");
   const rows = [
     ["PDF", "catalogue-2026.pdf"],
     ["URL", "atelierlune.com/faq"],
-    ["Notion", "Shipping & returns"],
+    ["Notion", t("notionPage")],
   ];
   return (
-    <Frame label="Indexed">
+    <Frame label={t("indexed")}>
       {rows.map(([tag, name]) => (
         <div key={name} className="border-border bg-bg flex items-center gap-3 rounded-sm border px-2.5 py-1.5">
           <span className="text-link w-9 font-mono text-[10px]">{tag}</span>
@@ -39,6 +42,7 @@ export function ConnectVisual() {
 }
 
 export function ShapeVisual() {
+  const t = useTranslations("HomeVisuals");
   return (
     <Frame>
       <div className="flex items-center gap-2.5">
@@ -55,18 +59,19 @@ export function ShapeVisual() {
             <span key={c} className={`size-4 rounded-full ${c}`} />
           ),
         )}
-        <span className="text-text-muted ml-auto font-mono text-[10px]">Warm tone</span>
+        <span className="text-text-muted ml-auto font-mono text-[10px]">{t("warmTone")}</span>
       </div>
       <p className="border-border bg-bg text-text-muted rounded-sm border px-2.5 py-1.5 text-[12px]">
-        Welcome to Atelier Lune — how can I help?
+        {t("welcome")}
       </p>
     </Frame>
   );
 }
 
 export function EmbedVisual() {
+  const t = useTranslations("HomeVisuals");
   return (
-    <Frame label="< 5 KB">
+    <Frame label={t("under5")}>
       <pre className="text-text-muted overflow-hidden font-mono text-[11px] leading-5 whitespace-pre-wrap">
         <span className="text-link">&lt;script</span> src=<span className="text-success">&quot;/widget/v1.js&quot;</span>
         {"\n"}
@@ -80,25 +85,26 @@ export function EmbedVisual() {
 }
 
 export function HandoffVisual() {
+  const t = useTranslations("HomeVisuals");
   return (
-    <Frame label="Inbox">
+    <Frame label={t("inbox")}>
       <div className="border-border bg-bg flex items-center gap-2.5 rounded-sm border px-2.5 py-2">
         <span className="bg-surface-raised text-text-muted flex size-6 items-center justify-center rounded-full text-[10px]">
           M
         </span>
         <span className="min-w-0 flex-1">
-          <span className="text-text block truncate text-[12px]">Can I change my delivery address?</span>
-          <span className="text-text-muted block truncate text-[10px]">Not found in your docs</span>
+          <span className="text-text block truncate text-[12px]">{t("q1")}</span>
+          <span className="text-text-muted block truncate text-[10px]">{t("notFound")}</span>
         </span>
         <span className="text-warning border-warning/40 rounded-full border px-2 py-0.5 text-[9px] tracking-wide uppercase">
-          Handoff
+          {t("handoff")}
         </span>
       </div>
       <div className="border-border bg-bg flex items-center gap-2.5 rounded-sm border px-2.5 py-2 opacity-60">
         <span className="bg-surface-raised text-text-muted flex size-6 items-center justify-center rounded-full text-[10px]">
           J
         </span>
-        <span className="text-text-muted min-w-0 flex-1 truncate text-[12px]">Do you ship to Switzerland?</span>
+        <span className="text-text-muted min-w-0 flex-1 truncate text-[12px]">{t("q2")}</span>
         <Icon icon={CheckIcon} size={13} className="text-success" />
       </div>
     </Frame>
