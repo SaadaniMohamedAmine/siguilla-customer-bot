@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 const MAX_MS = 10000;
-const SHOW_DELAY_MS = 150;
+const SHOW_DELAY_MS = 80;
 
 /** Loader (4 barres) affiché pendant le passage d'une page à l'autre ; invisible si la navigation est rapide. */
 export function NavigationLoader() {
@@ -13,15 +13,16 @@ export function NavigationLoader() {
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
-      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const a = (e.target as Element | null)?.closest("a");
       if (!a || (a.target && a.target !== "_self") || a.hasAttribute("download")) return;
       const url = new URL(a.href, location.href);
       if (url.origin !== location.origin || url.pathname === location.pathname) return;
       setFrom(location.pathname);
     };
-    document.addEventListener("click", onClick);
-    return () => document.removeEventListener("click", onClick);
+    // Phase de capture : le <Link> de Next appelle preventDefault() et gère le clic lui-même.
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
   }, []);
 
   useEffect(() => {
