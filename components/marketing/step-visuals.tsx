@@ -70,11 +70,37 @@ export function EmbedVisual() {
       <pre className="text-text-muted overflow-hidden font-mono text-[11px] leading-5 whitespace-pre-wrap">
         <span className="text-link">&lt;script</span> src=<span className="text-success">&quot;/widget/v1.js&quot;</span>
         {"\n"}
-        {"        "}data-bot=<span className="text-success">&quot;pk_atelier&quot;</span>
+        {"  "}data-bot=<span className="text-success">&quot;pk_atelier&quot;</span>
         {"\n"}
-        {"        "}async<span className="text-link">&gt;&lt;/script&gt;</span>
+        {"  "}async<span className="text-link">&gt;&lt;/script&gt;</span>
         <span className="bg-accent anim-keep ml-0.5 inline-block h-3.5 w-1.5 translate-y-0.5" style={{ animation: "caret 1s steps(1) infinite" }} />
       </pre>
+    </Frame>
+  );
+}
+
+export function HandoffVisual() {
+  return (
+    <Frame label="Inbox">
+      <div className="border-border bg-bg flex items-center gap-2.5 rounded-sm border px-2.5 py-2">
+        <span className="bg-surface-raised text-text-muted flex size-6 items-center justify-center rounded-full text-[10px]">
+          M
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="text-text block truncate text-[12px]">Can I change my delivery address?</span>
+          <span className="text-text-muted block truncate text-[10px]">Not found in your docs</span>
+        </span>
+        <span className="text-warning border-warning/40 rounded-full border px-2 py-0.5 text-[9px] tracking-wide uppercase">
+          Handoff
+        </span>
+      </div>
+      <div className="border-border bg-bg flex items-center gap-2.5 rounded-sm border px-2.5 py-2 opacity-60">
+        <span className="bg-surface-raised text-text-muted flex size-6 items-center justify-center rounded-full text-[10px]">
+          J
+        </span>
+        <span className="text-text-muted min-w-0 flex-1 truncate text-[12px]">Do you ship to Switzerland?</span>
+        <Icon icon={CheckIcon} size={13} className="text-success" />
+      </div>
     </Frame>
   );
 }
