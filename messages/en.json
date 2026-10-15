@@ -16,6 +16,16 @@
     "rights": "© 2026 Sigilla",
     "backToTop": "Back to top"
   },
+  "NotFound": {
+    "eyebrow": "ERROR 404",
+    "title": "This page has left the house.",
+    "body": "The link may be broken, or the page may have moved. Let's get you back to something sealed.",
+    "home": "Return home",
+    "pricing": "Pricing",
+    "docs": "Docs",
+    "demo": "Live demo",
+    "quickLinks": "Helpful links"
+  },
   "Legal": {
     "eyebrow": "LEGAL",
     "lastUpdated": "Last updated",

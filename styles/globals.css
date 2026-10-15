@@ -266,3 +266,6 @@ html:has([data-splash]) {
     background-size: 100% 2px;
   }
 }
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}

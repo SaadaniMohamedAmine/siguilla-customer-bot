@@ -16,6 +16,16 @@
     "rights": "© 2026 Sigilla",
     "backToTop": "Haut de page"
   },
+  "NotFound": {
+    "eyebrow": "ERREUR 404",
+    "title": "Cette page a quitté la maison.",
+    "body": "Le lien est peut-être cassé, ou la page a été déplacée. Revenons à quelque chose de scellé.",
+    "home": "Retour à l'accueil",
+    "pricing": "Tarifs",
+    "docs": "Docs",
+    "demo": "Démo live",
+    "quickLinks": "Liens utiles"
+  },
   "Legal": {
     "eyebrow": "LÉGAL",
     "lastUpdated": "Dernière mise à jour",
