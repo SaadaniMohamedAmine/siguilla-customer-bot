@@ -134,6 +134,7 @@ button{cursor:pointer;border:0;background:none;color:inherit}
 .l:hover{transform:scale(1.04)}.l:focus-visible,button:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--l);outline-offset:2px}
 .tt{position:absolute;bottom:68px;${c.position}:0;width:220px;padding:10px 12px;border-radius:8px;background:var(--r);color:var(--t);border:1px solid var(--b);font-size:13px}
 .p{position:absolute;bottom:68px;${c.position}:0;width:380px;height:600px;max-height:calc(100vh - 100px);display:flex;flex-direction:column;border-radius:20px;background:var(--bg);color:var(--t);border:1px solid var(--b);box-shadow:0 16px 40px -12px #0009;overflow:hidden}
+.p{transform-origin:bottom ${c.position};animation:pin .25s cubic-bezier(.16,1,.3,1) both}.p.out{animation:pout .18s ease-in both}@keyframes pin{from{opacity:0;transform:translateY(12px) scale(.96)}}@keyframes pout{to{opacity:0;transform:translateY(12px) scale(.96)}}
 .h{display:flex;gap:10px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--b)${c.headerStyle === "bold" ? ";background:var(--a);color:var(--o)" : ""}}
 .av{width:32px;height:32px;border-radius:8px;background:var(--a);color:var(--o);font:400 18px/32px "Instrument Serif",serif;text-align:center;overflow:hidden;flex:none}.av img{width:100%;height:100%;object-fit:cover}
 .n{font-weight:600;font-size:14px}.s{font-size:12px;opacity:.75}.d{display:inline-block;width:6px;height:6px;border-radius:50%;background:#6FBF8E;margin-right:6px}
@@ -156,7 +157,8 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
 .rest{flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:24px;text-align:center}.rest h3{font:400 24px/1.2 "Instrument Serif",serif}
 .cur::after{content:"▍";animation:b 1s steps(1) infinite;color:var(--l)}@keyframes b{50%{opacity:0}}
 @media (max-width:480px){.p{position:fixed;inset:0;width:100%;height:100%;max-height:none;border-radius:0}}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}`;
+@keyframes fin{from{opacity:0}}@keyframes fout{to{opacity:0}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}.cur::after{animation:none!important}.p{animation-name:fin!important}.p.out{animation-name:fout!important}}`;
   };
 
   let feed: HTMLElement, input: HTMLTextAreaElement, panel: HTMLElement, launcher: HTMLButtonElement;
@@ -349,9 +351,10 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
       timer = window.setTimeout(poll, 3000);
   }
 
-  function openPanel() {
+  function openPanel(animate = true) {
     const c = state.cfg!;
     state.open = true;
+    root.querySelectorAll(".p.out").forEach((n) => n.remove());
     root.querySelector(".tt")?.remove();
     const av = c.avatarUrl ? `<img src="${esc(c.avatarUrl)}" alt="">` : "S";
     panel = el(`<div class="p" role="dialog" aria-modal="true" aria-label="${esc(c.displayName)}">
@@ -359,6 +362,7 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
       <div class="f" role="log" aria-live="polite"></div>
       <div class="i"><textarea rows="1" placeholder="${esc(c.placeholder)}" aria-label="${esc(c.placeholder)}"></textarea><button class="sd" aria-label="${T.send}">↑</button></div>
       ${state.badge ? `<div class="ft">${T.by}</div>` : ""}</div>`);
+    if (!animate) panel.style.animation = "none";
     root.appendChild(panel);
     feed = panel.querySelector(".f")!;
     input = panel.querySelector("textarea")!;
@@ -427,8 +431,13 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
 
   function closePanel() {
     state.open = false;
-    panel?.remove();
     clearTimeout(timer);
+    const p = panel;
+    if (p) {
+      p.classList.add("out");
+      p.addEventListener("animationend", () => p.remove(), { once: true });
+      setTimeout(() => p.remove(), 300);
+    }
     launcher.focus();
   }
 
@@ -460,6 +469,6 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
       if (e.origin !== new URL(api).origin || e.data?.type !== "sigilla:config") return;
       const wasOpen = state.open;
       mount(e.data.config);
-      if (wasOpen || e.data.open) openPanel();
+      if (wasOpen || e.data.open) openPanel(!wasOpen);
     });
 })();
