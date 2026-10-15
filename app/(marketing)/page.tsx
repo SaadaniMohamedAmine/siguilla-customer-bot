@@ -103,16 +103,31 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="border-border border-y py-8">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-10 gap-y-3 px-6">
-          <p className="text-small text-text-muted w-full text-center sm:w-auto">Built for houses like</p>
-          {BRANDS.map((b) => (
-            <span key={b} className="text-body-lg text-text-muted font-serif">
-              {b}
-            </span>
-          ))}
+      <section className="border-border border-y py-10">
+        <p className="label-caps text-text-muted text-center">Built for houses like</p>
+        <div
+          className="group relative mt-6 overflow-hidden"
+          style={{
+            maskImage: "linear-gradient(to right, transparent, #000 15%, #000 85%, transparent)",
+            WebkitMaskImage: "linear-gradient(to right, transparent, #000 15%, #000 85%, transparent)",
+          }}
+        >
+          <div className="anim-keep marquee-track flex w-max items-center group-hover:[animation-play-state:paused]">
+            {[0, 1].map((copy) => (
+              <ul key={copy} aria-hidden={copy === 1 || undefined} className="flex shrink-0 items-center">
+                {BRANDS.map((b) => (
+                  <li key={b} className="flex items-center">
+                    <span className="text-text-muted hover:text-text px-8 font-serif text-[22px] transition-colors duration-300">
+                      {b}
+                    </span>
+                    <span aria-hidden className="bg-accent size-1 rotate-45" />
+                  </li>
+                ))}
+              </ul>
+            ))}
+          </div>
         </div>
-        <p className="text-small text-text-muted mt-3 text-center">Illustrative brands</p>
+        <p className="text-small text-text-muted/70 mt-6 text-center">Illustrative brands</p>
       </section>
 
       <section id="how" className="px-6 py-24">

@@ -232,3 +232,10 @@ html:has([data-splash]) {
   opacity: 0;
   animation: hero-blur 900ms var(--ease-lux) calc(var(--d, 0ms) + 700ms) both;
 }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 35s linear infinite;
+}
