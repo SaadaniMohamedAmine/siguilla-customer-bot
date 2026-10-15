@@ -88,14 +88,14 @@ export function HowItWorks({ eyebrow, title }: { eyebrow: string; title: string 
 
               <div
                 className={cn(
-                  "anim-keep transition-[opacity,transform] duration-700 ease-[var(--ease-lux)]",
+                  "anim-keep flex h-full flex-col transition-[opacity,transform] duration-700 ease-[var(--ease-lux)]",
                   lit ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
                 )}
                 style={{ transitionDelay: lit ? delay : "0ms" }}
               >
                 <p className="text-link font-serif text-[40px] leading-none italic">{s.n}</p>
                 <h3 className="text-h3 text-text mt-3 font-serif">{s.title}</h3>
-                <p className="text-body text-text-muted mt-2">{s.body}</p>
+                <p className="text-body text-text-muted mt-2 mb-5">{s.body}</p>
                 {s.visual}
               </div>
             </div>

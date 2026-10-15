@@ -7,7 +7,7 @@ function Frame({ children, label }: { children: React.ReactNode; label?: string 
   return (
     <div
       aria-hidden
-      className="border-border bg-surface relative mt-5 flex h-[132px] flex-col justify-center gap-2 overflow-hidden rounded-md border p-4"
+      className="border-border bg-surface relative mt-auto flex h-[132px] flex-col justify-center gap-2 overflow-hidden rounded-md border p-4"
     >
       {children}
       {label ? (
