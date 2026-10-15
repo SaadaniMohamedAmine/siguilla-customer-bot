@@ -52,12 +52,12 @@ export function NavigationLoader() {
       className="bg-bg/70 pointer-events-none fixed inset-0 z-[2147483100] flex items-center justify-center backdrop-blur-[2px]"
       style={{ animation: `loader-fade-in 120ms ease-out both` }}
     >
-      <div className="flex h-[44px] items-end gap-1.5" aria-hidden>
+      <div className="flex h-[50px] items-end gap-2.5" aria-hidden>
         {[0, 0.1, 0.2, 0.3].map((delay) => (
           <span
             key={delay}
-            className="bg-accent w-4 rounded-[5px]"
-            style={{ height: 8, animation: `wave-bar 1s ease-in-out ${delay}s infinite` }}
+            className="wave-bar bg-accent w-5 rounded-[5px]"
+            style={{ height: 10, animationDelay: `${delay}s` }}
           />
         ))}
       </div>
