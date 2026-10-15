@@ -1,15 +1,16 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 const MAX_MS = 10000;
-const SHOW_DELAY_MS = 80;
+const MIN_MS = 700;
 
-/** Loader (4 barres) affiché pendant le passage d'une page à l'autre ; invisible si la navigation est rapide. */
+/** Loader (4 barres) affiché pendant le passage d'une page à l'autre, au moins MIN_MS pour rester perceptible. */
 export function NavigationLoader() {
   const pathname = usePathname();
-  // Chemin d'où part la navigation en cours ; le loader est actif tant qu'on n'a pas quitté ce chemin.
-  const [from, setFrom] = useState<string | null>(null);
+  const [active, setActive] = useState(false);
+  const startedAt = useRef(0);
+  const fromPath = useRef<string | null>(null);
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -18,27 +19,38 @@ export function NavigationLoader() {
       if (!a || (a.target && a.target !== "_self") || a.hasAttribute("download")) return;
       const url = new URL(a.href, location.href);
       if (url.origin !== location.origin || url.pathname === location.pathname) return;
-      setFrom(location.pathname);
+      startedAt.current = performance.now();
+      fromPath.current = location.pathname;
+      setActive(true);
     };
     // Phase de capture : le <Link> de Next appelle preventDefault() et gère le clic lui-même.
     document.addEventListener("click", onClick, true);
     return () => document.removeEventListener("click", onClick, true);
   }, []);
 
+  // Arrivée sur la nouvelle page : on garde le loader jusqu'à MIN_MS écoulé depuis le clic.
   useEffect(() => {
-    if (from === null) return;
-    const id = setTimeout(() => setFrom(null), MAX_MS);
+    if (!active || pathname === fromPath.current) return;
+    const wait = Math.max(0, MIN_MS - (performance.now() - startedAt.current));
+    const id = setTimeout(() => setActive(false), wait);
     return () => clearTimeout(id);
-  }, [from]);
+  }, [pathname, active]);
 
-  if (from === null || from !== pathname) return null;
+  // Garde-fou si la navigation n'aboutit jamais.
+  useEffect(() => {
+    if (!active) return;
+    const id = setTimeout(() => setActive(false), MAX_MS);
+    return () => clearTimeout(id);
+  }, [active]);
+
+  if (!active) return null;
 
   return (
     <div
       role="status"
       aria-busy="true"
       className="bg-bg/70 pointer-events-none fixed inset-0 z-[2147483100] flex items-center justify-center backdrop-blur-[2px]"
-      style={{ animation: `loader-fade-in 200ms ease-out ${SHOW_DELAY_MS}ms both` }}
+      style={{ animation: `loader-fade-in 120ms ease-out both` }}
     >
       <div className="flex h-[44px] items-end gap-1.5" aria-hidden>
         {[0, 0.1, 0.2, 0.3].map((delay) => (
