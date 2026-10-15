@@ -134,7 +134,7 @@
     border-radius: var(--radius-sm);
   }
   html {
-    scrollbar-color: var(--border) transparent;
+    scrollbar-color: var(--accent) transparent;
     scrollbar-width: thin;
   }
   @media (prefers-reduced-motion: reduce) {
