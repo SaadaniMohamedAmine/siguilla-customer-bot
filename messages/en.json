@@ -153,10 +153,6 @@
       {
         "q": "Can I remove the “Sealed by Sigilla” badge?",
         "a": "Yes, on Pro and Team."
-      },
-      {
-        "q": "Is this a real product?",
-        "a": "Sigilla is a portfolio project. Payments run in Stripe test mode; no real charges."
       }
     ]
   },

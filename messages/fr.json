@@ -153,10 +153,6 @@
       {
         "q": "Puis-je retirer le badge « Sealed by Sigilla » ?",
         "a": "Oui, avec les offres Pro et Team."
-      },
-      {
-        "q": "Est-ce un vrai produit ?",
-        "a": "Sigilla est un projet de portfolio. Les paiements passent par le mode test de Stripe ; aucun débit réel."
       }
     ]
   },
