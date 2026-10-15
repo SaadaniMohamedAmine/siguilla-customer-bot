@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SplashScreen } from "@/components/ui/splash-screen";
+import { NavigationLoader } from "@/components/ui/navigation-loader";
 import { QueryProvider } from "@/components/query-provider";
 import { instrumentSerif, instrumentSans, jetbrainsMono } from "@/lib/fonts";
 import "@/styles/globals.css";
@@ -43,6 +44,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <QueryProvider>
               <TooltipProvider>
                 <SplashScreen />
+                <NavigationLoader />
                 {children}
                 <ToastContainer position="bottom-right" hideProgressBar closeButton={false} theme="dark" />
               </TooltipProvider>
