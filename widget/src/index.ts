@@ -134,7 +134,7 @@ button{cursor:pointer;border:0;background:none;color:inherit}
 .l:hover{transform:scale(1.04)}.l:focus-visible,button:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--l);outline-offset:2px}
 .tt{position:absolute;bottom:68px;${c.position}:0;width:220px;padding:10px 12px;border-radius:8px;background:var(--r);color:var(--t);border:1px solid var(--b);font-size:13px}
 .p{position:absolute;bottom:68px;${c.position}:0;width:380px;height:600px;max-height:calc(100vh - 100px);display:flex;flex-direction:column;border-radius:20px;background:var(--bg);color:var(--t);border:1px solid var(--b);box-shadow:0 16px 40px -12px #0009;overflow:hidden}
-.p{transform-origin:bottom ${c.position};animation:pin .25s cubic-bezier(.16,1,.3,1) both}.p.out{animation:pout .18s ease-in both}@keyframes pin{from{opacity:0;transform:translateY(12px) scale(.96)}}@keyframes pout{to{opacity:0;transform:translateY(12px) scale(.96)}}
+.p{transform-origin:bottom ${c.position};animation:pin .38s cubic-bezier(.16,1,.3,1) both}.p.out{animation:pout .26s ease-in both}@keyframes pin{from{opacity:0;transform:translateY(20px) scale(.94)}}@keyframes pout{to{opacity:0;transform:translateY(20px) scale(.94)}}
 .h{display:flex;gap:10px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--b)${c.headerStyle === "bold" ? ";background:var(--a);color:var(--o)" : ""}}
 .av{width:32px;height:32px;border-radius:8px;background:var(--a);color:var(--o);font:400 18px/32px "Instrument Serif",serif;text-align:center;overflow:hidden;flex:none}.av img{width:100%;height:100%;object-fit:cover}
 .n{font-weight:600;font-size:14px}.s{font-size:12px;opacity:.75}.d{display:inline-block;width:6px;height:6px;border-radius:50%;background:#6FBF8E;margin-right:6px}
@@ -436,7 +436,7 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
     if (p) {
       p.classList.add("out");
       p.addEventListener("animationend", () => p.remove(), { once: true });
-      setTimeout(() => p.remove(), 300);
+      setTimeout(() => p.remove(), 400);
     }
     launcher.focus();
   }
