@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { DOCS_ORDER, getDocTitle, getDocContent, getDocHeadings, slugifyHeading } from "@/lib/docs";
 import { CodeBlock } from "@/components/marketing/code-block";
 import { DocBlockquote } from "@/components/marketing/doc-callout";
@@ -21,14 +21,16 @@ export async function generateMetadata({ params }: PageProps<"/docs/[[...slug]]"
   const { slug } = await params;
   if (!slug || slug.length === 0) return { title: "Docs" };
   const page = slug[0];
-  return { title: `${getDocTitle(page)} — Docs` };
+  const locale = await getLocale();
+  return { title: `${getDocTitle(page, locale)} — Docs` };
 }
 
 export default async function DocsPage({ params }: PageProps<"/docs/[[...slug]]">) {
   const { slug } = await params;
   if (!slug || slug.length === 0) return <DocsHome />;
   const page = slug[0];
-  const content = getDocContent(page);
+  const locale = await getLocale();
+  const content = getDocContent(page, locale);
   if (!content) notFound();
   const t = await getTranslations("Docs");
   const headings = getDocHeadings(content);
@@ -106,7 +108,7 @@ export default async function DocsPage({ params }: PageProps<"/docs/[[...slug]]"
                 />
                 {t("previous")}
               </span>
-              <span className="text-body-lg text-text mt-1 block font-serif">{getDocTitle(prev)}</span>
+              <span className="text-body-lg text-text mt-1 block font-serif">{getDocTitle(prev, locale)}</span>
             </Link>
           ) : (
             <span />
@@ -124,7 +126,7 @@ export default async function DocsPage({ params }: PageProps<"/docs/[[...slug]]"
                   className="anim-keep transition-transform duration-200 group-hover:translate-x-1"
                 />
               </span>
-              <span className="text-body-lg text-text mt-1 block font-serif">{getDocTitle(next)}</span>
+              <span className="text-body-lg text-text mt-1 block font-serif">{getDocTitle(next, locale)}</span>
             </Link>
           ) : null}
         </nav>

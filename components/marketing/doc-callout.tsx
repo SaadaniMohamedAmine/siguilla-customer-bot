@@ -19,7 +19,14 @@ function textOf(node: React.ReactNode): string {
 /** `> **Note** — …`, `> **Warning** — …`, `> **Tip** — …` en Markdown deviennent des encadrés ; sinon, citation simple. */
 export function DocBlockquote({ children }: { children?: React.ReactNode }) {
   const first = textOf(children).trim().toLowerCase();
-  const kind = (Object.keys(KINDS) as (keyof typeof KINDS)[]).find((k) => first.startsWith(k));
+  const ALIASES: Record<string, keyof typeof KINDS> = {
+    note: "note",
+    warning: "warning",
+    attention: "warning",
+    tip: "tip",
+    astuce: "tip",
+  };
+  const kind = ALIASES[Object.keys(ALIASES).find((k) => first.startsWith(k)) ?? ""];
   if (!kind) {
     return <blockquote className="border-border text-text-muted mt-4 border-l-2 pl-4">{children}</blockquote>;
   }

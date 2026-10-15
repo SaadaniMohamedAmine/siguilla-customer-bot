@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import type { IconSvgElement } from "@hugeicons/react";
 import { Icon } from "@/components/ui/icon";
 import { AgentIcon, ArrowRightIcon, GlobeIcon, KeyIcon } from "@/lib/icons";
@@ -10,6 +10,7 @@ import { ConciergeLink } from "@/components/marketing/concierge-link";
 /** Page d'accueil de /docs : recherche, 3 cartes d'entrée, toutes les pages par thème, lien vers le concierge. */
 export async function DocsHome() {
   const t = await getTranslations("Docs");
+  const locale = await getLocale();
   const cards: { href: string; icon: IconSvgElement; title: string; body: string }[] = [
     { href: "/docs/getting-started", icon: AgentIcon, title: t("createTitle"), body: t("createBody") },
     { href: "/docs/embed", icon: GlobeIcon, title: t("embedTitle"), body: t("embedBody") },
@@ -22,7 +23,7 @@ export async function DocsHome() {
       <p className="text-body-lg text-text-muted mt-4 max-w-xl">{t("homeBody")}</p>
 
       <div className="mt-8 max-w-xl">
-        <DocsSearch index={getDocSearchIndex()} hotkey={false} className="py-3.5" />
+        <DocsSearch index={getDocSearchIndex(locale)} hotkey={false} className="py-3.5" />
       </div>
 
       <div className="mt-12 grid gap-4 md:grid-cols-3">
@@ -59,7 +60,7 @@ export async function DocsHome() {
                     href={`/docs/${slug}`}
                     className="anim-keep text-body text-text-muted hover:text-text hover:border-accent -ml-px block border-l border-transparent py-1.5 pl-4 transition-colors duration-200"
                   >
-                    {getDocTitle(slug)}
+                    {getDocTitle(slug, locale)}
                   </Link>
                 </li>
               ))}
