@@ -16,6 +16,11 @@
     "rights": "© 2026 Sigilla",
     "backToTop": "Haut de page"
   },
+  "ErrorPage": {
+    "eyebrow": "ERREUR INATTENDUE",
+    "home": "Retour à l'accueil",
+    "reference": "Référence"
+  },
   "NotFound": {
     "eyebrow": "ERREUR 404",
     "title": "Cette page a quitté la maison.",
