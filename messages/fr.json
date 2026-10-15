@@ -128,6 +128,11 @@
     "language": "Langue"
   },
   "Auth": {
+    "backHome": "Retour à l'accueil",
+    "tagline": "Des agents de support IA sans code, entraînés sur vos docs.",
+    "benefit1": "Plan gratuit pour commencer",
+    "benefit2": "Intégration en une ligne, moins de 5 Ko",
+    "benefit3": "Chaque réponse citée par sa source",
     "signInTitle": "Bon retour",
     "signInSubtitle": "Connectez-vous à vos agents et conversations.",
     "signUpTitle": "Créez votre compte",

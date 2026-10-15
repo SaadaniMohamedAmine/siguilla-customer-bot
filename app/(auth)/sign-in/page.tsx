@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Icon } from "@/components/ui/icon";
-import { GoogleIcon, GithubIcon } from "@/lib/icons";
+import { GoogleIcon, GithubIcon, ArrowRightIcon } from "@/lib/icons";
 
 type FieldErrors = { email?: string; password?: string };
 
@@ -54,11 +54,13 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="w-full max-w-[420px] rounded-md border border-border bg-surface-raised p-10">
-      <h1 className="font-serif text-h2 text-text">{t("signInTitle")}</h1>
-      <p className="mt-1 text-body text-text-muted">{t("signInSubtitle")}</p>
+    <div className="page-in anim-keep w-full max-w-[420px] rounded-md border border-border bg-surface-raised p-10">
+      <div className="hero-in anim-keep" style={{ "--d": "0ms" } as React.CSSProperties}>
+        <h1 className="font-serif text-h2 text-text">{t("signInTitle")}</h1>
+        <p className="mt-1 text-body text-text-muted">{t("signInSubtitle")}</p>
+      </div>
 
-      <div className="mt-6 flex flex-col gap-3">
+      <div className="hero-in anim-keep mt-6 flex flex-col gap-3" style={{ "--d": "100ms" } as React.CSSProperties}>
         <Button
           type="button"
           variant="ghost"
@@ -85,7 +87,12 @@ export default function SignInPage() {
         <span className="h-px flex-1 bg-border" />
       </div>
 
-      <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
+      <form
+        onSubmit={onSubmit}
+        noValidate
+        className="hero-in anim-keep flex flex-col gap-4"
+        style={{ "--d": "200ms" } as React.CSSProperties}
+      >
         <Input
           label={t("email")}
           type="email"
@@ -101,6 +108,11 @@ export default function SignInPage() {
         <div>
           <PasswordInput
             label={t("password")}
+            labelAction={
+              <Link href="/forgot-password" className="text-small link-draw anim-keep text-link">
+                {t("forgot")}
+              </Link>
+            }
             autoComplete="current-password"
             value={password}
             onChange={(e) => {
@@ -110,9 +122,6 @@ export default function SignInPage() {
             onBlur={(e) => setFieldErrors((f) => ({ ...f, password: validatePassword(e.target.value) }))}
             error={fieldErrors.password}
           />
-          <Link href="/forgot-password" className="mt-2 inline-block text-small text-link hover:underline">
-            {t("forgot")}
-          </Link>
         </div>
         {formError ? <p className="text-small text-error">{formError}</p> : null}
         <Button type="submit" className="w-full" loading={loading}>
@@ -122,14 +131,15 @@ export default function SignInPage() {
 
       <p className="mt-6 text-center text-small text-text-muted">
         {t("noAccount")}{" "}
-        <Link href="/sign-up" className="text-link underline underline-offset-2">
+        <Link href="/sign-up" className="link-draw anim-keep text-link">
           {t("createAccount")}
         </Link>
       </p>
       {demoEnabled ? (
-        <p className="mt-2 text-center text-small">
-          <Link href="/demo" className="text-link hover:underline">
-            {t("exploreDemo")}
+        <p className="mt-3 text-center text-small">
+          <Link href="/demo" className="group anim-keep text-link inline-flex items-center gap-1.5">
+            <span className="link-draw anim-keep">{t("exploreDemo")}</span>
+            <Icon icon={ArrowRightIcon} size={14} className="anim-keep transition-transform duration-200 group-hover:translate-x-1" />
           </Link>
         </p>
       ) : null}

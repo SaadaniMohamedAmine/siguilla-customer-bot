@@ -254,3 +254,15 @@ html:has([data-splash]) {
 .page-in {
   animation: mock-fade 500ms var(--ease-lux) both;
 }
+
+@utility link-draw {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 100% 1px;
+  padding-bottom: 1px;
+  transition: background-size 300ms var(--ease-lux);
+  &:hover {
+    background-size: 100% 2px;
+  }
+}

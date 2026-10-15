@@ -128,6 +128,11 @@
     "language": "Language"
   },
   "Auth": {
+    "backHome": "Back to home",
+    "tagline": "No-code AI support agents, trained on your docs.",
+    "benefit1": "Free plan to get started",
+    "benefit2": "Embed in one line, under 5 KB",
+    "benefit3": "Every answer cited by its source",
     "signInTitle": "Welcome back",
     "signInSubtitle": "Sign in to your agents and conversations.",
     "signUpTitle": "Create your account",
