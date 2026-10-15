@@ -33,7 +33,7 @@ export async function SiteFooter() {
     <footer className="border-border relative overflow-hidden border-t px-6 pt-16">
       <span
         aria-hidden
-        className="text-text pointer-events-none absolute inset-x-0 bottom-0 z-0 translate-y-[28%] text-center font-serif text-[clamp(8rem,28vw,24rem)] leading-none whitespace-nowrap opacity-[0.035] select-none"
+        className="text-text pointer-events-none absolute inset-x-0 bottom-0 z-0 text-center font-serif text-[clamp(4.5rem,15vw,13rem)] leading-none whitespace-nowrap opacity-[0.04] select-none"
       >
         Sigilla
       </span>
