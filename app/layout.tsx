@@ -34,6 +34,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html
       lang={locale}
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
       className={`${instrumentSerif.variable} ${instrumentSans.variable} ${jetbrainsMono.variable}`}
     >
       <body className="min-h-screen bg-bg font-sans text-text antialiased">
