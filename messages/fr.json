@@ -1,5 +1,13 @@
 {
   "Home": {
+    "promiseQuote": "Chaque réponse, scellée par sa source.",
+    "promiseLabel": "LA PROMESSE SIGILLA",
+    "conciergeHint": "Curieux ? Posez n'importe quelle question sur Sigilla au concierge.",
+    "conciergeAction": "Demander au concierge",
+    "ctaEyebrow": "COMMENCER",
+    "ctaTitle": "Votre premier agent est à quelques minutes.",
+    "ctaBody": "Connectez vos docs, façonnez votre agent et intégrez-le en une ligne.",
+    "ctaNote": "Plan gratuit disponible.",
     "whyEyebrow": "POURQUOI SIGILLA",
     "whyTitle": "Conçu pour des réponses de confiance.",
     "howEyebrow": "COMMENT ÇA MARCHE",

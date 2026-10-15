@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { PromiseSection } from "@/components/marketing/promise-section";
 import { HowItWorks } from "@/components/marketing/how-it-works";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/marketing/reveal";
@@ -155,40 +156,52 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      <section className="px-6 py-24 text-center">
-        <Reveal>
-          <p className="text-h2 text-text mx-auto max-w-2xl font-serif">
-            &ldquo;Every answer, sealed by its source.&rdquo;
-          </p>
-          <p className="label-caps text-text-muted mt-4">THE SIGILLA PROMISE</p>
-        </Reveal>
-      </section>
-
-      <section className="px-6 py-16 text-center">
-        <p className="text-body text-text-muted">Ask the concierge in the corner anything about Sigilla.</p>
+      <section className="px-6 py-24">
+        <PromiseSection
+          quote={t("promiseQuote")}
+          label={t("promiseLabel")}
+          hint={t("conciergeHint")}
+          action={t("conciergeAction")}
+        />
       </section>
 
       <section className="px-6 pb-24">
-        <div className="border-border bg-surface mx-auto max-w-3xl rounded-md border p-12 text-center">
-          <h2 className="text-h1 text-text font-serif">Your first agent is a few minutes away.</h2>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link href="/sign-up">
-              <Button size="lg" className={CTA}>
-                  Start free
-                  <Icon
-                    icon={ArrowRightIcon}
-                    size={16}
-                    className="anim-keep transition-transform duration-200 group-hover:translate-x-1"
-                  />
-                </Button>
-            </Link>
-            <Link href="/demo">
-              <Button size="lg" variant="ghost" className={CTA}>
-                Explore the live demo
-              </Button>
-            </Link>
+        <Reveal>
+          <div className="border-border bg-surface relative mx-auto max-w-3xl overflow-hidden rounded-lg border p-12 text-center sm:p-16">
+            <div
+              aria-hidden
+              className="anim-keep pointer-events-none absolute -top-32 left-1/2 h-72 w-[36rem] -translate-x-1/2 rounded-full"
+              style={{
+                background: "radial-gradient(circle, var(--accent) 0%, transparent 70%)",
+                opacity: 0.22,
+                animation: "glow-drift 9s ease-in-out infinite",
+              }}
+            />
+            <div className="relative">
+              <p className="label-caps text-link">{t("ctaEyebrow")}</p>
+              <h2 className="text-h1 text-text mt-3 font-serif">{t("ctaTitle")}</h2>
+              <p className="text-body-lg text-text-muted mx-auto mt-4 max-w-md">{t("ctaBody")}</p>
+              <div className="mt-8 flex flex-wrap justify-center gap-3">
+                <Link href="/sign-up">
+                  <Button size="lg" className={CTA}>
+                    Start free
+                    <Icon
+                      icon={ArrowRightIcon}
+                      size={16}
+                      className="anim-keep transition-transform duration-200 group-hover:translate-x-1"
+                    />
+                  </Button>
+                </Link>
+                <Link href="/demo">
+                  <Button size="lg" variant="ghost" className={CTA}>
+                    Explore the live demo
+                  </Button>
+                </Link>
+              </div>
+              <p className="text-small text-text-muted mt-5">{t("ctaNote")}</p>
+            </div>
           </div>
-        </div>
+        </Reveal>
       </section>
     </div>
   );
