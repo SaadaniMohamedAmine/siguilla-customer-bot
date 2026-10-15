@@ -5,7 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/marketing/reveal";
 import { FeatureCard } from "@/components/marketing/feature-card";
 import { Icon } from "@/components/ui/icon";
-import { ArrowRightIcon } from "@/lib/icons";
+import { AnalyticsIcon, ArrowRightIcon, FlashIcon, HumanIcon, SealIcon } from "@/lib/icons";
+import {
+  AnalyticsVisual,
+  CitedVisual,
+  HandoffFeatureVisual,
+  SizeVisual,
+} from "@/components/marketing/feature-visuals";
 import { HeroWidgetMock } from "@/components/marketing/hero-widget-mock";
 
 const CTA = "group anim-keep hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]";
@@ -14,16 +20,30 @@ const at = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
 const BRANDS = ["Atelier Lune", "Ledgerline", "Maison Verdant", "Aurelia Haute", "Vendôme & Cie"];
 
 const FEATURES = [
-  { title: "Cited answers", body: "Every sentence points to the page or URL it came from." },
+  {
+    title: "Cited answers",
+    body: "Every sentence points to the page or URL it came from.",
+    icon: SealIcon,
+    visual: <CitedVisual />,
+  },
   {
     title: "Human handoff",
     body: "When the answer isn't in your docs, your agent says so and brings in your team.",
+    icon: HumanIcon,
+    visual: <HandoffFeatureVisual />,
   },
   {
     title: "Conversation analytics",
     body: "See what customers ask, what's answered, and what's missing from your docs.",
+    icon: AnalyticsIcon,
+    visual: <AnalyticsVisual />,
   },
-  { title: "Under 5 KB", body: "A dependency-free widget that won't slow your site down." },
+  {
+    title: "Under 5 KB",
+    body: "A dependency-free widget that won't slow your site down.",
+    icon: FlashIcon,
+    visual: <SizeVisual />,
+  },
 ];
 
 const JSON_LD = {
@@ -120,12 +140,18 @@ export default async function LandingPage() {
       </section>
 
       <section className="bg-surface px-6 py-24">
-        <div className="mx-auto grid max-w-5xl gap-6 sm:grid-cols-2">
-          {FEATURES.map((f, i) => (
-            <Reveal key={f.title} delay={i * 100} className="h-full">
-              <FeatureCard title={f.title} body={f.body} />
-            </Reveal>
-          ))}
+        <div className="mx-auto max-w-5xl">
+          <Reveal className="text-center">
+            <p className="label-caps text-link">{t("whyEyebrow")}</p>
+            <h2 className="text-h1 text-text mx-auto mt-3 max-w-2xl font-serif">{t("whyTitle")}</h2>
+          </Reveal>
+          <div className="mt-14 grid gap-6 sm:grid-cols-2">
+            {FEATURES.map((f, i) => (
+              <Reveal key={f.title} delay={i * 100} className="h-full">
+                <FeatureCard title={f.title} body={f.body} icon={f.icon} visual={f.visual} />
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 

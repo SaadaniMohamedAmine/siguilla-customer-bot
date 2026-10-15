@@ -53,4 +53,5 @@ export {
   Notion01Icon as NotionIcon,
   Mail01Icon as MailIcon,
   SentIcon as SendIcon,
+  FlashIcon,
 } from "@hugeicons/core-free-icons";
