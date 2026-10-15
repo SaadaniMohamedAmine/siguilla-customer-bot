@@ -76,8 +76,8 @@ export async function SiteFooter() {
         </div>
       </div>
 
-      <div aria-hidden className="relative mx-auto h-[clamp(4rem,11vw,9.5rem)] max-w-5xl overflow-hidden select-none">
-        <span className="text-text pointer-events-none absolute inset-x-0 top-0 block text-center font-serif text-[clamp(6rem,24vw,20rem)] leading-[0.85] whitespace-nowrap opacity-[0.05]">
+      <div aria-hidden className="relative mx-auto h-[clamp(2.25rem,5.5vw,4.75rem)] max-w-5xl overflow-hidden select-none">
+        <span className="text-text pointer-events-none absolute inset-x-0 top-0 block text-center font-serif text-[clamp(4rem,13vw,11rem)] leading-[0.8] whitespace-nowrap opacity-[0.05]">
           Sigilla
         </span>
       </div>
