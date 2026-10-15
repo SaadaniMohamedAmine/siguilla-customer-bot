@@ -1,16 +1,50 @@
 import Link from "next/link";
+import { Icon } from "@/components/ui/icon";
+import { ArrowLeftIcon, ArrowRightIcon, SealIcon } from "@/lib/icons";
 
-export function DemoBanner({ dark }: { dark?: boolean }) {
+/** Bandeau Sigilla en haut des sites fictifs : indique que la marque est illustrative et que le concierge est propulsé par Sigilla. */
+export function DemoBanner() {
   return (
     <div
-      className={dark ? "bg-[#231A1C] text-[#E8DAC4]" : "bg-[#F4F6F8] text-[#475569]"}
-      style={{ fontSize: 12 }}
+      className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-6 py-2.5 text-[12px]"
+      style={{
+        background: "linear-gradient(90deg, #0E0A0B, #1B1013 55%, #0E0A0B)",
+        color: "#F3ECE6",
+        borderBottom: "1px solid #2E2225",
+        fontFamily: "ui-sans-serif, system-ui, sans-serif",
+      }}
     >
-      <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-2">
-        <span>Illustrative brand — part of the Sigilla demo.</span>
-        <Link href="/" className="underline">
-          Back to Sigilla
-        </Link>
+      <p className="flex items-center gap-2">
+        <Icon icon={SealIcon} size={15} className="text-[#E3B3BA]" />
+        <span>
+          <span style={{ fontFamily: "Georgia, serif", fontSize: 14 }}>Sigilla</span>
+          <span className="text-[#A8999A]"> · Illustrative brand — the concierge in the corner is powered by Sigilla.</span>
+        </span>
+      </p>
+      <div className="flex flex-wrap items-center gap-2">
+      {/* Lien classique : /demo est une route qui ouvre une session de démo, on évite tout préchargement. */}
+      <a
+        href="/demo"
+        className="group inline-flex items-center gap-1.5 rounded-full border border-[#2E2225] px-3 py-1 transition-colors duration-200 hover:border-[#9E2F45]"
+      >
+        Open the demo dashboard
+        <Icon
+          icon={ArrowRightIcon}
+          size={13}
+          className="text-[#E3B3BA] transition-transform duration-200 group-hover:translate-x-0.5"
+        />
+      </a>
+      <Link
+        href="/"
+        className="group inline-flex items-center gap-1.5 rounded-full border border-[#2E2225] px-3 py-1 transition-colors duration-200 hover:border-[#9E2F45]"
+      >
+        <Icon
+          icon={ArrowLeftIcon}
+          size={13}
+          className="text-[#E3B3BA] transition-transform duration-200 group-hover:-translate-x-0.5"
+        />
+        Back to Sigilla
+      </Link>
       </div>
     </div>
   );

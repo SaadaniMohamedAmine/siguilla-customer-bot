@@ -1,51 +1,87 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+import { LegalPage, type LegalSection } from "@/components/marketing/legal-page";
 
 export const metadata: Metadata = { title: "Privacy" };
 
-export default function PrivacyPage() {
-  return (
-    <div className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="text-h1 text-text font-serif">Privacy Policy</h1>
-      <p className="text-small text-text-muted mt-2">Last updated 2026.</p>
+export default async function PrivacyPage() {
+  const t = await getTranslations("Legal.privacy");
+  const tt = await getTranslations("Legal.terms");
+  const rows = t.raw("processors") as { name: string; role: string }[];
+  const contact = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
 
-      <div className="text-body text-text-muted mt-10 flex flex-col gap-8">
-        <section>
-          <h2 className="text-h3 text-text font-serif">What we process</h2>
-          <p className="mt-2">
-            Your account details (name, email), the content of the sources you upload or connect (PDFs,
-            crawled pages, Notion pages), conversations your visitors have with your agents, and an optional
-            email address a visitor may leave when requesting a human.
-          </p>
-        </section>
-        <section>
-          <h2 className="text-h3 text-text font-serif">Sub-processors</h2>
-          <p className="mt-2">
-            Vercel (hosting and file storage), Neon (database), Groq and Google Gemini (answer generation and
-            embeddings), Stripe (payments, test mode only), and Notion (if you connect a workspace).
-          </p>
-        </section>
-        <section>
-          <h2 className="text-h3 text-text font-serif">What we don&apos;t do</h2>
-          <p className="mt-2">We never sell your data, and we don&apos;t use advertising cookies.</p>
-        </section>
-        <section>
-          <h2 className="text-h3 text-text font-serif">The widget</h2>
-          <p className="mt-2">
-            The embeddable widget stores a random visitor identifier in your visitors&apos; browser
-            `localStorage` to keep a conversation going across page reloads. No cross-site tracking.
-          </p>
-        </section>
-        <section>
-          <h2 className="text-h3 text-text font-serif">Deleting your data</h2>
-          <p className="mt-2">You can delete your account and organization at any time from Settings.</p>
-        </section>
-        <section>
-          <h2 className="text-h3 text-text font-serif">Contact</h2>
-          <p className="mt-2">
-            {process.env.NEXT_PUBLIC_CONTACT_EMAIL || "Use the contact link on the homepage."}
-          </p>
-        </section>
-      </div>
-    </div>
+  const sections: LegalSection[] = [
+    { id: "s1", title: t("processTitle"), content: <p>{t("processBody")}</p> },
+    {
+      id: "s2",
+      title: t("subTitle"),
+      content: (
+        <div className="border-border overflow-x-auto rounded-md border">
+          <table className="text-small w-full border-collapse">
+            <thead className="bg-surface">
+              <tr className="border-border border-b">
+                <th scope="col" className="text-text px-4 py-3 text-left font-medium">
+                  {t("colService")}
+                </th>
+                <th scope="col" className="text-text px-4 py-3 text-left font-medium">
+                  {t("colRole")}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.name} className="border-border hover:bg-surface/60 border-b transition-colors last:border-b-0">
+                  <th scope="row" className="text-text px-4 py-3 text-left font-normal">
+                    {r.name}
+                  </th>
+                  <td className="text-text-muted px-4 py-3">{r.role}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ),
+    },
+    { id: "s3", title: t("dontTitle"), content: <p>{t("dontBody")}</p> },
+    {
+      id: "s4",
+      title: t("widgetTitle"),
+      content: (
+        <p>
+          {t.rich("widgetBody", {
+            code: (chunks) => (
+              <code className="bg-surface-raised text-small text-text rounded-sm px-1.5 py-0.5 font-mono">
+                {chunks}
+              </code>
+            ),
+          })}
+        </p>
+      ),
+    },
+    { id: "s5", title: t("deleteTitle"), content: <p>{t("deleteBody")}</p> },
+  ];
+  if (contact) {
+    sections.push({
+      id: "s6",
+      title: t("contactTitle"),
+      content: (
+        <p>
+          <a href={`mailto:${contact}`} className="text-link link-draw anim-keep">
+            {contact}
+          </a>
+        </p>
+      ),
+    });
+  }
+
+  return (
+    <LegalPage
+      title={t("title")}
+      updated={t("updated")}
+      intro={t("intro")}
+      summary={{ title: t("glanceTitle"), items: t.raw("glance") as string[] }}
+      sections={sections}
+      other={{ href: "/terms", label: tt("title") }}
+    />
   );
 }

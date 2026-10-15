@@ -3,16 +3,15 @@ import { notFound } from "next/navigation";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { Metadata } from "next";
-import {
-  DOCS_ORDER,
-  getDocNav,
-  getDocTitle,
-  getDocContent,
-  getDocHeadings,
-  slugifyHeading,
-} from "@/lib/docs";
+import { getLocale, getTranslations } from "next-intl/server";
+import { DOCS_ORDER, getDocTitle, getDocContent, getDocHeadings, slugifyHeading } from "@/lib/docs";
 import { CodeBlock } from "@/components/marketing/code-block";
-import { cn } from "@/lib/utils";
+import { DocBlockquote } from "@/components/marketing/doc-callout";
+import { DocHeading } from "@/components/marketing/doc-heading";
+import { DocsToc } from "@/components/marketing/docs-toc";
+import { DocsHome } from "@/components/marketing/docs-home";
+import { Icon } from "@/components/ui/icon";
+import { ArrowLeftIcon, ArrowRightIcon } from "@/lib/icons";
 
 export function generateStaticParams() {
   return [{ slug: [] }, ...DOCS_ORDER.map((slug) => ({ slug: [slug] }))];
@@ -20,85 +19,120 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<"/docs/[[...slug]]">): Promise<Metadata> {
   const { slug } = await params;
-  const page = slug?.[0] ?? DOCS_ORDER[0];
-  return { title: `${getDocTitle(page)} — Docs` };
+  if (!slug || slug.length === 0) return { title: "Docs" };
+  const page = slug[0];
+  const locale = await getLocale();
+  return { title: `${getDocTitle(page, locale)} — Docs` };
 }
 
 export default async function DocsPage({ params }: PageProps<"/docs/[[...slug]]">) {
   const { slug } = await params;
-  const page = slug?.[0] ?? DOCS_ORDER[0];
-  const content = getDocContent(page);
+  if (!slug || slug.length === 0) return <DocsHome />;
+  const page = slug[0];
+  const locale = await getLocale();
+  const content = getDocContent(page, locale);
   if (!content) notFound();
+  const t = await getTranslations("Docs");
   const headings = getDocHeadings(content);
-  const nav = getDocNav();
+  const i = (DOCS_ORDER as readonly string[]).indexOf(page);
+  const prev = i > 0 ? DOCS_ORDER[i - 1] : null;
+  const next = i >= 0 && i < DOCS_ORDER.length - 1 ? DOCS_ORDER[i + 1] : null;
 
   return (
-    <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-6 py-16 lg:grid-cols-[200px_1fr_180px]">
-      <nav className="flex flex-col gap-1">
-        {nav.map((item) => (
-          <Link
-            key={item.slug}
-            href={`/docs/${item.slug}`}
-            className={cn(
-              "text-small rounded-sm px-2 py-1.5",
-              item.slug === page ? "bg-surface-raised text-text" : "text-text-muted hover:text-text",
-            )}
-          >
-            {item.title}
-          </Link>
-        ))}
-      </nav>
-
-      <article className="prose-sigilla max-w-none">
-        <Markdown
-          remarkPlugins={[remarkGfm]}
-          skipHtml
-          components={{
-            h1: (p) => <h1 className="text-h1 text-text font-serif" {...p} />,
-            h2: (p) => (
-              <h2
-                id={slugifyHeading(String(p.children))}
-                className="text-h2 text-text mt-10 font-serif"
-                {...p}
-              />
-            ),
-            p: (p) => <p className="text-body text-text-muted mt-4" {...p} />,
-            a: (p) => <a className="text-link underline underline-offset-2" {...p} />,
-            ul: (p) => <ul className="text-body text-text-muted mt-4 ml-5 list-disc" {...p} />,
-            li: (p) => <li className="mt-1" {...p} />,
-            code: (p) =>
-              "className" in p ? (
-                <code {...p} />
-              ) : (
-                <code
-                  className="bg-surface-raised text-small text-text rounded-sm px-1.5 py-0.5 font-mono"
+    <div className="grid min-w-0 gap-10 xl:grid-cols-[minmax(0,1fr)_180px]">
+      <div key={page} className="page-in anim-keep min-w-0">
+        <article className="max-w-none">
+          <Markdown
+            remarkPlugins={[remarkGfm]}
+            skipHtml
+            components={{
+              h1: (p) => <h1 className="text-h1 text-text font-serif" {...p} />,
+              h2: ({ children }) => (
+                <DocHeading level={2} id={slugifyHeading(String(children))}>
+                  {children}
+                </DocHeading>
+              ),
+              h3: ({ children }) => (
+                <DocHeading level={3} id={slugifyHeading(String(children))}>
+                  {children}
+                </DocHeading>
+              ),
+              p: (p) => <p className="text-body text-text-muted mt-4 leading-7" {...p} />,
+              a: (p) => (
+                <a
+                  className="text-link decoration-link/40 hover:decoration-link underline underline-offset-4 transition-colors"
                   {...p}
                 />
               ),
-            pre: (p) => <CodeBlock>{p.children}</CodeBlock>,
-            table: (p) => <table className="text-small mt-4 w-full border-collapse" {...p} />,
-            th: (p) => <th className="border-border text-text border-b p-2 text-left" {...p} />,
-            td: (p) => <td className="border-border text-text-muted border-b p-2" {...p} />,
-          }}
-        >
-          {content}
-        </Markdown>
-      </article>
+              ul: (p) => <ul className="text-body text-text-muted mt-4 ml-5 list-disc leading-7" {...p} />,
+              ol: (p) => <ol className="text-body text-text-muted mt-4 ml-5 list-decimal leading-7" {...p} />,
+              li: (p) => <li className="mt-1.5 marker:text-link" {...p} />,
+              strong: (p) => <strong className="text-text font-semibold" {...p} />,
+              blockquote: (p) => <DocBlockquote>{p.children}</DocBlockquote>,
+              code: (p) =>
+                "className" in p ? (
+                  <code {...p} />
+                ) : (
+                  <code
+                    className="bg-surface-raised text-small text-text rounded-sm px-1.5 py-0.5 font-mono"
+                    {...p}
+                  />
+                ),
+              pre: (p) => <CodeBlock>{p.children}</CodeBlock>,
+              table: (p) => (
+                <div className="border-border mt-5 overflow-x-auto rounded-md border">
+                  <table className="text-small w-full border-collapse" {...p} />
+                </div>
+              ),
+              thead: (p) => <thead className="bg-surface" {...p} />,
+              tr: (p) => <tr className="border-border hover:bg-surface/60 border-b transition-colors last:border-b-0" {...p} />,
+              th: (p) => <th className="text-text px-4 py-3 text-left font-medium" {...p} />,
+              td: (p) => <td className="text-text-muted px-4 py-3" {...p} />,
+            }}
+          >
+            {content}
+          </Markdown>
+        </article>
 
-      {headings.length > 0 ? (
-        <aside className="hidden lg:block">
-          <p className="label-caps mb-3">On this page</p>
-          <ul className="text-small text-text-muted flex flex-col gap-2">
-            {headings.map((h) => (
-              <li key={h.id}>
-                <a href={`#${h.id}`} className="hover:text-text">
-                  {h.text}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </aside>
-      ) : null}
+        <nav aria-label={t("pagination")} className="border-border mt-16 grid gap-4 border-t pt-8 sm:grid-cols-2">
+          {prev ? (
+            <Link
+              href={`/docs/${prev}`}
+              className="anim-keep group border-border hover:border-accent rounded-md border p-4 transition-[border-color,transform] duration-300 hover:-translate-y-0.5"
+            >
+              <span className="text-small text-text-muted inline-flex items-center gap-1.5">
+                <Icon
+                  icon={ArrowLeftIcon}
+                  size={14}
+                  className="anim-keep transition-transform duration-200 group-hover:-translate-x-1"
+                />
+                {t("previous")}
+              </span>
+              <span className="text-body-lg text-text mt-1 block font-serif">{getDocTitle(prev, locale)}</span>
+            </Link>
+          ) : (
+            <span />
+          )}
+          {next ? (
+            <Link
+              href={`/docs/${next}`}
+              className="anim-keep group border-border hover:border-accent rounded-md border p-4 text-right transition-[border-color,transform] duration-300 hover:-translate-y-0.5 sm:col-start-2"
+            >
+              <span className="text-small text-text-muted inline-flex items-center gap-1.5">
+                {t("next")}
+                <Icon
+                  icon={ArrowRightIcon}
+                  size={14}
+                  className="anim-keep transition-transform duration-200 group-hover:translate-x-1"
+                />
+              </span>
+              <span className="text-body-lg text-text mt-1 block font-serif">{getDocTitle(next, locale)}</span>
+            </Link>
+          ) : null}
+        </nav>
+      </div>
+
+      <DocsToc headings={headings} title={t("onThisPage")} />
     </div>
   );
 }

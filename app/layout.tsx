@@ -4,6 +4,8 @@ import { getLocale } from "next-intl/server";
 import { ToastContainer } from "react-toastify";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
+import { SplashScreen } from "@/components/ui/splash-screen";
+import { NavigationLoader } from "@/components/ui/navigation-loader";
 import { QueryProvider } from "@/components/query-provider";
 import { instrumentSerif, instrumentSans, jetbrainsMono } from "@/lib/fonts";
 import "@/styles/globals.css";
@@ -33,6 +35,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html
       lang={locale}
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
       className={`${instrumentSerif.variable} ${instrumentSans.variable} ${jetbrainsMono.variable}`}
     >
       <body className="min-h-screen bg-bg font-sans text-text antialiased">
@@ -40,6 +43,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
             <QueryProvider>
               <TooltipProvider>
+                <SplashScreen />
+                <NavigationLoader />
                 {children}
                 <ToastContainer position="bottom-right" hideProgressBar closeButton={false} theme="dark" />
               </TooltipProvider>

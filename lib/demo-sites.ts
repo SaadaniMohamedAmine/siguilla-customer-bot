@@ -28,6 +28,11 @@ const AGENT_NAME: Record<DemoSite, string> = {
   ledgerline: "Ledgerline — Help Center",
 };
 
+/** Site fictif sur lequel tourne un agent de démo (d'après son nom), ou null. */
+export function getDemoSiteByAgentName(name: string): DemoSite | null {
+  return (Object.keys(AGENT_NAME) as DemoSite[]).find((k) => AGENT_NAME[k] === name) ?? null;
+}
+
 export function getDemoPages(site: DemoSite) {
   return PAGES[site];
 }

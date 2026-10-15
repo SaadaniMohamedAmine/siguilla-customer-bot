@@ -1,67 +1,82 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
+import { ArrowRightIcon, SealIcon } from "@/lib/icons";
 import { PricingCards } from "@/components/marketing/pricing-cards";
+import { CompareTable } from "@/components/marketing/compare-table";
+import { FaqAccordion } from "@/components/marketing/faq-accordion";
+import { TestCardPill } from "@/components/marketing/test-card-pill";
+import { Reveal } from "@/components/marketing/reveal";
 
 export const metadata: Metadata = { title: "Pricing" };
 
-const FAQ = [
-  {
-    q: "How do citations work?",
-    a: "Every answer is grounded in the sources you connected. Each sentence that uses a source gets a numbered seal linking back to the exact page or URL.",
-  },
-  {
-    q: "What happens when the answer isn't in my docs?",
-    a: "Your agent declines rather than guessing, and offers to bring in a human from your team.",
-  },
-  {
-    q: "Which sources can I connect?",
-    a: "PDFs, websites up to 100 pages per site, and Notion workspaces (Pro and Team).",
-  },
-  { q: "Can I remove the “Sealed by Sigilla” badge?", a: "Yes, on Pro and Team." },
-  {
-    q: "Is this a real product?",
-    a: "Sigilla is a portfolio project. Payments run in Stripe test mode; no real charges.",
-  },
-];
+const at = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const t = await getTranslations("Pricing");
+  const faq = t.raw("faq") as { q: string; a: string }[];
   return (
     <div className="mx-auto max-w-5xl px-6 py-16">
       <div className="text-center">
-        <h1 className="text-h1 text-text font-serif">Simple plans. Exceptional answers.</h1>
-        <p className="text-body-lg text-text-muted mt-3">Ground every answer in your documentation.</p>
-        <p className="border-border bg-surface-raised text-small text-text-muted mt-4 inline-block rounded-sm border px-3 py-1.5 font-mono">
-          Demo mode — payments use Stripe test mode. Card: 4242 4242 4242 4242
+        <p className="label-caps text-link hero-in anim-keep" style={at(0)}>
+          {t("eyebrow")}
         </p>
+        <h1 className="text-h1 text-text hero-in anim-keep mt-3 font-serif" style={at(120)}>
+          {t("title")}
+        </h1>
+        <p className="text-body-lg text-text-muted hero-in anim-keep mt-3" style={at(240)}>
+          {t("subtitle")}
+        </p>
+        <div className="hero-in anim-keep" style={at(360)}>
+          <TestCardPill label={t("testMode")} />
+        </div>
       </div>
 
       <PricingCards />
 
-      <div className="border-border bg-surface mt-16 rounded-md border p-8 text-center">
-        <p className="text-h3 text-text font-serif">How answers stay honest</p>
-        <p className="text-body text-text-muted mt-2">
-          Below a similarity threshold you control, your agent declines to answer and offers a human instead.
-        </p>
-      </div>
+      <section className="mt-24">
+        <Reveal>
+          <h2 className="text-h2 text-text text-center font-serif">{t("compareTitle")}</h2>
+        </Reveal>
+        <Reveal delay={100} className="mt-8">
+          <CompareTable />
+        </Reveal>
+      </section>
 
-      <div className="mx-auto mt-16 max-w-2xl">
-        <h2 className="text-h2 text-text font-serif">Frequently asked questions</h2>
-        <div className="divide-border border-border mt-6 flex flex-col divide-y border-t">
-          {FAQ.map((item) => (
-            <details key={item.q} className="group py-4">
-              <summary className="text-body-lg text-text cursor-pointer list-none marker:content-none">
-                {item.q}
-              </summary>
-              <p className="text-body text-text-muted mt-2">{item.a}</p>
-            </details>
-          ))}
+      <Reveal className="mt-24">
+        <div className="border-border bg-surface rounded-md border p-8 text-center sm:p-10">
+          <span
+            aria-hidden
+            className="border-border bg-bg text-link mx-auto flex size-10 items-center justify-center rounded-full border"
+          >
+            <Icon icon={SealIcon} size={20} />
+          </span>
+          <p className="text-h3 text-text mt-4 font-serif">{t("honestTitle")}</p>
+          <p className="text-body text-text-muted mx-auto mt-2 max-w-xl">{t("honestBody")}</p>
         </div>
-      </div>
+      </Reveal>
+
+      <section className="mx-auto mt-24 max-w-2xl">
+        <Reveal>
+          <h2 className="text-h2 text-text font-serif">{t("faqTitle")}</h2>
+          <div className="mt-6">
+            <FaqAccordion items={faq} />
+          </div>
+        </Reveal>
+      </section>
 
       <div className="mt-16 text-center">
         <Link href="/docs">
-          <Button variant="ghost">Read the docs</Button>
+          <Button variant="ghost" className="group anim-keep">
+            {t("readDocs")}
+            <Icon
+              icon={ArrowRightIcon}
+              size={16}
+              className="anim-keep transition-transform duration-200 group-hover:translate-x-1"
+            />
+          </Button>
         </Link>
       </div>
     </div>

@@ -1,4 +1,249 @@
 {
+  "Footer": {
+    "tagline": "Chaque réponse, scellée par sa source.",
+    "product": "Produit",
+    "how": "Comment ça marche",
+    "pricing": "Tarifs",
+    "docs": "Docs",
+    "demo": "Démo live",
+    "legal": "Légal",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "getStarted": "Commencer",
+    "signIn": "Se connecter",
+    "startFree": "Démarrer gratuitement",
+    "builtBy": "Créé par",
+    "rights": "© 2026 Sigilla",
+    "backToTop": "Haut de page"
+  },
+  "SiteNav": {
+    "demo": "Démo",
+    "main": "Navigation principale",
+    "product": "Produit",
+    "pricing": "Tarifs",
+    "docs": "Docs",
+    "signIn": "Se connecter",
+    "startFree": "Démarrer gratuitement",
+    "toggleTheme": "Changer de thème",
+    "switchTo": "Changer de langue",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
+  },
+  "ErrorPage": {
+    "eyebrow": "ERREUR INATTENDUE",
+    "home": "Retour à l'accueil",
+    "reference": "Référence"
+  },
+  "NotFound": {
+    "eyebrow": "ERREUR 404",
+    "title": "Cette page a quitté la maison.",
+    "body": "Le lien est peut-être cassé, ou la page a été déplacée. Revenons à quelque chose de scellé.",
+    "home": "Retour à l'accueil",
+    "pricing": "Tarifs",
+    "docs": "Docs",
+    "demo": "Démo live",
+    "quickLinks": "Liens utiles"
+  },
+  "Legal": {
+    "eyebrow": "LÉGAL",
+    "lastUpdated": "Dernière mise à jour",
+    "alsoRead": "À lire aussi",
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "updated": "15 octobre 2026",
+      "intro": "Ce que Sigilla collecte, qui nous aide à le faire fonctionner, et comment vous gardez le contrôle de vos données.",
+      "glanceTitle": "En bref",
+      "glance": [
+        "Nous ne vendons jamais vos données.",
+        "Aucun cookie publicitaire, aucun suivi inter-sites.",
+        "Vous pouvez supprimer votre compte et votre organisation à tout moment depuis les Paramètres."
+      ],
+      "processTitle": "Ce que nous traitons",
+      "processBody": "Les informations de votre compte (nom, e-mail), le contenu des sources que vous importez ou connectez (PDF, pages explorées, pages Notion), les conversations de vos visiteurs avec vos agents, et une adresse e-mail facultative qu'un visiteur peut laisser en demandant un humain.",
+      "subTitle": "Sous-traitants",
+      "colService": "Service",
+      "colRole": "Rôle",
+      "processors": [
+        {
+          "name": "Vercel",
+          "role": "Hébergement et stockage de fichiers"
+        },
+        {
+          "name": "Neon",
+          "role": "Base de données"
+        },
+        {
+          "name": "Groq · Google Gemini",
+          "role": "Génération des réponses et embeddings"
+        },
+        {
+          "name": "Stripe",
+          "role": "Paiements (mode test uniquement)"
+        },
+        {
+          "name": "Notion",
+          "role": "Uniquement si vous connectez un espace"
+        }
+      ],
+      "dontTitle": "Ce que nous ne faisons pas",
+      "dontBody": "Nous ne vendons jamais vos données et n'utilisons pas de cookies publicitaires.",
+      "widgetTitle": "Le widget",
+      "widgetBody": "Le widget intégrable stocke un identifiant de visiteur aléatoire dans le <code>localStorage</code> du navigateur de vos visiteurs afin de poursuivre une conversation entre les rechargements de page. Aucun suivi inter-sites.",
+      "deleteTitle": "Suppression de vos données",
+      "deleteBody": "Vous pouvez supprimer votre compte et votre organisation à tout moment depuis les Paramètres.",
+      "contactTitle": "Contact"
+    },
+    "terms": {
+      "title": "Conditions d'utilisation",
+      "updated": "15 octobre 2026",
+      "intro": "Les règles d'utilisation de Sigilla.",
+      "acceptableTitle": "Utilisation acceptable",
+      "acceptableBody": "N'importez pas et n'explorez pas de contenu illégal, contrefait, ou que vous n'avez pas le droit d'utiliser.",
+      "limitsTitle": "Limites des offres",
+      "limitsBody": "Chaque offre a des limites sur les agents, les sources, les pages explorées et les messages mensuels — voir <pricing>Tarifs</pricing>.",
+      "changesTitle": "Modifications",
+      "changesBody": "Ces conditions peuvent être mises à jour de temps à autre."
+    }
+  },
+  "Docs": {
+    "overview": "Vue d'ensemble",
+    "homeEyebrow": "DOCUMENTATION",
+    "homeTitle": "Tout ce qu'il faut pour lancer votre agent.",
+    "homeBody": "Guides, concepts et référence pour créer, intégrer et faire tourner votre agent Sigilla.",
+    "createTitle": "Créer votre premier agent",
+    "createBody": "Inscrivez-vous, suivez l'assistant et publiez un agent en quelques minutes.",
+    "embedTitle": "Intégrer le widget",
+    "embedBody": "Collez une balise script et installez le concierge sur votre site.",
+    "apiTitle": "Référence API",
+    "apiBody": "Clés, endpoints et limites pour travailler avec Sigilla depuis votre code.",
+    "open": "Ouvrir",
+    "browseTitle": "Parcourir par thème",
+    "helpText": "Vous ne trouvez pas ce qu'il vous faut ? Demandez au concierge.",
+    "helpAction": "Demander au concierge",
+    "search": "Rechercher dans les docs",
+    "searchPlaceholder": "Rechercher dans la documentation…",
+    "searchHint": "Tapez pour chercher des pages et des sections. Utilisez les flèches et Entrée pour ouvrir un résultat.",
+    "noResults": "Aucun résultat pour « {q} ».",
+    "browse": "Parcourir les docs",
+    "onThisPage": "Sur cette page",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "pagination": "Pages de documentation",
+    "copyLink": "Copier le lien vers cette section",
+    "linkCopied": "Copié",
+    "groups": {
+      "start": "Démarrer",
+      "widget": "Widget",
+      "concepts": "Concepts",
+      "reference": "Référence"
+    }
+  },
+  "Pricing": {
+    "eyebrow": "TARIFS",
+    "title": "Des offres simples. Des réponses exceptionnelles.",
+    "subtitle": "Ancrez chaque réponse dans votre documentation.",
+    "testMode": "Mode démo — les paiements utilisent le mode test de Stripe. Carte :",
+    "mostChosen": "Le plus choisi",
+    "month": "/mois",
+    "startFree": "Démarrer gratuitement",
+    "upgradeTo": "Passer à {plan}",
+    "compareTitle": "Comparer les offres",
+    "compareFeature": "Fonctionnalité",
+    "rowAgents": "Agents",
+    "rowSources": "Sources par agent",
+    "rowPages": "Pages explorées par site",
+    "rowMessages": "Messages par mois",
+    "rowMembers": "Membres de l'équipe",
+    "rowHandoff": "Passage à un humain",
+    "rowNotion": "Connecteur Notion",
+    "rowApi": "Accès API",
+    "rowBadge": "Badge « Sealed by Sigilla » retirable",
+    "included": "Inclus",
+    "notIncluded": "Non inclus",
+    "honestTitle": "Comment les réponses restent honnêtes",
+    "honestBody": "Sous un seuil de similarité que vous contrôlez, votre agent refuse de répondre et propose un humain à la place.",
+    "faqTitle": "Questions fréquentes",
+    "readDocs": "Lire la documentation",
+    "faq": [
+      {
+        "q": "Comment fonctionnent les citations ?",
+        "a": "Chaque réponse s'appuie sur les sources que vous avez connectées. Chaque phrase qui utilise une source reçoit un sceau numéroté qui renvoie à la page ou à l'URL exacte."
+      },
+      {
+        "q": "Que se passe-t-il quand la réponse n'est pas dans mes docs ?",
+        "a": "Votre agent refuse plutôt que d'inventer, et propose de faire intervenir un humain de votre équipe."
+      },
+      {
+        "q": "Quelles sources puis-je connecter ?",
+        "a": "Des PDF, des sites jusqu'à 100 pages par site, et des espaces Notion (Pro et Team)."
+      },
+      {
+        "q": "Puis-je retirer le badge « Sealed by Sigilla » ?",
+        "a": "Oui, avec les offres Pro et Team."
+      }
+    ]
+  },
+  "HomeVisuals": {
+    "indexed": "Indexé",
+    "notionPage": "Livraisons et retours",
+    "warmTone": "Ton chaleureux",
+    "welcome": "Bienvenue chez Atelier Lune — comment puis-je vous aider ?",
+    "under5": "< 5 Ko",
+    "inbox": "Boîte de réception",
+    "q1": "Puis-je changer mon adresse de livraison ?",
+    "notFound": "Introuvable dans vos docs",
+    "handoff": "Passage humain",
+    "q2": "Livrez-vous en Suisse ?",
+    "cited1": "La livraison prend 3 à 5 jours",
+    "cited2": "et les droits sont ajoutés au paiement",
+    "shipping": "Politique de livraison",
+    "cantFind": "Je ne trouve pas cela dans vos docs.",
+    "bringing": "Je fais venir votre équipe…",
+    "analytics": "12 sans réponse · 94 % résolues",
+    "size": "4,5 Ko",
+    "limit": "limite 5 Ko",
+    "deps": "0 dépendance · isolé dans le Shadow DOM",
+    "newSeason": "Nouvelle saison",
+    "mockQ": "Expédiez-vous vos bougies en Suisse ?",
+    "mockA": "Oui — 3 à 5 jours ouvrés, droits et TVA calculés au paiement",
+    "mockSealed": "Scellé par 2 sources — {shipping} · FAQ"
+  },
+  "Home": {
+    "seeEyebrow": "VOYEZ-LE EN ACTION",
+    "seeTitle": "Le concierge, installé sur des sites réalistes.",
+    "seeBody": "Explorez deux marques fictives et posez n'importe quelle question à leur concierge.",
+    "seeOpen": "Ouvrir le site",
+    "atelierTag": "Bougies de luxe",
+    "ledgerTag": "Logiciel de comptabilité",
+    "atelierDesc": "Une boutique dont le concierge répond aux questions de livraison, de retours et d'entretien, avec ses sources.",
+    "ledgerDesc": "Un centre d'aide dont l'assistant répond aux questions de facturation, de TVA et de synchronisation bancaire.",
+    "heroEyebrow": "SUPPORT IA, AVEC SOURCES",
+    "heroLine1": "Un support qui répond",
+    "heroLine2": "avec distinction.",
+    "heroBody": "Des agents de support IA sans code, entraînés sur vos docs et intégrables partout en une ligne.",
+    "startFree": "Démarrer gratuitement",
+    "exploreDemo": "Explorer la démo live",
+    "brandsLabel": "Conçu pour des maisons comme",
+    "brandsNote": "Marques fictives",
+    "steps": [{"title": "Connectez vos sources", "body": "Importez des PDF, explorez votre site ou connectez Notion. Sigilla lit, découpe et indexe tout."}, {"title": "Façonnez votre agent", "body": "Donnez-lui un nom, un ton et des limites. Choisissez vos couleurs et votre message d'accueil."}, {"title": "Intégrez-le en une ligne", "body": "Collez une seule balise script. Moins de 5 Ko, isolée de vos styles."}, {"title": "Votre équipe prend le relais", "body": "Les questions sans réponse arrivent dans votre boîte avec toute la conversation."}],
+    "features": [{"title": "Réponses citées", "body": "Chaque phrase renvoie à la page ou à l'URL d'où elle vient."}, {"title": "Passage à un humain", "body": "Quand la réponse n'est pas dans vos docs, votre agent le dit et fait venir votre équipe."}, {"title": "Analytics des conversations", "body": "Voyez ce que demandent vos clients, ce qui est répondu et ce qui manque à vos docs."}, {"title": "Moins de 5 Ko", "body": "Un widget sans dépendance qui ne ralentira pas votre site."}],
+    "promiseQuote": "Chaque réponse, scellée par sa source.",
+    "promiseLabel": "LA PROMESSE SIGILLA",
+    "conciergeHint": "Curieux ? Posez n'importe quelle question sur Sigilla au concierge.",
+    "conciergeAction": "Demander au concierge",
+    "ctaEyebrow": "COMMENCER",
+    "ctaTitle": "Votre premier agent est à quelques minutes.",
+    "ctaBody": "Connectez vos docs, façonnez votre agent et intégrez-le en une ligne.",
+    "ctaNote": "Plan gratuit disponible.",
+    "whyEyebrow": "POURQUOI SIGILLA",
+    "whyTitle": "Conçu pour des réponses de confiance.",
+    "howEyebrow": "COMMENT ÇA MARCHE",
+    "howTitle": "De vos documents à des réponses scellées, en trois étapes."
+  },
+  "Splash": {
+    "tagline": "Chaque réponse, scellée par sa source.",
+    "loading": "Chargement"
+  },
   "Common": {
     "save": "Enregistrer",
     "cancel": "Annuler",
@@ -25,6 +270,17 @@
     "language": "Langue"
   },
   "Auth": {
+    "backHome": "Retour à l'accueil",
+    "tagline": "Des agents de support IA sans code, entraînés sur vos docs.",
+    "benefit1": "Plan gratuit pour commencer",
+    "benefit2": "Intégration en une ligne, moins de 5 Ko",
+    "benefit3": "Chaque réponse citée par sa source",
+    "backToSignIn": "Retour à la connexion",
+    "forgotSentTitle": "Vérifiez votre boîte mail",
+    "resetSubtitle": "Utilisez au moins 8 caractères.",
+    "resetInvalidTitle": "Ce lien n'est pas valide",
+    "resetInvalid": "Le lien de réinitialisation est absent ou a expiré. Demandez-en un nouveau pour continuer.",
+    "requestNew": "Demander un nouveau lien",
     "signInTitle": "Bon retour",
     "signInSubtitle": "Connectez-vous à vos agents et conversations.",
     "signUpTitle": "Créez votre compte",
@@ -271,6 +527,8 @@
     },
     "draftBanner": "Cet agent est un brouillon. Publiez-le depuis l'onglet Widget pour répondre aux visiteurs.",
     "overview": {
+      "viewOnSite": "Voir cet agent en action sur son site",
+      "viewOnSiteBody": "Ouvrez la marque fictive où ce concierge est installé (nouvel onglet).",
       "recentConversations": "Conversations récentes",
       "noneYet": "Aucune conversation pour l'instant.",
       "knowledgeHealth": "Santé de la base",

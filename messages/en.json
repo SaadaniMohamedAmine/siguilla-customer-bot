@@ -1,4 +1,249 @@
 {
+  "Footer": {
+    "tagline": "Every answer, sealed by its source.",
+    "product": "Product",
+    "how": "How it works",
+    "pricing": "Pricing",
+    "docs": "Docs",
+    "demo": "Live demo",
+    "legal": "Legal",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "getStarted": "Get started",
+    "signIn": "Sign in",
+    "startFree": "Start free",
+    "builtBy": "Built by",
+    "rights": "© 2026 Sigilla",
+    "backToTop": "Back to top"
+  },
+  "SiteNav": {
+    "demo": "Demo",
+    "main": "Main navigation",
+    "product": "Product",
+    "pricing": "Pricing",
+    "docs": "Docs",
+    "signIn": "Sign in",
+    "startFree": "Start free",
+    "toggleTheme": "Toggle theme",
+    "switchTo": "Switch language",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "ErrorPage": {
+    "eyebrow": "UNEXPECTED ERROR",
+    "home": "Return home",
+    "reference": "Reference"
+  },
+  "NotFound": {
+    "eyebrow": "ERROR 404",
+    "title": "This page has left the house.",
+    "body": "The link may be broken, or the page may have moved. Let's get you back to something sealed.",
+    "home": "Return home",
+    "pricing": "Pricing",
+    "docs": "Docs",
+    "demo": "Live demo",
+    "quickLinks": "Helpful links"
+  },
+  "Legal": {
+    "eyebrow": "LEGAL",
+    "lastUpdated": "Last updated",
+    "alsoRead": "Also read",
+    "privacy": {
+      "title": "Privacy Policy",
+      "updated": "October 15, 2026",
+      "intro": "What Sigilla collects, who helps us run it, and how you stay in control of your data.",
+      "glanceTitle": "At a glance",
+      "glance": [
+        "We never sell your data.",
+        "No advertising cookies, no cross-site tracking.",
+        "You can delete your account and organization at any time from Settings."
+      ],
+      "processTitle": "What we process",
+      "processBody": "Your account details (name, email), the content of the sources you upload or connect (PDFs, crawled pages, Notion pages), conversations your visitors have with your agents, and an optional email address a visitor may leave when requesting a human.",
+      "subTitle": "Sub-processors",
+      "colService": "Service",
+      "colRole": "Role",
+      "processors": [
+        {
+          "name": "Vercel",
+          "role": "Hosting and file storage"
+        },
+        {
+          "name": "Neon",
+          "role": "Database"
+        },
+        {
+          "name": "Groq · Google Gemini",
+          "role": "Answer generation and embeddings"
+        },
+        {
+          "name": "Stripe",
+          "role": "Payments (test mode only)"
+        },
+        {
+          "name": "Notion",
+          "role": "Only if you connect a workspace"
+        }
+      ],
+      "dontTitle": "What we don't do",
+      "dontBody": "We never sell your data, and we don't use advertising cookies.",
+      "widgetTitle": "The widget",
+      "widgetBody": "The embeddable widget stores a random visitor identifier in your visitors' browser <code>localStorage</code> to keep a conversation going across page reloads. No cross-site tracking.",
+      "deleteTitle": "Deleting your data",
+      "deleteBody": "You can delete your account and organization at any time from Settings.",
+      "contactTitle": "Contact"
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "updated": "October 15, 2026",
+      "intro": "The rules for using Sigilla.",
+      "acceptableTitle": "Acceptable use",
+      "acceptableBody": "Don't upload or crawl content that is illegal, infringing, or that you don't have the right to use.",
+      "limitsTitle": "Plan limits",
+      "limitsBody": "Each plan has limits on agents, sources, crawled pages and monthly messages — see <pricing>Pricing</pricing>.",
+      "changesTitle": "Changes",
+      "changesBody": "These terms may be updated from time to time."
+    }
+  },
+  "Docs": {
+    "overview": "Overview",
+    "homeEyebrow": "DOCUMENTATION",
+    "homeTitle": "Everything you need to ship your agent.",
+    "homeBody": "Guides, concepts and reference for building, embedding and running your Sigilla agent.",
+    "createTitle": "Create your first agent",
+    "createBody": "Sign up, run the wizard and publish an agent in a few minutes.",
+    "embedTitle": "Embed the widget",
+    "embedBody": "Paste one script tag and put the concierge on your site.",
+    "apiTitle": "API reference",
+    "apiBody": "Keys, endpoints and limits for working with Sigilla from your own code.",
+    "open": "Open",
+    "browseTitle": "Browse by topic",
+    "helpText": "Can't find what you need? Ask the concierge.",
+    "helpAction": "Ask the concierge",
+    "search": "Search docs",
+    "searchPlaceholder": "Search the documentation…",
+    "searchHint": "Type to search pages and sections. Use the arrow keys and Enter to open a result.",
+    "noResults": "No results for “{q}”.",
+    "browse": "Browse docs",
+    "onThisPage": "On this page",
+    "previous": "Previous",
+    "next": "Next",
+    "pagination": "Documentation pages",
+    "copyLink": "Copy link to this section",
+    "linkCopied": "Copied",
+    "groups": {
+      "start": "Start",
+      "widget": "Widget",
+      "concepts": "Concepts",
+      "reference": "Reference"
+    }
+  },
+  "Pricing": {
+    "eyebrow": "PRICING",
+    "title": "Simple plans. Exceptional answers.",
+    "subtitle": "Ground every answer in your documentation.",
+    "testMode": "Demo mode — payments use Stripe test mode. Card:",
+    "mostChosen": "Most chosen",
+    "month": "/month",
+    "startFree": "Start free",
+    "upgradeTo": "Upgrade to {plan}",
+    "compareTitle": "Compare plans",
+    "compareFeature": "Feature",
+    "rowAgents": "Agents",
+    "rowSources": "Sources per agent",
+    "rowPages": "Pages crawled per website",
+    "rowMessages": "Messages per month",
+    "rowMembers": "Team members",
+    "rowHandoff": "Human handoff",
+    "rowNotion": "Notion connector",
+    "rowApi": "API access",
+    "rowBadge": "Removable “Sealed by Sigilla” badge",
+    "included": "Included",
+    "notIncluded": "Not included",
+    "honestTitle": "How answers stay honest",
+    "honestBody": "Below a similarity threshold you control, your agent declines to answer and offers a human instead.",
+    "faqTitle": "Frequently asked questions",
+    "readDocs": "Read the docs",
+    "faq": [
+      {
+        "q": "How do citations work?",
+        "a": "Every answer is grounded in the sources you connected. Each sentence that uses a source gets a numbered seal linking back to the exact page or URL."
+      },
+      {
+        "q": "What happens when the answer isn't in my docs?",
+        "a": "Your agent declines rather than guessing, and offers to bring in a human from your team."
+      },
+      {
+        "q": "Which sources can I connect?",
+        "a": "PDFs, websites up to 100 pages per site, and Notion workspaces (Pro and Team)."
+      },
+      {
+        "q": "Can I remove the “Sealed by Sigilla” badge?",
+        "a": "Yes, on Pro and Team."
+      }
+    ]
+  },
+  "HomeVisuals": {
+    "indexed": "Indexed",
+    "notionPage": "Shipping & returns",
+    "warmTone": "Warm tone",
+    "welcome": "Welcome to Atelier Lune — how can I help?",
+    "under5": "< 5 KB",
+    "inbox": "Inbox",
+    "q1": "Can I change my delivery address?",
+    "notFound": "Not found in your docs",
+    "handoff": "Handoff",
+    "q2": "Do you ship to Switzerland?",
+    "cited1": "Delivery takes 3–5 days",
+    "cited2": "and duties are added at checkout",
+    "shipping": "Shipping Policy",
+    "cantFind": "I can't find that in your docs.",
+    "bringing": "Bringing in your team…",
+    "analytics": "12 unanswered · 94% resolved",
+    "size": "4.5 KB",
+    "limit": "limit 5 KB",
+    "deps": "0 dependencies · isolated in Shadow DOM",
+    "newSeason": "New season",
+    "mockQ": "Do your candles ship to Switzerland?",
+    "mockA": "Yes — 3–5 business days, duties and VAT calculated at checkout",
+    "mockSealed": "Sealed by 2 sources — {shipping} · FAQ"
+  },
+  "Home": {
+    "seeEyebrow": "SEE IT IN ACTION",
+    "seeTitle": "The concierge, installed on real-looking sites.",
+    "seeBody": "Explore two illustrative brands and ask their concierge anything.",
+    "seeOpen": "Open the live site",
+    "atelierTag": "Luxury candles",
+    "ledgerTag": "Accounting software",
+    "atelierDesc": "A boutique whose concierge answers shipping, returns and care questions, with sources.",
+    "ledgerDesc": "A help center whose assistant answers invoicing, VAT and bank sync questions.",
+    "heroEyebrow": "AI SUPPORT, WITH SOURCES",
+    "heroLine1": "Support, answered",
+    "heroLine2": "with distinction.",
+    "heroBody": "No-code AI support agents, trained on your docs and embedded anywhere in one line.",
+    "startFree": "Start free",
+    "exploreDemo": "Explore the live demo",
+    "brandsLabel": "Built for houses like",
+    "brandsNote": "Illustrative brands",
+    "steps": [{"title": "Connect your sources", "body": "Upload PDFs, crawl your website or connect Notion. Sigilla reads, splits and indexes everything."}, {"title": "Shape your agent", "body": "Give it a name, a tone and boundaries. Choose your colors and welcome message."}, {"title": "Embed in one line", "body": "Paste one script tag. Under 5 KB, isolated from your styles."}, {"title": "Your team steps in", "body": "Unanswered questions land in your inbox with the full conversation attached."}],
+    "features": [{"title": "Cited answers", "body": "Every sentence points to the page or URL it came from."}, {"title": "Human handoff", "body": "When the answer isn't in your docs, your agent says so and brings in your team."}, {"title": "Conversation analytics", "body": "See what customers ask, what's answered, and what's missing from your docs."}, {"title": "Under 5 KB", "body": "A dependency-free widget that won't slow your site down."}],
+    "promiseQuote": "Every answer, sealed by its source.",
+    "promiseLabel": "THE SIGILLA PROMISE",
+    "conciergeHint": "Curious? Ask the concierge anything about Sigilla.",
+    "conciergeAction": "Ask the concierge",
+    "ctaEyebrow": "GET STARTED",
+    "ctaTitle": "Your first agent is a few minutes away.",
+    "ctaBody": "Connect your docs, shape your agent and embed it with one line.",
+    "ctaNote": "Free plan available.",
+    "whyEyebrow": "WHY SIGILLA",
+    "whyTitle": "Built for answers you can trust.",
+    "howEyebrow": "HOW IT WORKS",
+    "howTitle": "From your documents to sealed answers, in three steps."
+  },
+  "Splash": {
+    "tagline": "Every answer, sealed by its source.",
+    "loading": "Loading"
+  },
   "Common": {
     "save": "Save",
     "cancel": "Cancel",
@@ -25,6 +270,17 @@
     "language": "Language"
   },
   "Auth": {
+    "backHome": "Back to home",
+    "tagline": "No-code AI support agents, trained on your docs.",
+    "benefit1": "Free plan to get started",
+    "benefit2": "Embed in one line, under 5 KB",
+    "benefit3": "Every answer cited by its source",
+    "backToSignIn": "Back to sign in",
+    "forgotSentTitle": "Check your inbox",
+    "resetSubtitle": "Use at least 8 characters.",
+    "resetInvalidTitle": "This link isn't valid",
+    "resetInvalid": "The reset link is missing or has expired. Request a new one to continue.",
+    "requestNew": "Request a new link",
     "signInTitle": "Welcome back",
     "signInSubtitle": "Sign in to your agents and conversations.",
     "signUpTitle": "Create your account",
@@ -271,6 +527,8 @@
     },
     "draftBanner": "This agent is a draft. Publish it from the Widget tab to answer visitors.",
     "overview": {
+      "viewOnSite": "See this agent live on its site",
+      "viewOnSiteBody": "Open the illustrative brand where this concierge is installed (new tab).",
       "recentConversations": "Recent conversations",
       "noneYet": "No conversations yet.",
       "knowledgeHealth": "Knowledge health",

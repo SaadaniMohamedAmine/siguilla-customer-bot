@@ -3,6 +3,9 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { requireOrgPage } from "@/lib/session";
 import { prisma } from "@/lib/db";
+import { getDemoSiteByAgentName } from "@/lib/demo-sites";
+import { Icon } from "@/components/ui/icon";
+import { ArrowRightIcon, GlobeIcon } from "@/lib/icons";
 import { getKpis } from "@/lib/analytics/queries";
 import { daysAgo } from "@/lib/time";
 import { EmbedSnippet } from "@/components/widget/embed-snippet";
@@ -34,10 +37,33 @@ export default async function AgentOverviewPage({ params }: PageProps<"/agents/[
   const processing = sources.filter((s) => s.status === "queued" || s.status === "processing").length;
   const failed = sources.filter((s) => s.status === "failed").length;
 
+  const demoSite = org.isDemo ? getDemoSiteByAgentName(chatbot.name) : null;
+
   const pct = (v: number | null) => (v != null ? `${Math.round(v * 100)}%` : "—");
 
   return (
     <div className="flex flex-col gap-8">
+      {demoSite ? (
+        <a
+          href={`/${demoSite}`}
+          target="_blank"
+          rel="noreferrer"
+          className="anim-keep group border-link/40 bg-link/10 hover:border-link flex items-center justify-between gap-4 rounded-md border p-4 transition-colors duration-200"
+        >
+          <span className="flex items-center gap-3">
+            <Icon icon={GlobeIcon} size={20} className="text-link" />
+            <span>
+              <span className="text-body text-text block font-medium">{t("viewOnSite")}</span>
+              <span className="text-small text-text-muted block">{t("viewOnSiteBody")}</span>
+            </span>
+          </span>
+          <Icon
+            icon={ArrowRightIcon}
+            size={18}
+            className="anim-keep text-link transition-transform duration-200 group-hover:translate-x-1"
+          />
+        </a>
+      ) : null}
       {chatbot.status === "draft" ? (
         <div className="border-warning/30 bg-warning/10 text-small text-warning rounded-sm border p-4">
           This agent is a draft. Publish it from the Widget tab to answer visitors.

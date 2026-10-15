@@ -67,11 +67,13 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="w-full max-w-[420px] rounded-md border border-border bg-surface-raised p-10">
-      <h1 className="font-serif text-h2 text-text">{t("signUpTitle")}</h1>
-      <p className="mt-1 text-body text-text-muted">{t("signUpSubtitle")}</p>
+    <div className="page-in anim-keep w-full max-w-[420px] rounded-md border border-border bg-surface-raised p-10">
+      <div className="hero-in anim-keep" style={{ "--d": "0ms" } as React.CSSProperties}>
+        <h1 className="font-serif text-h2 text-text">{t("signUpTitle")}</h1>
+        <p className="mt-1 text-body text-text-muted">{t("signUpSubtitle")}</p>
+      </div>
 
-      <div className="mt-6 flex flex-col gap-3">
+      <div className="hero-in anim-keep mt-6 flex flex-col gap-3" style={{ "--d": "100ms" } as React.CSSProperties}>
         <Button
           type="button"
           variant="ghost"
@@ -98,7 +100,12 @@ export default function SignUpPage() {
         <span className="h-px flex-1 bg-border" />
       </div>
 
-      <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
+      <form
+        onSubmit={onSubmit}
+        noValidate
+        className="hero-in anim-keep flex flex-col gap-4"
+        style={{ "--d": "200ms" } as React.CSSProperties}
+      >
         <Input
           label={t("name")}
           value={name}
@@ -155,12 +162,12 @@ export default function SignUpPage() {
         <p className="text-small text-text-muted">
           {t.rich("legal", {
             terms: (chunks) => (
-              <Link href="/terms" className="text-link underline underline-offset-2">
+              <Link href="/terms" className="link-draw anim-keep text-link">
                 {chunks}
               </Link>
             ),
             privacy: (chunks) => (
-              <Link href="/privacy" className="text-link underline underline-offset-2">
+              <Link href="/privacy" className="link-draw anim-keep text-link">
                 {chunks}
               </Link>
             ),
@@ -173,7 +180,7 @@ export default function SignUpPage() {
 
       <p className="mt-6 text-center text-small text-text-muted">
         {t("haveAccount")}{" "}
-        <Link href="/sign-in" className="text-link underline underline-offset-2">
+        <Link href="/sign-in" className="link-draw anim-keep text-link">
           {t("signIn")}
         </Link>
       </p>
