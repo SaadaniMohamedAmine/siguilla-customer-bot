@@ -239,3 +239,7 @@ html:has([data-splash]) {
 .marquee-track {
   animation: marquee 35s linear infinite;
 }
+@keyframes caret {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

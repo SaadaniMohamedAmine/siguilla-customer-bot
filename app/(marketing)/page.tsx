@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { HowItWorks } from "@/components/marketing/how-it-works";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/marketing/reveal";
 import { FeatureCard } from "@/components/marketing/feature-card";
@@ -10,24 +12,6 @@ const CTA = "group anim-keep hover:-translate-y-0.5 hover:shadow-[var(--shadow-l
 const at = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
 
 const BRANDS = ["Atelier Lune", "Ledgerline", "Maison Verdant", "Aurelia Haute", "Vendôme & Cie"];
-
-const STEPS = [
-  {
-    n: "01",
-    title: "Connect your sources",
-    body: "Upload PDFs, crawl your website or connect Notion. Sigilla reads, splits and indexes everything.",
-  },
-  {
-    n: "02",
-    title: "Shape your agent",
-    body: "Give it a name, a tone and boundaries. Choose your colors and welcome message.",
-  },
-  {
-    n: "03",
-    title: "Embed in one line",
-    body: "Paste one script tag. Under 5 KB, isolated from your styles.",
-  },
-];
 
 const FEATURES = [
   { title: "Cited answers", body: "Every sentence points to the page or URL it came from." },
@@ -55,7 +39,8 @@ const JSON_LD = {
   ],
 };
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const t = await getTranslations("Home");
   return (
     <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
@@ -130,16 +115,8 @@ export default function LandingPage() {
         <p className="text-small text-text-muted/70 mt-6 text-center">Illustrative brands</p>
       </section>
 
-      <section id="how" className="px-6 py-24">
-        <div className="mx-auto grid max-w-5xl gap-10 sm:grid-cols-3">
-          {STEPS.map((s, i) => (
-            <Reveal key={s.n} delay={i * 120}>
-              <p className="text-link font-serif text-[40px] italic">{s.n}</p>
-              <h2 className="text-h3 text-text mt-2 font-serif">{s.title}</h2>
-              <p className="text-body text-text-muted mt-2">{s.body}</p>
-            </Reveal>
-          ))}
-        </div>
+      <section id="how" className="scroll-mt-16 px-6 py-24">
+        <HowItWorks eyebrow={t("howEyebrow")} title={t("howTitle")} />
       </section>
 
       <section className="bg-surface px-6 py-24">
