@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Wordmark } from "@/components/ui/wordmark";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,15 @@ import { useHydrated } from "@/lib/use-hydrated";
 export function MarketingNav() {
   const { theme, setTheme } = useTheme();
   const mounted = useHydrated();
+  const pathname = usePathname();
+  // Sur la home, défilement fluide vers l'ancre (Next ne l'anime pas pour un lien /#id).
+  const scrollToHow = (e: React.MouseEvent) => {
+    const target = pathname === "/" ? document.getElementById("how") : null;
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: "smooth" });
+    history.replaceState(null, "", "/#how");
+  };
   return (
     <header className="border-border bg-bg/80 sticky top-0 z-40 border-b backdrop-blur-sm">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
@@ -17,7 +27,7 @@ export function MarketingNav() {
           <Wordmark size="md" />
         </Link>
         <nav className="text-body text-text-muted hidden items-center gap-6 sm:flex">
-          <Link href="/#how" className="hover:text-text">
+          <Link href="/#how" onClick={scrollToHow} className="hover:text-text">
             Product
           </Link>
           <Link href="/pricing" className="hover:text-text">
