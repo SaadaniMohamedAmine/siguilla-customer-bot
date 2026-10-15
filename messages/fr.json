@@ -1,4 +1,8 @@
 {
+  "Splash": {
+    "tagline": "Chaque réponse, scellée par sa source.",
+    "loading": "Chargement"
+  },
   "Common": {
     "save": "Enregistrer",
     "cancel": "Annuler",

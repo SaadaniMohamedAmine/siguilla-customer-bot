@@ -1,4 +1,8 @@
 {
+  "Splash": {
+    "tagline": "Every answer, sealed by its source.",
+    "loading": "Loading"
+  },
   "Common": {
     "save": "Save",
     "cancel": "Cancel",
