@@ -661,6 +661,10 @@
     },
     "draftBanner": "Cet agent est un brouillon. Publiez-le depuis l'onglet Widget pour répondre aux visiteurs.",
     "overview": {
+      "goToWidget": "Aller au Widget",
+      "viewAll": "Tout voir",
+      "manageSources": "Gérer les sources",
+      "embedHint": "Collez cette ligne unique avant </body> sur votre site.",
       "viewOnSite": "Voir cet agent en action sur son site",
       "viewOnSiteBody": "Ouvrez la marque fictive où ce concierge est installé (nouvel onglet).",
       "recentConversations": "Conversations récentes",

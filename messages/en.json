@@ -661,6 +661,10 @@
     },
     "draftBanner": "This agent is a draft. Publish it from the Widget tab to answer visitors.",
     "overview": {
+      "goToWidget": "Go to Widget",
+      "viewAll": "View all",
+      "manageSources": "Manage sources",
+      "embedHint": "Paste this single line before </body> on your site.",
       "viewOnSite": "See this agent live on its site",
       "viewOnSiteBody": "Open the illustrative brand where this concierge is installed (new tab).",
       "recentConversations": "Recent conversations",

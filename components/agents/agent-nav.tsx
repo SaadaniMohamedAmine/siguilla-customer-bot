@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { Icon } from "@/components/ui/icon";
+import { ArrowRightIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
 const TABS = [
@@ -14,13 +16,17 @@ const TABS = [
   { key: "settings", href: "settings" },
 ] as const;
 
+/** Onglets de la fiche agent : le loader global ne se lance pas entre eux (même agent), l'indicateur accent se redessine. */
 export function AgentNav({ agentId }: { agentId: string }) {
   const t = useTranslations("Agents.tabs");
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   return (
-    <nav className="border-border mb-6 flex flex-wrap gap-6 border-b">
+    <nav
+      aria-label={t("overview")}
+      className="border-border scroll-thin -mx-1 mb-8 flex gap-1 overflow-x-auto border-b px-1"
+    >
       {TABS.map((tab) => {
         const external = tab.href.startsWith("/");
         const href = external
@@ -33,12 +39,27 @@ export function AgentNav({ agentId }: { agentId: string }) {
           <Link
             key={tab.key}
             href={href}
+            aria-current={active ? "page" : undefined}
             className={cn(
-              "text-body -mb-px border-b py-3 whitespace-nowrap transition-colors",
-              active ? "border-link text-text" : "text-text-muted hover:text-text border-transparent",
+              "anim-keep text-body group relative inline-flex shrink-0 items-center gap-1.5 px-3 py-3 whitespace-nowrap transition-colors duration-200",
+              active ? "text-text" : "text-text-muted hover:text-text",
             )}
           >
             {t(tab.key)}
+            {external ? (
+              <Icon
+                icon={ArrowRightIcon}
+                size={12}
+                className="anim-keep -rotate-45 opacity-50 transition-opacity duration-200 group-hover:opacity-100"
+              />
+            ) : null}
+            <span
+              aria-hidden
+              className={cn(
+                "anim-keep bg-accent absolute right-3 -bottom-px left-3 h-0.5 origin-left rounded-full transition-transform duration-300 ease-[var(--ease-lux)]",
+                active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-50",
+              )}
+            />
           </Link>
         );
       })}
