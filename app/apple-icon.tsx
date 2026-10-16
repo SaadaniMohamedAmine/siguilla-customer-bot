@@ -1,9 +1,11 @@
 import { ImageResponse } from "next/og";
+import { loadSerifFont } from "@/lib/og-fonts";
 
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
-export default function AppleIcon() {
+export default async function AppleIcon() {
+  const serif = await loadSerifFont();
   return new ImageResponse(
     (
       <div
@@ -28,13 +30,13 @@ export default function AppleIcon() {
             border: "3px solid rgba(243,236,230,0.55)",
             color: "#F3ECE6",
             fontSize: 84,
-            fontFamily: "Georgia, serif",
+            fontFamily: "Instrument Serif",
           }}
         >
           S
         </div>
       </div>
     ),
-    size,
+    { ...size, fonts: [{ name: "Instrument Serif", data: serif, style: "normal", weight: 400 }] },
   );
 }

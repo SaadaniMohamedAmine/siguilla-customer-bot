@@ -1,9 +1,11 @@
 import { ImageResponse } from "next/og";
+import { loadSerifFont } from "@/lib/og-fonts";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OgImage() {
+export default async function OgImage() {
+  const serif = await loadSerifFont();
   return new ImageResponse(
     <div
       style={{
@@ -16,7 +18,7 @@ export default function OgImage() {
         backgroundImage:
           "radial-gradient(circle at 88% 8%, rgba(158,47,69,0.55) 0%, rgba(158,47,69,0) 45%), radial-gradient(circle at 5% 100%, rgba(158,47,69,0.18) 0%, rgba(158,47,69,0) 40%)",
         padding: 72,
-        fontFamily: "Georgia, serif",
+        fontFamily: "Instrument Serif",
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
@@ -35,7 +37,7 @@ export default function OgImage() {
         >
           S
         </div>
-        <div style={{ display: "flex", color: "#F3ECE6", fontSize: 38, letterSpacing: 1 }}>Sigilla</div>
+        <div style={{ display: "flex", color: "#F3ECE6", fontSize: 46, letterSpacing: 1 }}>Sigilla</div>
       </div>
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 56 }}>
@@ -43,7 +45,7 @@ export default function OgImage() {
           <div style={{ display: "flex", color: "#E3B3BA", fontSize: 22, letterSpacing: 5, marginBottom: 22 }}>
             AI SUPPORT, WITH SOURCES
           </div>
-          <div style={{ display: "flex", color: "#F3ECE6", fontSize: 62, lineHeight: 1.12 }}>
+          <div style={{ display: "flex", color: "#F3ECE6", fontSize: 84, lineHeight: 1.04 }}>
             Every answer, sealed by its source.
           </div>
           <div style={{ display: "flex", color: "#A8999A", fontSize: 26, marginTop: 26 }}>
@@ -133,6 +135,6 @@ export default function OgImage() {
 
       <div style={{ display: "flex", color: "#6B5A5D", fontSize: 22, letterSpacing: 2 }}>sigilla.app</div>
     </div>,
-    size,
+    { ...size, fonts: [{ name: "Instrument Serif", data: serif, style: "normal", weight: 400 }] },
   );
 }
