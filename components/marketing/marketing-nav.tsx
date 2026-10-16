@@ -12,6 +12,7 @@ import { changeLocale } from "@/lib/actions/locale";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { locales } from "@/i18n/locales";
 import { useHydrated } from "@/lib/use-hydrated";
+import { useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
 const iconBtn =
@@ -23,6 +24,8 @@ export function MarketingNav() {
   const locale = useLocale();
   const mounted = useHydrated();
   const pathname = usePathname();
+  const { data: session, isPending } = useSession();
+  const signedIn = !!session?.user;
   const [scrolled, setScrolled] = useState(false);
   // Le menu mobile est ouvert tant qu'on est sur la page où il a été ouvert (se referme tout seul à la navigation).
   const [openAt, setOpenAt] = useState<string | null>(null);
@@ -135,15 +138,28 @@ export function MarketingNav() {
             >
               <Icon icon={mounted && theme === "dark" ? SunIcon : MoonIcon} size={18} />
             </button>
-            <Link
-              href="/sign-in"
-              className="text-body text-text-muted hover:text-text hidden transition-colors sm:inline"
+            {/* Pas de clignotement : tant que la session charge, on réserve la place sans rien afficher. */}
+            <div
+              className={cn(
+                "hidden items-center gap-4 transition-opacity duration-300 sm:flex",
+                isPending ? "invisible opacity-0" : "opacity-100",
+              )}
             >
-              {t("signIn")}
-            </Link>
-            <Link href="/sign-up" className="hidden sm:block">
-              <Button size="sm">{t("startFree")}</Button>
-            </Link>
+              {signedIn ? (
+                <Link href="/agents">
+                  <Button size="sm">{t("openDashboard")}</Button>
+                </Link>
+              ) : (
+                <>
+                  <Link href="/sign-in" className="text-body text-text-muted hover:text-text transition-colors">
+                    {t("signIn")}
+                  </Link>
+                  <Link href="/sign-up">
+                    <Button size="sm">{t("startFree")}</Button>
+                  </Link>
+                </>
+              )}
+            </div>
 
             <button
               type="button"
@@ -245,16 +261,24 @@ export function MarketingNav() {
         </div>
 
         <div className="flex flex-col gap-4">
-          <Link
-            href="/sign-in"
-            onClick={() => setOpenAt(null)}
-            className="text-body text-text hover:text-link transition-colors"
-          >
-            {t("signIn")}
-          </Link>
-          <Link href="/sign-up" onClick={() => setOpenAt(null)}>
-            <Button className="w-full">{t("startFree")}</Button>
-          </Link>
+          {signedIn ? (
+            <Link href="/agents" onClick={() => setOpenAt(null)}>
+              <Button className="w-full">{t("openDashboard")}</Button>
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/sign-in"
+                onClick={() => setOpenAt(null)}
+                className="text-body text-text hover:text-link transition-colors"
+              >
+                {t("signIn")}
+              </Link>
+              <Link href="/sign-up" onClick={() => setOpenAt(null)}>
+                <Button className="w-full">{t("startFree")}</Button>
+              </Link>
+            </>
+          )}
         </div>
       </aside>
     </>

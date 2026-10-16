@@ -18,6 +18,7 @@
   },
   "SiteNav": {
     "demo": "Démo",
+    "openDashboard": "Ouvrir le tableau de bord",
     "main": "Navigation principale",
     "product": "Produit",
     "pricing": "Tarifs",
@@ -263,6 +264,7 @@
     "analytics": "Analytique",
     "settings": "Paramètres",
     "docs": "Docs",
+    "backToSite": "Retour au site",
     "signOut": "Se déconnecter",
     "theme": "Thème",
     "dark": "Sombre",

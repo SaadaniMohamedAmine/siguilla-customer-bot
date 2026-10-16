@@ -29,6 +29,7 @@ import {
   MoonIcon,
   LogoutIcon,
   DocsIcon,
+  GlobeIcon,
 } from "@/lib/icons";
 import { authClient, useListOrganizations, useActiveOrganization, signOut } from "@/lib/auth-client";
 import { changeLocale } from "@/lib/actions/locale";
@@ -89,7 +90,12 @@ export function AppShell({
     <div className="flex min-h-screen">
       <aside className="border-border bg-bg sticky top-0 flex h-screen w-[248px] shrink-0 flex-col border-r">
         <div className="p-6">
-          <Link href="/agents">
+          <Link
+            href="/"
+            aria-label={t("backToSite")}
+            title={t("backToSite")}
+            className="inline-block transition-opacity duration-200 hover:opacity-80"
+          >
             <Wordmark size="md" />
           </Link>
         </div>
@@ -154,18 +160,25 @@ export function AppShell({
               <Badge className="font-mono uppercase">{plan}</Badge>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-[200px]">
-              <DropdownMenuItem onSelect={() => setTheme(theme === "dark" ? "light" : "dark")}>
-                <Icon icon={mounted && theme === "dark" ? SunIcon : MoonIcon} size={16} />
-                {theme === "dark" ? t("light") : t("dark")}
-              </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => changeLocale(locale === "en" ? "fr" : "en")}>
-                {locale === "en" ? "Français" : "English"}
+              <DropdownMenuItem asChild>
+                <Link href="/">
+                  <Icon icon={GlobeIcon} size={16} />
+                  {t("backToSite")}
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/docs">
                   <Icon icon={DocsIcon} size={16} />
                   {t("docs")}
                 </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onSelect={() => setTheme(theme === "dark" ? "light" : "dark")}>
+                <Icon icon={mounted && theme === "dark" ? SunIcon : MoonIcon} size={16} />
+                {theme === "dark" ? t("light") : t("dark")}
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => changeLocale(locale === "en" ? "fr" : "en")}>
+                {locale === "en" ? "Français" : "English"}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem

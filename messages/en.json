@@ -18,6 +18,7 @@
   },
   "SiteNav": {
     "demo": "Demo",
+    "openDashboard": "Open dashboard",
     "main": "Main navigation",
     "product": "Product",
     "pricing": "Pricing",
@@ -263,6 +264,7 @@
     "analytics": "Analytics",
     "settings": "Settings",
     "docs": "Docs",
+    "backToSite": "Back to website",
     "signOut": "Sign out",
     "theme": "Theme",
     "dark": "Dark",
