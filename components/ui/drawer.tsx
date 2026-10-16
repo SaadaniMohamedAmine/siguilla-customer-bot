@@ -10,10 +10,10 @@ export const DrawerTrigger = DialogPrimitive.Trigger;
 export function DrawerContent({ className, children, ...props }: React.ComponentProps<typeof DialogPrimitive.Content>) {
   return (
     <DialogPrimitive.Portal>
-      <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/60 data-[state=open]:animate-in data-[state=open]:fade-in" />
+      <DialogPrimitive.Overlay className="overlay-anim anim-keep fixed inset-0 z-50 bg-black/60 backdrop-blur-[2px]" />
       <DialogPrimitive.Content
         className={cn(
-          "fixed inset-y-0 right-0 z-50 flex w-full max-w-[480px] flex-col border-l border-border bg-surface-raised p-6 shadow-[var(--shadow-lift)] duration-250 ease-[var(--ease-lux)] data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right",
+          "drawer-anim anim-keep fixed inset-y-0 right-0 z-50 flex w-full max-w-[480px] flex-col border-l border-border bg-surface-raised p-6 shadow-[var(--shadow-lift)] duration-250 ease-[var(--ease-lux)] data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right",
           className,
         )}
         {...props}

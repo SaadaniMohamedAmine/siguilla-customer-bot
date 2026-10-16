@@ -435,6 +435,14 @@
     "agentsCta": "Créer un agent"
   },
   "Sources": {
+    "subtitle": "Ce que sait votre agent. Ajoutez des PDF, des sites web ou des pages Notion.",
+    "emptyTitle": "Votre agent n'a encore rien à lire",
+    "summary": {"sources": "Sources", "pages": "Pages", "chunks": "Segments", "lastSync": "Dernière synchro"},
+    "types": {"pdf": "PDF", "url": "Site web", "notion": "Notion"},
+    "counts": "{pages} pages · {chunks} segments",
+    "drawerSubtitle": "Choisissez comment alimenter votre agent.",
+    "uploading": "Envoi en cours…",
+    "dropHere": "Déposez vos PDF ici",
     "title": "Sources",
     "addSource": "Ajouter une source",
     "empty": "Aucune source pour l'instant. Ajoutez un PDF, une URL ou une page Notion pour commencer.",

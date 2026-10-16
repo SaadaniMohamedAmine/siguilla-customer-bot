@@ -435,6 +435,14 @@
     "agentsCta": "Create an agent"
   },
   "Sources": {
+    "subtitle": "What your agent knows. Add PDFs, websites or Notion pages.",
+    "emptyTitle": "Your agent has nothing to read yet",
+    "summary": {"sources": "Sources", "pages": "Pages", "chunks": "Chunks", "lastSync": "Last sync"},
+    "types": {"pdf": "PDF", "url": "Website", "notion": "Notion"},
+    "counts": "{pages} pages · {chunks} chunks",
+    "drawerSubtitle": "Pick how you want to feed your agent.",
+    "uploading": "Uploading…",
+    "dropHere": "Drop your PDFs here",
     "title": "Sources",
     "addSource": "Add source",
     "empty": "No sources yet. Add a PDF, a URL or a Notion page to begin.",

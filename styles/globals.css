@@ -320,3 +320,28 @@ html:has([data-splash]) {
 .scroll-thin::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
 }
+
+@keyframes drawer-in {
+  from { transform: translateX(100%); }
+}
+@keyframes drawer-out {
+  to { transform: translateX(100%); }
+}
+@keyframes overlay-in {
+  from { opacity: 0; }
+}
+@keyframes overlay-out {
+  to { opacity: 0; }
+}
+.drawer-anim[data-state="open"] {
+  animation: drawer-in 320ms var(--ease-lux) both;
+}
+.drawer-anim[data-state="closed"] {
+  animation: drawer-out 220ms ease-in both;
+}
+.overlay-anim[data-state="open"] {
+  animation: overlay-in 250ms ease-out both;
+}
+.overlay-anim[data-state="closed"] {
+  animation: overlay-out 200ms ease-in both;
+}
