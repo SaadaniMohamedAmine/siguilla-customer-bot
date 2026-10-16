@@ -63,6 +63,13 @@
     "deleteTitle": "Supprimer cet agent ?",
     "deleteBody": "Tapez <b>{name}</b> pour confirmer. Cette action est irréversible."
   },
+  "Invite": {
+    "pendingTitle": "Nous rejoignons votre équipe…",
+    "pendingBody": "Nous acceptons votre invitation. Cela ne prend qu'un instant.",
+    "errorTitle": "Cette invitation n'est pas valide",
+    "errorBody": "Le lien d'invitation est invalide ou a expiré. Demandez à votre collègue de vous en envoyer un nouveau.",
+    "goToDashboard": "Aller au tableau de bord"
+  },
   "Settings": {
     "title": "Paramètres",
     "subtitle": "Gérez votre profil, votre organisation, la facturation et les intégrations.",
@@ -759,6 +766,19 @@
     }
   },
   "Wizard": {
+    "cancel": "Annuler",
+    "progress": "Progression de la création de l'agent",
+    "identityTitle": "Qui est votre agent ?",
+    "identityBody": "Commencez par l'essentiel. Vous pourrez tout modifier plus tard.",
+    "namePlaceholder": "ex. Concierge",
+    "descriptionPlaceholder": "Une courte description interne (facultatif).",
+    "sourcesTitle": "Donnez-lui de quoi lire",
+    "sourcesBody": "Ajoutez des PDF, un site web ou des pages Notion. Votre agent ne répond qu'à partir de ce que vous fournissez.",
+    "widgetTitle": "Installez-le sur votre site",
+    "widgetBody": "Collez cette ligne unique avant </body>, puis mettez votre agent en ligne.",
+    "fineTune": "Ajustez couleurs, avatar et messages à tout moment depuis l'onglet Widget.",
+    "customizeFirst": "Personnaliser d'abord le widget",
+    "genericError": "Un problème est survenu de notre côté.",
     "stepIdentity": "Identité",
     "stepSources": "Sources",
     "stepWidget": "Widget et intégration",

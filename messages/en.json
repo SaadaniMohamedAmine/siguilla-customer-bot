@@ -63,6 +63,13 @@
     "deleteTitle": "Delete this agent?",
     "deleteBody": "Type <b>{name}</b> to confirm. This cannot be undone."
   },
+  "Invite": {
+    "pendingTitle": "Joining your team…",
+    "pendingBody": "We're accepting your invitation. This only takes a moment.",
+    "errorTitle": "This invitation isn't valid",
+    "errorBody": "The invitation link is invalid or has expired. Ask your teammate to send a new one.",
+    "goToDashboard": "Go to dashboard"
+  },
   "Settings": {
     "title": "Settings",
     "subtitle": "Manage your profile, organization, billing and integrations.",
@@ -759,6 +766,19 @@
     }
   },
   "Wizard": {
+    "cancel": "Cancel",
+    "progress": "Agent creation progress",
+    "identityTitle": "Who is your agent?",
+    "identityBody": "Start with the basics. You can change everything later.",
+    "namePlaceholder": "e.g. Concierge",
+    "descriptionPlaceholder": "A short internal description (optional).",
+    "sourcesTitle": "Give it something to read",
+    "sourcesBody": "Add PDFs, a website or Notion pages. Your agent only answers from what you provide.",
+    "widgetTitle": "Put it on your site",
+    "widgetBody": "Paste this single line before </body>, then make your agent live.",
+    "fineTune": "Fine-tune colors, avatar and messages anytime from the Widget tab.",
+    "customizeFirst": "Customize the widget first",
+    "genericError": "Something went wrong on our side.",
     "stepIdentity": "Identity",
     "stepSources": "Sources",
     "stepWidget": "Widget & embed",
