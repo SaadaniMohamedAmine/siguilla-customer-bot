@@ -672,6 +672,18 @@
     "addedSources": "Sources ajoutées"
   },
   "Conversations": {
+    "subtitle": "Lisez ce que demandent vos visiteurs et intervenez quand votre agent a besoin de vous.",
+    "agentLabel": "Agent",
+    "periodLabel": "Période",
+    "anyTime": "Toute période",
+    "results": "{count, plural, one {# conversation} other {# conversations}}",
+    "selectOneDesc": "Choisissez une conversation à gauche pour la lire et y répondre.",
+    "backToList": "Retour aux conversations",
+    "details": "Détails",
+    "replyHint": "Répondre prend le relais du bot.",
+    "noVerified": "Aucune réponse vérifiée",
+    "match": "Pertinence {pct} %",
+    "matchHelp": "À quel point vos sources correspondent à la question. Sous le seuil de l'agent, il refuse de répondre.",
     "title": "Conversations",
     "search": "Rechercher dans les messages…",
     "filterByAgent": "Filtrer par agent",
@@ -706,6 +718,11 @@
       "agent_joined": "{name} a rejoint"
     },
     "context": {
+      "visitorTitle": "Visiteur",
+      "qualityTitle": "Qualité de la réponse",
+      "matchLabel": "Correspondance des sources (dernière réponse)",
+      "matchExplain": "Plus c'est haut, mieux vos documents couvraient la question.",
+      "copied": "Copié",
       "title": "Contexte",
       "email": "Email",
       "notProvided": "Non fourni",

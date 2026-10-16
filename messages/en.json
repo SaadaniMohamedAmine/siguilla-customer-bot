@@ -672,6 +672,18 @@
     "addedSources": "Added sources"
   },
   "Conversations": {
+    "subtitle": "Read what visitors ask and step in when your agent needs you.",
+    "agentLabel": "Agent",
+    "periodLabel": "Period",
+    "anyTime": "Any time",
+    "results": "{count, plural, one {# conversation} other {# conversations}}",
+    "selectOneDesc": "Pick a conversation on the left to read it and reply.",
+    "backToList": "Back to conversations",
+    "details": "Details",
+    "replyHint": "Replying takes over from the bot.",
+    "noVerified": "No verified answer",
+    "match": "Match {pct}%",
+    "matchHelp": "How closely your sources matched this question. Below the agent's threshold, it declines to answer.",
     "title": "Conversations",
     "search": "Search messages…",
     "filterByAgent": "Filter by agent",
@@ -706,6 +718,11 @@
       "agent_joined": "{name} joined"
     },
     "context": {
+      "visitorTitle": "Visitor",
+      "qualityTitle": "Answer quality",
+      "matchLabel": "Source match (last answer)",
+      "matchExplain": "Higher means your documents covered the question.",
+      "copied": "Copied",
       "title": "Context",
       "email": "Email",
       "notProvided": "Not provided",
