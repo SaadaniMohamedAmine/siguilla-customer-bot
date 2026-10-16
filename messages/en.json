@@ -557,6 +557,11 @@
     }
   },
   "Widget": {
+    "genericError": "Something went wrong on our side.",
+    "remove": "Remove {value}",
+    "unsaved": "You have unpublished changes",
+    "previewHint": "Updates as you type.",
+    "previewUrl": "your-site.com",
     "appearance": "Appearance",
     "color": "Color",
     "theme": "Theme",

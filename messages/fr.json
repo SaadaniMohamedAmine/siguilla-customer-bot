@@ -557,6 +557,11 @@
     }
   },
   "Widget": {
+    "genericError": "Un problème est survenu de notre côté.",
+    "remove": "Retirer {value}",
+    "unsaved": "Vous avez des modifications non publiées",
+    "previewHint": "Se met à jour pendant que vous tapez.",
+    "previewUrl": "votre-site.com",
     "appearance": "Apparence",
     "color": "Couleur",
     "theme": "Thème",

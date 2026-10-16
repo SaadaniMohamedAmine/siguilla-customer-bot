@@ -8,12 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
 import { Icon } from "@/components/ui/icon";
 import { toast } from "@/components/ui/toast";
 import { EmbedSnippet } from "@/components/widget/embed-snippet";
 import { WidgetConfig, parseWidgetConfig } from "@/lib/widget/config";
-import { CloseIcon, AddIcon, UploadIcon } from "@/lib/icons";
+import { CloseIcon, AddIcon, UploadIcon, CheckIcon, LockIcon, WarningIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
 const COLORS = ["#9E2F45", "#1A1214", "#2F7A4D", "#1F3A5F", "#5B3A6B", "#8A5A12"];
@@ -92,7 +91,7 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
       toast.success(t("published"));
       router.refresh();
     } catch {
-      toast.error("Something went wrong on our side.");
+      toast.error(t("genericError"));
     } finally {
       setSaving(false);
     }
@@ -103,32 +102,41 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[2fr_3fr]">
-      <div className="flex flex-col gap-6">
+    <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,440px)_minmax(0,1fr)]">
+      <div className="flex flex-col gap-5">
         <Section title={t("appearance")}>
           <div>
             <label className="label-caps">{t("color")}</label>
-            <div className="mt-2 flex items-center gap-2">
-              {COLORS.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  aria-label={c}
-                  onClick={() => set("color", c)}
-                  className={cn(
-                    "h-7 w-7 rounded-full border-2",
-                    config.color === c ? "border-focus" : "border-transparent",
-                  )}
-                  style={{ backgroundColor: c }}
+            <div className="mt-3 flex flex-wrap items-center gap-3">
+              {COLORS.map((c) => {
+                const active = config.color.toLowerCase() === c.toLowerCase();
+                return (
+                  <button
+                    key={c}
+                    type="button"
+                    aria-label={c}
+                    aria-pressed={active}
+                    onClick={() => set("color", c)}
+                    className={cn(
+                      "anim-keep ring-offset-surface flex size-8 items-center justify-center rounded-full ring-2 ring-offset-2 transition-[box-shadow,transform] duration-200 hover:scale-110",
+                      active ? "ring-focus" : "ring-transparent",
+                    )}
+                    style={{ backgroundColor: c }}
+                  >
+                    {active ? <Icon icon={CheckIcon} size={14} className="text-white" /> : null}
+                  </button>
+                );
+              })}
+              <div className="border-border bg-bg flex h-8 items-center gap-2 rounded-sm border pl-2">
+                <span aria-hidden className="size-4 rounded-full" style={{ backgroundColor: config.color }} />
+                <input
+                  value={config.color}
+                  onChange={(e) => /^#[0-9a-fA-F]{0,6}$/.test(e.target.value) && set("color", e.target.value)}
+                  className="text-small text-text h-full w-20 bg-transparent pr-2 font-mono outline-none"
+                  aria-label={t("color")}
+                  maxLength={7}
                 />
-              ))}
-              <input
-                value={config.color}
-                onChange={(e) => /^#[0-9a-fA-F]{0,6}$/.test(e.target.value) && set("color", e.target.value)}
-                className="border-border bg-surface text-small text-text focus-visible:border-focus h-8 w-24 rounded-sm border px-2 font-mono focus-visible:outline-none"
-                aria-label={t("color")}
-                maxLength={7}
-              />
+              </div>
             </div>
           </div>
           <Segmented
@@ -163,9 +171,9 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
         <Section title={t("identity")}>
           <div>
             <label className="label-caps">{t("avatar")}</label>
-            <div className="mt-2 flex items-center gap-3">
+            <div className="mt-3 flex items-center gap-4">
               <div
-                className="text-body-lg flex h-11 w-11 items-center justify-center overflow-hidden rounded-md"
+                className="flex size-16 items-center justify-center overflow-hidden rounded-lg font-serif text-[28px]"
                 style={{ backgroundColor: config.color, color: "#F3ECE6" }}
               >
                 {config.avatarUrl ? (
@@ -182,20 +190,17 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
                 className="hidden"
                 onChange={(e) => e.target.files?.[0] && onAvatarPick(e.target.files[0])}
               />
-              <Button
-                variant="ghost"
-                size="sm"
-                loading={uploadingAvatar}
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <Icon icon={UploadIcon} size={14} />
-                {t("uploadAvatar")}
-              </Button>
-              {config.avatarUrl ? (
-                <Button variant="link" size="sm" onClick={() => set("avatarUrl", null)}>
-                  {t("removeAvatar")}
+              <div className="flex flex-wrap items-center gap-2">
+                <Button variant="ghost" size="sm" loading={uploadingAvatar} onClick={() => fileInputRef.current?.click()}>
+                  <Icon icon={UploadIcon} size={14} />
+                  {t("uploadAvatar")}
                 </Button>
-              ) : null}
+                {config.avatarUrl ? (
+                  <Button variant="link" size="sm" onClick={() => set("avatarUrl", null)}>
+                    {t("removeAvatar")}
+                  </Button>
+                ) : null}
+              </div>
             </div>
           </div>
           <Input
@@ -229,9 +234,12 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
           <div>
             <label className="label-caps">{t("suggestions")}</label>
             <p className="text-small text-text-muted mt-1">{t("suggestionsHint")}</p>
-            <div className="mt-2 flex flex-wrap items-center gap-2">
+            <div className="mt-3 flex flex-wrap items-center gap-2">
               {config.suggestions.map((s, i) => (
-                <Badge key={i} className="flex items-center gap-1.5">
+                <span
+                  key={i}
+                  className="border-border bg-surface-raised text-small text-text inline-flex items-center gap-1.5 rounded-full border py-0.5 pr-1.5 pl-3"
+                >
                   {s}
                   <button
                     type="button"
@@ -241,11 +249,12 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
                         config.suggestions.filter((_, idx) => idx !== i),
                       )
                     }
-                    aria-label={`Remove ${s}`}
+                    aria-label={t("remove", { value: s })}
+                    className="text-text-muted hover:text-text rounded-full p-0.5"
                   >
                     <Icon icon={CloseIcon} size={12} />
                   </button>
-                </Badge>
+                </span>
               ))}
               {config.suggestions.length < 3 ? (
                 <div className="flex items-center gap-1">
@@ -260,7 +269,7 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
                       }
                     }}
                     placeholder={t("addSuggestion")}
-                    className="border-border bg-surface text-small text-text placeholder:text-text-muted focus-visible:border-focus h-8 min-w-[140px] rounded-sm border px-2 focus-visible:outline-none"
+                    className="border-border bg-bg text-small text-text placeholder:text-text-muted focus-visible:border-focus h-8 min-w-[160px] rounded-full border px-3 outline-none"
                   />
                   <Button variant="ghost" size="icon" onClick={addSuggestion} aria-label={t("addSuggestion")}>
                     <Icon icon={AddIcon} size={14} />
@@ -279,10 +288,20 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
         </Section>
 
         <Section title={t("branding")}>
-          <div className="flex items-center justify-between">
+          <div
+            className={cn(
+              "flex items-center justify-between gap-4 rounded-md border p-4",
+              canRemoveBadge ? "border-border bg-bg" : "border-border bg-bg opacity-90",
+            )}
+          >
             <div>
               <p className="text-body text-text">{t("showBadge")}</p>
-              {!canRemoveBadge ? <p className="text-small text-text-muted">{t("badgeProOnly")}</p> : null}
+              {!canRemoveBadge ? (
+                <p className="text-small text-text-muted mt-0.5 flex items-center gap-1.5">
+                  <Icon icon={LockIcon} size={12} />
+                  {t("badgeProOnly")}
+                </p>
+              ) : null}
             </div>
             <Switch
               checked={config.showBadge}
@@ -297,32 +316,50 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
           {chatbot.allowedDomains.length ? (
             <div className="flex flex-wrap gap-2">
               {chatbot.allowedDomains.map((d) => (
-                <Badge key={d}>{d}</Badge>
+                <span key={d} className="border-border bg-surface-raised text-small text-text rounded-full border px-3 py-0.5">
+                  {d}
+                </span>
               ))}
             </div>
           ) : (
-            <p className="border-warning/30 bg-warning/10 text-small text-warning rounded-sm border p-3">
+            <p className="border-warning/30 bg-warning/10 text-small text-warning flex items-start gap-2 rounded-sm border p-3">
+              <Icon icon={WarningIcon} size={15} className="mt-0.5 shrink-0" />
               {t("domainsWarning")}
             </p>
           )}
-          <Link href={`/agents/${chatbot.id}/settings`} className="text-small text-link hover:underline">
+          <Link href={`/agents/${chatbot.id}/settings`} className="text-small text-link underline underline-offset-4">
             {t("domainsEdit")}
           </Link>
         </Section>
 
-        <div className="bg-bg sticky bottom-0 flex justify-end gap-3 py-4">
-          <Button variant="ghost" disabled={!dirty || saving} onClick={discard}>
-            {t("discard")}
-          </Button>
-          <Button loading={saving} disabled={!dirty} onClick={publish}>
-            {t("publish")}
-          </Button>
+        <div
+          className={cn(
+            "border-border bg-surface-raised sticky bottom-4 z-10 flex flex-wrap items-center justify-between gap-3 rounded-lg border p-4 shadow-[var(--shadow-lift)] transition-[opacity,transform] duration-300 ease-[var(--ease-lux)]",
+            dirty ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0",
+          )}
+          aria-hidden={!dirty}
+        >
+          <p className="text-body text-text flex items-center gap-2">
+            <span className="bg-warning size-2 rounded-full" />
+            {t("unsaved")}
+          </p>
+          <div className="flex gap-2">
+            <Button variant="ghost" disabled={saving} onClick={discard} tabIndex={dirty ? 0 : -1}>
+              {t("discard")}
+            </Button>
+            <Button loading={saving} onClick={publish} tabIndex={dirty ? 0 : -1}>
+              {t("publish")}
+            </Button>
+          </div>
         </div>
       </div>
 
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-h3 text-text font-serif">{t("preview")}</h2>
+      <div className="flex flex-col gap-4 lg:sticky lg:top-6">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h2 className="text-h3 text-text font-serif">{t("preview")}</h2>
+            <p className="text-small text-text-muted">{t("previewHint")}</p>
+          </div>
           <Segmented
             value={device}
             onChange={(v) => setDevice(v as "desktop" | "mobile")}
@@ -332,12 +369,9 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
             ]}
           />
         </div>
-        <div className="border-border bg-surface flex flex-1 items-center justify-center rounded-md border p-6">
+        <div className="border-border bg-surface flex items-center justify-center rounded-lg border p-5">
           {device === "mobile" ? (
-            <div
-              className="border-border bg-bg rounded-[44px] border-[6px] p-1"
-              style={{ width: 390, height: 700 }}
-            >
+            <div className="border-border bg-bg rounded-[44px] border-[6px] p-1" style={{ width: 390, maxWidth: "100%", height: 700 }}>
               <iframe
                 ref={iframeRef}
                 src={`/widget-preview?pk=${chatbot.publicKey}`}
@@ -346,16 +380,24 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
               />
             </div>
           ) : (
-            <iframe
-              ref={iframeRef}
-              src={`/widget-preview?pk=${chatbot.publicKey}`}
-              className="border-border h-[640px] w-full rounded-sm border"
-              title="Widget preview"
-            />
+            <div className="border-border w-full overflow-hidden rounded-md border">
+              <div className="border-border bg-surface-raised flex items-center gap-2 border-b px-4 py-2.5">
+                <span className="bg-error/50 size-2.5 rounded-full" />
+                <span className="bg-warning/50 size-2.5 rounded-full" />
+                <span className="bg-success/50 size-2.5 rounded-full" />
+                <span className="text-text-muted ml-3 font-mono text-[11px]">{t("previewUrl")}</span>
+              </div>
+              <iframe
+                ref={iframeRef}
+                src={`/widget-preview?pk=${chatbot.publicKey}`}
+                className="block h-[620px] w-full"
+                title="Widget preview"
+              />
+            </div>
           )}
         </div>
-        <div>
-          <p className="label-caps mb-2">{t("embedTitle")}</p>
+        <div className="border-border bg-surface rounded-lg border p-5">
+          <p className="label-caps mb-3">{t("embedTitle")}</p>
           <EmbedSnippet publicKey={chatbot.publicKey} />
         </div>
       </div>
@@ -365,10 +407,10 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="border-border flex flex-col gap-4 rounded-md border p-5">
-      <p className="label-caps">{title}</p>
+    <section className="border-border bg-surface flex flex-col gap-5 rounded-lg border p-6">
+      <h2 className="text-h3 text-text font-serif">{title}</h2>
       {children}
-    </div>
+    </section>
   );
 }
 
@@ -383,18 +425,33 @@ function Segmented({
   onChange: (value: string) => void;
   options: { value: string; label: string }[];
 }) {
+  const index = Math.max(0, options.findIndex((o) => o.value === value));
   return (
     <div>
       {label ? <label className="label-caps">{label}</label> : null}
-      <div className={cn("border-border flex overflow-hidden rounded-sm border", label && "mt-2")}>
+      <div
+        role="radiogroup"
+        className={cn("border-border bg-bg relative grid rounded-md border p-0.5", label && "mt-2")}
+        style={{ gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))` }}
+      >
+        <span
+          aria-hidden
+          className="anim-keep border-accent bg-tint absolute top-0.5 bottom-0.5 left-0.5 rounded-[5px] border transition-transform duration-300 ease-[var(--ease-lux)]"
+          style={{
+            width: `calc((100% - 4px) / ${options.length})`,
+            transform: `translateX(${index * 100}%)`,
+          }}
+        />
         {options.map((o) => (
           <button
             key={o.value}
             type="button"
+            role="radio"
+            aria-checked={value === o.value}
             onClick={() => onChange(o.value)}
             className={cn(
-              "text-small flex-1 px-3 py-1.5 transition-colors",
-              value === o.value ? "bg-accent text-on-accent" : "bg-surface text-text-muted hover:text-text",
+              "anim-keep text-small relative z-10 px-3 py-1.5 transition-colors duration-200",
+              value === o.value ? "text-text" : "text-text-muted hover:text-text",
             )}
           >
             {o.label}
