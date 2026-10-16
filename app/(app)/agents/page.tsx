@@ -4,11 +4,9 @@ import { prisma } from "@/lib/db";
 import { requireOrgPage } from "@/lib/session";
 import { getPlanLimits } from "@/lib/billing/plans";
 import { daysAgo } from "@/lib/time";
-import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
-import { AgentCard } from "@/components/agents/agent-card";
-import { AgentIcon, AddIcon } from "@/lib/icons";
+import { AgentsGrid, type AgentItem } from "@/components/agents/agents-grid";
+import { AddIcon, ArrowRightIcon, AgentIcon, CopyIcon, UploadIcon } from "@/lib/icons";
 import { Icon } from "@/components/ui/icon";
 
 export default async function AgentsPage() {
@@ -29,104 +27,121 @@ export default async function AgentsPage() {
           },
         },
       },
-      dataSources: { select: { lastSyncedAt: true } },
+      dataSources: { select: { lastSyncedAt: true, status: true } },
     },
   });
 
-  const metrics = await Promise.all(
+  const items: AgentItem[] = await Promise.all(
     agents.map(async (agent) => {
       const convFilter = {
         chatbotId: agent.id,
         createdAt: { gte: daysAgo(30) },
         visitorId: { not: { startsWith: "playground:" as const } },
       };
-      const [up, down] = await Promise.all([
+      const [up, down, unanswered] = await Promise.all([
         prisma.message.count({ where: { feedback: "up", conversation: convFilter } }),
         prisma.message.count({ where: { feedback: "down", conversation: convFilter } }),
+        prisma.analyticsEvent.count({
+          where: { chatbotId: agent.id, type: "fallback", createdAt: { gte: daysAgo(30) } },
+        }),
       ]);
       const lastSynced = agent.dataSources.reduce<Date | null>(
         (max, s) => (s.lastSyncedAt && (!max || s.lastSyncedAt > max) ? s.lastSyncedAt : max),
         null,
       );
       return {
-        id: agent.id,
-        sources: agent._count.dataSources,
-        conversations: agent._count.conversations,
-        satisfaction: up + down > 0 ? up / (up + down) : null,
-        lastSynced,
+        agent: {
+          id: agent.id,
+          name: agent.name,
+          description: agent.description,
+          status: agent.status,
+          publicKey: agent.publicKey,
+        },
+        metrics: {
+          sources: agent._count.dataSources,
+          conversations: agent._count.conversations,
+          satisfaction: up + down > 0 ? up / (up + down) : null,
+          lastSynced,
+        },
+        health: {
+          processing: agent.dataSources.filter((s) => s.status === "queued" || s.status === "processing").length,
+          failed: agent.dataSources.filter((s) => s.status === "failed").length,
+          unanswered,
+        },
       };
     }),
   );
-  const metricsById = new Map(metrics.map((m) => [m.id, m]));
 
   const atLimit = agents.length >= limits.agents;
+  const ratio = limits.agents > 0 ? Math.min(1, agents.length / limits.agents) : 0;
 
-  const newAgentButton = (
-    <Link href={atLimit ? "#" : "/agents/new"} aria-disabled={atLimit} tabIndex={atLimit ? -1 : undefined}>
-      <Button disabled={atLimit}>
-        <Icon icon={AddIcon} size={16} />
-        {tAgents("newAgent")}
-      </Button>
-    </Link>
-  );
+  const steps = [
+    { icon: AgentIcon, title: tAgents("empty.step1Title"), body: tAgents("empty.step1Body") },
+    { icon: UploadIcon, title: tAgents("empty.step2Title"), body: tAgents("empty.step2Body") },
+    { icon: CopyIcon, title: tAgents("empty.step3Title"), body: tAgents("empty.step3Body") },
+  ];
 
   return (
     <div>
-      <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-h1 text-text font-serif">{tAgents("title")}</h1>
+      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-h1 text-text font-serif">{tAgents("title")}</h1>
+          <p className="text-body text-text-muted mt-2 max-w-xl">{tAgents("subtitle")}</p>
+        </div>
         {agents.length > 0 ? (
-          atLimit ? (
-            <Tooltip>
-              <TooltipTrigger asChild>{newAgentButton}</TooltipTrigger>
-              <TooltipContent className="border-border bg-surface-raised text-small text-text z-50 max-w-xs rounded-sm border px-3 py-2 shadow-[var(--shadow-lift)]">
-                {tAgents("planLimit", { n: limits.agents })}
-              </TooltipContent>
-            </Tooltip>
-          ) : (
-            newAgentButton
-          )
+          <div className="flex items-center gap-4">
+            <div className="hidden min-w-[150px] sm:block">
+              <p className="text-small text-text-muted font-mono">
+                {tAgents("usage", { used: agents.length, limit: limits.agents })}
+              </p>
+              <div className="bg-surface-raised mt-1.5 h-1.5 overflow-hidden rounded-full">
+                <div
+                  className={`h-full rounded-full ${atLimit ? "bg-warning" : "bg-accent"}`}
+                  style={{ width: `${Math.round(ratio * 100)}%` }}
+                />
+              </div>
+            </div>
+            {atLimit ? (
+              <Link href="/settings?tab=billing">
+                <Button>
+                  {tAgents("upgradeMore")}
+                  <Icon icon={ArrowRightIcon} size={16} />
+                </Button>
+              </Link>
+            ) : (
+              <Link href="/agents/new">
+                <Button>
+                  <Icon icon={AddIcon} size={16} />
+                  {tAgents("newAgent")}
+                </Button>
+              </Link>
+            )}
+          </div>
         ) : null}
       </div>
 
       {agents.length === 0 ? (
-        <EmptyState
-          icon={AgentIcon}
-          title={t("agentsTitle")}
-          description={t("agentsBody")}
-          action={
-            <Link href="/agents/new">
-              <Button>{t("agentsCta")}</Button>
-            </Link>
-          }
-          className="mt-10"
-        />
-      ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {agents.map((agent) => (
-            <AgentCard
-              key={agent.id}
-              agent={{
-                id: agent.id,
-                name: agent.name,
-                description: agent.description,
-                status: agent.status,
-                publicKey: agent.publicKey,
-              }}
-              metrics={metricsById.get(agent.id)!}
-            />
-          ))}
-          {!atLimit ? (
-            <Link
-              href="/agents/new"
-              className="border-border text-body text-text-muted hover:border-focus hover:text-text flex h-full min-h-[160px] items-center justify-center rounded-md border border-dashed transition-colors"
-            >
-              <span className="flex items-center gap-2">
-                <Icon icon={AddIcon} size={16} />
-                {tAgents("createCard")}
-              </span>
-            </Link>
-          ) : null}
+        <div className="border-border bg-surface mx-auto mt-6 max-w-3xl rounded-lg border p-10 text-center">
+          <span className="border-border bg-bg text-link mx-auto flex size-14 items-center justify-center rounded-full border">
+            <Icon icon={AgentIcon} size={26} />
+          </span>
+          <h2 className="text-h2 text-text mt-5 font-serif">{t("agentsTitle")}</h2>
+          <p className="text-body-lg text-text-muted mx-auto mt-2 max-w-md">{t("agentsBody")}</p>
+          <ol className="mt-8 grid gap-4 text-left sm:grid-cols-3">
+            {steps.map((s, i) => (
+              <li key={s.title} className="border-border bg-bg rounded-md border p-4">
+                <p className="text-link font-serif text-[22px] italic">{String(i + 1).padStart(2, "0")}</p>
+                <p className="text-body text-text mt-1 font-medium">{s.title}</p>
+                <p className="text-small text-text-muted mt-1">{s.body}</p>
+              </li>
+            ))}
+          </ol>
+          <Link href="/agents/new" className="mt-8 inline-block">
+            <Button size="lg">{t("agentsCta")}</Button>
+          </Link>
         </div>
+      ) : (
+        <AgentsGrid items={items} atLimit={atLimit} limit={limits.agents} />
       )}
     </div>
   );

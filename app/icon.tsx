@@ -1,9 +1,11 @@
 import { ImageResponse } from "next/og";
+import { loadSerifFont } from "@/lib/og-fonts";
 
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
 
-export default function Icon() {
+export default async function Icon() {
+  const serif = await loadSerifFont();
   return new ImageResponse(
     (
       <div
@@ -14,15 +16,16 @@ export default function Icon() {
           alignItems: "center",
           justifyContent: "center",
           background: "#9E2F45",
-          borderRadius: "22%",
+          backgroundImage: "linear-gradient(145deg, #B8405A 0%, #9E2F45 55%, #7A2236 100%)",
+          borderRadius: "24%",
           color: "#F3ECE6",
-          fontSize: 20,
-          fontFamily: "Georgia, serif",
+          fontSize: 22,
+          fontFamily: "Instrument Serif",
         }}
       >
         S
       </div>
     ),
-    size,
+    { ...size, fonts: [{ name: "Instrument Serif", data: serif, style: "normal", weight: 400 }] },
   );
 }

@@ -10,16 +10,16 @@ export const DialogTrigger = DialogPrimitive.Trigger;
 export function DialogContent({ className, children, ...props }: React.ComponentProps<typeof DialogPrimitive.Content>) {
   return (
     <DialogPrimitive.Portal>
-      <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/60 data-[state=open]:animate-in data-[state=open]:fade-in" />
+      <DialogPrimitive.Overlay className="overlay-anim anim-keep fixed inset-0 z-50 bg-black/60 backdrop-blur-[2px]" />
       <DialogPrimitive.Content
         className={cn(
-          "fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-lg border border-border bg-surface-raised p-6 shadow-[var(--shadow-lift)] duration-200 ease-[var(--ease-lux)] data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:zoom-in-95",
+          "dialog-anim anim-keep fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-xl border border-border bg-surface-raised p-7 shadow-[var(--shadow-lift)]",
           className,
         )}
         {...props}
       >
         {children}
-        <DialogPrimitive.Close className="absolute right-4 top-4 text-text-muted hover:text-text">
+        <DialogPrimitive.Close className="anim-keep absolute right-4 top-4 rounded-sm p-1 text-text-muted transition-colors duration-200 hover:bg-surface hover:text-text">
           <Icon icon={CloseIcon} size={18} label="Close" />
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>

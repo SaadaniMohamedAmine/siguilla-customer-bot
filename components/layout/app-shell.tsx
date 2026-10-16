@@ -29,6 +29,8 @@ import {
   MoonIcon,
   LogoutIcon,
   DocsIcon,
+  GlobeIcon,
+  CloseIcon,
 } from "@/lib/icons";
 import { authClient, useListOrganizations, useActiveOrganization, signOut } from "@/lib/auth-client";
 import { changeLocale } from "@/lib/actions/locale";
@@ -63,6 +65,8 @@ export function AppShell({
   const { theme, setTheme } = useTheme();
   const mounted = useHydrated();
   const locale = useLocale();
+  const [openAt, setOpenAt] = React.useState<string | null>(null);
+  const menuOpen = openAt === pathname;
   const { data: orgs } = useListOrganizations();
   const { data: activeOrg } = useActiveOrganization();
 
@@ -77,6 +81,19 @@ export function AppShell({
     document.title = pendingCount ? `(${pendingCount}) ${base}` : base;
   }, [pendingCount]);
 
+  React.useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpenAt(null);
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
   async function switchOrg(organizationId: string) {
     await authClient.organization.setActive({ organizationId });
     // router.refresh() alone leaves useActiveOrganization()'s client-side cache stale
@@ -85,11 +102,15 @@ export function AppShell({
     window.location.reload();
   }
 
-  return (
-    <div className="flex min-h-screen">
-      <aside className="border-border bg-bg sticky top-0 flex h-screen w-[248px] shrink-0 flex-col border-r">
+  const sidebar = (
+    <>
         <div className="p-6">
-          <Link href="/agents">
+          <Link
+            href="/"
+            aria-label={t("backToSite")}
+            title={t("backToSite")}
+            className="inline-block transition-opacity duration-200 hover:opacity-80"
+          >
             <Wordmark size="md" />
           </Link>
         </div>
@@ -121,6 +142,7 @@ export function AppShell({
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => setOpenAt(null)}
                 className={cn(
                   "text-body flex items-center gap-2 rounded-sm px-3 py-2 transition-colors",
                   active ? "bg-accent text-on-accent" : "text-text-muted hover:bg-surface hover:text-text",
@@ -154,18 +176,25 @@ export function AppShell({
               <Badge className="font-mono uppercase">{plan}</Badge>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-[200px]">
-              <DropdownMenuItem onSelect={() => setTheme(theme === "dark" ? "light" : "dark")}>
-                <Icon icon={mounted && theme === "dark" ? SunIcon : MoonIcon} size={16} />
-                {theme === "dark" ? t("light") : t("dark")}
-              </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => changeLocale(locale === "en" ? "fr" : "en")}>
-                {locale === "en" ? "Français" : "English"}
+              <DropdownMenuItem asChild>
+                <Link href="/">
+                  <Icon icon={GlobeIcon} size={16} />
+                  {t("backToSite")}
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/docs">
                   <Icon icon={DocsIcon} size={16} />
                   {t("docs")}
                 </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onSelect={() => setTheme(theme === "dark" ? "light" : "dark")}>
+                <Icon icon={mounted && theme === "dark" ? SunIcon : MoonIcon} size={16} />
+                {theme === "dark" ? t("light") : t("dark")}
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => changeLocale(locale === "en" ? "fr" : "en")}>
+                {locale === "en" ? "Français" : "English"}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
@@ -177,10 +206,65 @@ export function AppShell({
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
+    </>
+  );
+
+  return (
+    <div className="flex min-h-screen">
+      <aside className="border-border bg-bg sticky top-0 hidden h-screen w-[248px] shrink-0 flex-col border-r lg:flex">
+        {sidebar}
       </aside>
 
-      <div className="flex-1">
-        <main className="mx-auto max-w-[1200px] px-10 py-10">
+      {/* Mobile : barre du haut + tiroir latéral */}
+      <header className="border-border bg-bg/90 fixed inset-x-0 top-0 z-30 flex h-14 items-center justify-between border-b px-4 backdrop-blur-md lg:hidden">
+        <Link href="/" aria-label={t("backToSite")}>
+          <Wordmark size="sm" />
+        </Link>
+        <button
+          type="button"
+          aria-expanded={menuOpen}
+          aria-controls="app-drawer"
+          aria-label={t("openMenu")}
+          onClick={() => setOpenAt(pathname)}
+          className="text-text relative size-9"
+        >
+          <span className="bg-text absolute top-[12px] left-2 h-px w-5" />
+          <span className="bg-text absolute top-[18px] left-2 h-px w-5" />
+          <span className="bg-text absolute top-[24px] left-2 h-px w-5" />
+        </button>
+      </header>
+      <div
+        aria-hidden
+        onClick={() => setOpenAt(null)}
+        className={cn(
+          "anim-keep fixed inset-0 z-40 bg-black/55 backdrop-blur-[2px] transition-opacity duration-300 lg:hidden",
+          menuOpen ? "opacity-100" : "pointer-events-none opacity-0",
+        )}
+      />
+      <aside
+        id="app-drawer"
+        role="dialog"
+        aria-modal="true"
+        aria-label={t("openMenu")}
+        inert={!menuOpen}
+        className={cn(
+          "anim-keep border-border bg-bg fixed inset-y-0 left-0 z-40 flex w-[min(86vw,300px)] flex-col border-r shadow-[var(--shadow-lift)] transition-transform duration-300 ease-[var(--ease-lux)] lg:hidden",
+          menuOpen ? "translate-x-0" : "-translate-x-full",
+        )}
+      >
+        <button
+          type="button"
+          aria-label={t("closeMenu")}
+          onClick={() => setOpenAt(null)}
+          className="text-text-muted hover:text-text absolute top-5 right-4 z-10"
+        >
+          <Icon icon={CloseIcon} size={20} />
+        </button>
+        {sidebar}
+      </aside>
+
+      <div className="min-w-0 flex-1 pt-14 lg:pt-0">
+        <main className="mx-auto max-w-[1200px] px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
           {isDemo ? <DemoModeBanner /> : null}
           <QuotaBanner usage={messageUsage} />
           {children}

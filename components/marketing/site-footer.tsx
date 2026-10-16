@@ -51,6 +51,7 @@ export async function SiteFooter() {
               <FooterLink href="/pricing">{t("pricing")}</FooterLink>
               <FooterLink href="/docs">{t("docs")}</FooterLink>
               <FooterLink href="/demo">{t("demo")}</FooterLink>
+              <FooterLink href="/design-system">{t("designSystem")}</FooterLink>
             </div>
           </Reveal>
           <Reveal delay={200}>

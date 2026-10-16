@@ -19,6 +19,10 @@ export function NavigationLoader() {
       if (!a || (a.target && a.target !== "_self") || a.hasAttribute("download")) return;
       const url = new URL(a.href, location.href);
       if (url.origin !== location.origin || url.pathname === location.pathname) return;
+      // Onglets d'un même agent (/agents/<id>/…) : simple changement de contenu, pas de loader plein écran.
+      const agentOf = (path: string) => /^\/agents\/([^/]+)/.exec(path)?.[1];
+      const toAgent = agentOf(url.pathname);
+      if (toAgent && toAgent !== "new" && toAgent === agentOf(location.pathname)) return;
       startedAt.current = performance.now();
       fromPath.current = location.pathname;
       setActive(true);

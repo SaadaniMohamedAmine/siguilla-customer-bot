@@ -297,3 +297,110 @@ html:has([data-splash]) {
 .menu-anim[data-state="closed"] {
   animation: menu-out 130ms ease-in both;
 }
+
+/* Panneaux défilants discrets (sans flèches) : on neutralise scrollbar-color/width hérités pour que le style WebKit s'applique. */
+.scroll-thin {
+  scrollbar-color: auto;
+  scrollbar-width: auto;
+}
+.scroll-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scroll-thin::-webkit-scrollbar-button {
+  display: none;
+}
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+.scroll-thin::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+@keyframes drawer-in {
+  from { transform: translateX(100%); }
+}
+@keyframes drawer-out {
+  to { transform: translateX(100%); }
+}
+@keyframes overlay-in {
+  from { opacity: 0; }
+}
+@keyframes overlay-out {
+  to { opacity: 0; }
+}
+.drawer-anim[data-state="open"] {
+  animation: drawer-in 320ms var(--ease-lux) both;
+}
+.drawer-anim[data-state="closed"] {
+  animation: drawer-out 220ms ease-in both;
+}
+.overlay-anim[data-state="open"] {
+  animation: overlay-in 250ms ease-out both;
+}
+.overlay-anim[data-state="closed"] {
+  animation: overlay-out 200ms ease-in both;
+}
+
+/* Défilement sans barre visible (onglets horizontaux sur mobile). */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Dialogues, infobulles et notifications */
+@keyframes dialog-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+}
+@keyframes dialog-out {
+  to { opacity: 0; transform: translateY(6px) scale(0.97); }
+}
+@keyframes tip-in {
+  from { opacity: 0; transform: translateY(3px) scale(0.97); }
+}
+.dialog-anim[data-state="open"] {
+  animation: dialog-in 260ms var(--ease-lux) both;
+}
+.dialog-anim[data-state="closed"] {
+  animation: dialog-out 170ms ease-in both;
+}
+.tip-anim[data-state="delayed-open"],
+.tip-anim[data-state="instant-open"] {
+  animation: tip-in 140ms ease-out both;
+}
+
+/* react-toastify : on pilote ses variables avec nos tokens pour suivre les thèmes clair et sombre. */
+:root {
+  --toastify-color-light: var(--surface-raised);
+  --toastify-text-color-light: var(--text);
+  --toastify-color-progress-light: var(--accent);
+  --toastify-color-progress-success: var(--success);
+  --toastify-color-progress-error: var(--error);
+  --toastify-color-progress-warning: var(--warning);
+  --toastify-color-progress-info: var(--link);
+  --toastify-font-family: var(--font-sans);
+  --toastify-toast-width: 360px;
+  --toastify-toast-min-height: 56px;
+  --toastify-toast-bd-radius: 12px;
+}
+.Toastify__toast {
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lift);
+}
+.Toastify__close-button {
+  color: var(--text-muted);
+  opacity: 1;
+  align-self: center;
+}
+.Toastify__close-button:hover {
+  color: var(--text);
+}
+.Toastify__progress-bar {
+  height: 2px;
+}
