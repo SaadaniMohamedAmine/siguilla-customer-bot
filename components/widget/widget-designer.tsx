@@ -12,7 +12,7 @@ import { Icon } from "@/components/ui/icon";
 import { toast } from "@/components/ui/toast";
 import { EmbedSnippet } from "@/components/widget/embed-snippet";
 import { WidgetConfig, parseWidgetConfig } from "@/lib/widget/config";
-import { CloseIcon, AddIcon, UploadIcon, CheckIcon, LockIcon, WarningIcon } from "@/lib/icons";
+import { CloseIcon, AddIcon, UploadIcon, CheckIcon, LockIcon, WarningIcon, ArrowRightIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
 const COLORS = ["#9E2F45", "#1A1214", "#2F7A4D", "#1F3A5F", "#5B3A6B", "#8A5A12"];
@@ -360,14 +360,25 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
             <h2 className="text-h3 text-text font-serif">{t("preview")}</h2>
             <p className="text-small text-text-muted">{t("previewHint")}</p>
           </div>
-          <Segmented
-            value={device}
-            onChange={(v) => setDevice(v as "desktop" | "mobile")}
-            options={[
-              { value: "desktop", label: t("desktop") },
-              { value: "mobile", label: t("mobile") },
-            ]}
-          />
+          <div className="flex items-center gap-3">
+            <a
+              href={`/widget-preview?pk=${chatbot.publicKey}`}
+              target="_blank"
+              rel="noreferrer"
+              className="anim-keep group text-small text-link inline-flex items-center gap-1.5 whitespace-nowrap"
+            >
+              {t("openPreview")}
+              <Icon icon={ArrowRightIcon} size={13} className="anim-keep -rotate-45 transition-transform duration-200 group-hover:translate-x-0.5" />
+            </a>
+            <Segmented
+              value={device}
+              onChange={(v) => setDevice(v as "desktop" | "mobile")}
+              options={[
+                { value: "desktop", label: t("desktop") },
+                { value: "mobile", label: t("mobile") },
+              ]}
+            />
+          </div>
         </div>
         <div className="border-border bg-surface flex items-center justify-center rounded-lg border p-5">
           {device === "mobile" ? (

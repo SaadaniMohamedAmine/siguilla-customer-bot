@@ -132,6 +132,18 @@
       }
     }
   },
+  "WidgetPreview": {
+    "brand": "VOTRE SITE",
+    "nav1": "Boutique",
+    "nav2": "Journal",
+    "nav3": "Contact",
+    "eyebrow": "Page d'aperçu",
+    "title": "Un coin tranquille d'internet.",
+    "body": "Cette page neutre n'existe que pour prévisualiser votre widget tel qu'un visiteur le verrait sur votre propre site.",
+    "cta": "Parcourir la collection",
+    "cta2": "En savoir plus",
+    "note": "Rien sur cette page n'est réel — seul votre widget l'est."
+  },
   "Settings": {
     "title": "Paramètres",
     "subtitle": "Gérez votre profil, votre organisation, la facturation et les intégrations.",
@@ -629,6 +641,7 @@
     }
   },
   "Widget": {
+    "openPreview": "Ouvrir l'aperçu en grand",
     "genericError": "Un problème est survenu de notre côté.",
     "remove": "Retirer {value}",
     "unsaved": "Vous avez des modifications non publiées",

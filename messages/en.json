@@ -132,6 +132,18 @@
       }
     }
   },
+  "WidgetPreview": {
+    "brand": "YOUR SITE",
+    "nav1": "Shop",
+    "nav2": "Journal",
+    "nav3": "Contact",
+    "eyebrow": "Preview canvas",
+    "title": "A quiet corner of the internet.",
+    "body": "This neutral page exists only to preview your widget as a visitor would see it on your own site.",
+    "cta": "Browse the collection",
+    "cta2": "Learn more",
+    "note": "Nothing on this page is real — only your widget is."
+  },
   "Settings": {
     "title": "Settings",
     "subtitle": "Manage your profile, organization, billing and integrations.",
@@ -629,6 +641,7 @@
     }
   },
   "Widget": {
+    "openPreview": "Open full preview",
     "genericError": "Something went wrong on our side.",
     "remove": "Remove {value}",
     "unsaved": "You have unpublished changes",
