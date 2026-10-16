@@ -422,6 +422,8 @@
     "learnMore": "Learn more"
   },
   "Nav": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
     "organization": "Organization",
     "agents": "Agents",
     "conversations": "Conversations",
