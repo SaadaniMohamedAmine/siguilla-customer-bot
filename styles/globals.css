@@ -345,3 +345,11 @@ html:has([data-splash]) {
 .overlay-anim[data-state="closed"] {
   animation: overlay-out 200ms ease-in both;
 }
+
+/* Défilement sans barre visible (onglets horizontaux sur mobile). */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

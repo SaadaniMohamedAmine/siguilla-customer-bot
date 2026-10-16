@@ -103,7 +103,7 @@ export function SettingsTabs(props: Props) {
       <div className="grid grid-cols-1 gap-8 md:grid-cols-[200px_minmax(0,1fr)] md:gap-10">
         <nav
           aria-label={t("title")}
-          className="-mx-2 flex gap-1 overflow-x-auto px-2 pb-1 md:sticky md:top-10 md:mx-0 md:flex-col md:self-start md:overflow-visible md:px-0 md:pb-0"
+          className="no-scrollbar -mx-2 flex gap-1 overflow-x-auto overflow-y-hidden px-2 pb-1 md:sticky md:top-10 md:mx-0 md:flex-col md:self-start md:overflow-visible md:px-0 md:pb-0"
         >
           {TABS.map((x) => {
             const active = tab === x.id;

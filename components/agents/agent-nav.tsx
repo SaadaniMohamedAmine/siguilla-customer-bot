@@ -25,7 +25,7 @@ export function AgentNav({ agentId }: { agentId: string }) {
   return (
     <nav
       aria-label={t("overview")}
-      className="border-border scroll-thin -mx-1 mb-8 flex gap-1 overflow-x-auto border-b px-1"
+      className="border-border no-scrollbar -mx-1 mb-8 flex gap-1 overflow-x-auto overflow-y-hidden border-b px-1 md:overflow-visible"
     >
       {TABS.map((tab) => {
         const external = tab.href.startsWith("/");
