@@ -25,7 +25,6 @@ export const config = {
     "/conversations/:path*",
     "/analytics/:path*",
     "/settings/:path*",
-    "/design-system",
     "/sign-in",
     "/sign-up",
     "/forgot-password",

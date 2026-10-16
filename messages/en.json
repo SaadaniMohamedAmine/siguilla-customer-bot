@@ -70,6 +70,68 @@
     "errorBody": "The invitation link is invalid or has expired. Ask your teammate to send a new one.",
     "goToDashboard": "Go to dashboard"
   },
+  "DesignSystem": {
+    "eyebrow": "DESIGN SYSTEM",
+    "title": "The Sigilla design language",
+    "intro": "Tokens, type, components and motion behind every Sigilla screen — luxury, restraint, and sources you can trust.",
+    "onThisPage": "Sections",
+    "switchToLight": "Switch to light",
+    "switchToDark": "Switch to dark",
+    "brandAssets": "Brand assets",
+    "assets": {
+      "og": "Share image",
+      "icon": "Favicon",
+      "apple": "App icon"
+    },
+    "surfaceSample": "A surface in the Sigilla palette.",
+    "motion": {
+      "ease": "Easing curve",
+      "pulse": "Soft pulse for live status",
+      "loader": "Page loader"
+    },
+    "sections": {
+      "brand": {
+        "title": "Brand",
+        "desc": "The wordmark, the seal and the monogram — in the sizes we use them."
+      },
+      "palette": {
+        "title": "Palette",
+        "desc": "Thirteen tokens drive both themes. The accent is only ever used as a background."
+      },
+      "typography": {
+        "title": "Typography",
+        "desc": "Instrument Serif for voice, Instrument Sans for reading, JetBrains Mono for data."
+      },
+      "buttons": {
+        "title": "Buttons",
+        "desc": "One primary action per view; everything else stays quiet."
+      },
+      "forms": {
+        "title": "Forms",
+        "desc": "Inputs with clear focus, error and disabled states."
+      },
+      "status": {
+        "title": "Status & people",
+        "desc": "Pills, badges and avatars that communicate state at a glance."
+      },
+      "surfaces": {
+        "title": "Surfaces",
+        "desc": "Three layers of depth, plus the lift we give interactive cards."
+      },
+      "feedback": {
+        "title": "Feedback",
+        "desc": "Toasts, dialogs, loading and empty states."
+      },
+      "motion": {
+        "title": "Motion",
+        "desc": "Slow, soft, never decorative for its own sake."
+      },
+      "citations": {
+        "title": "Citations",
+        "desc": "The signature of Sigilla: every answer is sealed by its source."
+      }
+    }
+  },
   "Settings": {
     "title": "Settings",
     "subtitle": "Manage your profile, organization, billing and integrations.",
@@ -171,6 +233,7 @@
     "moreSoon": "More integrations coming soon."
   },
   "Footer": {
+    "designSystem": "Design system",
     "tagline": "Every answer, sealed by its source.",
     "product": "Product",
     "how": "How it works",

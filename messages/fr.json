@@ -70,6 +70,68 @@
     "errorBody": "Le lien d'invitation est invalide ou a expiré. Demandez à votre collègue de vous en envoyer un nouveau.",
     "goToDashboard": "Aller au tableau de bord"
   },
+  "DesignSystem": {
+    "eyebrow": "DESIGN SYSTEM",
+    "title": "Le langage visuel de Sigilla",
+    "intro": "Tokens, typographie, composants et mouvement derrière chaque écran Sigilla — luxe, retenue, et des sources auxquelles on peut se fier.",
+    "onThisPage": "Sections",
+    "switchToLight": "Passer en clair",
+    "switchToDark": "Passer en sombre",
+    "brandAssets": "Éléments de marque",
+    "assets": {
+      "og": "Image de partage",
+      "icon": "Favicon",
+      "apple": "Icône d'application"
+    },
+    "surfaceSample": "Une surface de la palette Sigilla.",
+    "motion": {
+      "ease": "Courbe d'accélération",
+      "pulse": "Pulsation douce pour un statut actif",
+      "loader": "Loader de page"
+    },
+    "sections": {
+      "brand": {
+        "title": "Marque",
+        "desc": "Le wordmark, le sceau et le monogramme, aux tailles où nous les utilisons."
+      },
+      "palette": {
+        "title": "Palette",
+        "desc": "Treize tokens pilotent les deux thèmes. L'accent n'est utilisé qu'en fond."
+      },
+      "typography": {
+        "title": "Typographie",
+        "desc": "Instrument Serif pour la voix, Instrument Sans pour la lecture, JetBrains Mono pour les données."
+      },
+      "buttons": {
+        "title": "Boutons",
+        "desc": "Une seule action principale par écran ; le reste reste discret."
+      },
+      "forms": {
+        "title": "Formulaires",
+        "desc": "Des champs avec des états de focus, d'erreur et de désactivation clairs."
+      },
+      "status": {
+        "title": "Statuts et personnes",
+        "desc": "Pastilles, badges et avatars qui disent l'état d'un coup d'œil."
+      },
+      "surfaces": {
+        "title": "Surfaces",
+        "desc": "Trois niveaux de profondeur, et l'élévation donnée aux cartes interactives."
+      },
+      "feedback": {
+        "title": "Retours",
+        "desc": "Notifications, dialogues, chargement et états vides."
+      },
+      "motion": {
+        "title": "Mouvement",
+        "desc": "Lent, doux, jamais décoratif pour lui-même."
+      },
+      "citations": {
+        "title": "Citations",
+        "desc": "La signature de Sigilla : chaque réponse est scellée par sa source."
+      }
+    }
+  },
   "Settings": {
     "title": "Paramètres",
     "subtitle": "Gérez votre profil, votre organisation, la facturation et les intégrations.",
@@ -171,6 +233,7 @@
     "moreSoon": "D'autres intégrations arrivent bientôt."
   },
   "Footer": {
+    "designSystem": "Design system",
     "tagline": "Chaque réponse, scellée par sa source.",
     "product": "Produit",
     "how": "Comment ça marche",
