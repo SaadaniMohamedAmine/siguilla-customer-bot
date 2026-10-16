@@ -16,8 +16,11 @@ import { Switch } from "@/components/ui/switch";
 import { Icon } from "@/components/ui/icon";
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/toast";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipPortal } from "@/components/ui/tooltip";
 import { Reveal } from "@/components/marketing/reveal";
-import { AgentIcon, ArrowRightIcon, MoonIcon, SealIcon, SunIcon } from "@/lib/icons";
+import { AgentIcon, ArrowRightIcon, CopyIcon, DeleteIcon, InfoIcon, MoonIcon, SealIcon, SettingsIcon, SunIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
 const TOKENS = [
@@ -253,6 +256,49 @@ export default function DesignSystemPage() {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
+          </div>
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost">Dropdown menu</Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
+                  <Icon icon={SettingsIcon} size={16} />
+                  Settings
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Icon icon={CopyIcon} size={16} />
+                  Copy embed code
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="text-error">
+                  <Icon icon={DeleteIcon} size={16} />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Select defaultValue="30">
+              <SelectTrigger className="w-40" aria-label="Period">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="7">Last 7 days</SelectItem>
+                <SelectItem value="30">Last 30 days</SelectItem>
+                <SelectItem value="90">Last 90 days</SelectItem>
+              </SelectContent>
+            </Select>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost">
+                  <Icon icon={InfoIcon} size={16} />
+                  Tooltip
+                </Button>
+              </TooltipTrigger>
+              <TooltipPortal>
+                <TooltipContent>Hover or focus to reveal more context.</TooltipContent>
+              </TooltipPortal>
+            </Tooltip>
           </div>
           <div className="mt-6 flex flex-col gap-4">
             <Skeleton className="anim-keep h-10 w-48" />

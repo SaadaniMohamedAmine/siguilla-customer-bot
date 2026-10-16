@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
-import { ToastContainer } from "react-toastify";
+import { Slide, ToastContainer } from "react-toastify";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SplashScreen } from "@/components/ui/splash-screen";
@@ -46,7 +46,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <SplashScreen />
                 <NavigationLoader />
                 {children}
-                <ToastContainer position="bottom-right" hideProgressBar closeButton={false} theme="dark" />
+                <ToastContainer position="bottom-right" transition={Slide} theme="light" />
               </TooltipProvider>
             </QueryProvider>
           </ThemeProvider>
