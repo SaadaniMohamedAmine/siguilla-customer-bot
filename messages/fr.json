@@ -521,6 +521,7 @@
     "loading": "Chargement"
   },
   "Common": {
+    "skipToContent": "Aller au contenu principal",
     "close": "Fermer",
     "copyFailed": "Copie impossible. Sélectionnez le code et copiez-le manuellement.",
     "copyEmbed": "Copier le code d'intégration",

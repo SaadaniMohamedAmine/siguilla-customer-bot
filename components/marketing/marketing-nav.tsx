@@ -12,6 +12,7 @@ import { changeLocale } from "@/lib/actions/locale";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { locales } from "@/i18n/locales";
 import { useHydrated } from "@/lib/use-hydrated";
+import { useFocusTrap } from "@/lib/use-focus-trap";
 import { useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
@@ -30,7 +31,8 @@ export function MarketingNav() {
   // Le menu mobile est ouvert tant qu'on est sur la page où il a été ouvert (se referme tout seul à la navigation).
   const [openAt, setOpenAt] = useState<string | null>(null);
   const open = openAt === pathname;
-  const closeRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLElement>(null);
+  useFocusTrap(open, drawerRef);
 
   useEffect(() => {
     let raf = 0;
@@ -53,7 +55,6 @@ export function MarketingNav() {
     };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
-    closeRef.current?.focus();
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
@@ -188,6 +189,7 @@ export function MarketingNav() {
       />
       <aside
         id="mobile-menu"
+        ref={drawerRef}
         role="dialog"
         aria-modal="true"
         aria-label={t("main")}
@@ -199,7 +201,6 @@ export function MarketingNav() {
       >
         <div className="flex h-[60px] items-center justify-end">
           <button
-            ref={closeRef}
             type="button"
             aria-label={t("closeMenu")}
             onClick={() => setOpenAt(null)}

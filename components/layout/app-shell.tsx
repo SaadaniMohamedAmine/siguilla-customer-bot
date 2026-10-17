@@ -36,6 +36,8 @@ import { authClient, useListOrganizations, useActiveOrganization, signOut } from
 import { changeLocale } from "@/lib/actions/locale";
 import { useLocale } from "next-intl";
 import { cn } from "@/lib/utils";
+import { useFocusTrap } from "@/lib/use-focus-trap";
+import { SkipLink } from "@/components/ui/skip-link";
 
 const NAV = [
   { href: "/agents", icon: AgentIcon, key: "agents" },
@@ -67,6 +69,8 @@ export function AppShell({
   const locale = useLocale();
   const [openAt, setOpenAt] = React.useState<string | null>(null);
   const menuOpen = openAt === pathname;
+  const drawerRef = React.useRef<HTMLElement>(null);
+  useFocusTrap(menuOpen, drawerRef);
   const { data: orgs } = useListOrganizations();
   const { data: activeOrg } = useActiveOrganization();
 
@@ -211,6 +215,7 @@ export function AppShell({
 
   return (
     <div className="flex min-h-screen">
+      <SkipLink />
       <aside className="border-border bg-bg sticky top-0 hidden h-screen w-[248px] shrink-0 flex-col border-r lg:flex">
         {sidebar}
       </aside>
@@ -243,6 +248,7 @@ export function AppShell({
       />
       <aside
         id="app-drawer"
+        ref={drawerRef}
         role="dialog"
         aria-modal="true"
         aria-label={t("openMenu")}
@@ -264,7 +270,7 @@ export function AppShell({
       </aside>
 
       <div className="min-w-0 flex-1 pt-14 lg:pt-0">
-        <main className="mx-auto max-w-[1200px] px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
+        <main id="main-content" tabIndex={-1} className="mx-auto outline-none max-w-[1200px] px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
           {isDemo ? <DemoModeBanner /> : null}
           <QuotaBanner usage={messageUsage} />
           {children}

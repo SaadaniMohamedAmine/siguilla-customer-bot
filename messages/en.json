@@ -521,6 +521,7 @@
     "loading": "Loading"
   },
   "Common": {
+    "skipToContent": "Skip to main content",
     "close": "Close",
     "copyFailed": "Could not copy. Select the snippet and copy it manually.",
     "copyEmbed": "Copy embed code",
