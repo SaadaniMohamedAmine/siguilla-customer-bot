@@ -150,7 +150,7 @@ export function AgentCard({
             </div>
           </div>
 
-          <p className={cn("text-body mt-4 line-clamp-2 min-h-[2.75rem]", agent.description ? "text-text-muted" : "text-text-muted/60 italic")}>
+          <p className={cn("text-body mt-4 line-clamp-2 min-h-[2.75rem]", agent.description ? "text-text-muted" : "text-text-muted italic")}>
             {agent.description || t("noDescription")}
           </p>
 
