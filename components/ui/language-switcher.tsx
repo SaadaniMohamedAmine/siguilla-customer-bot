@@ -3,7 +3,8 @@ import { useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Icon } from "@/components/ui/icon";
-import { CheckIcon, ChevronDownIcon, GlobeIcon } from "@/lib/icons";
+import { CheckIcon, ChevronDownIcon } from "@/lib/icons";
+import { Flag } from "@/components/ui/flag";
 import { changeLocale } from "@/lib/actions/locale";
 import { locales, type Locale } from "@/i18n/locales";
 import { cn } from "@/lib/utils";
@@ -34,7 +35,7 @@ export function LanguageSwitcher({
           className,
         )}
       >
-        <Icon icon={GlobeIcon} size={15} className="text-link" />
+        <Flag locale={locale} />
         <span className="font-medium uppercase">{locale}</span>
         <Icon
           icon={ChevronDownIcon}
@@ -59,14 +60,7 @@ export function LanguageSwitcher({
               className={cn("anim-keep justify-between rounded-sm py-2 transition-colors", active && "bg-tint")}
             >
               <span className="flex items-center gap-2.5">
-                <span
-                  className={cn(
-                    "border-border flex h-6 w-8 items-center justify-center rounded-sm border font-mono text-[10px] uppercase",
-                    active ? "border-accent text-link" : "text-text-muted",
-                  )}
-                >
-                  {l}
-                </span>
+                <Flag locale={l} className="h-4 w-6" />
                 <span className={cn(active && "font-medium")}>{NAMES[l]}</span>
               </span>
               {active ? <Icon icon={CheckIcon} size={16} className="text-link" /> : null}
