@@ -111,3 +111,18 @@ export function getDocSearchIndex(locale = "en"): DocSearchEntry[] {
   }
   return out;
 }
+
+/** Première phrase utile d'une page de doc (hors titre), pour la meta description. */
+export function getDocDescription(slug: string, locale = "en"): string {
+  const md = getDocContent(slug, locale);
+  if (!md) return "";
+  const body = md.replace(/^#\s+.*$/m, "");
+  const first = body.split(/\n\s*\n/).map((b) => b.trim()).find((b) => b && !b.startsWith("#") && !b.startsWith("```") && !b.startsWith("|"));
+  const text = (first ?? "")
+    .replace(/`([^`]*)`/g, "$1")
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/\*\*|__|\*/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  return text.length > 158 ? `${text.slice(0, 155).trimEnd()}…` : text;
+}

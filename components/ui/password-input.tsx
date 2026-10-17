@@ -2,11 +2,13 @@
 import * as React from "react";
 import { Icon } from "./icon";
 import { EyeIcon, EyeOffIcon } from "@/lib/icons";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { InputProps } from "./input";
 
 export const PasswordInput = React.forwardRef<HTMLInputElement, InputProps & { labelAction?: React.ReactNode }>(
   ({ className, label, labelAction, error, id, ...props }, ref) => {
+    const t = useTranslations("Common");
     const [visible, setVisible] = React.useState(false);
     const generatedId = React.useId();
     const inputId = id ?? generatedId;
@@ -39,7 +41,7 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, InputProps & { l
           <button
             type="button"
             aria-pressed={visible}
-            aria-label={visible ? "Hide password" : "Show password"}
+            aria-label={visible ? t("hidePassword") : t("showPassword")}
             onClick={() => setVisible((v) => !v)}
             className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-text-muted hover:text-text"
           >

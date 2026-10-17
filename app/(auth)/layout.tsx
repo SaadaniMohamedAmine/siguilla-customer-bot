@@ -63,7 +63,7 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
           <circle cx="100" cy="100" r="70" stroke="var(--border)" />
         </svg>
       </div>
-      <main className="relative flex flex-1 flex-col items-center justify-center p-6 lg:w-[45%]">
+      <main id="main-content" tabIndex={-1} className="outline-none relative flex flex-1 flex-col items-center justify-center p-6 lg:w-[45%]">
         <BackHome label={t("backHome")} className="absolute top-6 left-6" />
         <div className="w-full max-w-[420px] pt-10 lg:hidden">
           <Link href="/" aria-label={t("backHome")} className="mb-8 block text-center">

@@ -144,6 +144,35 @@
     "cta2": "En savoir plus",
     "note": "Rien sur cette page n'est réel — seul votre widget l'est."
   },
+  "Banners": {
+    "quotaExceeded": "Vos agents se reposent jusqu'au {date}.",
+    "quotaNear": "Vous avez utilisé 90 % des messages de ce mois-ci.",
+    "upgrade": "Passer à l'offre supérieure",
+    "demo": "Vous explorez une démo en direct. Les modifications sont désactivées.",
+    "startFree": "Démarrer gratuitement"
+  },
+  "Meta": {
+    "pricing": {
+      "title": "Tarifs",
+      "description": "Des offres simples pour des agents de support IA qui répondent à partir de vos docs, avec leurs sources. Démarrez gratuitement, évoluez en grandissant."
+    },
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "description": "Ce que Sigilla collecte, qui nous aide à le faire fonctionner, et comment vous gardez le contrôle de vos données."
+    },
+    "terms": {
+      "title": "Conditions d'utilisation",
+      "description": "Les règles d'utilisation de Sigilla : usage acceptable, limites des offres et modifications de ces conditions."
+    },
+    "docs": {
+      "title": "Docs",
+      "description": "Guides, concepts et référence pour créer, intégrer et faire tourner votre agent Sigilla."
+    },
+    "designSystem": {
+      "title": "Design system",
+      "description": "Tokens, typographie, composants et mouvement derrière chaque écran Sigilla."
+    }
+  },
   "Settings": {
     "title": "Paramètres",
     "subtitle": "Gérez votre profil, votre organisation, la facturation et les intégrations.",
@@ -492,6 +521,13 @@
     "loading": "Chargement"
   },
   "Common": {
+    "skipToContent": "Aller au contenu principal",
+    "close": "Fermer",
+    "copyFailed": "Copie impossible. Sélectionnez le code et copiez-le manuellement.",
+    "copyEmbed": "Copier le code d'intégration",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "sourceLabel": "Source {index} : {label}",
     "save": "Enregistrer",
     "cancel": "Annuler",
     "continue": "Continuer",
@@ -504,6 +540,7 @@
     "learnMore": "En savoir plus"
   },
   "Nav": {
+    "breadcrumb": "Fil d'Ariane",
     "openMenu": "Ouvrir le menu",
     "closeMenu": "Fermer le menu",
     "organization": "Organisation",
@@ -641,6 +678,7 @@
     }
   },
   "Widget": {
+    "previewTitle": "Aperçu du widget",
     "openPreview": "Ouvrir l'aperçu en grand",
     "genericError": "Un problème est survenu de notre côté.",
     "remove": "Retirer {value}",

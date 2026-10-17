@@ -139,20 +139,20 @@ button{cursor:pointer;border:0;background:none;color:inherit}
 .av{width:32px;height:32px;border-radius:8px;background:var(--a);color:var(--o);font:400 18px/32px "Instrument Serif",serif;text-align:center;overflow:hidden;flex:none}.av img{width:100%;height:100%;object-fit:cover}
 .n{font-weight:600;font-size:14px}.s{font-size:12px;opacity:.75}.d{display:inline-block;width:6px;height:6px;border-radius:50%;background:#6FBF8E;margin-right:6px}
 .x{margin-left:auto;width:28px;height:28px;border-radius:6px;font-size:18px}
-.f{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
-.m{max-width:85%;padding:10px 12px;border-radius:12px;white-space:pre-wrap;word-wrap:break-word}
-.v{align-self:flex-end;background:var(--r)}.bt,.ag{align-self:flex-start;background:var(--bg);border:1px solid var(--b)}
+.f{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:var(--b) #0000}
+.m{max-width:85%;padding:10px 13px;border-radius:16px;white-space:pre-wrap;word-wrap:break-word}
+.v{align-self:flex-end;background:color-mix(in srgb,var(--a) 16%,var(--bg));border-bottom-right-radius:4px}.bt,.ag{align-self:flex-start;background:var(--bg);border:1px solid var(--b);border-bottom-left-radius:4px}
 .fb{font-style:italic;color:var(--m)}.ag .w{display:block;font-size:11px;color:var(--m);margin-bottom:2px}
 .sys{align-self:center;font-size:11px;color:var(--m);text-transform:uppercase;letter-spacing:.08em}
 .sl{display:inline-block;min-width:16px;height:16px;padding:0 3px;margin:0 2px;border-radius:9px;background:var(--a);color:var(--o);font:500 10px/16px ui-monospace,monospace;text-align:center;vertical-align:1px}
 .src{margin-top:8px;padding-top:8px;border-top:1px solid var(--b);font-size:12px;color:var(--m)}.src a,.src span{color:var(--l);text-decoration:none;display:block}
 .fbk{margin-top:6px;font-size:11px;color:var(--m)}.fbk button{padding:2px 6px;border-radius:4px}.fbk button[aria-pressed=true]{color:var(--l)}
-.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{padding:6px 10px;border:1px solid var(--b);border-radius:999px;font-size:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{padding:6px 11px;border:1px solid var(--b);border-radius:999px;font-size:12px;transition:border-color .2s}.chip:hover{border-color:var(--a)}
 .card{border:1px solid var(--b);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
 input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid var(--b);border-radius:8px;padding:9px 10px;resize:none}
 .pr{background:var(--a);color:var(--o);border-radius:8px;padding:9px 12px;font-weight:500}
 .i{display:flex;gap:8px;padding:12px;border-top:1px solid var(--b);align-items:flex-end}.i textarea{max-height:96px}
-.sd{width:38px;height:38px;border-radius:8px;background:var(--a);color:var(--o);flex:none;font-size:18px}
+.sd{width:38px;height:38px;border-radius:10px;background:var(--a);color:var(--o);flex:none;font-size:18px}
 .ft{text-align:center;font-size:11px;color:var(--m);padding:0 0 8px}
 .rest{flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:24px;text-align:center}.rest h3{font:400 24px/1.2 "Instrument Serif",serif}
 .cur::after{content:"▍";animation:b 1s steps(1) infinite;color:var(--l)}@keyframes b{50%{opacity:0}}

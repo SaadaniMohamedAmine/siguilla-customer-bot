@@ -1,9 +1,13 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/meta";
 import { getTranslations } from "next-intl/server";
 import { LegalPage } from "@/components/marketing/legal-page";
 
-export const metadata: Metadata = { title: "Terms" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Meta");
+  return pageMeta(t("terms.title"), t("terms.description"), "/terms");
+}
 
 export default async function TermsPage() {
   const t = await getTranslations("Legal.terms");

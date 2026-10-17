@@ -128,7 +128,7 @@ export default async function LandingPage() {
             ))}
           </div>
         </div>
-        <p className="text-small text-text-muted/70 mt-6 text-center">{t("brandsNote")}</p>
+        <p className="text-small text-text-muted mt-6 text-center">{t("brandsNote")}</p>
       </section>
 
       <section id="how" className="scroll-mt-16 px-6 py-24">

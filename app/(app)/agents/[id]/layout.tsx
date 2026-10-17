@@ -19,7 +19,7 @@ export default async function AgentLayout({ children, params }: LayoutProps<"/ag
 
   return (
     <div>
-      <nav aria-label="Breadcrumb" className="text-small text-text-muted mb-4 flex items-center gap-1.5">
+      <nav aria-label={tn("breadcrumb")} className="text-small text-text-muted mb-4 flex items-center gap-1.5">
         <Link href="/agents" className="hover:text-text transition-colors">
           {tn("agents")}
         </Link>

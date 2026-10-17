@@ -1,10 +1,12 @@
 "use client";
 import * as Tooltip from "@radix-ui/react-tooltip";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 export type CitationSource = { index: number; title: string; locator?: string | null; url?: string | null };
 
 export function CitationSeal({ source, className }: { source: CitationSource; className?: string }) {
+  const t = useTranslations("Common");
   const label = `${source.title}${source.locator ? ` — ${source.locator}` : ""}`;
   const seal = (
     <span
@@ -13,7 +15,7 @@ export function CitationSeal({ source, className }: { source: CitationSource; cl
         className,
       )}
       tabIndex={0}
-      aria-label={`Source ${source.index}: ${label}`}
+      aria-label={t("sourceLabel", { index: source.index, label })}
     >
       {source.index}
     </span>
