@@ -151,6 +151,28 @@
     "demo": "You're exploring a live demo. Changes are disabled.",
     "startFree": "Start free"
   },
+  "Meta": {
+    "pricing": {
+      "title": "Pricing",
+      "description": "Simple plans for AI support agents that answer from your docs, with sources. Start free, upgrade when you grow."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "description": "What Sigilla collects, who helps us run it, and how you stay in control of your data."
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "description": "The rules for using Sigilla: acceptable use, plan limits and changes to these terms."
+    },
+    "docs": {
+      "title": "Docs",
+      "description": "Guides, concepts and reference for building, embedding and running your Sigilla agent."
+    },
+    "designSystem": {
+      "title": "Design system",
+      "description": "Tokens, typography, components and motion behind every Sigilla screen."
+    }
+  },
   "Settings": {
     "title": "Settings",
     "subtitle": "Manage your profile, organization, billing and integrations.",

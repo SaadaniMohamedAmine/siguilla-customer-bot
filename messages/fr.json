@@ -151,6 +151,28 @@
     "demo": "Vous explorez une démo en direct. Les modifications sont désactivées.",
     "startFree": "Démarrer gratuitement"
   },
+  "Meta": {
+    "pricing": {
+      "title": "Tarifs",
+      "description": "Des offres simples pour des agents de support IA qui répondent à partir de vos docs, avec leurs sources. Démarrez gratuitement, évoluez en grandissant."
+    },
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "description": "Ce que Sigilla collecte, qui nous aide à le faire fonctionner, et comment vous gardez le contrôle de vos données."
+    },
+    "terms": {
+      "title": "Conditions d'utilisation",
+      "description": "Les règles d'utilisation de Sigilla : usage acceptable, limites des offres et modifications de ces conditions."
+    },
+    "docs": {
+      "title": "Docs",
+      "description": "Guides, concepts et référence pour créer, intégrer et faire tourner votre agent Sigilla."
+    },
+    "designSystem": {
+      "title": "Design system",
+      "description": "Tokens, typographie, composants et mouvement derrière chaque écran Sigilla."
+    }
+  },
   "Settings": {
     "title": "Paramètres",
     "subtitle": "Gérez votre profil, votre organisation, la facturation et les intégrations.",

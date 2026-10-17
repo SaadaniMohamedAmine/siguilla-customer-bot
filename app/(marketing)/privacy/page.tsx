@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/meta";
 import { getTranslations } from "next-intl/server";
 import { LegalPage, type LegalSection } from "@/components/marketing/legal-page";
 
-export const metadata: Metadata = { title: "Privacy" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Meta");
+  return pageMeta(t("privacy.title"), t("privacy.description"), "/privacy");
+}
 
 export default async function PrivacyPage() {
   const t = await getTranslations("Legal.privacy");

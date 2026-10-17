@@ -4,7 +4,8 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import { DOCS_ORDER, getDocTitle, getDocContent, getDocHeadings, slugifyHeading } from "@/lib/docs";
+import { DOCS_ORDER, getDocTitle, getDocContent, getDocDescription, getDocHeadings, slugifyHeading } from "@/lib/docs";
+import { pageMeta } from "@/lib/meta";
 import { CodeBlock } from "@/components/marketing/code-block";
 import { DocBlockquote } from "@/components/marketing/doc-callout";
 import { DocHeading } from "@/components/marketing/doc-heading";
@@ -19,10 +20,15 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<"/docs/[[...slug]]">): Promise<Metadata> {
   const { slug } = await params;
-  if (!slug || slug.length === 0) return { title: "Docs" };
+  const tm = await getTranslations("Meta");
+  if (!slug || slug.length === 0) return pageMeta(tm("docs.title"), tm("docs.description"), "/docs");
   const page = slug[0];
   const locale = await getLocale();
-  return { title: `${getDocTitle(page, locale)} — Docs` };
+  return pageMeta(
+    `${getDocTitle(page, locale)} — Docs`,
+    getDocDescription(page, locale) || tm("docs.description"),
+    `/docs/${page}`,
+  );
 }
 
 export default async function DocsPage({ params }: PageProps<"/docs/[[...slug]]">) {

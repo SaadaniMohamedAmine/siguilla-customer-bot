@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/meta";
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -10,7 +11,10 @@ import { FaqAccordion } from "@/components/marketing/faq-accordion";
 import { TestCardPill } from "@/components/marketing/test-card-pill";
 import { Reveal } from "@/components/marketing/reveal";
 
-export const metadata: Metadata = { title: "Pricing" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Meta");
+  return pageMeta(t("pricing.title"), t("pricing.description"), "/pricing");
+}
 
 const at = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
 
