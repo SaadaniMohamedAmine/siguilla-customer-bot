@@ -144,6 +144,13 @@
     "cta2": "Learn more",
     "note": "Nothing on this page is real — only your widget is."
   },
+  "Banners": {
+    "quotaExceeded": "Your agents are resting until {date}.",
+    "quotaNear": "You've used 90% of this month's messages.",
+    "upgrade": "Upgrade",
+    "demo": "You're exploring a live demo. Changes are disabled.",
+    "startFree": "Start free"
+  },
   "Settings": {
     "title": "Settings",
     "subtitle": "Manage your profile, organization, billing and integrations.",
@@ -492,6 +499,12 @@
     "loading": "Loading"
   },
   "Common": {
+    "close": "Close",
+    "copyFailed": "Could not copy. Select the snippet and copy it manually.",
+    "copyEmbed": "Copy embed code",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "sourceLabel": "Source {index}: {label}",
     "save": "Save",
     "cancel": "Cancel",
     "continue": "Continue",
@@ -504,6 +517,7 @@
     "learnMore": "Learn more"
   },
   "Nav": {
+    "breadcrumb": "Breadcrumb",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "organization": "Organization",
@@ -641,6 +655,7 @@
     }
   },
   "Widget": {
+    "previewTitle": "Widget preview",
     "openPreview": "Open full preview",
     "genericError": "Something went wrong on our side.",
     "remove": "Remove {value}",

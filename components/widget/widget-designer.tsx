@@ -387,7 +387,7 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
                 ref={iframeRef}
                 src={`/widget-preview?pk=${chatbot.publicKey}`}
                 className="h-full w-full rounded-[38px]"
-                title="Widget preview"
+                title={t("previewTitle")}
               />
             </div>
           ) : (
@@ -402,7 +402,7 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
                 ref={iframeRef}
                 src={`/widget-preview?pk=${chatbot.publicKey}`}
                 className="block h-[620px] w-full"
-                title="Widget preview"
+                title={t("previewTitle")}
               />
             </div>
           )}
