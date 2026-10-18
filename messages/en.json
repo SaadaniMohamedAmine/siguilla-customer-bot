@@ -598,6 +598,7 @@
     "errors": {
       "invalid": "Email or password is incorrect.",
       "exists": "An account with this email already exists.",
+      "tooMany": "Too many attempts. Please wait a minute and try again.",
       "generic": "Something went wrong on our side. Please try again."
     },
     "validation": {

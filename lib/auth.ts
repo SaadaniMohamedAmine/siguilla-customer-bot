@@ -7,6 +7,9 @@ import { apiKey } from "@better-auth/api-key";
 import { prisma } from "@/lib/db";
 import { prepareAccountDeletion } from "@/lib/account";
 import { MEMBERS_LIMIT_CODE, hasFreeSeat } from "@/lib/billing/seats";
+import { authRateRules } from "@/lib/auth-rate-limit";
+import { rateLimit } from "@/lib/rate-limit";
+import { clientIp } from "@/lib/public/cors";
 import {
   DEMO_READ_ONLY_MESSAGE,
   PASSWORD_RESET_REQUEST_PATHS,
@@ -53,6 +56,15 @@ export const auth = betterAuth({
     // Sigilla, ce hook couvre les endpoints Better Auth (allowlist, deny-by-default).
     before: createAuthMiddleware(async (ctx) => {
       const demoEmail = process.env.DEMO_USER_EMAIL;
+
+      // Anti brute-force / spam : seulement les vraies requêtes HTTP (pas les appels serveur comme /demo).
+      if (ctx.request) {
+        const email = (ctx.body as { email?: unknown } | undefined)?.email;
+        for (const rule of authRateRules(ctx.path, clientIp(ctx.request), email)) {
+          const rl = await rateLimit(rule.key, rule.limit, rule.windowMs);
+          if (!rl.ok) throw new APIError("TOO_MANY_REQUESTS", { message: "rate_limited" });
+        }
+      }
 
       // Pas de réinitialisation de mot de passe visant le compte démo (requête sans session).
       if (PASSWORD_RESET_REQUEST_PATHS.includes(ctx.path)) {

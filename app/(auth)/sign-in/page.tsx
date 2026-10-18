@@ -50,7 +50,7 @@ export default function SignInPage() {
     setLoading(true);
     const { error: authError } = await signIn.email({ email, password, callbackURL: redirectTo });
     setLoading(false);
-    if (authError) setFormError(t("errors.invalid"));
+    if (authError) setFormError(authError.status === 429 ? t("errors.tooMany") : t("errors.invalid"));
     else router.push(redirectTo);
   }
 
