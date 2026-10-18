@@ -989,5 +989,23 @@
     "online": "En ligne",
     "err": "Un souci de connexion. Réessayez.",
     "by": "Scellé par Sigilla"
+  },
+  "ApiErrors": {
+    "demo_read_only": "La démo est en lecture seule.",
+    "unauthorized": "Votre session a expiré. Reconnectez-vous.",
+    "agents_limit": "Votre offre autorise un nombre limité d'agents. Passez à l'offre supérieure pour en ajouter.",
+    "sources_limit": "Votre offre autorise un nombre limité de sources. Passez à l'offre supérieure pour en ajouter.",
+    "members_limit": "La limite de membres de votre offre est atteinte. Passez à l'offre supérieure pour inviter plus de monde.",
+    "notion_requires_pro": "Le connecteur Notion est disponible avec Pro et Team.",
+    "api_requires_pro": "L'API est disponible avec Pro et Team.",
+    "global_storage_full": "Le stockage est plein. Réessayez plus tard.",
+    "quota_exceeded": "La limite mensuelle de messages est atteinte.",
+    "rate_limited": "Trop de requêtes. Patientez un instant puis réessayez.",
+    "invalid_url": "Saisissez une URL valide.",
+    "not_found": "Cet élément n'existe plus.",
+    "no_subscription": "Aucun abonnement actif à gérer.",
+    "billing_forbidden": "Seuls les propriétaires et les administrateurs peuvent gérer la facturation.",
+    "keys_forbidden": "Seuls les propriétaires et les administrateurs peuvent gérer les clés API.",
+    "owner_only": "Seul le propriétaire peut supprimer l'organisation."
   }
 }

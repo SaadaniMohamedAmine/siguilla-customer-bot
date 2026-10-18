@@ -15,6 +15,8 @@ import { WidgetConfig, parseWidgetConfig } from "@/lib/widget/config";
 import { toRuntimeConfig } from "@/lib/widget/runtime";
 import { CloseIcon, AddIcon, UploadIcon, CheckIcon, LockIcon, WarningIcon, ArrowRightIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
+import { responseError } from "@/lib/api";
+import { useApiError } from "@/lib/use-api-error";
 
 const COLORS = ["#9E2F45", "#1A1214", "#2F7A4D", "#1F3A5F", "#5B3A6B", "#8A5A12"];
 
@@ -27,6 +29,7 @@ type Chatbot = {
 
 export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; canRemoveBadge: boolean }) {
   const t = useTranslations("Widget");
+  const errMsg = useApiError();
   const router = useRouter();
   const initial = React.useMemo(() => parseWidgetConfig(chatbot.widgetConfig), [chatbot.widgetConfig]);
   const [config, setConfig] = React.useState<WidgetConfig>(initial);
@@ -88,11 +91,11 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ widgetConfig: config, status: "live" }),
       });
-      if (!res.ok) throw new Error();
+      if (!res.ok) throw await responseError(res);
       toast.success(t("published"));
       router.refresh();
-    } catch {
-      toast.error(t("genericError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("genericError")));
     } finally {
       setSaving(false);
     }

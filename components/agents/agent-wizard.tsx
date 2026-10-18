@@ -13,6 +13,7 @@ import { SourcesManager } from "@/components/sources/sources-manager";
 import { EmbedSnippet } from "@/components/widget/embed-snippet";
 import { ArrowRightIcon, CheckIcon } from "@/lib/icons";
 import { api } from "@/lib/api";
+import { useApiError } from "@/lib/use-api-error";
 import { cn } from "@/lib/utils";
 
 const STEPS = ["stepIdentity", "stepSources", "stepWidget"] as const;
@@ -82,6 +83,7 @@ function StepHeading({ title, body }: { title: string; body: string }) {
 }
 
 function StepIdentity({ id, router, t }: { id?: string; router: ReturnType<typeof useRouter>; t: T }) {
+  const errMsg = useApiError();
   const tCommon = useTranslations("Common");
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
@@ -110,7 +112,7 @@ function StepIdentity({ id, router, t }: { id?: string; router: ReturnType<typeo
       });
       router.push(`/agents/new?step=2&id=${agentId}`);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : t("genericError"));
+      toast.error(errMsg(err, t("genericError")));
     } finally {
       setSaving(false);
     }
@@ -201,6 +203,7 @@ function StepSources({
 }
 
 function StepWidget({ id, router, t }: { id: string; router: ReturnType<typeof useRouter>; t: T }) {
+  const errMsg = useApiError();
   const { data: chatbot } = useQuery({
     queryKey: ["chatbot", id],
     queryFn: () => api<{ publicKey: string }>(`/api/chatbots/${id}`),
@@ -214,7 +217,7 @@ function StepWidget({ id, router, t }: { id: string; router: ReturnType<typeof u
       toast.success(t("live"));
       router.push(`/agents/${id}`);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : t("genericError"));
+      toast.error(errMsg(err, t("genericError")));
     } finally {
       setPublishing(false);
     }

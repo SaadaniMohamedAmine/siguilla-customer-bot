@@ -36,7 +36,8 @@ import {
   UserIcon,
 } from "@/lib/icons";
 import { authClient } from "@/lib/auth-client";
-import { api } from "@/lib/api";
+import { api, unwrapAuth } from "@/lib/api";
+import { useApiError } from "@/lib/use-api-error";
 import { passwordStrength } from "@/lib/validation/auth";
 import { useHydrated } from "@/lib/use-hydrated";
 import { getPlanLimits, usePlanDetails, PLAN_PRICES, type PlanId } from "@/lib/billing/plans";
@@ -206,6 +207,7 @@ function LockedState({ title, body }: { title: string; body: string }) {
 
 function ProfileTab({ user, isDemo }: { user: Props["user"]; isDemo: boolean }) {
   const t = useTranslations("Settings");
+  const errMsg = useApiError();
   const ta = useTranslations("Auth");
   const { theme, setTheme } = useTheme();
   const mounted = useHydrated();
@@ -221,10 +223,10 @@ function ProfileTab({ user, isDemo }: { user: Props["user"]; isDemo: boolean }) 
   async function saveName() {
     setSaving(true);
     try {
-      await authClient.updateUser({ name });
+      unwrapAuth(await authClient.updateUser({ name }));
       toast.success(t("saved"));
-    } catch {
-      toast.error(t("genericError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("genericError")));
     } finally {
       setSaving(false);
     }
@@ -232,21 +234,21 @@ function ProfileTab({ user, isDemo }: { user: Props["user"]; isDemo: boolean }) 
 
   async function changePassword() {
     try {
-      await authClient.changePassword({ newPassword, currentPassword });
+      unwrapAuth(await authClient.changePassword({ newPassword, currentPassword }));
       toast.success(t("passwordUpdated"));
       setNewPassword("");
       setCurrentPassword("");
-    } catch {
-      toast.error(t("passwordError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("passwordError")));
     }
   }
 
   async function deleteAccount() {
     try {
-      await authClient.deleteUser({});
+      unwrapAuth(await authClient.deleteUser({}));
       redirectTo("/");
-    } catch {
-      toast.error(t("deleteAccountError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("deleteAccountError")));
     }
   }
 
@@ -392,6 +394,7 @@ function OrganizationTab({
   invitations: Props["invitations"];
 }) {
   const t = useTranslations("Settings");
+  const errMsg = useApiError();
   const router = useRouter();
   const [name, setName] = React.useState(org.name);
   const [inviteOpen, setInviteOpen] = React.useState(false);
@@ -406,57 +409,61 @@ function OrganizationTab({
 
   async function saveName() {
     try {
-      await authClient.organization.update({ data: { name }, organizationId: org.id });
+      unwrapAuth(await authClient.organization.update({ data: { name }, organizationId: org.id }));
       toast.success(t("saved"));
       router.refresh();
-    } catch {
-      toast.error(t("genericError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("genericError")));
     }
   }
 
   async function invite() {
     try {
-      const res = await authClient.organization.inviteMember({
-        email: inviteEmail,
-        role: inviteRole as "member" | "admin",
-        organizationId: org.id,
-      });
-      const id = (res.data as { id: string } | null)?.id;
+      const res = unwrapAuth(
+        await authClient.organization.inviteMember({
+          email: inviteEmail,
+          role: inviteRole as "member" | "admin",
+          organizationId: org.id,
+        }),
+      );
+      const id = (res as { id: string } | null)?.id;
       if (id) setInviteLink(`${window.location.origin}/invite/${id}`);
       router.refresh();
-    } catch {
-      toast.error(t("inviteError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("inviteError")));
     }
   }
 
   async function removeMember(memberId: string) {
     try {
-      await authClient.organization.removeMember({ memberIdOrEmail: memberId, organizationId: org.id });
+      unwrapAuth(await authClient.organization.removeMember({ memberIdOrEmail: memberId, organizationId: org.id }));
       router.refresh();
-    } catch {
-      toast.error(t("genericError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("genericError")));
     }
   }
 
   async function updateRole(memberId: string, newRole: string) {
     try {
-      await authClient.organization.updateMemberRole({
-        memberId,
-        role: newRole as "member" | "admin" | "owner",
-        organizationId: org.id,
-      });
+      unwrapAuth(
+        await authClient.organization.updateMemberRole({
+          memberId,
+          role: newRole as "member" | "admin" | "owner",
+          organizationId: org.id,
+        }),
+      );
       router.refresh();
-    } catch {
-      toast.error(t("genericError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("genericError")));
     }
   }
 
   async function cancelInvite(id: string) {
     try {
-      await authClient.organization.cancelInvitation({ invitationId: id });
+      unwrapAuth(await authClient.organization.cancelInvitation({ invitationId: id }));
       router.refresh();
-    } catch {
-      toast.error(t("genericError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("genericError")));
     }
   }
 
@@ -464,8 +471,8 @@ function OrganizationTab({
     try {
       await api(`/api/organization`, { method: "DELETE" });
       redirectTo("/");
-    } catch {
-      toast.error(t("deleteOrgError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("deleteOrgError")));
     }
   }
 
@@ -621,6 +628,7 @@ function BillingTab({
   canManage: boolean;
 }) {
   const t = useTranslations("Settings");
+  const errMsg = useApiError();
   const tp = useTranslations("Pricing");
   const plans = usePlanDetails();
   const [loading, setLoading] = React.useState<string | null>(null);
@@ -633,8 +641,8 @@ function BillingTab({
         body: JSON.stringify({ plan }),
       });
       redirectTo(url);
-    } catch {
-      toast.error(t("genericError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("genericError")));
       setLoading(null);
     }
   }
@@ -644,8 +652,8 @@ function BillingTab({
     try {
       const { url } = await api<{ url: string }>("/api/billing/portal", { method: "POST" });
       redirectTo(url);
-    } catch {
-      toast.error(t("genericError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("genericError")));
       setLoading(null);
     }
   }
@@ -769,6 +777,7 @@ function ApiKeysTab({
   plan: string;
 }) {
   const t = useTranslations("Settings");
+  const errMsg = useApiError();
   const router = useRouter();
   const [createOpen, setCreateOpen] = React.useState(false);
   const [name, setName] = React.useState("");
@@ -787,8 +796,8 @@ function ApiKeysTab({
       const res = await api<{ key: string }>("/api/keys", { method: "POST", body: JSON.stringify({ name }) });
       setCreated(res);
       router.refresh();
-    } catch {
-      toast.error(t("genericError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("genericError")));
     }
   }
 
@@ -796,8 +805,8 @@ function ApiKeysTab({
     try {
       await api(`/api/keys?id=${id}`, { method: "DELETE" });
       router.refresh();
-    } catch {
-      toast.error(t("genericError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("genericError")));
     }
   }
 
@@ -883,14 +892,15 @@ function ApiKeysTab({
 
 function IntegrationsTab({ notion, plan }: { notion: Props["notion"]; plan: string }) {
   const t = useTranslations("Settings");
+  const errMsg = useApiError();
   const notionAllowed = getPlanLimits(plan).notion;
 
   async function disconnect() {
     try {
       await api("/api/notion", { method: "DELETE" });
       window.location.reload();
-    } catch {
-      toast.error(t("genericError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("genericError")));
     }
   }
 

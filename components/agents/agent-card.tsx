@@ -18,6 +18,8 @@ import { toast } from "@/components/ui/toast";
 import { KebabIcon, CopyIcon, DeleteIcon, SettingsIcon, WarningIcon } from "@/lib/icons";
 import { useNow, formatRelative } from "@/lib/time";
 import { cn } from "@/lib/utils";
+import { responseError } from "@/lib/api";
+import { useApiError } from "@/lib/use-api-error";
 
 export type AgentCardAgent = { id: string; name: string; description: string | null; status: string; publicKey: string };
 export type AgentCardMetrics = {
@@ -38,6 +40,7 @@ export function AgentCard({
   health: AgentCardHealth;
 }) {
   const t = useTranslations("Agents");
+  const errMsg = useApiError();
   const tCommon = useTranslations("Common");
   const locale = useLocale();
   const router = useRouter();
@@ -62,11 +65,11 @@ export function AgentCard({
     setDeleting(true);
     try {
       const res = await fetch(`/api/chatbots/${agent.id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error();
+      if (!res.ok) throw await responseError(res);
       setDeleteOpen(false);
       router.refresh();
-    } catch {
-      toast.error(t("genericError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("genericError")));
     } finally {
       setDeleting(false);
     }
