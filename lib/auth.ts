@@ -2,9 +2,16 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { organization } from "better-auth/plugins";
+import { APIError, createAuthMiddleware, getSessionFromCtx } from "better-auth/api";
 import { apiKey } from "@better-auth/api-key";
 import { prisma } from "@/lib/db";
 import { prepareAccountDeletion } from "@/lib/account";
+import {
+  DEMO_READ_ONLY_MESSAGE,
+  PASSWORD_RESET_REQUEST_PATHS,
+  isDemoAllowedPath,
+  isDemoEmail,
+} from "@/lib/demo-guard";
 
 function slugify(input: string) {
   return input
@@ -40,6 +47,37 @@ export const auth = betterAuth({
     },
   },
   session: { expiresIn: 60 * 60 * 24 * 30, updateAge: 60 * 60 * 24 },
+  hooks: {
+    // La démo publique est en lecture seule : requireOrgApi({ write: true }) ne couvre que les routes
+    // Sigilla, ce hook couvre les endpoints Better Auth (allowlist, deny-by-default).
+    before: createAuthMiddleware(async (ctx) => {
+      const demoEmail = process.env.DEMO_USER_EMAIL;
+
+      // Pas de réinitialisation de mot de passe visant le compte démo (requête sans session).
+      if (PASSWORD_RESET_REQUEST_PATHS.includes(ctx.path)) {
+        if (isDemoEmail((ctx.body as { email?: unknown } | undefined)?.email, demoEmail)) {
+          throw new APIError("FORBIDDEN", { message: DEMO_READ_ONLY_MESSAGE });
+        }
+        return;
+      }
+
+      // Chemins sûrs : on sort avant toute requête en base.
+      if (isDemoAllowedPath(ctx.path)) return;
+
+      const session = await getSessionFromCtx(ctx);
+      if (!session) return;
+
+      let isDemo = isDemoEmail(session.user.email, demoEmail);
+      if (!isDemo && session.session.activeOrganizationId) {
+        const org = await prisma.organization.findUnique({
+          where: { id: session.session.activeOrganizationId },
+          select: { isDemo: true },
+        });
+        isDemo = org?.isDemo === true;
+      }
+      if (isDemo) throw new APIError("FORBIDDEN", { message: DEMO_READ_ONLY_MESSAGE });
+    }),
+  },
   user: {
     deleteUser: {
       enabled: true,
