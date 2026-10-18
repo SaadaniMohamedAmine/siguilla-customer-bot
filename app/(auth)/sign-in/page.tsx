@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { signIn } from "@/lib/auth-client";
 import { SignInSchema } from "@/lib/validation/auth";
+import { safeRedirect } from "@/lib/safe-redirect";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
@@ -17,7 +18,7 @@ export default function SignInPage() {
   const t = useTranslations("Auth");
   const router = useRouter();
   const search = useSearchParams();
-  const redirectTo = search.get("redirect") || "/agents";
+  const redirectTo = safeRedirect(search.get("redirect"));
   const demoEnabled = process.env.NEXT_PUBLIC_DEMO_ENABLED === "true";
 
   const [email, setEmail] = React.useState("");
