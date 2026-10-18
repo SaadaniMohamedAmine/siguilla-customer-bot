@@ -5,7 +5,7 @@ await build({
   bundle: true,
   minify: true,
   format: "iife",
-  target: ["es2019"],
+  target: ["es2020"],
   legalComments: "none",
   sourcemap: false,
   treeShaking: true,

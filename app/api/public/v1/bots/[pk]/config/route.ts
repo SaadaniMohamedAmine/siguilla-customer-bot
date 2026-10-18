@@ -3,6 +3,7 @@ import { originAllowed, corsHeaders, loadPublicBot, effectiveOrigin } from "@/li
 import { rateLimit } from "@/lib/rate-limit";
 import { CONFIG_PER_MINUTE } from "@/lib/public/limits";
 import { parseWidgetConfig } from "@/lib/widget/config";
+import { toRuntimeConfig, widgetStrings } from "@/lib/widget/runtime";
 import { getPlanLimits } from "@/lib/billing/plans";
 
 export async function OPTIONS(request: NextRequest, { params }: { params: Promise<{ pk: string }> }) {
@@ -35,8 +36,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const removeBadgeAllowed = getPlanLimits(bot.organization.plan).removeBadge;
   const badge = !removeBadgeAllowed || config.showBadge;
 
+  const lang = request.nextUrl.searchParams.get("lang");
+
   return NextResponse.json(
-    { config, badge, name: bot.name },
+    { config: toRuntimeConfig(config), badge, name: bot.name, t: widgetStrings(lang) },
     { headers: { ...corsHeaders(origin), "cache-control": "public, max-age=60, stale-while-revalidate=600" } },
   );
 }

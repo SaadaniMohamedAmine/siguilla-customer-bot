@@ -476,7 +476,7 @@
     "cantFind": "Je ne trouve pas cela dans vos docs.",
     "bringing": "Je fais venir votre équipe…",
     "analytics": "12 sans réponse · 94 % résolues",
-    "size": "4,5 Ko",
+    "size": "4,95 Ko",
     "limit": "limite 5 Ko",
     "deps": "0 dépendance · isolé dans le Shadow DOM",
     "newSeason": "Nouvelle saison",
@@ -971,5 +971,22 @@
       "knowledgeGap": "Lacune détectée",
       "addMissingKnowledge": "Ajouter la connaissance manquante"
     }
+  },
+  "WidgetRuntime": {
+    "open": "Ouvrir l'assistant",
+    "close": "Fermer",
+    "send": "Envoyer",
+    "sealedOne": "Scellé par {n} source",
+    "sealedMany": "Scellé par {n} sources",
+    "helpful": "Utile ?",
+    "human": "Parler à un humain",
+    "email": "Votre email (facultatif)",
+    "joined": "{n} a rejoint la conversation",
+    "resting": "Cet assistant se repose pour le moment.",
+    "restingSub": "Laissez votre email, l'équipe vous répondra personnellement.",
+    "leave": "Laisser un message",
+    "online": "En ligne",
+    "err": "Un souci de connexion. Réessayez.",
+    "by": "Scellé par Sigilla"
   }
 }

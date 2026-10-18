@@ -27,6 +27,7 @@
   "size-limit": [
     {
       "path": "public/widget/v1.js",
+      "gzip": true,
       "limit": "5 KB"
     }
   ],

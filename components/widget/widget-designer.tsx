@@ -12,6 +12,7 @@ import { Icon } from "@/components/ui/icon";
 import { toast } from "@/components/ui/toast";
 import { EmbedSnippet } from "@/components/widget/embed-snippet";
 import { WidgetConfig, parseWidgetConfig } from "@/lib/widget/config";
+import { toRuntimeConfig } from "@/lib/widget/runtime";
 import { CloseIcon, AddIcon, UploadIcon, CheckIcon, LockIcon, WarningIcon, ArrowRightIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
@@ -47,7 +48,7 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
     if (!frame) return;
     const timer = setTimeout(() => {
       frame.contentWindow?.postMessage(
-        { type: "sigilla:config", config, open: true },
+        { type: "sigilla:config", config: toRuntimeConfig(config), open: true },
         window.location.origin,
       );
     }, 150);
