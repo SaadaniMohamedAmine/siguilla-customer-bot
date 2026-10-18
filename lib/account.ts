@@ -1,5 +1,5 @@
-import { del } from "@vercel/blob";
 import { prisma } from "@/lib/db";
+import { avatarUrlOf, deleteBlobs } from "@/lib/blob-cleanup";
 import { getStripe } from "@/lib/stripe/client";
 
 export class AccountError extends Error {
@@ -21,15 +21,14 @@ export async function deleteOrganization(organizationId: string) {
       .catch(() => {});
   }
 
-  const blobUrls = (
-    await prisma.dataSource.findMany({
+  const [sources, chatbots] = await Promise.all([
+    prisma.dataSource.findMany({
       where: { chatbot: { organizationId }, blobUrl: { not: null } },
       select: { blobUrl: true },
-    })
-  )
-    .map((s) => s.blobUrl)
-    .filter((u): u is string => !!u);
-  await Promise.all(blobUrls.map((url) => del(url).catch(() => {})));
+    }),
+    prisma.chatbot.findMany({ where: { organizationId }, select: { widgetConfig: true } }),
+  ]);
+  await deleteBlobs([...sources.map((s) => s.blobUrl), ...chatbots.map((c) => avatarUrlOf(c.widgetConfig))]);
 
   await prisma.organization.delete({ where: { id: organizationId } });
 }
