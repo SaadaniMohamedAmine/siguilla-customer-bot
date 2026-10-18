@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
+import { cookies } from "next/headers";
 import { Slide, ToastContainer } from "react-toastify";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SplashScreen } from "@/components/ui/splash-screen";
+import { SPLASH_COOKIE } from "@/lib/splash";
 import { NavigationLoader } from "@/components/ui/navigation-loader";
 import { QueryProvider } from "@/components/query-provider";
 import { instrumentSerif, instrumentSans, jetbrainsMono } from "@/lib/fonts";
@@ -31,6 +33,7 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const locale = await getLocale();
+  const splashSeen = (await cookies()).has(SPLASH_COOKIE);
   return (
     <html
       lang={locale}
@@ -43,7 +46,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
             <QueryProvider>
               <TooltipProvider>
-                <SplashScreen />
+                {!splashSeen && <SplashScreen />}
                 <NavigationLoader />
                 {children}
                 <ToastContainer position="bottom-right" transition={Slide} theme="light" />
