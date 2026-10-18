@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { requireOrgApi, toErrorResponse, HttpError } from "@/lib/session";
 import { ChatbotUpdate } from "@/lib/validation/chatbot";
 import { parseWidgetConfig } from "@/lib/widget/config";
+import { avatarUrlOf, deleteBlobs } from "@/lib/blob-cleanup";
 
 async function loadOwnedChatbot(id: string, organizationId: string) {
   const chatbot = await prisma.chatbot.findFirst({ where: { id, organizationId } });
@@ -41,8 +42,14 @@ export async function DELETE(_request: NextRequest, { params }: { params: Promis
   try {
     const { id } = await params;
     const { org } = await requireOrgApi({ write: true });
-    await loadOwnedChatbot(id, org.id);
+    const chatbot = await loadOwnedChatbot(id, org.id);
+    const sources = await prisma.dataSource.findMany({
+      where: { chatbotId: id, blobUrl: { not: null } },
+      select: { blobUrl: true },
+    });
     await prisma.chatbot.delete({ where: { id } });
+    // Après la suppression en base : un échec de nettoyage ne doit jamais laisser un agent à moitié supprimé.
+    await deleteBlobs([...sources.map((s) => s.blobUrl), avatarUrlOf(chatbot.widgetConfig)]);
     return Response.json({ data: { id } });
   } catch (error) {
     return toErrorResponse(error);

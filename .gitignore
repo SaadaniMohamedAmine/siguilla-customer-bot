@@ -55,3 +55,6 @@ next-env.d.ts
 
 # Vitest coverage report
 /coverage/
+
+# Local test credentials (never commit)
+TEST_USERS.md

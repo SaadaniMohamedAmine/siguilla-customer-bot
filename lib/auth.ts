@@ -2,9 +2,20 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { organization } from "better-auth/plugins";
+import { APIError, createAuthMiddleware, getSessionFromCtx } from "better-auth/api";
 import { apiKey } from "@better-auth/api-key";
 import { prisma } from "@/lib/db";
 import { prepareAccountDeletion } from "@/lib/account";
+import { MEMBERS_LIMIT_CODE, hasFreeSeat } from "@/lib/billing/seats";
+import { authRateRules } from "@/lib/auth-rate-limit";
+import { rateLimit } from "@/lib/rate-limit";
+import { clientIp } from "@/lib/public/cors";
+import {
+  DEMO_READ_ONLY_MESSAGE,
+  PASSWORD_RESET_REQUEST_PATHS,
+  isDemoAllowedPath,
+  isDemoEmail,
+} from "@/lib/demo-guard";
 
 function slugify(input: string) {
   return input
@@ -40,6 +51,46 @@ export const auth = betterAuth({
     },
   },
   session: { expiresIn: 60 * 60 * 24 * 30, updateAge: 60 * 60 * 24 },
+  hooks: {
+    // La démo publique est en lecture seule : requireOrgApi({ write: true }) ne couvre que les routes
+    // Sigilla, ce hook couvre les endpoints Better Auth (allowlist, deny-by-default).
+    before: createAuthMiddleware(async (ctx) => {
+      const demoEmail = process.env.DEMO_USER_EMAIL;
+
+      // Anti brute-force / spam : seulement les vraies requêtes HTTP (pas les appels serveur comme /demo).
+      if (ctx.request) {
+        const email = (ctx.body as { email?: unknown } | undefined)?.email;
+        for (const rule of authRateRules(ctx.path, clientIp(ctx.request), email)) {
+          const rl = await rateLimit(rule.key, rule.limit, rule.windowMs);
+          if (!rl.ok) throw new APIError("TOO_MANY_REQUESTS", { message: "rate_limited" });
+        }
+      }
+
+      // Pas de réinitialisation de mot de passe visant le compte démo (requête sans session).
+      if (PASSWORD_RESET_REQUEST_PATHS.includes(ctx.path)) {
+        if (isDemoEmail((ctx.body as { email?: unknown } | undefined)?.email, demoEmail)) {
+          throw new APIError("FORBIDDEN", { message: DEMO_READ_ONLY_MESSAGE });
+        }
+        return;
+      }
+
+      // Chemins sûrs : on sort avant toute requête en base.
+      if (isDemoAllowedPath(ctx.path)) return;
+
+      const session = await getSessionFromCtx(ctx);
+      if (!session) return;
+
+      let isDemo = isDemoEmail(session.user.email, demoEmail);
+      if (!isDemo && session.session.activeOrganizationId) {
+        const org = await prisma.organization.findUnique({
+          where: { id: session.session.activeOrganizationId },
+          select: { isDemo: true },
+        });
+        isDemo = org?.isDemo === true;
+      }
+      if (isDemo) throw new APIError("FORBIDDEN", { message: DEMO_READ_ONLY_MESSAGE });
+    }),
+  },
   user: {
     deleteUser: {
       enabled: true,
@@ -85,6 +136,30 @@ export const auth = betterAuth({
       creatorRole: "owner",
       // Pas d'email : l'invitation est partagée par lien copiable (UI Phase 6).
       sendInvitationEmail: async () => {},
+      organizationHooks: {
+        // La limite de membres du plan est appliquée côté serveur (l'UI seule se contourne avec un appel API).
+        // Un siège = un membre ou une invitation en attente.
+        beforeCreateInvitation: async ({ organization }) => {
+          const [org, members, pending] = await Promise.all([
+            prisma.organization.findUnique({ where: { id: organization.id }, select: { plan: true } }),
+            prisma.member.count({ where: { organizationId: organization.id } }),
+            prisma.invitation.count({ where: { organizationId: organization.id, status: "pending" } }),
+          ]);
+          if (!hasFreeSeat(members + pending, org?.plan ?? "free")) {
+            throw new APIError("FORBIDDEN", { message: MEMBERS_LIMIT_CODE });
+          }
+        },
+        // Une invitation créée avant une rétrogradation ne doit pas dépasser la limite du plan actuel.
+        beforeAcceptInvitation: async ({ organization }) => {
+          const [org, members] = await Promise.all([
+            prisma.organization.findUnique({ where: { id: organization.id }, select: { plan: true } }),
+            prisma.member.count({ where: { organizationId: organization.id } }),
+          ]);
+          if (!hasFreeSeat(members, org?.plan ?? "free")) {
+            throw new APIError("FORBIDDEN", { message: MEMBERS_LIMIT_CODE });
+          }
+        },
+      },
     }),
     apiKey({ references: "organization" }),
     nextCookies(), // toujours en dernier

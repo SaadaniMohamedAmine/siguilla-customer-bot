@@ -476,7 +476,7 @@
     "cantFind": "Je ne trouve pas cela dans vos docs.",
     "bringing": "Je fais venir votre équipe…",
     "analytics": "12 sans réponse · 94 % résolues",
-    "size": "4,5 Ko",
+    "size": "4,95 Ko",
     "limit": "limite 5 Ko",
     "deps": "0 dépendance · isolé dans le Shadow DOM",
     "newSeason": "Nouvelle saison",
@@ -598,6 +598,7 @@
     "errors": {
       "invalid": "L'email ou le mot de passe est incorrect.",
       "exists": "Un compte existe déjà avec cet email.",
+      "tooMany": "Trop de tentatives. Patientez une minute puis réessayez.",
       "generic": "Une erreur est survenue de notre côté. Veuillez réessayer."
     },
     "validation": {
@@ -971,5 +972,40 @@
       "knowledgeGap": "Lacune détectée",
       "addMissingKnowledge": "Ajouter la connaissance manquante"
     }
+  },
+  "WidgetRuntime": {
+    "open": "Ouvrir l'assistant",
+    "close": "Fermer",
+    "send": "Envoyer",
+    "sealedOne": "Scellé par {n} source",
+    "sealedMany": "Scellé par {n} sources",
+    "helpful": "Utile ?",
+    "human": "Parler à un humain",
+    "email": "Votre email (facultatif)",
+    "joined": "{n} a rejoint la conversation",
+    "resting": "Cet assistant se repose pour le moment.",
+    "restingSub": "Laissez votre email, l'équipe vous répondra personnellement.",
+    "leave": "Laisser un message",
+    "online": "En ligne",
+    "err": "Un souci de connexion. Réessayez.",
+    "by": "Scellé par Sigilla"
+  },
+  "ApiErrors": {
+    "demo_read_only": "La démo est en lecture seule.",
+    "unauthorized": "Votre session a expiré. Reconnectez-vous.",
+    "agents_limit": "Votre offre autorise un nombre limité d'agents. Passez à l'offre supérieure pour en ajouter.",
+    "sources_limit": "Votre offre autorise un nombre limité de sources. Passez à l'offre supérieure pour en ajouter.",
+    "members_limit": "La limite de membres de votre offre est atteinte. Passez à l'offre supérieure pour inviter plus de monde.",
+    "notion_requires_pro": "Le connecteur Notion est disponible avec Pro et Team.",
+    "api_requires_pro": "L'API est disponible avec Pro et Team.",
+    "global_storage_full": "Le stockage est plein. Réessayez plus tard.",
+    "quota_exceeded": "La limite mensuelle de messages est atteinte.",
+    "rate_limited": "Trop de requêtes. Patientez un instant puis réessayez.",
+    "invalid_url": "Saisissez une URL valide.",
+    "not_found": "Cet élément n'existe plus.",
+    "no_subscription": "Aucun abonnement actif à gérer.",
+    "billing_forbidden": "Seuls les propriétaires et les administrateurs peuvent gérer la facturation.",
+    "keys_forbidden": "Seuls les propriétaires et les administrateurs peuvent gérer les clés API.",
+    "owner_only": "Seul le propriétaire peut supprimer l'organisation."
   }
 }

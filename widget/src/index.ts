@@ -21,6 +21,7 @@ type Cfg = {
   placeholder: string;
   suggestions: string[];
   tooltip: string | null;
+  on: string;
 };
 
 (() => {
@@ -31,42 +32,9 @@ type Cfg = {
   w.__sigilla = 1;
   const api = new URL(script!.src).origin + "/api/public/v1/";
   const preview = script!.dataset.preview === "true";
-  const fr = (navigator.language || "en").toLowerCase().startsWith("fr");
-  const T = fr
-    ? {
-        open: "Ouvrir l'assistant",
-        close: "Fermer",
-        send: "Envoyer",
-        sealed: (n: number) => `Scellé par ${n} source${n > 1 ? "s" : ""}`,
-        helpful: "Utile ?",
-        human: "Parler à un humain",
-        email: "Votre email (facultatif)",
-        joined: (n: string) => `${n} a rejoint la conversation`,
-        resting: "Cet assistant se repose pour le moment.",
-        restingSub: "Laissez votre email, l'équipe vous répondra personnellement.",
-        leave: "Laisser un message",
-        online: "En ligne",
-        err: "Un souci de connexion. Réessayez.",
-        sent: "Merci. L'équipe revient vers vous.",
-        by: "Scellé par Sigilla",
-      }
-    : {
-        open: "Open assistant",
-        close: "Close",
-        send: "Send",
-        sealed: (n: number) => `Sealed by ${n} source${n > 1 ? "s" : ""}`,
-        helpful: "Helpful?",
-        human: "Talk to a human",
-        email: "Your email (optional)",
-        joined: (n: string) => `${n} joined`,
-        resting: "This assistant is resting for now.",
-        restingSub: "Please leave your email and the team will reply personally.",
-        leave: "Leave a message",
-        online: "Online",
-        err: "Connection issue. Please try again.",
-        sent: "Thank you. The team will be in touch.",
-        by: "Sealed by Sigilla",
-      };
+  // Textes (EN/FR) envoyés par /config : le widget n'embarque aucun dictionnaire.
+  let T: Record<string, string> = {};
+  const fmt = (t: string, n: string | number) => t.replace("{n}", () => String(n));
 
   const store = (() => {
     try {
@@ -103,30 +71,16 @@ type Cfg = {
   };
   persist();
 
-  const lum = (hex: string) => {
-    const n = parseInt(hex.slice(1), 16);
-    const c = [n >> 16, (n >> 8) & 255, n & 255].map((x) => {
-      x /= 255;
-      return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4;
-    });
-    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
-  };
-  const esc = (s: string) =>
-    s.replace(
-      /[&<>"']/g,
-      (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!,
-    );
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => "&#" + c.charCodeAt(0) + ";");
 
   const host = document.createElement("div");
   host.style.cssText = "all:initial;position:fixed;z-index:2147483000;bottom:20px";
   const root = host.attachShadow({ mode: "open" });
   document.body.appendChild(host);
 
-  const contrast = (l1: number, l2: number) => (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
   const css = (c: Cfg) => {
     const dark = c.theme === "dark";
-    const bgLum = lum(c.color);
-    const on = contrast(bgLum, lum("#1A1214")) >= contrast(bgLum, lum("#FFFFFF")) ? "#1A1214" : "#FFFFFF";
+    const on = c.on;
     return `:host{--a:${c.color};--o:${on};--bg:${dark ? "#171113" : "#FFFFFF"};--r:${dark ? "#201719" : "#F4EDE8"};--b:${dark ? "#2E2225" : "#E8DED8"};--t:${dark ? "#F3ECE6" : "#1A1214"};--m:${dark ? "#A8999A" : "#6B5A5D"};--l:${dark ? "#E3B3BA" : "#8A2438"}}
 *{box-sizing:border-box;margin:0;font:400 14px/1.5 "Instrument Sans",ui-sans-serif,system-ui,sans-serif}
 button{cursor:pointer;border:0;background:none;color:inherit}
@@ -157,8 +111,7 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
 .rest{flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:24px;text-align:center}.rest h3{font:400 24px/1.2 "Instrument Serif",serif}
 .cur::after{content:"▍";animation:b 1s steps(1) infinite;color:var(--l)}@keyframes b{50%{opacity:0}}
 @media (max-width:480px){.p{position:fixed;inset:0;width:100%;height:100%;max-height:none;border-radius:0}}
-@keyframes fin{from{opacity:0}}@keyframes fout{to{opacity:0}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}.cur::after{animation:none!important}.p{animation-name:fin!important}.p.out{animation-name:fout!important}}`;
+@media (prefers-reduced-motion:reduce){*,::after{transition:none!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}`;
   };
 
   let feed: HTMLElement, input: HTMLTextAreaElement, panel: HTMLElement, launcher: HTMLButtonElement;
@@ -180,7 +133,7 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
   const sources = (cites: Cite[]) =>
     !cites.length
       ? ""
-      : `<div class="src">${T.sealed(cites.length)}${cites
+      : `<div class="src">${fmt(cites.length > 1 ? T.sealedMany : T.sealedOne, cites.length)}${cites
           .map((c) => {
             const lbl = esc(c.title + (c.pageNumber ? " — p." + c.pageNumber : ""));
             return c.url && /^https?:/.test(c.url)
@@ -253,6 +206,8 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
     panel.querySelector(".i")?.remove();
   };
 
+  const fail = () => addMsg({ role: "bot", content: T.err, fallback: true });
+
   async function ask(q: string) {
     if (state.busy || !q.trim()) return;
     state.busy = true;
@@ -272,7 +227,7 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
       });
       if (!res.ok || !res.body) {
         node.remove();
-        addMsg({ role: "bot", content: T.err, fallback: true });
+        fail();
         state.busy = false;
         input?.focus();
         return;
@@ -314,30 +269,33 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
           if (e.type === "error") {
             node.remove();
             if (e.code === "quota_exceeded") resting();
-            else addMsg({ role: "bot", content: T.err, fallback: true });
+            else fail();
           }
         }
       }
     } catch {
       node.remove();
-      addMsg({ role: "bot", content: T.err, fallback: true });
+      fail();
     }
     state.busy = false;
     input?.focus();
   }
 
+  const getMsgs = () =>
+    fetch(
+      `${api}conversations/${state.conversationId}/messages?pk=${pk}&visitorId=${state.visitorId}&after=${encodeURIComponent(state.last)}`,
+    );
+
   let timer = 0;
   async function poll() {
     if (!state.conversationId) return;
     try {
-      const r = await fetch(
-        `${api}conversations/${state.conversationId}/messages?pk=${pk}&visitorId=${state.visitorId}&after=${encodeURIComponent(state.last)}`,
-      );
+      const r = await getMsgs();
       if (r.ok) {
         const d = await r.json();
         if (d.agentName && d.agentName !== state.agentName) {
           state.agentName = d.agentName;
-          addMsg({ role: "system", content: T.joined(d.agentName) });
+          addMsg({ role: "system", content: fmt(T.joined, d.agentName) });
         }
         state.status = d.status;
         d.messages.filter((m: Msg) => m.role === "agent").forEach(addMsg);
@@ -358,10 +316,7 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
     root.querySelector(".tt")?.remove();
     const av = c.avatarUrl ? `<img src="${esc(c.avatarUrl)}" alt="">` : "S";
     panel = el(`<div class="p" role="dialog" aria-modal="true" aria-label="${esc(c.displayName)}">
-      <div class="h"><div class="av">${av}</div><div><div class="n">${esc(c.displayName)}</div><div class="s"><span class="d"></span>${esc(c.subtitle || T.online)}</div></div><button class="x" aria-label="${T.close}">×</button></div>
-      <div class="f" role="log" aria-live="polite"></div>
-      <div class="i"><textarea rows="1" placeholder="${esc(c.placeholder)}" aria-label="${esc(c.placeholder)}"></textarea><button class="sd" aria-label="${T.send}">↑</button></div>
-      ${state.badge ? `<div class="ft">${T.by}</div>` : ""}</div>`);
+      <div class="h"><div class="av">${av}</div><div><div class="n">${esc(c.displayName)}</div><div class="s"><span class="d"></span>${esc(c.subtitle || T.online)}</div></div><button class="x" aria-label="${T.close}">×</button></div><div class="f" role="log" aria-live="polite"></div><div class="i"><textarea rows="1" placeholder="${esc(c.placeholder)}" aria-label="${esc(c.placeholder)}"></textarea><button class="sd" aria-label="${T.send}">↑</button></div>${state.badge ? `<div class="ft">${T.by}</div>` : ""}</div>`);
     if (!animate) panel.style.animation = "none";
     root.appendChild(panel);
     feed = panel.querySelector(".f")!;
@@ -413,9 +368,7 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
 
   async function restore() {
     try {
-      const r = await fetch(
-        `${api}conversations/${state.conversationId}/messages?pk=${pk}&visitorId=${state.visitorId}&after=`,
-      );
+      const r = await getMsgs();
       if (!r.ok) {
         state.conversationId = null;
         persist();
@@ -454,10 +407,11 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
       }, 4000);
   }
 
-  fetch(api + "bots/" + pk + "/config")
+  fetch(api + "bots/" + pk + "/config?lang=" + (navigator.language || "en").slice(0, 2))
     .then((r) => (r.ok ? r.json() : null))
     .then((d) => {
       if (d) {
+        T = d.t;
         state.badge = d.badge;
         mount(d.config);
       }
@@ -466,7 +420,7 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
   // Aperçu live du dashboard : la page parente (même origine que l'app) pousse la config non sauvegardée.
   if (preview)
     window.addEventListener("message", (e) => {
-      if (e.origin !== new URL(api).origin || e.data?.type !== "sigilla:config") return;
+      if (e.origin !== new URL(api).origin || e.data?.type !== "sigilla:config" || !T.open) return;
       const wasOpen = state.open;
       mount(e.data.config);
       if (wasOpen || e.data.open) openPanel(!wasOpen);

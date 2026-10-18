@@ -476,7 +476,7 @@
     "cantFind": "I can't find that in your docs.",
     "bringing": "Bringing in your team…",
     "analytics": "12 unanswered · 94% resolved",
-    "size": "4.5 KB",
+    "size": "4.95 KB",
     "limit": "limit 5 KB",
     "deps": "0 dependencies · isolated in Shadow DOM",
     "newSeason": "New season",
@@ -598,6 +598,7 @@
     "errors": {
       "invalid": "Email or password is incorrect.",
       "exists": "An account with this email already exists.",
+      "tooMany": "Too many attempts. Please wait a minute and try again.",
       "generic": "Something went wrong on our side. Please try again."
     },
     "validation": {
@@ -971,5 +972,40 @@
       "knowledgeGap": "Knowledge gap detected",
       "addMissingKnowledge": "Add missing knowledge"
     }
+  },
+  "WidgetRuntime": {
+    "open": "Open assistant",
+    "close": "Close",
+    "send": "Send",
+    "sealedOne": "Sealed by {n} source",
+    "sealedMany": "Sealed by {n} sources",
+    "helpful": "Helpful?",
+    "human": "Talk to a human",
+    "email": "Your email (optional)",
+    "joined": "{n} joined",
+    "resting": "This assistant is resting for now.",
+    "restingSub": "Please leave your email and the team will reply personally.",
+    "leave": "Leave a message",
+    "online": "Online",
+    "err": "Connection issue. Please try again.",
+    "by": "Sealed by Sigilla"
+  },
+  "ApiErrors": {
+    "demo_read_only": "The demo is read-only.",
+    "unauthorized": "Your session has expired. Please sign in again.",
+    "agents_limit": "Your plan allows a limited number of agents. Upgrade to add more.",
+    "sources_limit": "Your plan allows a limited number of sources. Upgrade to add more.",
+    "members_limit": "Your plan's member limit is reached. Upgrade to invite more people.",
+    "notion_requires_pro": "The Notion connector is available on Pro and Team.",
+    "api_requires_pro": "The API is available on Pro and Team.",
+    "global_storage_full": "Storage is at capacity. Please try again later.",
+    "quota_exceeded": "The monthly message limit is reached.",
+    "rate_limited": "Too many requests. Please wait a moment and try again.",
+    "invalid_url": "Enter a valid URL.",
+    "not_found": "This item no longer exists.",
+    "no_subscription": "There is no active subscription to manage.",
+    "billing_forbidden": "Only owners and admins can manage billing.",
+    "keys_forbidden": "Only owners and admins can manage API keys.",
+    "owner_only": "Only the owner can delete the organization."
   }
 }

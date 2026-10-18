@@ -24,6 +24,7 @@ import {
   UploadIcon,
 } from "@/lib/icons";
 import { cn } from "@/lib/utils";
+import { useApiError } from "@/lib/use-api-error";
 
 type SourceStatus = "queued" | "processing" | "ready" | "failed";
 type DataSource = {
@@ -75,13 +76,14 @@ export function SourcesManager({ chatbotId, plan, maxPdfMb }: { chatbotId: strin
   });
 
   const tErrors = useTranslations("Errors");
+  const errMsg = useApiError();
   const remove = useMutation({
     mutationFn: (id: string) => api(`/api/sources/${id}`, { method: "DELETE" }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["sources", chatbotId] });
       setDeleteTarget(null);
     },
-    onError: () => toast.error(tErrors("genericTitle")),
+    onError: (e) => toast.error(errMsg(e, tErrors("genericTitle"))),
   });
 
   const rtf = React.useMemo(() => new Intl.RelativeTimeFormat(locale, { numeric: "auto" }), [locale]);
@@ -341,6 +343,8 @@ function AddSourceDrawer({
   onAdded: () => void;
 }) {
   const t = useTranslations("Sources");
+  const tErrors = useTranslations("Errors");
+  const errMsg = useApiError();
 
   const [uploading, setUploading] = React.useState(false);
   const [dragOver, setDragOver] = React.useState(false);
@@ -375,7 +379,7 @@ function AddSourceDrawer({
       onAdded();
       onOpenChange(false);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "upload_failed");
+      toast.error(errMsg(error, tErrors("genericTitle")));
     } finally {
       setUploading(false);
     }
@@ -391,7 +395,7 @@ function AddSourceDrawer({
       onAdded();
       onOpenChange(false);
     } catch (error) {
-      setUrlError(error instanceof Error ? error.message : "invalid_url");
+      setUrlError(errMsg(error, t("errors.invalid_url")));
     } finally {
       setUrlLoading(false);
     }
@@ -453,7 +457,7 @@ function AddSourceDrawer({
                 placeholder={t("urlPlaceholder")}
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                error={urlError ? (t(`errors.${urlError}` as never) ?? urlError) : undefined}
+                error={urlError ?? undefined}
                 className="flex-1"
               />
               <Button type="submit" loading={urlLoading} disabled={!url}>

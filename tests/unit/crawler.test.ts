@@ -1,4 +1,10 @@
 import { describe, it, expect, afterEach, vi } from "vitest";
+
+// Pas de vrai DNS en test : tout nom de domaine résout vers une IP publique.
+vi.mock("node:dns/promises", () => ({
+  lookup: vi.fn(async () => [{ address: "93.184.216.34", family: 4 }]),
+}));
+
 import { normalizeUrl, loadRobots, crawlPage } from "@/lib/ingestion/crawler";
 
 afterEach(() => {
@@ -61,5 +67,32 @@ describe("crawlPage", () => {
       vi.fn(async () => new Response("", { status: 404 })),
     );
     expect(await crawlPage("https://example.com/missing")).toBeNull();
+  });
+
+  it("refuses private or local start URLs without fetching", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(crawlPage("http://127.0.0.1/admin")).rejects.toThrow("invalid_url");
+    await expect(crawlPage("http://169.254.169.254/latest/meta-data")).rejects.toThrow("invalid_url");
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("refuses a redirect to a private address", async () => {
+    const fetchMock = vi.fn(
+      async () => new Response(null, { status: 302, headers: { location: "http://127.0.0.1/secret" } }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(crawlPage("https://example.com/redirect")).rejects.toThrow("invalid_url");
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("follows a public redirect but stops after 3 hops", async () => {
+    let n = 0;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response(null, { status: 302, headers: { location: `https://example.com/hop${++n}` } })),
+    );
+    await expect(crawlPage("https://example.com/loop")).rejects.toThrow("too_many_redirects");
+    expect(n).toBe(4);
   });
 });

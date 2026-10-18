@@ -18,6 +18,8 @@ import {
 import { toast } from "@/components/ui/toast";
 import { CloseIcon, WarningIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
+import { responseError } from "@/lib/api";
+import { useApiError } from "@/lib/use-api-error";
 
 type Chatbot = {
   id: string;
@@ -41,6 +43,7 @@ function Section({ title, description, children }: { title: string; description:
 
 export function AgentSettingsForm({ chatbot }: { chatbot: Chatbot }) {
   const t = useTranslations("AgentSettings");
+  const errMsg = useApiError();
   const router = useRouter();
   const [name, setName] = React.useState(chatbot.name);
   const [description, setDescription] = React.useState(chatbot.description ?? "");
@@ -86,11 +89,11 @@ export function AgentSettingsForm({ chatbot }: { chatbot: Chatbot }) {
           status: live ? "live" : "draft",
         }),
       });
-      if (!res.ok) throw new Error();
+      if (!res.ok) throw await responseError(res);
       toast.success(t("saved"));
       router.refresh();
-    } catch {
-      toast.error(t("genericError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("genericError")));
     } finally {
       setSaving(false);
     }
@@ -107,10 +110,10 @@ export function AgentSettingsForm({ chatbot }: { chatbot: Chatbot }) {
     setDeleting(true);
     try {
       const res = await fetch(`/api/chatbots/${chatbot.id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error();
+      if (!res.ok) throw await responseError(res);
       router.push("/agents");
-    } catch {
-      toast.error(t("genericError"));
+    } catch (e) {
+      toast.error(errMsg(e, t("genericError")));
       setDeleting(false);
     }
   }

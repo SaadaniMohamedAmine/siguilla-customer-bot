@@ -1,18 +1,28 @@
 "use client";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Wordmark } from "@/components/ui/wordmark";
+import { SPLASH_COOKIE, shouldShowSplash } from "@/lib/splash";
 
-const MIN_MS = 1000;
+const MIN_MS = 400;
 const FADE_MS = 500;
 
-/** Écran de chargement affiché au chargement / rechargement complet de la page (pas à la navigation interne). */
+/**
+ * Écran de chargement affiché une seule fois par session : le layout ne le rend plus une fois
+ * le cookie de session posé (pas de clignotement, le serveur le sait avant d'envoyer la page).
+ * Jamais sur les sites fictifs ni l'aperçu du widget.
+ */
 export function SplashScreen() {
   const t = useTranslations("Splash");
+  const pathname = usePathname();
+  // Décidé une seule fois au montage : une navigation interne ne doit jamais le faire apparaître.
+  const [enabled] = useState(() => shouldShowSplash(pathname));
   const [progress, setProgress] = useState(0);
-  const [phase, setPhase] = useState<"loading" | "leaving" | "done">("loading");
+  const [phase, setPhase] = useState<"loading" | "leaving" | "done">(enabled ? "loading" : "done");
 
   useEffect(() => {
+    if (!enabled) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const start = performance.now();
     let loaded = document.readyState === "complete";
@@ -38,10 +48,13 @@ export function SplashScreen() {
       cancelAnimationFrame(raf);
       window.removeEventListener("load", onLoad);
     };
-  }, []);
+  }, [enabled]);
 
   useEffect(() => {
     if (phase !== "leaving") return;
+    try {
+      document.cookie = `${SPLASH_COOKIE}=1; path=/; SameSite=Lax`; // cookie de session (pas d'expiration)
+    } catch {}
     const id = setTimeout(() => setPhase("done"), FADE_MS + 150);
     return () => clearTimeout(id);
   }, [phase]);

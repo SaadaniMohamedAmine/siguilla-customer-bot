@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations, useLocale } from "next-intl";
 import { api } from "@/lib/api";
+import { useApiError } from "@/lib/use-api-error";
 import { useNow, formatRelative } from "@/lib/time";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -194,7 +195,8 @@ export function ConversationsInbox({
   });
 
   const tErrors = useTranslations("Errors");
-  const onMutationError = () => toast.error(tErrors("genericTitle"));
+  const errMsg = useApiError();
+  const onMutationError = (e: unknown) => toast.error(errMsg(e, tErrors("genericTitle")));
 
   const takeOver = useMutation({
     mutationFn: () => api(`/api/conversations/${selectedId}/takeover`, { method: "POST" }),

@@ -5,6 +5,7 @@ import { SourceCreate } from "@/lib/validation/chatbot";
 import { assertCanAddSource, LimitError } from "@/lib/ingestion/guards";
 import { triggerIngestion } from "@/lib/ingestion/trigger";
 import { normalizeUrl } from "@/lib/ingestion/crawler";
+import { assertPublicUrl, UnsafeUrlError } from "@/lib/ingestion/safe-url";
 
 async function loadOwnedChatbot(id: string, organizationId: string) {
   const chatbot = await prisma.chatbot.findFirst({ where: { id, organizationId } });
@@ -46,6 +47,12 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     } else if (body.type === "url") {
       const normalized = normalizeUrl(body.url);
       if (!normalized) return Response.json({ error: "invalid_url" }, { status: 400 });
+      try {
+        await assertPublicUrl(normalized);
+      } catch (error) {
+        if (error instanceof UnsafeUrlError) return Response.json({ error: "invalid_url" }, { status: 400 });
+        throw error;
+      }
       source = await prisma.dataSource.create({
         data: { chatbotId: chatbot.id, type: "url", name: new URL(normalized).hostname, url: normalized },
       });
