@@ -6,6 +6,7 @@ import { APIError, createAuthMiddleware, getSessionFromCtx } from "better-auth/a
 import { apiKey } from "@better-auth/api-key";
 import { prisma } from "@/lib/db";
 import { prepareAccountDeletion } from "@/lib/account";
+import { MEMBERS_LIMIT_CODE, hasFreeSeat } from "@/lib/billing/seats";
 import {
   DEMO_READ_ONLY_MESSAGE,
   PASSWORD_RESET_REQUEST_PATHS,
@@ -123,6 +124,30 @@ export const auth = betterAuth({
       creatorRole: "owner",
       // Pas d'email : l'invitation est partagée par lien copiable (UI Phase 6).
       sendInvitationEmail: async () => {},
+      organizationHooks: {
+        // La limite de membres du plan est appliquée côté serveur (l'UI seule se contourne avec un appel API).
+        // Un siège = un membre ou une invitation en attente.
+        beforeCreateInvitation: async ({ organization }) => {
+          const [org, members, pending] = await Promise.all([
+            prisma.organization.findUnique({ where: { id: organization.id }, select: { plan: true } }),
+            prisma.member.count({ where: { organizationId: organization.id } }),
+            prisma.invitation.count({ where: { organizationId: organization.id, status: "pending" } }),
+          ]);
+          if (!hasFreeSeat(members + pending, org?.plan ?? "free")) {
+            throw new APIError("FORBIDDEN", { message: MEMBERS_LIMIT_CODE });
+          }
+        },
+        // Une invitation créée avant une rétrogradation ne doit pas dépasser la limite du plan actuel.
+        beforeAcceptInvitation: async ({ organization }) => {
+          const [org, members] = await Promise.all([
+            prisma.organization.findUnique({ where: { id: organization.id }, select: { plan: true } }),
+            prisma.member.count({ where: { organizationId: organization.id } }),
+          ]);
+          if (!hasFreeSeat(members, org?.plan ?? "free")) {
+            throw new APIError("FORBIDDEN", { message: MEMBERS_LIMIT_CODE });
+          }
+        },
+      },
     }),
     apiKey({ references: "organization" }),
     nextCookies(), // toujours en dernier
