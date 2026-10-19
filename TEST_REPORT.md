@@ -5,20 +5,20 @@
 > Légende : ✅ vérifié sur `<PROD>` · 🟡 code fait, **re-test sur `<PROD>` en attente** · ⏳ à faire · ❌ échec
 
 ## Bloquants (§2)
-Branche `fix-phase-9b-blockers`. Preuve actuelle : `npm run check` vert (198 tests unitaires), jamais testé sur `<PROD>`.
+Branche `fix-phase-9b-blockers` (PR #12, fusionnée le 2026-10-19). Preuves : `npm run check` vert (198 tests unitaires) + smoke test sur `<PROD>` du 2026-10-19 (voir « Résultats »). Validés en production : BLK-1 (UI), BLK-2, BLK-3, BLK-9, BLK-10. Restent à re-tester : BLK-5 (G7), BLK-6 (I8), BLK-7 (F10) ; BLK-8 validé pour le texte, pas pour la lisibilité du toast.
 
 | ID | Statut | Correctif (fichier, commit) | Re-test |
 |---|---|---|---|
-| BLK-1 Garde-fou démo (Better Auth) | 🟡 | `lib/demo-guard.ts`, `lib/auth.ts` — 7937fc0 | H5 |
-| BLK-2 SSRF crawler | 🟡 | `lib/ingestion/safe-url.ts`, `crawler.ts`, `sources/route.ts` — 81b953b | J8, J5 (le crawl d'un vrai site doit toujours marcher) |
-| BLK-3 Open redirect | 🟡 | `lib/safe-redirect.ts`, `sign-in/page.tsx` — 1b05cac | F12 |
+| BLK-1 Garde-fou démo (Better Auth) | ✅ prod (UI) | `lib/demo-guard.ts`, `lib/auth.ts` — 7937fc0 | H5 |
+| BLK-2 SSRF crawler | ✅ prod | `lib/ingestion/safe-url.ts`, `crawler.ts`, `sources/route.ts` — 81b953b | J8, J5 (le crawl d'un vrai site doit toujours marcher) |
+| BLK-3 Open redirect | ✅ prod | `lib/safe-redirect.ts`, `sign-in/page.tsx` — 1b05cac | F12 |
 | BLK-4 Mots de passe de test dans Git | 🟡 | `.gitignore`, `TEST_USERS.md` retiré — 81d04cb. **Reste** : mots de passe aussi dans `seed.ts`, `billing.spec.ts`, `tenancy.spec.ts` + historique → supprimer test1-3 de la prod | W4, §6.1 |
 | BLK-5 Limite de membres côté serveur | 🟡 | `lib/billing/seats.ts`, `lib/auth.ts` — 063fc67 | G7 |
 | BLK-6 Blobs orphelins (suppression d'agent) | 🟡 | `lib/blob-cleanup.ts`, routes chatbots/sources, `lib/account.ts` — 9474eb4. Script `scripts/find-orphan-blobs.ts` **pas encore exécuté** | I8, §6.1 |
 | BLK-7 Rate limit mot de passe oublié / connexion | 🟡 | `lib/auth-rate-limit.ts`, `lib/auth.ts` — 0b571ca | F10 |
-| BLK-8 Toasts d'erreur génériques | 🟡 | `lib/api-errors.ts`, `lib/use-api-error.ts`, 7 composants — f7501e9 | H4, I6, G7 |
-| BLK-9 Widget < 5 KB (gzip) | 🟡 | `size-limit` gzip, `lib/widget/runtime.ts`, `widget/src/index.ts` — 0c41285 | B5, V3, B7, L2, L3, L16, M1, S3 |
-| BLK-10 Splash une fois par session | 🟡 | `lib/splash.ts`, `splash-screen.tsx`, `layout.tsx` — c00c939 | B11 |
+| BLK-8 Toasts d'erreur génériques | 🟡 (texte ✅, toast illisible) | `lib/api-errors.ts`, `lib/use-api-error.ts`, 7 composants — f7501e9 | H4, I6, G7 |
+| BLK-9 Widget < 5 KB (gzip) | ✅ prod | `size-limit` gzip, `lib/widget/runtime.ts`, `widget/src/index.ts` — 0c41285 | B5, V3, B7, L2, L3, L16, M1, S3 |
+| BLK-10 Splash une fois par session | ✅ prod | `lib/splash.ts`, `splash-screen.tsx`, `layout.tsx` — c00c939 | B11 |
 
 ## Environnement (§1)
 | ID | Statut | Note |
@@ -57,7 +57,8 @@ Branche `fix-phase-9b-blockers`. Preuve actuelle : `npm run check` vert (198 tes
 | J14 (partiel) — suppression d'une source | ✅ | fenêtre « Delete this source? » puis ligne retirée (`en.wikipedia.org`, ancienne source en « Failed », 0 chunk) ; la source `siguilla-customer-bot.vercel.app` (18 pages, 24 chunks) a été conservée. La suppression d'une source **avec chunks** n'est pas testée | — |
 | H1–H3 (démo, ouverture) | ✅ | « Explore the live demo » → dashboard « Maison Démo », bandeau « You're exploring a live demo. Changes are disabled. » + « Start free », 2 agents (Ledgerline — Help Center, Atelier Lune — Concierge), « 2 of 5 agents », plan PRO, compte `demo@sigilla.a…` | — |
 | H4 (démo, créer un agent) — BLK-8 | ✅ (message) | wizard `/agents/new` : nom « Jackal » + Continue → requête `chatbots` rouge, réponse `{"error": "The demo is read-only."}` ; toast « The demo is read-only. » affiché (le texte est correct, plus de toast générique) | toast illisible → remarque 11 |
-| H4 (démo, renommer l'organisation) / H5 | ⏳ | Settings → Organization : résultat à saisir (erreur attendue, jamais « Saved ») | — |
+| H5 (UI) — BLK-1 | ✅ | démo, Settings → Organization : nom changé en « Jackal Demo » puis « Save changes » → requête `update` **403**, réponse `{"message": "The demo is read-only."}` ; l'organisation reste « Maison Démo » ; toast d'erreur affiché (pas de faux « Saved ») : le hook Better Auth bloque bien `/organization/update` pour la démo. Autres chemins (`curl`) non testés | toast illisible + mal placé → remarque 11 |
+| H3 (démo, données) | ✅ | Conversations : liste et filtres, « Needs human » en tête, détail avec carte « Knowledge gap detected » et « Reply as Camille… » ; Analytics : 72 conversations (+14), résolu sans humain 99 %, satisfaction 85 %, fallback 19 %, courbe 30 j, sources citées, top questions, questions sans réponse (« Show all (8) ») | — |
 | Session anonyme | ✅ | fenêtre privée vierge : barre de navigation « Sign in » + « Start free » (le « Open dashboard » vu avant venait d'une session déjà ouverte dans l'ancienne fenêtre) | aucun bug |
 
 ## Remarques et retouches à grouper (non bloquantes, pour la prochaine PR)
@@ -75,7 +76,7 @@ Branche `fix-phase-9b-blockers`. Preuve actuelle : `npm run check` vert (198 tes
 
 10. **BUG (antérieur à la PR #12) : des liens `<Link href="/demo">` préchargent `/demo`, qui crée une session démo à chaque appel.** Signalé par l'utilisateur : après déconnexion, la barre de navigation garde « Open dashboard » et ouvre le compte démo. Cause probable : `<Link href="/demo">` à `app/(marketing)/page.tsx:88` et `:258`, `app/(auth)/sign-in/page.tsx:141` (page où atterrit la déconnexion), `components/marketing/site-footer.tsx:53`, `app/not-found.tsx:15` ; le préchargement de Next exécute la route, qui pose un cookie de session démo sans clic (la nav et `demo-banner.tsx` utilisent déjà un `<a>` « pour éviter tout préchargement »). Explique aussi : le « Open dashboard » vu dès la première fenêtre privée (l'explication « session restée ouverte » donnée alors était fausse), le `?demo=busy` (chaque affichage consomme le compteur de 10/h), et un utilisateur réel pouvant voir sa session remplacée par la démo. **Correctif proposé** : `<a href="/demo">` aux 5 endroits ; dans `app/demo/route.ts`, répondre sans effet aux requêtes de préchargement (`next-router-prefetch` / `rsc`) ; test unitaire. **Non confirmé dans le navigateur** (vérification possible : Network, filtre `demo`, charger `/sign-in`). *Priorité : haute (visible, touche la démo publique et les vraies sessions).*
 
-11. **Toasts illisibles sur le thème sombre** (signalé par l'utilisateur, capture du toast « The demo is read-only. ») : le toast est **blanc avec un texte presque blanc**. `app/layout.tsx:52` fixe `theme="light"` sur le `ToastContainer`, et `styles/globals.css` (l.378-404) tente de piloter `--toastify-color-light` / `--toastify-text-color-light` avec les tokens (`--surface-raised`, `--text`) : il semble que la couleur de fond ne soit pas appliquée alors que celle du texte l'est (probablement l'ordre des feuilles de style : react-toastify v11 injecte les siennes en JS, après les nôtres). **Piste de correctif** : un petit composant client qui lit le thème actif (`next-themes`) et passe `theme="dark"` / `"light"` au conteneur, puis vérifier fond et texte dans les deux thèmes (DevTools → styles calculés du toast). Antérieur à la PR #12 mais rendu visible par BLK-8 (les erreurs affichent maintenant le vrai message). *Priorité : haute (le message d'erreur de la démo est invisible).*
+11. **Toasts illisibles sur le thème sombre** (signalé par l'utilisateur, capture du toast « The demo is read-only. ») : le toast est **blanc avec un texte presque blanc**. `app/layout.tsx:52` fixe `theme="light"` sur le `ToastContainer`, et `styles/globals.css` (l.378-404) tente de piloter `--toastify-color-light` / `--toastify-text-color-light` avec les tokens (`--surface-raised`, `--text`) : il semble que la couleur de fond ne soit pas appliquée alors que celle du texte l'est (probablement l'ordre des feuilles de style : react-toastify v11 injecte les siennes en JS, après les nôtres). **Piste de correctif** : un petit composant client qui lit le thème actif (`next-themes`) et passe `theme="dark"` / `"light"` au conteneur, puis vérifier fond et texte dans les deux thèmes (DevTools → styles calculés du toast). Antérieur à la PR #12 mais rendu visible par BLK-8 (les erreurs affichent maintenant le vrai message). **Position (demande de l'utilisateur)** : passer de `bottom-right` à **`top-right`** — en bas à droite le toast chevauche le lanceur « S » du widget, visible aussi sur le dashboard (constaté sur les captures de la démo). *Priorité : haute (le message d'erreur de la démo est invisible et masqué par le widget).*
 
 ## Mesures
 - Widget : **4,95 kB gzip** (limite 5 kB, marge ~50 o) — était 5,61 kB gzip / 4,89 kB brotli
