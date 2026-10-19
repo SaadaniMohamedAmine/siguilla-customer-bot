@@ -52,6 +52,8 @@ Branche `fix-phase-9b-blockers`. Preuve actuelle : `npm run check` vert (198 tes
 | F12 (open redirect) | ✅ | `/sign-in?redirect=https://evil.com` puis connexion → URL finale `siguilla-customer-bot.vercel.app/agents` (jamais evil.com). Compte utilisé : `test1@sigilla.app` (« Test One's Org », plan Free) | — |
 | F5 / BLK-1 / BLK-7 (non-régression) | ✅ | connexion email OK, dashboard chargé (agents, conversations, analytics, settings dans le menu) : le hook Better Auth et le rate limit ne gênent pas un utilisateur normal | — |
 | I6 (partiel, UI) | ✅ | plan Free : « 1 of 1 agents », bouton remplacé par « Upgrade to add more » + carte « Unlock more agents ». Refus serveur (`POST /api/chatbots` → 403 `agents_limit`) non testé | — |
+| J5 / J2 (partiel) — BLK-2, crawl d'un vrai site | ✅ | agent « RAG Test » (Free), source `https://siguilla-customer-bot.vercel.app/docs/getting-started` : Queued → Crawling 8/24 → Crawling 16/24 → **Ready, 18 pages · 24 chunks** (« this minute »). Le `fetch` de Next accepte l'`Agent` undici (`dispatcher`) en production, et le crawl enchaîne bien plusieurs invocations | — |
+| J8 (refus des URL internes, UI) | ⏳ | `http://localhost:3000` et `http://169.254.169.254/latest/meta-data` : résultat à saisir par l'utilisateur | — |
 | Session anonyme | ✅ | fenêtre privée vierge : barre de navigation « Sign in » + « Start free » (le « Open dashboard » vu avant venait d'une session déjà ouverte dans l'ancienne fenêtre) | aucun bug |
 
 ## Remarques et retouches à grouper (non bloquantes, pour la prochaine PR)
