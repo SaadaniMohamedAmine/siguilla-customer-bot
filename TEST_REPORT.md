@@ -47,6 +47,7 @@ Branche `fix-phase-9b-blockers`. Preuve actuelle : `npm run check` vert (198 tes
 | B5 / V3 (valeur affichée) | ✅ | carte « Under 5 KB » : « 4.95 KB — limit 5 KB » | barre de progression restée à 90 % → voir remarque 1 |
 | B7 | ✅ | widget de la landing : réponse « How do citations work? » avec sceaux numérotés, « Scellé par 1 source · 1·Citations », 👍 👎 ; requête `chat` 200 en 2,30 s | — |
 | BLK-9 (/config) | ✅ | requête `config?lang=fr` 200 (1,1 kB, 94 ms) ; libellés « En ligne », « Utile ? », « Scellé par 1 source » (avec `{n}` remplacé) reçus du serveur | — |
+| H1 / H7 (démo) | 🟡 bloqué | clic sur « Explore the live demo » → redirection vers `/?demo=busy`, aucune démo ni message (limiteur 10/h/IP de `app/demo/route.ts`). Logs Vercel : `/demo` → `/agents` avait bien fonctionné à 18:52 et 19:11 UTC (déploiement post-merge). Compteur illisible : la base n'est pas joignable depuis le poste (port 5432). À refaire quand la fenêtre est repartie | voir remarques 6 et 7 |
 | Session anonyme | ✅ | fenêtre privée vierge : barre de navigation « Sign in » + « Start free » (le « Open dashboard » vu avant venait d'une session déjà ouverte dans l'ancienne fenêtre) | aucun bug |
 
 ## Remarques et retouches à grouper (non bloquantes, pour la prochaine PR)
@@ -55,6 +56,10 @@ Branche `fix-phase-9b-blockers`. Preuve actuelle : `npm run check` vert (198 tes
 3. **⚠ 4 avertissements + 1 message dans la console DevTools** apparus pendant le test, après un « No issues » initial : **ignorés sur décision de l'utilisateur** (contenu jamais relevé, aucune erreur rouge signalée). *Priorité : aucune.*
 4. **BLK-4, nettoyage de la prod (avant de rendre le dépôt public)** : supprimer `test1@`, `test2@`, `test3@sigilla.app` de la base de prod ; faire lire les identifiants des e2e (`billing.spec.ts`, `tenancy.spec.ts`) et du `seed.ts` depuis des variables d'environnement. *Priorité : haute avant publication.*
 5. **Reste à re-tester sur la prod** : Test 2 (démo en lecture seule : H4, H5), Test 3 (compte normal, F12), Test 4 (`/atelier-lune`, L-series), Test 5 (crawl : J5, J8).
+
+6. **`/?demo=busy` n'affiche aucun message** : le visiteur retombe sur la landing sans explication (le fichier de délégation, test H7, demande « retour landing avec message »). Piste : lire `?demo=busy` sur la landing et afficher un message traduit (EN/FR) avec le temps d'attente. *Priorité : moyenne (visible par un recruteur).*
+7. **Limiteur de `/demo` serré : 10 accès/heure/IP** (`app/demo/route.ts`). Des visiteurs derrière un même réseau (entreprise, école) se bloquent entre eux, et chaque clic compte, même refusé. À décider : relever la limite (ex. 30/h) et/ou ne compter que les créations de session réussies. *Priorité : moyenne.*
+8. **Bruit dans les logs Vercel** : chaque démarrage à froid imprime l'avertissement `pg` « SSL modes 'prefer', 'require'… are aliases for 'verify-full' » (niveau « error » dans Vercel, sans conséquence). Correctif côté Vercel : ajouter `sslmode=verify-full` à `DATABASE_URL` (action de l'utilisateur, aucune ligne de code). *Priorité : basse.*
 
 ## Mesures
 - Widget : **4,95 kB gzip** (limite 5 kB, marge ~50 o) — était 5,61 kB gzip / 4,89 kB brotli
