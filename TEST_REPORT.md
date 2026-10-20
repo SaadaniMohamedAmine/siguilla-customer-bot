@@ -101,9 +101,30 @@ Branche `fix-phase-9b-blockers` (PR #12, fusionnée le 2026-10-19). Preuves : `n
 | 2 — langue du widget | ✅ | `/atelier-lune`, navigateur en français : « Online », « Sealed by Sigilla », « Talk to a human », « Your email (optional) » et message de repli « I don't have a verified answer to that. Let me connect you with the team. » en **anglais** (avant : tout en français) |
 | 11 — toast sombre et lisible | ✅ (thèmes sombre et clair) | 1er essai (règle CSS) : en haut à droite ✅ mais toujours blanc, texte presque invisible. Correctif `002ed8c` (style inline `toastStyle`, PR #14), déployé : « The demo is read-only. » s'affiche **sombre, lisible, en haut à droite**, avec barre de progression. Thème clair vérifié aussi : fond clair, texte sombre lisible, icône rouge, en haut à droite |
 
+### W1 / K13 — isolation entre organisations (P0), 2026-10-21, `<PROD>`, script `scripts/audit-tenancy.ts`
+Comptes : A = `test1@` (organisation « Test One's Org », agent « RAG Test »), B = `test2@` (« Test Two's Org »). Mot de passe partagé lu dans `TEST_USERS_PASSWORD`.
+
+| Famille | Sondes | Résultat |
+|---|---|---|
+| Sans session (401 attendu) | 7 : `chatbots`, `chatbots/[id]` (+ sources, playground), `conversations`, `conversations/[id]`, `analytics` | ✅ 7/7 |
+| Listes de B ne contiennent rien de A | `chatbots`, `conversations`, `analytics` | ✅ 3/3 |
+| Lectures de B sur les ressources de A (404 attendu) | agent, sources, conversation | ✅ 3/3 |
+| Écritures sans effet de B (404 attendu) | `PATCH` valeur identique, `POST` corps invalide sur sources, **playground (K13)**, avatar, upload, reply | ✅ 6/6 |
+| Better Auth (B demande l'organisation de A) | `get-full-organization` 403, `list-members` 403, `update` refusé (400), `set-active` 403 | ✅ 4/4 |
+| Widget public | conversation de A avec un mauvais visiteur → 404 | ✅ 1/1 |
+| **Passe destructive** (B sur les données de A) | `takeover`, `resolve`, `resync`, `DELETE` source, `DELETE` agent → 404 ; **l'agent et la source de A existent toujours, inchangés** | ✅ 7/7 |
+
+**Total : 31 sondes sur 31 conformes, aucune fuite.** Contrôle statique complémentaire : les 12 routes à identifiant filtrent par organisation (`loadOwned*` ou `findFirst` avec `organizationId`) avant toute action.
+
+Constats pendant le test :
+- 1re passe : 3 « échecs » Better Auth qui étaient des **faux positifs** : `test2` était déjà `member` de « Test One's Org » (reste d'invitations de développement ; la liste affichait « 2 of 1 seats used », donc au-delà du plan Free, ce que BLK-5 interdit maintenant). Le script refuse désormais de tourner dans ce cas. `test2` a été retiré de l'organisation, puis la passe est repartie à 24/24.
+- Comportement à connaître : un utilisateur membre de **deux** organisations n'accède aux données de l'autre que s'il la sélectionne comme organisation active.
+
+Limites de la couverture : 2 organisations seulement (pas d'organisation C), l'organisation de B n'a pas d'agent donc la sonde « autre agent » du widget (P2) est sautée, et ne sont **pas** couvertes : clés API et `/api/v1/*` (plan Pro), `notion/*`, `billing/*`, `DELETE /api/organization` (volontairement jamais appelées).
+
 ## Mesures
 - Widget : **4,96 kB gzip** (limite 5 kB, marge ~40 o) — était 5,61 kB gzip / 4,89 kB brotli avant la PR #12, 4,95 kB juste après
 - Lighthouse mobile `/` : — / — / — / —
 - Couverture lib/rag, lib/ingestion, lib/billing, lib/public : — %
-- Isolation : — routes testées, — fuite
+- Isolation : **31 sondes, 0 fuite** (W1, `npm run audit:tenancy -- --destructive`, 2026-10-21, contre `<PROD>`)
 - Tests unitaires : 198 (50 au départ de la phase)
