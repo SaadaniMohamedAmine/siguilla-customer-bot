@@ -92,6 +92,15 @@ Branche `fix-phase-9b-blockers` (PR #12, fusionnée le 2026-10-19). Preuves : `n
 
 *Note sur le re-test de la remarque 6* : le toast s'obtient en ouvrant directement `https://siguilla-customer-bot.vercel.app/?demo=busy&wait=12` (aucun besoin d'épuiser le quota).
 
+### Re-tests sur `<PROD>` après la fusion de la PR #13 (2026-10-21, fenêtre privée vierge, testeur : l'utilisateur)
+| Remarque | Statut | Preuve |
+|---|---|---|
+| 10 — la démo ne s'ouvre plus toute seule | ✅ | landing en fenêtre privée vierge : « Sign in » + « Start free », inchangé après 3 rechargements ; clic sur « Explore the live demo » → dashboard « Maison Démo » (la démo s'ouvre bien au clic) ; déconnexion → `/sign-in` ; « Back to home » → « Sign in » + « Start free » (avant le correctif : « Open dashboard » et retour dans la démo) |
+
+| 6 — message `?demo=busy` | ✅ (texte, délai, adresse) | `/?demo=busy&wait=12` → toast « You've reached the demo access limit. Try again in about 12 minutes, or create a free account. » + lien « Start free » ; `wait=1` → « about 1 minute » (singulier) ; l'adresse est nettoyée ; en haut à droite. Le toast est encore blanc avec un lien rose pâle peu contrasté (correctif de couleur pas encore déployé, voir remarque 11) |
+| 2 — langue du widget | ✅ | `/atelier-lune`, navigateur en français : « Online », « Sealed by Sigilla », « Talk to a human », « Your email (optional) » et message de repli « I don't have a verified answer to that. Let me connect you with the team. » en **anglais** (avant : tout en français) |
+| 11 — toast sombre et lisible | ❌ partiel | en haut à droite ✅ (ne masque plus le bouton « S »), mais **toujours blanc** avec un texte presque invisible sur l'erreur « The demo is read-only. » : la règle CSS n'a pas pris. Nouveau correctif `002ed8c` (style inline `toastStyle`) sur la branche `feat-testing-prod-version-and-reporting-part-2`, **à déployer puis re-tester** |
+
 ## Mesures
 - Widget : **4,96 kB gzip** (limite 5 kB, marge ~40 o) — était 5,61 kB gzip / 4,89 kB brotli avant la PR #12, 4,95 kB juste après
 - Lighthouse mobile `/` : — / — / — / —
