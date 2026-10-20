@@ -49,7 +49,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 {!splashSeen && <SplashScreen />}
                 <NavigationLoader />
                 {children}
-                <ToastContainer position="bottom-right" transition={Slide} theme="light" />
+                <ToastContainer position="top-right" transition={Slide} theme="light" />
               </TooltipProvider>
             </QueryProvider>
           </ThemeProvider>

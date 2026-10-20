@@ -20,6 +20,32 @@ export function isDemoAllowedPath(path: string): boolean {
   return DEMO_ALLOWED.some((re) => re.test(path));
 }
 
+/**
+ * Requête de préchargement (un `<Link>` de Next, ou un navigateur qui anticipe) : elle ne doit jamais ouvrir
+ * une session de démo ni consommer le quota de `/demo`, sinon la démo s'ouvre toute seule chez les visiteurs.
+ */
+export function isPrefetchRequest(headers: Pick<Headers, "get">): boolean {
+  return (
+    headers.get("next-router-prefetch") !== null ||
+    headers.get("rsc") !== null ||
+    /prefetch|prerender/i.test(headers.get("purpose") ?? "") ||
+    /prefetch|prerender/i.test(headers.get("sec-purpose") ?? "")
+  );
+}
+
+/** Minutes à attendre avant de pouvoir rouvrir la démo (arrondi au-dessus, au moins 1). */
+export function busyWaitMinutes(retryAfterSeconds: number): number {
+  return Math.max(1, Math.ceil(retryAfterSeconds / 60));
+}
+
+/** `?demo=busy&wait=N` → N minutes (borné à 1–60, 5 par défaut) ; null si l'URL n'est pas un retour « démo indisponible ». */
+export function parseBusyWait(search: string): number | null {
+  const params = new URLSearchParams(search);
+  if (params.get("demo") !== "busy") return null;
+  const wait = Number.parseInt(params.get("wait") ?? "", 10);
+  return Number.isFinite(wait) ? Math.min(60, Math.max(1, wait)) : 5;
+}
+
 /** Demandes de réinitialisation de mot de passe (sans session) : interdites pour le compte démo. */
 export const PASSWORD_RESET_REQUEST_PATHS = ["/request-password-reset", "/forget-password"];
 

@@ -1,6 +1,6 @@
 // prisma/seed.ts
 //
-// 1. Dev-only test accounts with known passwords (see TEST_USERS.md).
+// 1. Dev-only test accounts (test1@..test3@), created only when TEST_USERS_PASSWORD is set.
 // 2. "Maison Démo" — read-only demo org with 2 live agents, real embedded
 //    sources, and 90 days of realistic conversation history.
 // 3. "Sigilla HQ" — demo org hosting "Sigilla Concierge", the agent embedded
@@ -16,10 +16,12 @@ import path from "node:path";
 
 loadEnv({ path: ".env.local" });
 
+// Le mot de passe n'est jamais écrit dans le dépôt : il vient de TEST_USERS_PASSWORD (voir .env.example).
+// Absent (ou trop court), le seed ne crée pas ces comptes — important quand il tourne contre la prod.
 const TEST_USERS = [
-  { name: "Test One", email: "test1@sigilla.app", password: "Test1Sigilla!" },
-  { name: "Test Two", email: "test2@sigilla.app", password: "Test2Sigilla!" },
-  { name: "Test Three", email: "test3@sigilla.app", password: "Test3Sigilla!" },
+  { name: "Test One", email: "test1@sigilla.app" },
+  { name: "Test Two", email: "test2@sigilla.app" },
+  { name: "Test Three", email: "test3@sigilla.app" },
 ];
 
 // Mulberry32 — PRNG déterministe (seed fixe), pour une démo reproductible.
@@ -147,14 +149,19 @@ async function main() {
 
   try {
     // --- 1. Comptes de test (dev) ---
-    for (const u of TEST_USERS) {
-      const existing = await prisma.user.findUnique({ where: { email: u.email } });
-      if (existing) {
-        console.log(`[seed] ${u.email} already exists, skipping`);
-        continue;
+    const testPassword = process.env.TEST_USERS_PASSWORD;
+    if (!testPassword || testPassword.length < 8) {
+      console.log("[seed] TEST_USERS_PASSWORD missing or shorter than 8 characters: test accounts skipped");
+    } else {
+      for (const u of TEST_USERS) {
+        const existing = await prisma.user.findUnique({ where: { email: u.email } });
+        if (existing) {
+          console.log(`[seed] ${u.email} already exists, skipping`);
+          continue;
+        }
+        await auth.api.signUpEmail({ body: { name: u.name, email: u.email, password: testPassword } });
+        console.log(`[seed] created ${u.email}`);
       }
-      await auth.api.signUpEmail({ body: { name: u.name, email: u.email, password: u.password } });
-      console.log(`[seed] created ${u.email}`);
     }
 
     // --- 2. Nettoyage des données démo précédentes ---

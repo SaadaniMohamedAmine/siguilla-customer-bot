@@ -6,7 +6,18 @@ import { BackToTop } from "@/components/marketing/footer-actions";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 
 /** Lien de footer : soulignement accent qui se dessine au survol (span réel, pas de pseudo-élément). */
-function FooterLink({ href, children, external }: { href: string; children: React.ReactNode; external?: boolean }) {
+function FooterLink({
+  href,
+  children,
+  external,
+  plain,
+}: {
+  href: string;
+  children: React.ReactNode;
+  external?: boolean;
+  /** Lien classique (pas de <Link>) : pour les routes qui ne doivent jamais être préchargées, comme /demo. */
+  plain?: boolean;
+}) {
   const cls = "group text-text-muted hover:text-text relative w-fit transition-colors duration-200";
   const underline = (
     <span
@@ -16,6 +27,11 @@ function FooterLink({ href, children, external }: { href: string; children: Reac
   );
   return external ? (
     <a href={href} target="_blank" rel="noreferrer" className={cls}>
+      {children}
+      {underline}
+    </a>
+  ) : plain ? (
+    <a href={href} className={cls}>
       {children}
       {underline}
     </a>
@@ -50,7 +66,9 @@ export async function SiteFooter() {
               <FooterLink href="/#how">{t("how")}</FooterLink>
               <FooterLink href="/pricing">{t("pricing")}</FooterLink>
               <FooterLink href="/docs">{t("docs")}</FooterLink>
-              <FooterLink href="/demo">{t("demo")}</FooterLink>
+              <FooterLink href="/demo" plain>
+                {t("demo")}
+              </FooterLink>
               <FooterLink href="/design-system">{t("designSystem")}</FooterLink>
             </div>
           </Reveal>

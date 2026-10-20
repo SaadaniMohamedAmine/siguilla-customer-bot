@@ -32,6 +32,7 @@ type Cfg = {
   w.__sigilla = 1;
   const api = new URL(script!.src).origin + "/api/public/v1/";
   const preview = script!.dataset.preview === "true";
+  const lang = document.documentElement.lang || navigator.language || "en";
   // Textes (EN/FR) envoyés par /config : le widget n'embarque aucun dictionnaire.
   let T: Record<string, string> = {};
   const fmt = (t: string, n: string | number) => t.replace("{n}", () => String(n));
@@ -222,7 +223,7 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
         question: q,
         visitorId: state.visitorId,
         conversationId: state.conversationId,
-        locale: navigator.language,
+        locale: lang,
         pageUrl: location.href,
       });
       if (!res.ok || !res.body) {
@@ -407,7 +408,7 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
       }, 4000);
   }
 
-  fetch(api + "bots/" + pk + "/config?lang=" + (navigator.language || "en").slice(0, 2))
+  fetch(api + "bots/" + pk + "/config?lang=" + lang.slice(0, 2))
     .then((r) => (r.ok ? r.json() : null))
     .then((d) => {
       if (d) {

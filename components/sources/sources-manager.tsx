@@ -390,7 +390,9 @@ function AddSourceDrawer({
     setUrlError(null);
     setUrlLoading(true);
     try {
-      await api(`/api/chatbots/${chatbotId}/sources`, { method: "POST", body: JSON.stringify({ type: "url", url }) });
+      // « example.com » est une saisie courante : on ajoute https:// quand aucun schéma n'est donné.
+      const target = /^[a-z][a-z0-9+.-]*:\/\//i.test(url.trim()) ? url.trim() : `https://${url.trim()}`;
+      await api(`/api/chatbots/${chatbotId}/sources`, { method: "POST", body: JSON.stringify({ type: "url", url: target }) });
       setUrl("");
       onAdded();
       onOpenChange(false);
@@ -456,7 +458,10 @@ function AddSourceDrawer({
               <Input
                 placeholder={t("urlPlaceholder")}
                 value={url}
-                onChange={(e) => setUrl(e.target.value)}
+                onChange={(e) => {
+                  setUrl(e.target.value);
+                  setUrlError(null);
+                }}
                 error={urlError ?? undefined}
                 className="flex-1"
               />

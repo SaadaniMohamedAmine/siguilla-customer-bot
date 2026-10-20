@@ -389,7 +389,11 @@ html:has([data-splash]) {
   --toastify-toast-min-height: 56px;
   --toastify-toast-bd-radius: 12px;
 }
-.Toastify__toast {
+/* Spécificité supérieure à `.Toastify__toast-theme--light` : react-toastify injecte ses feuilles après les nôtres
+   (fond blanc imposé sur le thème sombre, texte clair illisible). Fond et texte suivent donc les tokens du thème actif. */
+.Toastify__toast-container .Toastify__toast {
+  background: var(--surface-raised);
+  color: var(--text);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-lift);
 }

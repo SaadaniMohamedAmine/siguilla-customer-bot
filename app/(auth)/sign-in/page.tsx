@@ -138,10 +138,11 @@ export default function SignInPage() {
       </p>
       {demoEnabled ? (
         <p className="mt-3 text-center text-small">
-          <Link href="/demo" className="group anim-keep text-link inline-flex items-center gap-1.5">
+          {/* Lien classique : /demo ouvre une session de démo, un <Link> la ferait ouvrir par le préchargement. */}
+          <a href="/demo" className="group anim-keep text-link inline-flex items-center gap-1.5">
             <span className="link-draw anim-keep">{t("exploreDemo")}</span>
             <Icon icon={ArrowRightIcon} size={14} className="anim-keep transition-transform duration-200 group-hover:translate-x-1" />
-          </Link>
+          </a>
         </p>
       ) : null}
     </div>

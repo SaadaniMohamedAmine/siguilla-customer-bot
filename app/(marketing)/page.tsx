@@ -14,6 +14,7 @@ import {
   SizeVisual,
 } from "@/components/marketing/feature-visuals";
 import { HeroWidgetMock } from "@/components/marketing/hero-widget-mock";
+import { DemoBusyNotice } from "@/components/marketing/demo-busy-notice";
 
 const CTA = "group anim-keep hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]";
 const at = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
@@ -51,6 +52,7 @@ export default async function LandingPage() {
   const features = t.raw("features") as { title: string; body: string }[];
   return (
     <div>
+      <DemoBusyNotice />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
       <section className="relative overflow-hidden px-6 pt-20 pb-24">
         <div
@@ -85,11 +87,12 @@ export default async function LandingPage() {
                   />
                 </Button>
               </Link>
-              <Link href="/demo">
+              {/* Lien classique : /demo ouvre une session de démo, un <Link> la ferait ouvrir par le préchargement. */}
+              <a href="/demo">
                 <Button size="lg" variant="ghost" className={CTA}>
                   {t("exploreDemo")}
                 </Button>
-              </Link>
+              </a>
             </div>
           </div>
           <HeroWidgetMock />
@@ -255,11 +258,11 @@ export default async function LandingPage() {
                     />
                   </Button>
                 </Link>
-                <Link href="/demo">
+                <a href="/demo">
                   <Button size="lg" variant="ghost" className={CTA}>
                     {t("exploreDemo")}
                   </Button>
-                </Link>
+                </a>
               </div>
               <p className="text-small text-text-muted mt-5">{t("ctaNote")}</p>
             </div>

@@ -77,9 +77,16 @@ export default async function NotFound() {
           {links.map((l, i) => (
             <span key={l.href} className="flex items-center gap-4">
               {i > 0 ? <span aria-hidden className="bg-accent size-1 rotate-45" /> : null}
-              <Link href={l.href} className="link-draw anim-keep hover:text-text transition-colors">
-                {l.label}
-              </Link>
+              {l.href === "/demo" ? (
+                // Lien classique : /demo ouvre une session de démo, un <Link> la ferait ouvrir par le préchargement.
+                <a href={l.href} className="link-draw anim-keep hover:text-text transition-colors">
+                  {l.label}
+                </a>
+              ) : (
+                <Link href={l.href} className="link-draw anim-keep hover:text-text transition-colors">
+                  {l.label}
+                </Link>
+              )}
             </span>
           ))}
         </nav>
