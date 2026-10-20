@@ -49,7 +49,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 {!splashSeen && <SplashScreen />}
                 <NavigationLoader />
                 {children}
-                <ToastContainer position="top-right" transition={Slide} theme="light" />
+                <ToastContainer
+                  position="top-right"
+                  transition={Slide}
+                  theme="light"
+                  // Style inline : il l'emporte sur les feuilles de react-toastify (fond blanc imposé en thème sombre),
+                  // et suit le thème actif car les tokens changent avec la classe `dark`.
+                  toastStyle={{ background: "var(--surface-raised)", color: "var(--text)" }}
+                />
               </TooltipProvider>
             </QueryProvider>
           </ThemeProvider>
