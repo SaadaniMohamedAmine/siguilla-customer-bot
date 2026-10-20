@@ -99,7 +99,7 @@ Branche `fix-phase-9b-blockers` (PR #12, fusionnée le 2026-10-19). Preuves : `n
 
 | 6 — message `?demo=busy` | ✅ (texte, délai, adresse) | `/?demo=busy&wait=12` → toast « You've reached the demo access limit. Try again in about 12 minutes, or create a free account. » + lien « Start free » ; `wait=1` → « about 1 minute » (singulier) ; l'adresse est nettoyée ; en haut à droite. Le toast est encore blanc avec un lien rose pâle peu contrasté (correctif de couleur pas encore déployé, voir remarque 11) |
 | 2 — langue du widget | ✅ | `/atelier-lune`, navigateur en français : « Online », « Sealed by Sigilla », « Talk to a human », « Your email (optional) » et message de repli « I don't have a verified answer to that. Let me connect you with the team. » en **anglais** (avant : tout en français) |
-| 11 — toast sombre et lisible | ❌ partiel | en haut à droite ✅ (ne masque plus le bouton « S »), mais **toujours blanc** avec un texte presque invisible sur l'erreur « The demo is read-only. » : la règle CSS n'a pas pris. Nouveau correctif `002ed8c` (style inline `toastStyle`) sur la branche `feat-testing-prod-version-and-reporting-part-2`, **à déployer puis re-tester** |
+| 11 — toast sombre et lisible | ✅ (thèmes sombre et clair) | 1er essai (règle CSS) : en haut à droite ✅ mais toujours blanc, texte presque invisible. Correctif `002ed8c` (style inline `toastStyle`, PR #14), déployé : « The demo is read-only. » s'affiche **sombre, lisible, en haut à droite**, avec barre de progression. Thème clair vérifié aussi : fond clair, texte sombre lisible, icône rouge, en haut à droite |
 
 ## Mesures
 - Widget : **4,96 kB gzip** (limite 5 kB, marge ~40 o) — était 5,61 kB gzip / 4,89 kB brotli avant la PR #12, 4,95 kB juste après
