@@ -112,6 +112,17 @@ async function main() {
   const convId: string | undefined = (await A.req("GET", "/api/conversations")).json?.data?.[0]?.id;
   console.log(`Ressources de A : agent ${agentId}, source ${sourceId ?? "(aucune)"}, conversation ${convId ?? "(aucune)"}, organisation ${orgA ?? "(inconnue)"}`);
 
+  // --- Précondition : B ne doit PAS être membre de l'organisation de A (sinon les sondes Better Auth sont sans objet) ---
+  if (orgA) {
+    const members = (await A.req("GET", `/api/auth/organization/get-full-organization?organizationId=${orgA}`)).json?.members ?? [];
+    if (members.some((m: { user?: { email?: string } }) => m.user?.email === EMAIL_B)) {
+      throw new Error(
+        `${EMAIL_B} est déjà membre de l'organisation de ${EMAIL_A} : l'audit serait faussé. ` +
+          `Retire-le (connecté en ${EMAIL_A} : Settings → Organization → Members → corbeille) puis relance.`,
+      );
+    }
+  }
+
   // --- Listes de B : aucune ressource de A ---
   const listB = await B.req("GET", "/api/chatbots");
   record("W1-L1", "B  GET /api/chatbots ne contient pas l'agent de A", "absent", listB.status, listB.status === 200 && !JSON.stringify(listB.json).includes(agentId));
@@ -153,8 +164,6 @@ async function main() {
       const upd = await B.req("POST", "/api/auth/organization/update", { organizationId: orgA, data: { name: nameA } }); // nom identique : sans effet
       record("W1-A3", "B  POST organization/update (org de A, nom inchangé)", "403/404", upd.status, upd.status >= 400);
     }
-    const active = await B.req("POST", "/api/auth/organization/set-active", { organizationId: orgA });
-    record("W1-A4", "B  POST organization/set-active (org de A)", "refus", active.status, active.status >= 400);
   }
 
   // --- Widget public : une conversation de A n'est pas lisible hors de son agent ou de son visiteur ---
@@ -166,6 +175,12 @@ async function main() {
       const otherBot = await NOBODY.req("GET", `/api/public/v1/conversations/${convId}/messages?pk=${botB.publicKey}&visitorId=intrus-${Date.now()}`);
       record("W1-P2", "∅  GET public/…/messages (autre agent)", "403/404", otherBot.status, denied(otherBot.status));
     }
+  }
+
+  // En dernier : si elle réussissait, elle changerait l'organisation active de B et fausserait les sondes suivantes.
+  if (orgA) {
+    const active = await B.req("POST", "/api/auth/organization/set-active", { organizationId: orgA });
+    record("W1-A4", "B  POST organization/set-active (org de A)", "refus", active.status, active.status >= 400);
   }
 
   const failures = table();
