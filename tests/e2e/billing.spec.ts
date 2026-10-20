@@ -1,11 +1,15 @@
 import { test, expect } from "@playwright/test";
+import { MISSING_PASSWORD_REASON, testUsersPassword } from "./helpers";
+
+const password = testUsersPassword();
 
 test.skip(!process.env.STRIPE_SECRET_KEY, "Stripe not configured");
+test.skip(!password, MISSING_PASSWORD_REASON);
 
 test("upgrade to Pro via Stripe Checkout (test mode)", async ({ page }) => {
   await page.goto("/sign-in");
   await page.getByLabel(/work email/i).fill("test1@sigilla.app");
-  await page.getByLabel(/^password$/i).fill("Test1Sigilla!");
+  await page.getByLabel(/^password$/i).fill(password!);
   await page.getByRole("button", { name: /sign in/i }).click();
   await expect(page).toHaveURL(/\/agents/, { timeout: 15_000 });
 
