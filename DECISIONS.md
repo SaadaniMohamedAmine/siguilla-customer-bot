@@ -4,6 +4,22 @@
 
 ---
 
+## Phase 9B — corrections issues du smoke test sur la prod — 2026-10-20
+
+**Branche `feat-testing-prod-version-and-reporting`, un commit par correctif ; `npm run check` vert (209 tests), rien n'est encore déployé ni re-testé sur la prod** (voir le tableau « État des corrections » de `TEST_REPORT.md`). Le smoke test de la PR #12 a fait remonter huit retouches ; choix pris :
+
+- **Liens `/demo` (remarque 10)** — la démo s'ouvrait toute seule : cinq `<Link href="/demo">` (landing ×2, connexion, pied de page, 404) étaient préchargés par Next, ce qui exécute la route et pose le cookie de session démo. Elle remplaçait même la session d'un utilisateur connecté, vidait le quota de 10/h et laissait « Open dashboard » à un visiteur anonyme. Correctif double : liens `<a>` simples (comme déjà dans la nav et le bandeau de démo) **et** une protection dans la route qui répond 204 aux requêtes de préchargement (`next-router-prefetch`, `rsc`, `purpose`/`sec-purpose`), pour qu'un futur `<Link>` ne recrée pas le défaut. L'explication « session restée ouverte » donnée pendant le test pour le premier « Open dashboard » était fausse.
+- **Toasts (remarque 11)** — blancs avec un texte presque blanc sur le thème sombre : les feuilles de style que react-toastify injecte après les nôtres l'emportaient à spécificité égale. Fond, texte et bordure suivent maintenant les tokens avec un sélecteur plus spécifique ; position **en haut à droite** (en bas à droite, ils masquaient le bouton « S » du widget). Pas de composant client ajouté : les tokens changent avec le thème, un sélecteur suffit.
+- **Message `?demo=busy` (remarque 6)** — la route transmet l'attente (`wait` en minutes, arrondie au-dessus) ; la landing affiche un toast **persistant** (pas d'auto-fermeture), traduit, avec un lien « Start free », puis nettoie l'URL. Texte honnête : la limite est par IP, ce n'est pas « démo occupée ».
+- **Limite de la démo (remarque 7)** — 10 → **30 accès/heure/IP** (`DEMO_PER_HOUR`). Des visiteurs derrière un même réseau se partagent l'IP ; on ne compte toujours pas seulement les succès (chaque appel compte, même refusé), simple et suffisant.
+- **Langue du widget (remarque 2)** — le widget utilisait `navigator.language` : sur un site en anglais vu depuis un navigateur en français, libellés ET message de repli sortaient en français. Il suit maintenant la langue de la **page hôte** (`<html lang>`), puis celle du navigateur. Effet à connaître : un visiteur francophone sur un site tiers déclaré en anglais voit un widget anglais. Coût : +10 octets (**4,96 kB**), la landing affiche « 4,96 KB / Ko ». Marge restante avec la limite de 5 kB : ~40 octets.
+- **Barre « 4,95 KB » et champ de crawl (remarques 1 et 9)** — barre à 99 % ; le champ ajoute `https://` s'il n'y a pas de schéma et efface son erreur à la saisie.
+- **Avertissement `pg` SSL (remarque 8)** — corrigé dans le code plutôt que dans la variable Vercel : `sslmode=require|prefer|verify-ca` est réécrit en `verify-full` à la création de l'adaptateur Prisma (`lib/db-url.ts`). Comportement identique (c'est ce que `pg` faisait déjà), plus d'avertissement. Les scripts qui ouvrent leur propre connexion (`db-vector`) ne sont pas concernés.
+- **Comptes de test (BLK-4)** — risque accepté par l'utilisateur le 2026-10-19 : `test1@` à `test3@sigilla.app` restent en production alors que le dépôt est public et que leurs mots de passe sont lisibles dans `seed.ts` et deux e2e. À reprendre si le contexte change (vraies données, publication portfolio).
+- **Non testé par choix** : la facturation Stripe (P1 à P10) et les environnements Neon `dev` / Stripe test (ENV-1, ENV-2), écartés par l'utilisateur.
+
+---
+
 ## Phase 9B — 10 bloquants avant la campagne de tests — 2026-10-18
 
 **Branche `fix-phase-9b-blockers`, un commit par bloquant (IDs renommés `BLK-1…10` : les `B1…B10` du fichier de délégation entraient en collision avec les tests `B1…B15` de la landing).** Le code est fait et `npm run check` est vert (198 tests unitaires, widget 4,95 kB gzip) ; **aucun re-test sur `<PROD>` n'est encore fait** — voir `TEST_REPORT.md`. Écarts par rapport au fichier de délégation et choix pris :

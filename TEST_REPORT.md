@@ -85,12 +85,15 @@ Branche `fix-phase-9b-blockers` (PR #12, fusionnée le 2026-10-19). Preuves : `n
 | 11 — toasts illisibles et mal placés | 🟡 corrigé | `fee42f1` : fond et texte sur les tokens (spécificité supérieure à `.Toastify__toast-theme--light`) + `position="top-right"` | provoquer une erreur en démo (« New agent ») : toast sombre lisible, en haut à droite, sans masquer le widget ; vérifier aussi en thème clair |
 | 1 — barre « 4.95 KB » | 🟡 corrigé | `419f0a1` : largeur 99 % | carte « Under 5 KB » de la landing |
 | 9 — champ de crawl | 🟡 corrigé | `419f0a1` : `https://` ajouté si aucun schéma, erreur effacée à la saisie | saisir `siguilla-customer-bot.vercel.app/docs/getting-started` sans `https://` |
-| 6 — message `?demo=busy` | ⏳ non fait | — | — |
-| 7 — limite de la démo à 10/h/IP | ⏳ non fait (probablement moins gênante une fois la remarque 10 corrigée) | — | — |
-| 2, 8 | ⏳ non faits (priorité basse) | — | — |
+| 6 — message `?demo=busy` | 🟡 corrigé | `996fe5f` : `/demo` redirige vers `/?demo=busy&wait=N` ; la landing affiche un toast persistant traduit (EN/FR) avec le délai et un lien « Start free » | forcer le cas (voir note) : le toast apparaît, l'URL est nettoyée, le message est dans la bonne langue |
+| 7 — limite de la démo | 🟡 corrigé | `996fe5f` : 10 → **30 accès/heure/IP** (`DEMO_PER_HOUR`, `lib/public/limits.ts`) | test H7 : le seuil est maintenant 30, plus 10 |
+| 2 — widget mélangé FR/EN | 🟡 corrigé | `2469ef3` : le widget parle la langue de la page hôte (`<html lang>`), sinon celle du navigateur ; envoyée aussi au serveur (message de repli). Widget **4,96 kB** gzip, landing mise à jour (« 4,96 KB / Ko ») | navigateur en français sur `/atelier-lune` : libellés et message de repli en **anglais** (la page est en anglais) |
+| 8 — avertissement `pg` SSL | 🟡 corrigé | `7bb9741` : `sslmode=verify-full` écrit explicitement (`lib/db-url.ts`, appliqué dans `lib/db.ts`), même comportement | logs Vercel : plus de « SECURITY WARNING » au démarrage à froid ; connexion à la base inchangée (la démo et la connexion fonctionnent) |
+
+*Note sur le re-test de la remarque 6* : le toast s'obtient en ouvrant directement `https://siguilla-customer-bot.vercel.app/?demo=busy&wait=12` (aucun besoin d'épuiser le quota).
 
 ## Mesures
-- Widget : **4,95 kB gzip** (limite 5 kB, marge ~50 o) — était 5,61 kB gzip / 4,89 kB brotli
+- Widget : **4,96 kB gzip** (limite 5 kB, marge ~40 o) — était 5,61 kB gzip / 4,89 kB brotli avant la PR #12, 4,95 kB juste après
 - Lighthouse mobile `/` : — / — / — / —
 - Couverture lib/rag, lib/ingestion, lib/billing, lib/public : — %
 - Isolation : — routes testées, — fuite
