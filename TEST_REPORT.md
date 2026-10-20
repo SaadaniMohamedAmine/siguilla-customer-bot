@@ -78,6 +78,17 @@ Branche `fix-phase-9b-blockers` (PR #12, fusionnée le 2026-10-19). Preuves : `n
 
 11. **Toasts illisibles sur le thème sombre** (signalé par l'utilisateur, capture du toast « The demo is read-only. ») : le toast est **blanc avec un texte presque blanc**. `app/layout.tsx:52` fixe `theme="light"` sur le `ToastContainer`, et `styles/globals.css` (l.378-404) tente de piloter `--toastify-color-light` / `--toastify-text-color-light` avec les tokens (`--surface-raised`, `--text`) : il semble que la couleur de fond ne soit pas appliquée alors que celle du texte l'est (probablement l'ordre des feuilles de style : react-toastify v11 injecte les siennes en JS, après les nôtres). **Piste de correctif** : un petit composant client qui lit le thème actif (`next-themes`) et passe `theme="dark"` / `"light"` au conteneur, puis vérifier fond et texte dans les deux thèmes (DevTools → styles calculés du toast). Antérieur à la PR #12 mais rendu visible par BLK-8 (les erreurs affichent maintenant le vrai message). **Position (demande de l'utilisateur)** : passer de `bottom-right` à **`top-right`** — en bas à droite le toast chevauche le lanceur « S » du widget, visible aussi sur le dashboard (constaté sur les captures de la démo). *Priorité : haute (le message d'erreur de la démo est invisible et masqué par le widget).*
 
+### État des corrections (branche `feat-testing-prod-version-and-reporting`, **pas encore déployées ni re-testées sur la prod**)
+| Remarque | État | Commit | Re-test à faire après déploiement |
+|---|---|---|---|
+| 10 — liens `/demo` qui ouvrent une session toute seule | 🟡 corrigé | `0f94cc4` : `<a href="/demo">` (landing ×2, sign-in, footer, 404) + la route ignore les préchargements (`next-router-prefetch` / `rsc` / `purpose`) + 3 tests | fenêtre privée vierge : « Sign in » + « Start free » (jamais « Open dashboard ») ; se déconnecter de la démo → le bouton redevient « Start free » ; le compteur `?demo=busy` ne se vide plus tout seul |
+| 11 — toasts illisibles et mal placés | 🟡 corrigé | `fee42f1` : fond et texte sur les tokens (spécificité supérieure à `.Toastify__toast-theme--light`) + `position="top-right"` | provoquer une erreur en démo (« New agent ») : toast sombre lisible, en haut à droite, sans masquer le widget ; vérifier aussi en thème clair |
+| 1 — barre « 4.95 KB » | 🟡 corrigé | `419f0a1` : largeur 99 % | carte « Under 5 KB » de la landing |
+| 9 — champ de crawl | 🟡 corrigé | `419f0a1` : `https://` ajouté si aucun schéma, erreur effacée à la saisie | saisir `siguilla-customer-bot.vercel.app/docs/getting-started` sans `https://` |
+| 6 — message `?demo=busy` | ⏳ non fait | — | — |
+| 7 — limite de la démo à 10/h/IP | ⏳ non fait (probablement moins gênante une fois la remarque 10 corrigée) | — | — |
+| 2, 8 | ⏳ non faits (priorité basse) | — | — |
+
 ## Mesures
 - Widget : **4,95 kB gzip** (limite 5 kB, marge ~50 o) — était 5,61 kB gzip / 4,89 kB brotli
 - Lighthouse mobile `/` : — / — / — / —
