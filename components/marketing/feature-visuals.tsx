@@ -85,7 +85,7 @@ export async function SizeVisual() {
         <span className="text-text-muted">{t("limit")}</span>
       </div>
       <div className="bg-border h-1.5 overflow-hidden rounded-full">
-        <span className="anim-keep bg-accent block h-full w-0 rounded-full transition-[width] duration-[1400ms] ease-[var(--ease-lux)] group-data-[inview=true]:w-[90%]" />
+        <span className="anim-keep bg-accent block h-full w-0 rounded-full transition-[width] duration-[1400ms] ease-[var(--ease-lux)] group-data-[inview=true]:w-[99%]" />
       </div>
       <p className="text-text-muted font-mono text-[10px]">{t("deps")}</p>
     </Frame>
