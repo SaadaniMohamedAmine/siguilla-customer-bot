@@ -1007,5 +1007,9 @@
     "billing_forbidden": "Seuls les propriétaires et les administrateurs peuvent gérer la facturation.",
     "keys_forbidden": "Seuls les propriétaires et les administrateurs peuvent gérer les clés API.",
     "owner_only": "Seul le propriétaire peut supprimer l'organisation."
+  },
+  "DemoBusy": {
+    "message": "Vous avez atteint la limite d'accès à la démo. Réessayez dans environ {minutes, plural, one {# minute} other {# minutes}}, ou créez un compte gratuit.",
+    "cta": "Démarrer gratuitement"
   }
 }

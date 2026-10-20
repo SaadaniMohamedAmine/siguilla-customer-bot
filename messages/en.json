@@ -1007,5 +1007,9 @@
     "billing_forbidden": "Only owners and admins can manage billing.",
     "keys_forbidden": "Only owners and admins can manage API keys.",
     "owner_only": "Only the owner can delete the organization."
+  },
+  "DemoBusy": {
+    "message": "You've reached the demo access limit. Try again in about {minutes, plural, one {# minute} other {# minutes}}, or create a free account.",
+    "cta": "Start free"
   }
 }
