@@ -85,11 +85,12 @@ export default async function LandingPage() {
                   />
                 </Button>
               </Link>
-              <Link href="/demo">
+              {/* Lien classique : /demo ouvre une session de démo, un <Link> la ferait ouvrir par le préchargement. */}
+              <a href="/demo">
                 <Button size="lg" variant="ghost" className={CTA}>
                   {t("exploreDemo")}
                 </Button>
-              </Link>
+              </a>
             </div>
           </div>
           <HeroWidgetMock />
@@ -255,11 +256,11 @@ export default async function LandingPage() {
                     />
                   </Button>
                 </Link>
-                <Link href="/demo">
+                <a href="/demo">
                   <Button size="lg" variant="ghost" className={CTA}>
                     {t("exploreDemo")}
                   </Button>
-                </Link>
+                </a>
               </div>
               <p className="text-small text-text-muted mt-5">{t("ctaNote")}</p>
             </div>

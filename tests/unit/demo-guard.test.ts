@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isDemoAllowedPath, isDemoEmail, PASSWORD_RESET_REQUEST_PATHS } from "@/lib/demo-guard";
+import { isDemoAllowedPath, isDemoEmail, isPrefetchRequest, PASSWORD_RESET_REQUEST_PATHS } from "@/lib/demo-guard";
 
 describe("isDemoAllowedPath", () => {
   it.each([
@@ -66,6 +66,25 @@ describe("isDemoEmail", () => {
     expect(isDemoEmail("other@sigilla.app", "demo@sigilla.app")).toBe(false);
     expect(isDemoEmail(undefined, "demo@sigilla.app")).toBe(false);
     expect(isDemoEmail("demo@sigilla.app", undefined)).toBe(false);
+  });
+});
+
+describe("isPrefetchRequest", () => {
+  const h = (init: Record<string, string>) => new Headers(init);
+
+  it("detects Next.js <Link> prefetches and RSC requests", () => {
+    expect(isPrefetchRequest(h({ "next-router-prefetch": "1" }))).toBe(true);
+    expect(isPrefetchRequest(h({ rsc: "1" }))).toBe(true);
+  });
+
+  it("detects browser prefetch / prerender hints", () => {
+    expect(isPrefetchRequest(h({ purpose: "prefetch" }))).toBe(true);
+    expect(isPrefetchRequest(h({ "sec-purpose": "prefetch;prerender" }))).toBe(true);
+  });
+
+  it("lets a normal click through (so the demo still opens)", () => {
+    expect(isPrefetchRequest(h({}))).toBe(false);
+    expect(isPrefetchRequest(h({ accept: "text/html", "user-agent": "Mozilla/5.0" }))).toBe(false);
   });
 });
 

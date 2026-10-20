@@ -2,8 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/public/cors";
+import { isPrefetchRequest } from "@/lib/demo-guard";
 
 export async function GET(request: NextRequest) {
+  // Un préchargement ne doit ni ouvrir de session démo ni consommer le quota (voir isPrefetchRequest).
+  if (isPrefetchRequest(request.headers)) return new Response(null, { status: 204 });
   const rl = await rateLimit(`demo:${clientIp(request)}`, 10, 60 * 60_000);
   if (!rl.ok) return NextResponse.redirect(new URL("/?demo=busy", request.url));
   const res = await auth.api.signInEmail({
