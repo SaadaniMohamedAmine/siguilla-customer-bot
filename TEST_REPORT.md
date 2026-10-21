@@ -256,6 +256,23 @@ Constats :
 19. **Accessibilité de `/` (96)** : `aria-label` sur un `<p>` (attribut interdit sur ce rôle, `aria-prohibited-attr`) et boutons « Switch language » dont le nom accessible ne contient pas le texte visible (`label-content-name-mismatch`, WCAG 2.5.3). *Priorité : basse.* **Corrigé (`781b822`)** : `aria-label` du `<p>` remplacé par un `<span class="sr-only">` portant la citation (mots animés toujours `aria-hidden`) ; nom du sélecteur de langue = « Switch language (EN) », qui contient le texte visible. 223 tests unitaires, lint et typecheck OK. **À re-mesurer après déploiement.**
 Limites : une seule mesure par page, simulée depuis un poste local (variation de ±5 points courante) ; le diagnostic 17-18 vient des audits « insight » de Lighthouse et du `curl`, pas d'un profilage serveur.
 
+### V1 / V2 — 2e mesure après les correctifs 18 et 19 (2026-10-21, mêmes conditions, 1 passe par page)
+| Page | Perf | A11y | Bonnes pratiques | SEO | LCP | Avant (perf) |
+|---|---|---|---|---|---|---|
+| `/` | **90** | **100** | 100 | 100 | 3,2 s | 90 (a11y 96) |
+| `/pricing` | **85** | 100 | 100 | 100 | 3,2 s | 91 |
+| `/docs/getting-started` | **94** | 100 | 100 | 100 | 2,2 s | 76 |
+| `/sign-in` | **55** | 100 | 96 | 100 | 9,2 s | 66 |
+**Remarque 19 : ✅ vérifié** (a11y de `/` : 96 → 100). **Remarque 18 : déployé** (délai du mock à 1800 ms dans le HTML servi) **mais sans effet mesurable** sur le LCP (3,1 → 3,2 s, dans le bruit). **V1 ❌, V2 ❌ (perf < 95 partout).**
+**Analyse :** la perf de ces pages est dominée par la latence serveur, pas par le front (TBT 30 à 150 ms, CLS 0). Délai avant le premier octet mesuré par `curl`, 5 essais par page (s) :
+| Page | Essais |
+|---|---|
+| `/` | 2,4 · 1,6 · 0,6 · 2,0 · 1,5 |
+| `/pricing` | 1,7 · 1,8 · 1,3 · 1,9 · 2,2 |
+| `/docs/getting-started` | 1,8 · 0,9 · 0,5 · **5,7** · **5,5** |
+| `/sign-in` | 2,8 · 0,5 · 0,5 · 0,6 · 0,7 |
+Une même page répond entre 0,5 et 5,7 s : rendu à la demande (remarque 17) + démarrages à froid de fonctions serverless ; `proxy.ts` ne couvre pas ces pages, aucun accès base. Les écarts de note entre deux passes (docs 76 → 94, sign-in 66 → 55) sont de la variance serveur, pas de l'effet des correctifs. **Conclusion :** V1/V2 ne seront pas tenus de façon fiable tant que ces pages ne sont pas servies statiquement ou que les démarrages à froid ne sont pas réduits. **Arbitrage en attente** (A : accepter et documenter, seuil à discuter pour le GO car V1 est P0 ; B : pages marketing statiques avec langue dans l'URL, refonte de routage ; C : région des fonctions / Fluid compute dans Vercel, réglage sans code, à tenter d'abord).
+
 ### État des corrections de la 2e série (déployées en prod)
 | Remarque | État | Commit | Vérification |
 |---|---|---|---|
