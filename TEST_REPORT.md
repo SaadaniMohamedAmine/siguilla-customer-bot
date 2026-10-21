@@ -158,6 +158,13 @@ Les 4 autres questions, seuil à 0,50 (scores des passages entre 53 et 66 %, don
 
 15. **Le marqueur interne `NO_VERIFIED_ANSWER` fuite dans une réponse partielle** (constaté sur la capture de K5). Le prompt demande au modèle de répondre « exactement » `NO_VERIFIED_ANSWER` quand les sources ne couvrent pas la question (règle 3) ; `lib/rag/answer.ts` ne le reconnaît que si la réponse **commence** par le marqueur (`startsWith`, l.127-151). Quand le modèle répond à une moitié de la question puis ajoute le marqueur pour l'autre moitié (typique d'une question double ou d'une injection), le mot est diffusé au visiteur, enregistré, et le widget réutilise le texte diffusé à la fin du flux. Impact : divulgation d'un détail d'implémentation, réponse d'apparence cassée. **Piste de correctif** : un filtre de flux qui retient les ~18 derniers caractères non diffusés, retire le marqueur où qu'il apparaisse (et le texte après lui), puis le retire aussi du texte final enregistré ; test unitaire dans `tests/unit/answer.test.ts`. *Priorité : moyenne (visible, ne divulgue pas le prompt).*
 
+### G7 et F10 — limites côté serveur (2026-10-21, `<PROD>`, requêtes `curl`-like depuis un script jetable)
+| ID | Statut | Preuve |
+|---|---|---|
+| G7 — BLK-5 limite de membres | ✅ | `test1` (plan Free, 1/1 siège occupé par l'owner) : `POST /api/auth/organization/invite-member` → **403, message `members_limit`** ; aucune invitation créée (appel direct à l'API, pas par l'interface) |
+| F10 — BLK-7 mot de passe oublié | ✅ | 1re série de 7 demandes rapprochées : 200, 200, 200 puis 429 « Too many requests… » (protection intégrée de Better Auth, 3 par 10 s, qui se déclenche d'abord). 2e série espacée de 11 s : #1-#2 429 (même protection), #3-#4 200, **#5 429 `rate_limited` (mon limiteur)** : 5 demandes acceptées dans l'heure puis refus, comme prévu |
+| F8 (partiel) — pas d'énumération | ✅ | adresse inexistante : 200 « If this email exists in our system, check your email for the reset link » |
+
 ## Mesures
 - Widget : **4,96 kB gzip** (limite 5 kB, marge ~40 o) — était 5,61 kB gzip / 4,89 kB brotli avant la PR #12, 4,95 kB juste après
 - Lighthouse mobile `/` : — / — / — / —
