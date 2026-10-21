@@ -222,6 +222,26 @@ Un appel par cas sur `POST /api/public/v1/chat` (en-tête `Origin` forcé par sc
 | `https://siguilla-customer-bot.vercel.app` (domaine de l'app) | **200** | — | ✅ voulu : landing, aperçu et démo |
 **L19 : ✅.** Le filtre ne protège que contre les navigateurs : un script serveur peut forger `Origin` (c'est la nature de CORS), la protection réelle contre l'abus reste la limite de débit (L20).
 
+### L22 — XSS (2026-10-21, agent « QA Widget », `test2`, PDF `xss-test.pdf` contenant `<img src=x onerror=alert(1)>`, `<script>`, `<svg onload>`, lien `javascript:`)
+| Surface | Essai | Résultat |
+|---|---|---|
+| Playground (dashboard) | question `<img src=x onerror=alert(1)>` | ✅ texte brut, aucune alerte, aucune image |
+| Playground | contenu de la source (« product tag ») | ✅ balises recopiées comme texte, aucune alerte ; titre de source `xss-test.pdf — p.1` normal |
+| **Widget** (page `localhost:5055`) | même question | ✅ affichée comme texte ; la réponse recopie `<img src=x onerror=alert(1)>` issu de la source, en texte, sans alerte, sans image cassée |
+Code relu : tout passe par `esc()` avant `innerHTML` (messages, titres de sources, URL limitées à `http(s)`). Seconde question du widget : repli (score 72 % < seuil 0,75 de l'agent, comportement normal, bouton « Talk to a human »).
+**L22 : ✅.**
+
+### L21 — isolation CSS (2026-10-21, page hôte `localhost:5055` avec `* { font-family, color, letter-spacing, text-transform, font-size … !important }`, `div { border … !important }`, boutons/inputs stylés)
+| Sens | Résultat |
+|---|---|
+| Widget → page hôte | ✅ la page garde son style hostile (bouton jaune, input cyan pointillé) ; le widget ne la modifie pas |
+| Page hôte → widget | ❌ **fuite** : tout le texte du widget s'affiche en MAJUSCULES espacées (`letter-spacing`, `text-transform`, police héritée) ; le lanceur est entouré de la bordure rose de la règle `div` ; couleurs, fonds et tailles du widget restent intacts |
+Cause : le conteneur du widget reçoit `all:initial` en style inline **sans `!important`** ; une règle de page `!important` l'emporte, et les propriétés héritées traversent le Shadow DOM.
+**L21 : ❌ → corrigé** (`widget/src/index.ts` : `all:initial!important;position:fixed!important;z-index:…!important;bottom:20px!important` + `setProperty(…, "important")` pour `left`/`right`). Widget **4,98 kB gzip** (limite 5 kB, marge ~20 o), 223 tests unitaires OK. **À re-tester après déploiement** (rechargement forcé, le widget est mis en cache) : texte du widget en casse et espacement normaux, plus de bordure autour du lanceur.
+
+### Remarques ajoutées (L19 à L22)
+16. **Config du widget mise en cache après un changement de domaines autorisés** : `GET /api/public/v1/bots/<pk>/config` répond `public, max-age=60, stale-while-revalidate=600` ; juste après avoir retiré `example.com`, ce domaine obtenait encore 200 (puis 403 quelques secondes plus tard). Un domaine retiré peut charger la config du widget pendant 1 à 10 minutes ; l'envoi de messages (`/chat`) vérifie l'origine en direct, donc l'impact réel est faible. *Priorité : basse.*
+
 ### État des corrections de la 2e série (déployées en prod)
 | Remarque | État | Commit | Vérification |
 |---|---|---|---|
