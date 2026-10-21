@@ -75,7 +75,9 @@ type Cfg = {
   const esc = (s: string) => s.replace(/[&<>"']/g, (c) => "&#" + c.charCodeAt(0) + ";");
 
   const host = document.createElement("div");
-  host.style.cssText = "all:initial;position:fixed;z-index:2147483000;bottom:20px";
+  // !important : un style inline normal perd contre un `* { … !important }` de la page hôte, et les propriétés héritées
+  // (letter-spacing, text-transform, font-family…) traversent alors le Shadow DOM.
+  host.style.cssText = "all:initial!important;position:fixed!important;z-index:2147483000!important;bottom:20px!important";
   const root = host.attachShadow({ mode: "open" });
   document.body.appendChild(host);
 
@@ -398,7 +400,7 @@ input,textarea{width:100%;background:var(--r);color:var(--t);border:1px solid va
   function mount(c: Cfg) {
     state.cfg = c;
     root.innerHTML = `<style>${css(c)}</style>`;
-    host.style[c.position === "left" ? "left" : "right"] = "20px";
+    host.style.setProperty(c.position === "left" ? "left" : "right", "20px", "important");
     launcher = el(`<button class="l" aria-label="${T.open}">S</button>`) as HTMLButtonElement;
     launcher.addEventListener("click", () => (state.open ? closePanel() : openPanel()));
     root.appendChild(launcher);
