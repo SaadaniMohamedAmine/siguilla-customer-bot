@@ -25,7 +25,7 @@ export default async function NotFound() {
           animation: "glow-drift 9s ease-in-out infinite",
         }}
       />
-      <Link href="/" aria-label={t("home")} className="absolute top-8 left-1/2 -translate-x-1/2 transition-opacity hover:opacity-80">
+      <Link href="/" aria-label={`Sigilla — ${t("home")}`} className="absolute top-8 left-1/2 -translate-x-1/2 transition-opacity hover:opacity-80">
         <Wordmark size="md" />
       </Link>
 

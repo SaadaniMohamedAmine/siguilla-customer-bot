@@ -34,7 +34,7 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
             animation: "glow-drift 9s ease-in-out infinite",
           }}
         />
-        <Link href="/" aria-label={t("backHome")} className="relative w-fit transition-opacity duration-200 hover:opacity-80">
+        <Link href="/" aria-label={`Sigilla — ${t("backHome")}`} className="relative w-fit transition-opacity duration-200 hover:opacity-80">
           <Wordmark size="md" />
         </Link>
 
@@ -66,7 +66,7 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
       <main id="main-content" tabIndex={-1} className="outline-none relative flex flex-1 flex-col items-center justify-center p-6 lg:w-[45%]">
         <BackHome label={t("backHome")} className="absolute top-6 left-6" />
         <div className="w-full max-w-[420px] pt-10 lg:hidden">
-          <Link href="/" aria-label={t("backHome")} className="mb-8 block text-center">
+          <Link href="/" aria-label={`Sigilla — ${t("backHome")}`} className="mb-8 block text-center">
             <Wordmark size="md" />
           </Link>
         </div>
