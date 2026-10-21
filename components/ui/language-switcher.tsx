@@ -28,7 +28,8 @@ export function LanguageSwitcher({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label={t("switchTo")}
+        // Le nom accessible doit contenir le texte visible (« EN ») : WCAG 2.5.3, sinon la commande vocale « clic EN » échoue.
+        aria-label={`${t("switchTo")} (${locale.toUpperCase()})`}
         className={cn(
           "anim-keep group border-border bg-surface-raised text-text hover:border-accent text-small data-[state=open]:border-accent inline-flex h-8 items-center gap-1.5 rounded-full border pr-2.5 pl-3 transition-colors duration-200 outline-none",
           pending && "opacity-70",

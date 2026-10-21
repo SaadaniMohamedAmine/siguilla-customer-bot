@@ -57,7 +57,9 @@ export function PromiseSection({
         <Icon icon={SealIcon} size={22} />
       </span>
 
-      <p className="text-h1 text-text mt-8 font-serif" aria-label={quote}>
+      {/* `aria-label` est interdit sur un <p> : le texte complet est lu via un span sr-only, les mots animés restent masqués. */}
+      <p className="text-h1 text-text mt-8 font-serif">
+        <span className="sr-only">{quote}</span>
         <span aria-hidden>&ldquo;</span>
         {words.map((w, i) => (
           <span
