@@ -42,6 +42,12 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        // Réponses d'API propres à une session ou à une organisation : jamais mises en cache, ni par le navigateur ni par
+        // un proxy (sans cela Next envoie `public, max-age=0, must-revalidate`). /api/public/* fixe ses propres en-têtes.
+        source: "/api/((?!public/).*)",
+        headers: [{ key: "Cache-Control", value: "private, no-store" }],
+      },
+      {
         // Le widget lui-même est servi cross-origin vers les sites clients : lui appliquer
         // frame-ancestors/CSP n'a pas de sens (ce n'est pas une page) et casserait les en-têtes
         // CORS ci-dessus posés pour lui spécifiquement.
