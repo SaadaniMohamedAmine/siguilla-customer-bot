@@ -1,7 +1,8 @@
 import { getTranslations } from "next-intl/server";
 
-// Décalage : la page démarre sous le splash / loader de navigation (~0,8 à 1 s).
-const BASE = 700;
+// Décalage : la page démarre sous le splash / loader de navigation (~0,8 à 1 s). Volontairement court : la question tapée
+// est le plus grand élément du hero, donc le LCP (Lighthouse) arrive à BASE + 1700 ms.
+const BASE = 100;
 const at = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
 const fade = (ms: number) => ({ animation: `mock-fade 600ms var(--ease-lux) ${ms + BASE}ms both` }) as React.CSSProperties;
 
