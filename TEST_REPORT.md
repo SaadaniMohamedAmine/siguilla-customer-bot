@@ -273,6 +273,19 @@ Limites : une seule mesure par page, simulée depuis un poste local (variation d
 | `/sign-in` | 2,8 · 0,5 · 0,5 · 0,6 · 0,7 |
 Une même page répond entre 0,5 et 5,7 s : rendu à la demande (remarque 17) + démarrages à froid de fonctions serverless ; `proxy.ts` ne couvre pas ces pages, aucun accès base. Les écarts de note entre deux passes (docs 76 → 94, sign-in 66 → 55) sont de la variance serveur, pas de l'effet des correctifs. **Conclusion :** V1/V2 ne seront pas tenus de façon fiable tant que ces pages ne sont pas servies statiquement ou que les démarrages à froid ne sont pas réduits. **Arbitrage rendu (2026-10-21) : option A, accepter et documenter.** Option C vérifiée et épuisée : dans Vercel (Settings → Functions), **Fluid compute est déjà activé** et la région des fonctions est **iad1**, la même que la base Neon (`us-east-1`), donc rien à gagner de ce côté (plan Hobby : 1 région). Option B (pages marketing statiques, langue dans l'URL) **reportée à la Phase 10** : refonte de routage à risque, avec tests de navigation et de SEO à refaire. **V1 (P0) et V2 (P1) restent donc ❌ au sens strict du seuil 95** ; le seuil à retenir pour le verdict GO est à fixer à la clôture (remarque 17 ouverte, perf non reproductible d'une passe à l'autre, a11y/BP/SEO conformes).
 
+### SEO et liens (2026-10-21, script jetable sur `<PROD>`, 19 pages : sitemap + pages d'authentification)
+| Contrôle | Résultat |
+|---|---|
+| `sitemap.xml` | ✅ 200, `application/xml`, 16 URL, toutes sur le domaine de prod (aucun `localhost`) |
+| `robots.txt` | ✅ `Allow: /`, `Disallow` sur `/agents`, `/conversations`, `/analytics`, `/settings`, `/api`, `/demo`, `/atelier-lune`, `/ledgerline`, ligne `Sitemap:` |
+| `<title>` + description + `lang` + 1 seul `<h1>` | ✅ sur toutes les pages publiques (descriptions de 49 à 155 caractères ; `/docs/handoff` 49 et `/docs/customize` 56 sont courtes) |
+| Canonical | ✅ sur les pages marketing et docs ; ❌ absent sur `/` et sur les pages d'authentification |
+| `og:image` | ❌ présent seulement sur `/` : les 15 autres pages perdaient l'image au partage (un `openGraph` défini par `pageMeta` remplace celui du layout racine, image comprise) |
+| Titre des pages d'authentification | ❌ `sign-in`, `sign-up`, `forgot-password` : titre générique « Sigilla — Every answer, sealed by its source. » |
+| Liens internes (26 uniques) | ❌ 1 cassé : `/docs/faq` → 404, dans l'exemple de la page `/design-system` (donnée d'exemple, pas un lien de navigation) |
+| Page 404 | ✅ statut 404 ; titre générique |
+20. **Corrigés** (`fix(seo)`) : `pageMeta` répète l'image Open Graph et Twitter (`/opengraph-image`, 1200×630) ; `sign-in`, `sign-up`, `forgot-password`, `reset-password` ont un titre et une description EN/FR (`reset-password` en `noindex`, l'URL porte un jeton) ; le lien d'exemple pointe vers `/docs/answers`. Non traités : canonical de `/`, descriptions courtes de deux pages docs, titre de la 404, présence de `/design-system` dans le sitemap (page vitrine). **À vérifier après déploiement** (`og:image` sur `/pricing`, titre de `/sign-in`).
+
 ### État des corrections de la 2e série (déployées en prod)
 | Remarque | État | Commit | Vérification |
 |---|---|---|---|
