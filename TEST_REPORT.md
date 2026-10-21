@@ -209,6 +209,19 @@ Agent créé par l'assistant de création, PDF `llm.pdf` (12 pages, 71 chunks, 3
 `npx tsx scripts/load-widget.ts <PROD> <pk>` : 30 requêtes simultanées vers `/api/public/v1/chat`, un seul visiteur, agent sans source. Résultat : `{ total: 30, limited: 10 }`, code de sortie 0. La limite est de 20 par minute (`CHAT_PER_MINUTE`) : 20 acceptées, 10 refusées, soit pile le seuil attendu (≥ 10). Agent QA jetable, jamais la clé d'un agent de démo.
 **L20 : ✅.**
 
+### L19 — origine non autorisée (2026-10-21, `<PROD>`, agent « QA Widget », `allowedDomains: ["example.com"]`)
+Un appel par cas sur `POST /api/public/v1/chat` (en-tête `Origin` forcé par script) ; la config du widget (`GET /api/public/v1/bots/<pk>/config`) contrôlée sur 3 cas.
+| Origine | Chat | Config | Attendu |
+|---|---|---|---|
+| `https://example.com` | **200** (flux SSE) | **200** | ✅ autorisée |
+| `https://sub.example.com` | **403** `origin_not_allowed` | — | ✅ refusée (sous-domaine non listé, sans `*.`) |
+| `https://evil.test` | **403** `origin_not_allowed` | **403** | ✅ |
+| `https://example.com.evil.test` (usurpation par suffixe) | **403** | — | ✅ |
+| `http://localhost:3000` | **403** | — | ✅ (localhost refusé en prod) |
+| sans `Origin` ni `Referer` | **403** | **403** | ✅ |
+| `https://siguilla-customer-bot.vercel.app` (domaine de l'app) | **200** | — | ✅ voulu : landing, aperçu et démo |
+**L19 : ✅.** Le filtre ne protège que contre les navigateurs : un script serveur peut forger `Origin` (c'est la nature de CORS), la protection réelle contre l'abus reste la limite de débit (L20).
+
 ### État des corrections de la 2e série (déployées en prod)
 | Remarque | État | Commit | Vérification |
 |---|---|---|---|
