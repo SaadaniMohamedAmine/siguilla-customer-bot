@@ -205,6 +205,10 @@ Agent créé par l'assistant de création, PDF `llm.pdf` (12 pages, 71 chunks, 3
 ### W2 — en-têtes de sécurité (2026-10-21, securityheaders.com, `<PROD>`)
 **Note A** (« Grade capped at A »). CSP, Referrer-Policy, HSTS (2 ans, `includeSubDomains`, `preload`), X-Content-Type-Options, X-Frame-Options : ✅. Manquant : `Permissions-Policy` (c'est lui qui plafonne à A) ; avertissement : `'unsafe-inline'` dans `script-src` ; CORP/COEP/COOP absents (signalés « à venir » seulement). Voir remarque 14 : `Permissions-Policy` ajouté ensuite. **Re-scan après déploiement (2026-10-21 19:13 UTC) : toujours A**, `Permissions-Policy` au vert, plus aucun en-tête manquant ; seul reste l'avertissement `'unsafe-inline'`, qui plafonne la note (A+ = supprimer `unsafe-inline`, Phase 10). Mon pronostic « A+ » était faux.
 
+### L20 — limite de débit du chat public (2026-10-21, `<PROD>`, agent « QA Widget » de `test2`)
+`npx tsx scripts/load-widget.ts <PROD> <pk>` : 30 requêtes simultanées vers `/api/public/v1/chat`, un seul visiteur, agent sans source. Résultat : `{ total: 30, limited: 10 }`, code de sortie 0. La limite est de 20 par minute (`CHAT_PER_MINUTE`) : 20 acceptées, 10 refusées, soit pile le seuil attendu (≥ 10). Agent QA jetable, jamais la clé d'un agent de démo.
+**L20 : ✅.**
+
 ### État des corrections de la 2e série (déployées en prod)
 | Remarque | État | Commit | Vérification |
 |---|---|---|---|
