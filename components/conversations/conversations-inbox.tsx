@@ -581,7 +581,8 @@ function ConversationThread({
                 rows={Math.min(5, Math.max(1, reply.split("\n").length))}
                 maxLength={2000}
                 placeholder={t("composerPlaceholder", { name: currentUserName })}
-                className="flex-1 resize-none"
+                wrapperClassName="min-w-0 flex-1"
+                className="w-full resize-none"
               />
               <Button loading={sendingReply} onClick={onSendReply} disabled={!reply.trim()}>
                 <Icon icon={SendIcon} size={16} />

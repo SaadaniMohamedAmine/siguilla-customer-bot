@@ -192,7 +192,8 @@ export function PlaygroundClient({ chatbotId, defaultThreshold }: { chatbotId: s
               }}
               rows={Math.min(4, Math.max(1, input.split("\n").length))}
               placeholder={t("placeholder")}
-              className="flex-1 resize-none"
+              wrapperClassName="min-w-0 flex-1"
+              className="w-full resize-none"
             />
             <Button onClick={ask} loading={busy} disabled={!input.trim()}>
               <Icon icon={SendIcon} size={16} />
