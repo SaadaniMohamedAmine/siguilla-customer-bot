@@ -152,6 +152,22 @@
     "startFree": "Start free"
   },
   "Meta": {
+    "signIn": {
+      "title": "Sign in",
+      "description": "Sign in to Sigilla to manage your agents, sources and conversations."
+    },
+    "signUp": {
+      "title": "Create your account",
+      "description": "Create a free Sigilla account: build an AI support agent from your docs in minutes."
+    },
+    "forgotPassword": {
+      "title": "Forgot your password",
+      "description": "Request a link to reset your Sigilla password."
+    },
+    "resetPassword": {
+      "title": "Reset your password",
+      "description": "Choose a new password for your Sigilla account."
+    },
     "pricing": {
       "title": "Pricing",
       "description": "Simple plans for AI support agents that answer from your docs, with sources. Start free, upgrade when you grow."

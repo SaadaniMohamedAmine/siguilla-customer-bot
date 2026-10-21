@@ -152,6 +152,22 @@
     "startFree": "Démarrer gratuitement"
   },
   "Meta": {
+    "signIn": {
+      "title": "Connexion",
+      "description": "Connectez-vous à Sigilla pour gérer vos agents, vos sources et vos conversations."
+    },
+    "signUp": {
+      "title": "Créer votre compte",
+      "description": "Créez un compte Sigilla gratuit : un agent de support IA à partir de vos docs en quelques minutes."
+    },
+    "forgotPassword": {
+      "title": "Mot de passe oublié",
+      "description": "Demandez un lien pour réinitialiser votre mot de passe Sigilla."
+    },
+    "resetPassword": {
+      "title": "Réinitialiser votre mot de passe",
+      "description": "Choisissez un nouveau mot de passe pour votre compte Sigilla."
+    },
     "pricing": {
       "title": "Tarifs",
       "description": "Des offres simples pour des agents de support IA qui répondent à partir de vos docs, avec leurs sources. Démarrez gratuitement, évoluez en grandissant."
