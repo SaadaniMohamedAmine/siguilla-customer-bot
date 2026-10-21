@@ -138,7 +138,7 @@ Limites de la couverture : 2 organisations seulement (pas d'organisation C), l'o
 Remarques ajoutées :
 12. **Playground : champ de question trop étroit** (signalé par l'utilisateur, capture du Playground de « RAG Test ») : le champ occupe moins de la moitié de la largeur de la carte, avec une barre de défilement dès 2 lignes ; il devrait s'étendre sur la largeur disponible pour la lisibilité. À corriger dans le composant du Playground. *Priorité : moyenne (ergonomie, visible).*
 13. **Réponses d'API authentifiées avec `Cache-Control: public, max-age=0, must-revalidate`** (constaté sur `GET /api/chatbots` et `GET /api/conversations/pending-count` avec session ; `get-session`, lui, est `no-store`) : sans `s-maxage` le CDN de Vercel ne les met pas en cache et `max-age=0` impose la revalidation, donc risque faible, mais `public` sur des données propres à une organisation est une mauvaise pratique. Piste : une règle `headers()` dans `next.config.ts` appliquant `Cache-Control: private, no-store` à `/api/*` hors `/api/public/*` (qui fixent leurs propres en-têtes). *Priorité : moyenne (durcissement).*
-14. **CSP `unsafe-inline` + pas de `Permissions-Policy`** : durcissement possible (nonces, `Permissions-Policy`), à décider en Phase 10. *Priorité : basse.*
+14. **CSP `unsafe-inline` + pas de `Permissions-Policy`** : durcissement possible (nonces, `Permissions-Policy`). *Priorité : basse.* **Décision (2026-10-21) :** `Permissions-Policy: camera=(), microphone=(), geolocation=()` ajouté sur les pages (pas sur `/widget/*`) ; aucun usage de ces API dans le code ; vérifié en local (page : présent, `widget/v1.js` : absent), à re-scanner après déploiement. `unsafe-inline` **laissé tel quel, risque accepté, à traiter en Phase 10** : le supprimer impose des nonces, donc du rendu dynamique partout et un risque de casser les scripts inline (next-themes, toasts, splash), pour un gain faible tant qu'aucun HTML utilisateur n'est rendu brut (XSS testé en L22).
 
 ### K5 — injection directe dans le Playground (2026-10-21, agent « RAG Test », compte `test1`)
 | Essai | Résultat | Preuve |
@@ -191,6 +191,19 @@ Page de test `/qa/injection-test.html` (prix 42 €/38 €, livraison 8 € en 4
 
 ### Remarque 15, re-test en prod (2026-10-21)
 Script jetable, seuil abaissé à 0,50 puis remis à 0,75 : 4 questions simples (scores 0,74-0,78) et 6 questions doubles (0,67-0,72), modèle appelé à chaque fois. 10 réponses, 4 replis par marqueur seul, **aucun `NO_VERIF…` visible**. Le cas « moitié de réponse puis marqueur » n'a pas pu être provoqué à la demande (modèle non déterministe) : il reste couvert par les tests unitaires (flux exact de la capture).
+
+### I8 — suppression d'un agent et nettoyage des blobs (2026-10-21, `test2`, agent « I8 Delete Me »)
+Agent créé par l'assistant de création, PDF `llm.pdf` (12 pages, 71 chunks, 3,3 Mo, `ready`), puis suppression par la zone de danger (confirmation en tapant le nom). `test1` n'a pas été utilisé : plan Free = 1 agent, RAG Test à conserver.
+| Contrôle | Avant | Après |
+|---|---|---|
+| `GET /api/chatbots/<id>` | 200 | **404** |
+| `GET /api/chatbots/<id>/sources` | 200 (1 source `ready`) | **404** |
+| Fichier sur Vercel Blob | HEAD 200, 3 306 017 octets | **404 ; absent du listing du store** (4 blobs restants, tous des fichiers de test d'autres agents) |
+| Agents de `test2` | 1 | **0** (écran « Your first agent awaits », quota libéré) |
+**I8 : ✅.** Non vérifié directement : la suppression des 71 chunks en base (aucune route ne les expose ; cascade Prisma). Le blob n'avait pas été relevé avant, le contrôle repose sur le listing du store. **BLK-6 validé : 10/10 blocages validés en prod.**
+
+### W2 — en-têtes de sécurité (2026-10-21, securityheaders.com, `<PROD>`)
+**Note A** (« Grade capped at A »). CSP, Referrer-Policy, HSTS (2 ans, `includeSubDomains`, `preload`), X-Content-Type-Options, X-Frame-Options : ✅. Manquant : `Permissions-Policy` (c'est lui qui plafonne à A) ; avertissement : `'unsafe-inline'` dans `script-src` ; CORP/COEP/COOP absents (signalés « à venir » seulement). Voir remarque 14 : `Permissions-Policy` ajouté ensuite, **à re-scanner après déploiement (attendu A+)**.
 
 ### État des corrections de la 2e série (déployées en prod)
 | Remarque | État | Commit | Vérification |
