@@ -4,15 +4,17 @@ import { cn } from "@/lib/utils";
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   error?: string;
+  /** Classes de l'enveloppe (le `className` ne vise que le champ) : `min-w-0 flex-1` pour occuper une ligne flex. */
+  wrapperClassName?: string;
 }
 
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, label, error, id, ...props }, ref) => {
+  ({ className, wrapperClassName, label, error, id, ...props }, ref) => {
     const generatedId = React.useId();
     const textareaId = id ?? generatedId;
     const errorId = error ? `${textareaId}-error` : undefined;
     return (
-      <div className="flex flex-col gap-1.5">
+      <div className={cn("flex flex-col gap-1.5", wrapperClassName)}>
         {label ? (
           <label htmlFor={textareaId} className="label-caps">
             {label}

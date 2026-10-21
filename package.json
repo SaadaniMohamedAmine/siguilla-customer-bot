@@ -21,6 +21,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "e2e": "playwright test",
+    "audit:tenancy": "tsx scripts/audit-tenancy.ts",
     "e2e:ui": "playwright test --ui",
     "check": "npm run lint && npm run typecheck && npm run test && npm run size"
   },
