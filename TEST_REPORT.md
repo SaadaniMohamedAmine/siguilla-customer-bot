@@ -242,6 +242,20 @@ Cause : le conteneur du widget reçoit `all:initial` en style inline **sans `!im
 ### Remarques ajoutées (L19 à L22)
 16. **Config du widget mise en cache après un changement de domaines autorisés** : `GET /api/public/v1/bots/<pk>/config` répond `public, max-age=60, stale-while-revalidate=600` ; juste après avoir retiré `example.com`, ce domaine obtenait encore 200 (puis 403 quelques secondes plus tard). Un domaine retiré peut charger la config du widget pendant 1 à 10 minutes ; l'envoi de messages (`/chat`) vérifie l'origine en direct, donc l'impact réel est faible. *Priorité : basse.*
 
+### V1 / V2 — Lighthouse mobile sur `<PROD>` (2026-10-21, Lighthouse 12, Chrome headless, throttling simulé, **1 passe par page, depuis le poste de test**)
+| Page | Perf | A11y | Bonnes pratiques | SEO | LCP | TBT | CLS | Verdict (seuils 95/95/95/100) |
+|---|---|---|---|---|---|---|---|---|
+| `/` (V1, P0) | **90** | 96 | 100 | 100 | 3,1 s | 80 ms | 0 | ❌ perf |
+| `/pricing` (V2) | **91** | 100 | 100 | 100 | 3,0 s | 50 ms | 0 | ❌ perf |
+| `/docs/getting-started` (V2) | **76** | 100 | 100 | 100 | 3,8 s | 40 ms | 0 | ❌ perf |
+| `/sign-in` (V2) | **66** | 100 | **96** | 100 | 5,8 s | 60 ms | 0,005 | ❌ perf |
+**V1 ❌ (perf 90 < 95) ; V2 ❌ (perf 91 / 76 / 66 < 95).** Accessibilité, bonnes pratiques et SEO sont conformes partout sauf `/` en a11y (96, seuil atteint) ; le seul écart hors perf est `/sign-in` en bonnes pratiques (96, avertissement « issues » du panneau Chrome). TBT et CLS sont excellents : le déficit est entièrement l'affichage du plus grand élément (LCP).
+Constats :
+17. **Toutes les pages sont rendues à la demande, sans cache CDN** : `Cache-Control: private, no-cache, no-store, max-age=0, must-revalidate` y compris sur `/pricing` et `/` (probable cause : le layout lit des cookies/en-têtes, splash cookie + langue). TTFB mesuré par `curl` : ~0,5 à 0,65 s ; dans Lighthouse la page docs a mis 2,4 s (démarrage à froid possible). « Document request latency » : économie estimée 1,0 à 2,3 s selon la page. *Priorité : moyenne (sert directement V1/V2).*
+18. **LCP de `/` = un paragraphe animé de la maquette du hero** (`animation: mock-type 800ms steps(28, end) 2400ms`) : le plus grand élément n'est peint qu'après 2,4 s de délai d'animation, donc LCP ≈ 3,1 s quoi que fasse le serveur. *Priorité : moyenne.*
+19. **Accessibilité de `/` (96)** : `aria-label` sur un `<p>` (attribut interdit sur ce rôle, `aria-prohibited-attr`) et boutons « Switch language » dont le nom accessible ne contient pas le texte visible (`label-content-name-mismatch`, WCAG 2.5.3). *Priorité : basse.*
+Limites : une seule mesure par page, simulée depuis un poste local (variation de ±5 points courante) ; le diagnostic 17-18 vient des audits « insight » de Lighthouse et du `curl`, pas d'un profilage serveur.
+
 ### État des corrections de la 2e série (déployées en prod)
 | Remarque | État | Commit | Vérification |
 |---|---|---|---|
