@@ -3,7 +3,7 @@ import { streamAnswer } from "@/lib/ai/orchestrator";
 import { retrieve } from "./retrieve";
 import { buildMessages, MAX_QUESTION_CHARS } from "./prompt";
 import { extractCitations, sanitizeAnswer } from "./citations";
-import { fallbackMessage, FALLBACK_SENTINEL, HANDOFF_AFTER_FALLBACKS } from "./fallback";
+import { fallbackMessage, HANDOFF_AFTER_FALLBACKS, SentinelGuard, stripSentinel } from "./fallback";
 import { requestHandoff } from "@/lib/handoff";
 import type { StreamEvent, RetrievedChunk } from "./types";
 
@@ -117,43 +117,30 @@ export async function answer(input: AnswerInput): Promise<AnswerResult> {
     try {
       const res = await streamAnswer(messages, { temperature: 0.1, maxTokens: 600 });
       provider = res.provider;
-      // Tampon de 20 caractères : permet de détecter la sentinelle avant d'émettre le moindre token.
-      let buffer = "";
-      let released = false;
+      // Le marqueur interne ne doit jamais atteindre le visiteur, où qu'il apparaisse dans la réponse.
+      const guard = new SentinelGuard();
       for await (const piece of res.stream) {
         full += piece;
-        if (!released) {
-          buffer += piece;
-          if (FALLBACK_SENTINEL.startsWith(buffer.trim()) && buffer.trim().length < FALLBACK_SENTINEL.length)
-            continue;
-          if (buffer.trim().startsWith(FALLBACK_SENTINEL)) break;
-          released = true;
-          yield { type: "token", value: buffer };
-          continue;
-        }
-        yield { type: "token", value: piece };
+        const safe = guard.push(piece);
+        if (safe) yield { type: "token", value: safe };
+        if (guard.stopped) break;
       }
-      // Réponse très courte terminée sans avoir été libérée (et qui n'est pas la sentinelle) : on l'émet.
-      if (
-        !released &&
-        buffer &&
-        !buffer.trim().startsWith(FALLBACK_SENTINEL) &&
-        !FALLBACK_SENTINEL.startsWith(buffer.trim())
-      ) {
-        yield { type: "token", value: buffer };
-      }
+      const tail = guard.flush();
+      if (tail) yield { type: "token", value: tail };
     } catch (error) {
       console.error("[rag] generation failed", error);
       yield { type: "error", code: "unavailable" };
       return;
     }
 
-    if (full.trim().startsWith(FALLBACK_SENTINEL)) {
+    // Rien d'autre que le marqueur (ou que des espaces avant lui) : repli complet. Sinon on garde la partie utile.
+    const answerText = stripSentinel(full);
+    if (!answerText.trim()) {
       yield* finishFallback(topScore);
       return;
     }
 
-    const clean = sanitizeAnswer(full, retrieved);
+    const clean = sanitizeAnswer(answerText, retrieved);
     const citations = extractCitations(clean, retrieved);
     const msg = await prisma.message.create({
       data: {

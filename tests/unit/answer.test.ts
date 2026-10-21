@@ -112,6 +112,22 @@ describe("answer()", () => {
     );
   });
 
+  it("never lets the NO_VERIFIED_ANSWER marker reach the visitor inside a partial answer", async () => {
+    state.retrieved = [
+      { id: "c1", content: "x", sourceTitle: "A", sourceUrl: null, pageNumber: null, score: 0.9 },
+    ];
+    // Flux réel vu en production : la moitié de la question reçoit une réponse, l'autre le marqueur.
+    state.streamPieces = ["Sigilla is a no-code support platform [1].", "\n\nNO_VERIF", "IED_ANSWER"];
+    const events = await drain(baseInput);
+    const tokens = events.filter((e) => e.type === "token").map((e) => (e as { value: string }).value);
+    expect(tokens.join("")).toBe("Sigilla is a no-code support platform [1].");
+    expect(events.at(-1)).toMatchObject({ type: "done", fallback: false });
+    // Le message enregistré (relu au rechargement, renvoyé par l'API) est nettoyé lui aussi.
+    const saved = messageCreate.mock.calls.at(-1)?.[0].data as { content: string; fallback: boolean };
+    expect(saved.content).toBe("Sigilla is a no-code support platform [1].");
+    expect(saved.fallback).toBe(false);
+  });
+
   it("silences the bot entirely while a conversation is in human mode", async () => {
     state.conversation = { id: "conv1", status: "human", fallbackStreak: 0 };
     const { streamAnswer } = await import("@/lib/ai/orchestrator");
