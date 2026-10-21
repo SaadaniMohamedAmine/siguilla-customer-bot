@@ -9,5 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: now,
   }));
   const docsRoutes = DOCS_ORDER.map((slug) => ({ url: `${base}/docs/${slug}`, lastModified: now }));
-  return [...staticRoutes, ...docsRoutes];
+  // TEMPORAIRE (test K6) : fixture d'injection indirecte à retirer avec public/qa/injection-test.html.
+  const qaRoutes = [{ url: `${base}/qa/injection-test.html`, lastModified: now }];
+  return [...staticRoutes, ...docsRoutes, ...qaRoutes];
 }
