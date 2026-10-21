@@ -165,6 +165,19 @@ Les 4 autres questions, seuil à 0,50 (scores des passages entre 53 et 66 %, don
 | F10 — BLK-7 mot de passe oublié | ✅ | 1re série de 7 demandes rapprochées : 200, 200, 200 puis 429 « Too many requests… » (protection intégrée de Better Auth, 3 par 10 s, qui se déclenche d'abord). 2e série espacée de 11 s : #1-#2 429 (même protection), #3-#4 200, **#5 429 `rate_limited` (mon limiteur)** : 5 demandes acceptées dans l'heure puis refus, comme prévu |
 | F8 (partiel) — pas d'énumération | ✅ | adresse inexistante : 200 « If this email exists in our system, check your email for the reset link » |
 
+### W3 — secrets absents du code servi et de l'historique (2026-10-21)
+Script jetable : les valeurs des **16 secrets** de `.env.local` (`BETTER_AUTH_SECRET`, `BLOB_READ_WRITE_TOKEN`, `DATABASE_URL` + son mot de passe seul, `DEMO_USER_PASSWORD`, `ENCRYPTION_KEY`, `GEMINI_API_KEY`, `GITHUB_CLIENT_SECRET`, `GOOGLE_CLIENT_SECRET`, `GROQ_API_KEY`, `INGESTION_HMAC_SECRET`, `NOTION_CLIENT_SECRET`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `VERCEL_OIDC_TOKEN`, `TEST_USERS_PASSWORD`) lues en mémoire, jamais affichées, puis cherchées dans quatre endroits.
+
+| Endroit | Résultat |
+|---|---|
+| JS/CSS servis par `<PROD>` (30 fichiers, 1,1 Mo : landing, pricing, sign-in, sign-up, docs, sites fictifs, `widget/v1.js`) | ✅ aucun des 16 secrets |
+| Build local `.next/static` (54 fichiers) | ✅ aucun |
+| Fichiers suivis par Git (`git grep`) | ✅ aucun |
+| Historique Git complet (`git log -S`, tous les commits et branches) | ✅ aucun |
+| Motifs de clés dans l'historique (Stripe `whsec_`, Groq `gsk_`, Google `AIza`, Blob, jetons GitHub, URL de base avec mot de passe, clés privées) | ✅ aucun ; un seul faux positif : `sk_live_…` / `sk_test_…` dans la maquette Stitch `stitch_sigilla_luxury_ai_platform/sigilla_settings_api_keys_screen_18/code.html` (clés d'exemple tronquées ; `sk_live_` est le préfixe des clés API **du produit**, `app/api/keys/route.ts:39`) |
+
+**W3 : ✅.** (Les mots de passe de test `Test1Sigilla!` etc. ne sont plus dans les fichiers suivis mais restent dans l'historique ; risque accepté, voir remarque 4.)
+
 ## Mesures
 - Widget : **4,96 kB gzip** (limite 5 kB, marge ~40 o) — était 5,61 kB gzip / 4,89 kB brotli avant la PR #12, 4,95 kB juste après
 - Lighthouse mobile `/` : — / — / — / —
