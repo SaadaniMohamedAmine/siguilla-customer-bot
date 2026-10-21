@@ -138,7 +138,7 @@ Limites de la couverture : 2 organisations seulement (pas d'organisation C), l'o
 Remarques ajoutées :
 12. **Playground : champ de question trop étroit** (signalé par l'utilisateur, capture du Playground de « RAG Test ») : le champ occupe moins de la moitié de la largeur de la carte, avec une barre de défilement dès 2 lignes ; il devrait s'étendre sur la largeur disponible pour la lisibilité. À corriger dans le composant du Playground. *Priorité : moyenne (ergonomie, visible).*
 13. **Réponses d'API authentifiées avec `Cache-Control: public, max-age=0, must-revalidate`** (constaté sur `GET /api/chatbots` et `GET /api/conversations/pending-count` avec session ; `get-session`, lui, est `no-store`) : sans `s-maxage` le CDN de Vercel ne les met pas en cache et `max-age=0` impose la revalidation, donc risque faible, mais `public` sur des données propres à une organisation est une mauvaise pratique. Piste : une règle `headers()` dans `next.config.ts` appliquant `Cache-Control: private, no-store` à `/api/*` hors `/api/public/*` (qui fixent leurs propres en-têtes). *Priorité : moyenne (durcissement).*
-14. **CSP `unsafe-inline` + pas de `Permissions-Policy`** : durcissement possible (nonces, `Permissions-Policy`). *Priorité : basse.* **Décision (2026-10-21) :** `Permissions-Policy: camera=(), microphone=(), geolocation=()` ajouté sur les pages (pas sur `/widget/*`) ; aucun usage de ces API dans le code ; vérifié en local (page : présent, `widget/v1.js` : absent), à re-scanner après déploiement. `unsafe-inline` **laissé tel quel, risque accepté, à traiter en Phase 10** : le supprimer impose des nonces, donc du rendu dynamique partout et un risque de casser les scripts inline (next-themes, toasts, splash), pour un gain faible tant qu'aucun HTML utilisateur n'est rendu brut (XSS testé en L22).
+14. **CSP `unsafe-inline` + pas de `Permissions-Policy`** : durcissement possible (nonces, `Permissions-Policy`). *Priorité : basse.* **Décision (2026-10-21) :** `Permissions-Policy: camera=(), microphone=(), geolocation=()` ajouté sur les pages (pas sur `/widget/*`) ; aucun usage de ces API dans le code ; vérifié en local (page : présent, `widget/v1.js` : absent) **et en prod** (re-scan securityheaders.com le 2026-10-21 19:13 UTC : en-tête reconnu ✅, plus aucun en-tête manquant ; la note reste **A**, plafonnée par le seul avertissement `unsafe-inline`, donc A+ conditionné à la Phase 10). `unsafe-inline` **laissé tel quel, risque accepté, à traiter en Phase 10** : le supprimer impose des nonces, donc du rendu dynamique partout et un risque de casser les scripts inline (next-themes, toasts, splash), pour un gain faible tant qu'aucun HTML utilisateur n'est rendu brut (XSS testé en L22).
 
 ### K5 — injection directe dans le Playground (2026-10-21, agent « RAG Test », compte `test1`)
 | Essai | Résultat | Preuve |
@@ -203,7 +203,44 @@ Agent créé par l'assistant de création, PDF `llm.pdf` (12 pages, 71 chunks, 3
 **I8 : ✅.** Non vérifié directement : la suppression des 71 chunks en base (aucune route ne les expose ; cascade Prisma). Le blob n'avait pas été relevé avant, le contrôle repose sur le listing du store. **BLK-6 validé : 10/10 blocages validés en prod.**
 
 ### W2 — en-têtes de sécurité (2026-10-21, securityheaders.com, `<PROD>`)
-**Note A** (« Grade capped at A »). CSP, Referrer-Policy, HSTS (2 ans, `includeSubDomains`, `preload`), X-Content-Type-Options, X-Frame-Options : ✅. Manquant : `Permissions-Policy` (c'est lui qui plafonne à A) ; avertissement : `'unsafe-inline'` dans `script-src` ; CORP/COEP/COOP absents (signalés « à venir » seulement). Voir remarque 14 : `Permissions-Policy` ajouté ensuite, **à re-scanner après déploiement (attendu A+)**.
+**Note A** (« Grade capped at A »). CSP, Referrer-Policy, HSTS (2 ans, `includeSubDomains`, `preload`), X-Content-Type-Options, X-Frame-Options : ✅. Manquant : `Permissions-Policy` (c'est lui qui plafonne à A) ; avertissement : `'unsafe-inline'` dans `script-src` ; CORP/COEP/COOP absents (signalés « à venir » seulement). Voir remarque 14 : `Permissions-Policy` ajouté ensuite. **Re-scan après déploiement (2026-10-21 19:13 UTC) : toujours A**, `Permissions-Policy` au vert, plus aucun en-tête manquant ; seul reste l'avertissement `'unsafe-inline'`, qui plafonne la note (A+ = supprimer `unsafe-inline`, Phase 10). Mon pronostic « A+ » était faux.
+
+### L20 — limite de débit du chat public (2026-10-21, `<PROD>`, agent « QA Widget » de `test2`)
+`npx tsx scripts/load-widget.ts <PROD> <pk>` : 30 requêtes simultanées vers `/api/public/v1/chat`, un seul visiteur, agent sans source. Résultat : `{ total: 30, limited: 10 }`, code de sortie 0. La limite est de 20 par minute (`CHAT_PER_MINUTE`) : 20 acceptées, 10 refusées, soit pile le seuil attendu (≥ 10). Agent QA jetable, jamais la clé d'un agent de démo.
+**L20 : ✅.**
+
+### L19 — origine non autorisée (2026-10-21, `<PROD>`, agent « QA Widget », `allowedDomains: ["example.com"]`)
+Un appel par cas sur `POST /api/public/v1/chat` (en-tête `Origin` forcé par script) ; la config du widget (`GET /api/public/v1/bots/<pk>/config`) contrôlée sur 3 cas.
+| Origine | Chat | Config | Attendu |
+|---|---|---|---|
+| `https://example.com` | **200** (flux SSE) | **200** | ✅ autorisée |
+| `https://sub.example.com` | **403** `origin_not_allowed` | — | ✅ refusée (sous-domaine non listé, sans `*.`) |
+| `https://evil.test` | **403** `origin_not_allowed` | **403** | ✅ |
+| `https://example.com.evil.test` (usurpation par suffixe) | **403** | — | ✅ |
+| `http://localhost:3000` | **403** | — | ✅ (localhost refusé en prod) |
+| sans `Origin` ni `Referer` | **403** | **403** | ✅ |
+| `https://siguilla-customer-bot.vercel.app` (domaine de l'app) | **200** | — | ✅ voulu : landing, aperçu et démo |
+**L19 : ✅.** Le filtre ne protège que contre les navigateurs : un script serveur peut forger `Origin` (c'est la nature de CORS), la protection réelle contre l'abus reste la limite de débit (L20).
+
+### L22 — XSS (2026-10-21, agent « QA Widget », `test2`, PDF `xss-test.pdf` contenant `<img src=x onerror=alert(1)>`, `<script>`, `<svg onload>`, lien `javascript:`)
+| Surface | Essai | Résultat |
+|---|---|---|
+| Playground (dashboard) | question `<img src=x onerror=alert(1)>` | ✅ texte brut, aucune alerte, aucune image |
+| Playground | contenu de la source (« product tag ») | ✅ balises recopiées comme texte, aucune alerte ; titre de source `xss-test.pdf — p.1` normal |
+| **Widget** (page `localhost:5055`) | même question | ✅ affichée comme texte ; la réponse recopie `<img src=x onerror=alert(1)>` issu de la source, en texte, sans alerte, sans image cassée |
+Code relu : tout passe par `esc()` avant `innerHTML` (messages, titres de sources, URL limitées à `http(s)`). Seconde question du widget : repli (score 72 % < seuil 0,75 de l'agent, comportement normal, bouton « Talk to a human »).
+**L22 : ✅.**
+
+### L21 — isolation CSS (2026-10-21, page hôte `localhost:5055` avec `* { font-family, color, letter-spacing, text-transform, font-size … !important }`, `div { border … !important }`, boutons/inputs stylés)
+| Sens | Résultat |
+|---|---|
+| Widget → page hôte | ✅ la page garde son style hostile (bouton jaune, input cyan pointillé) ; le widget ne la modifie pas |
+| Page hôte → widget | ❌ **fuite** : tout le texte du widget s'affiche en MAJUSCULES espacées (`letter-spacing`, `text-transform`, police héritée) ; le lanceur est entouré de la bordure rose de la règle `div` ; couleurs, fonds et tailles du widget restent intacts |
+Cause : le conteneur du widget reçoit `all:initial` en style inline **sans `!important`** ; une règle de page `!important` l'emporte, et les propriétés héritées traversent le Shadow DOM.
+**L21 : ❌ → corrigé** (`widget/src/index.ts` : `all:initial!important;position:fixed!important;z-index:…!important;bottom:20px!important` + `setProperty(…, "important")` pour `left`/`right`). Widget **4,98 kB gzip** (limite 5 kB, marge ~20 o), 223 tests unitaires OK. **À re-tester après déploiement** (rechargement forcé, le widget est mis en cache) : texte du widget en casse et espacement normaux, plus de bordure autour du lanceur.
+
+### Remarques ajoutées (L19 à L22)
+16. **Config du widget mise en cache après un changement de domaines autorisés** : `GET /api/public/v1/bots/<pk>/config` répond `public, max-age=60, stale-while-revalidate=600` ; juste après avoir retiré `example.com`, ce domaine obtenait encore 200 (puis 403 quelques secondes plus tard). Un domaine retiré peut charger la config du widget pendant 1 à 10 minutes ; l'envoi de messages (`/chat`) vérifie l'origine en direct, donc l'impact réel est faible. *Priorité : basse.*
 
 ### État des corrections de la 2e série (déployées en prod)
 | Remarque | État | Commit | Vérification |
