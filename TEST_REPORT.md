@@ -293,6 +293,16 @@ Une même page répond entre 0,5 et 5,7 s : rendu à la demande (remarque 17) + 
 Autres constats du dashboard : accessibilité **100 sur les 9 pages** ; bonnes pratiques 93 à 98 à cause de requêtes `GET /api/conversations/pending-count` en **401** dans la console (probablement un artefact de l'audit, la requête JS de la page n'emportant pas la session injectée par Lighthouse : à confirmer en navigation réelle, console ouverte) ; audit `label-content-name-mismatch` (non pondéré) sur le lien du logo « Back to website ».
 21. **Nom accessible des liens-logo** (« Back to website », « Back to home », « Home », « Cancel ») ne contenant pas le texte visible « Sigilla » (WCAG 2.5.3) : **corrigé** (`Sigilla — …` dans l'app shell, l'authentification, la page d'erreur, la 404 et l'assistant de création). À vérifier après déploiement.
 
+### Vérification en prod des remarques 20 et 21 (2026-10-22, `curl` sur `<PROD>` après déploiement)
+| Contrôle | Résultat |
+|---|---|
+| `og:image` + `twitter:image` sur `/pricing`, `/docs/answers`, `/sign-in`, `/sign-up`, `/forgot-password`, `/reset-password` | ✅ présents (avant : seulement `/`) ; `/opengraph-image` répond 200 `image/png` |
+| Titres des pages d'authentification | ✅ « Sign in — Sigilla », « Create your account — Sigilla », « Forgot your password — Sigilla », « Reset your password — Sigilla » |
+| `/reset-password` | ✅ `<meta name="robots" content="noindex">` ; les trois autres restent indexables |
+| Lien `/docs/faq` dans `/design-system` | ✅ plus aucune occurrence |
+| Liens-logo | ✅ `aria-label="Sigilla — Back to home"` (authentification) ; sélecteur de langue `Switch language (EN)` |
+**Remarques 19, 20 et 21 : ✅ vérifiées en prod** (a11y `/` à 100 mesuré après la remarque 19 ; pas de nouvelle mesure Lighthouse pour 20 et 21, contrôles HTML uniquement).
+
 ### État des corrections de la 2e série (déployées en prod)
 | Remarque | État | Commit | Vérification |
 |---|---|---|---|
