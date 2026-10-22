@@ -1,15 +1,44 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-const PAGES = ["/", "/pricing", "/docs/getting-started", "/sign-in"];
+const PAGES = [
+  "/",
+  "/pricing",
+  "/docs",
+  "/docs/getting-started",
+  "/privacy",
+  "/terms",
+  "/sign-in",
+  "/sign-up",
+  "/forgot-password",
+];
+const THEMES = ["dark", "light"] as const;
 
-for (const path of PAGES) {
-  test(`a11y: ${path}`, async ({ page }) => {
-    await page.goto(path);
-    const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
-    const serious = results.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
-    expect(serious, JSON.stringify(serious, null, 2)).toEqual([]);
-  });
+for (const theme of THEMES) {
+  for (const path of PAGES) {
+    test(`a11y (${theme}): ${path}`, async ({ page, baseURL }) => {
+      // Splash déjà vu : son fondu de sortie fausserait le calcul de contraste (il a son propre test, B11).
+      await page.context().addCookies([{ name: "sg_splash", value: "1", url: baseURL! }]);
+      // next-themes lit sa préférence dans localStorage (clé « theme ») avant l'hydratation.
+      await page.addInitScript((t) => localStorage.setItem("theme", t), theme);
+      await page.goto(path);
+      await expect(page.locator("html")).toHaveClass(new RegExp(`\\b${theme}\\b`));
+      // Les fondus d'entrée (`page-in`, `hero-in`, splash) faussent le calcul de contraste d'axe : on attend leur fin.
+      // Les animations infinies (défilement des marques, curseur) ne se terminent jamais : on les écarte.
+      await page.evaluate(() =>
+        Promise.all(
+          document
+            .getAnimations()
+            .filter((a) => a.effect?.getComputedTiming().iterations !== Infinity)
+            .map((a) => a.finished.catch(() => undefined)),
+        ),
+      );
+      await page.waitForTimeout(500);
+      const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      const serious = results.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+      expect(serious, JSON.stringify(serious, null, 2)).toEqual([]);
+    });
+  }
 }
 
 test("widget: full keyboard navigation (Tab, Enter, Tab trap, Escape)", async ({ page }) => {
