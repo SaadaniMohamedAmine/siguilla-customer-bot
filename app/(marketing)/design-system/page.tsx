@@ -332,12 +332,12 @@ export default function DesignSystemPage() {
           <p className="max-w-lg text-body text-text">
             Shipping to Switzerland takes 3–5 business days
             <CitationSeal source={{ index: 1, title: "Shipping Policy.pdf" }} />, duties included at checkout
-            <CitationSeal source={{ index: 2, title: "FAQ", url: "/docs/faq" }} />.
+            <CitationSeal source={{ index: 2, title: "How answers work", url: "/docs/answers" }} />.
           </p>
           <SealedBy
             sources={[
               { index: 1, title: "Shipping Policy.pdf" },
-              { index: 2, title: "FAQ", url: "/docs/faq" },
+              { index: 2, title: "How answers work", url: "/docs/answers" },
             ]}
             label="Sealed by 2 sources —"
           />

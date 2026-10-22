@@ -256,6 +256,43 @@ Constats :
 19. **Accessibilité de `/` (96)** : `aria-label` sur un `<p>` (attribut interdit sur ce rôle, `aria-prohibited-attr`) et boutons « Switch language » dont le nom accessible ne contient pas le texte visible (`label-content-name-mismatch`, WCAG 2.5.3). *Priorité : basse.* **Corrigé (`781b822`)** : `aria-label` du `<p>` remplacé par un `<span class="sr-only">` portant la citation (mots animés toujours `aria-hidden`) ; nom du sélecteur de langue = « Switch language (EN) », qui contient le texte visible. 223 tests unitaires, lint et typecheck OK. **À re-mesurer après déploiement.**
 Limites : une seule mesure par page, simulée depuis un poste local (variation de ±5 points courante) ; le diagnostic 17-18 vient des audits « insight » de Lighthouse et du `curl`, pas d'un profilage serveur.
 
+### V1 / V2 — 2e mesure après les correctifs 18 et 19 (2026-10-21, mêmes conditions, 1 passe par page)
+| Page | Perf | A11y | Bonnes pratiques | SEO | LCP | Avant (perf) |
+|---|---|---|---|---|---|---|
+| `/` | **90** | **100** | 100 | 100 | 3,2 s | 90 (a11y 96) |
+| `/pricing` | **85** | 100 | 100 | 100 | 3,2 s | 91 |
+| `/docs/getting-started` | **94** | 100 | 100 | 100 | 2,2 s | 76 |
+| `/sign-in` | **55** | 100 | 96 | 100 | 9,2 s | 66 |
+**Remarque 19 : ✅ vérifié** (a11y de `/` : 96 → 100). **Remarque 18 : déployé** (délai du mock à 1800 ms dans le HTML servi) **mais sans effet mesurable** sur le LCP (3,1 → 3,2 s, dans le bruit). **V1 ❌, V2 ❌ (perf < 95 partout).**
+**Analyse :** la perf de ces pages est dominée par la latence serveur, pas par le front (TBT 30 à 150 ms, CLS 0). Délai avant le premier octet mesuré par `curl`, 5 essais par page (s) :
+| Page | Essais |
+|---|---|
+| `/` | 2,4 · 1,6 · 0,6 · 2,0 · 1,5 |
+| `/pricing` | 1,7 · 1,8 · 1,3 · 1,9 · 2,2 |
+| `/docs/getting-started` | 1,8 · 0,9 · 0,5 · **5,7** · **5,5** |
+| `/sign-in` | 2,8 · 0,5 · 0,5 · 0,6 · 0,7 |
+Une même page répond entre 0,5 et 5,7 s : rendu à la demande (remarque 17) + démarrages à froid de fonctions serverless ; `proxy.ts` ne couvre pas ces pages, aucun accès base. Les écarts de note entre deux passes (docs 76 → 94, sign-in 66 → 55) sont de la variance serveur, pas de l'effet des correctifs. **Conclusion :** V1/V2 ne seront pas tenus de façon fiable tant que ces pages ne sont pas servies statiquement ou que les démarrages à froid ne sont pas réduits. **Arbitrage rendu (2026-10-21) : option A, accepter et documenter.** Option C vérifiée et épuisée : dans Vercel (Settings → Functions), **Fluid compute est déjà activé** et la région des fonctions est **iad1**, la même que la base Neon (`us-east-1`), donc rien à gagner de ce côté (plan Hobby : 1 région). Option B (pages marketing statiques, langue dans l'URL) **reportée à la Phase 10** : refonte de routage à risque, avec tests de navigation et de SEO à refaire. **V1 (P0) et V2 (P1) restent donc ❌ au sens strict du seuil 95** ; le seuil à retenir pour le verdict GO est à fixer à la clôture (remarque 17 ouverte, perf non reproductible d'une passe à l'autre, a11y/BP/SEO conformes).
+
+### SEO et liens (2026-10-21, script jetable sur `<PROD>`, 19 pages : sitemap + pages d'authentification)
+| Contrôle | Résultat |
+|---|---|
+| `sitemap.xml` | ✅ 200, `application/xml`, 16 URL, toutes sur le domaine de prod (aucun `localhost`) |
+| `robots.txt` | ✅ `Allow: /`, `Disallow` sur `/agents`, `/conversations`, `/analytics`, `/settings`, `/api`, `/demo`, `/atelier-lune`, `/ledgerline`, ligne `Sitemap:` |
+| `<title>` + description + `lang` + 1 seul `<h1>` | ✅ sur toutes les pages publiques (descriptions de 49 à 155 caractères ; `/docs/handoff` 49 et `/docs/customize` 56 sont courtes) |
+| Canonical | ✅ sur les pages marketing et docs ; ❌ absent sur `/` et sur les pages d'authentification |
+| `og:image` | ❌ présent seulement sur `/` : les 15 autres pages perdaient l'image au partage (un `openGraph` défini par `pageMeta` remplace celui du layout racine, image comprise) |
+| Titre des pages d'authentification | ❌ `sign-in`, `sign-up`, `forgot-password` : titre générique « Sigilla — Every answer, sealed by its source. » |
+| Liens internes (26 uniques) | ❌ 1 cassé : `/docs/faq` → 404, dans l'exemple de la page `/design-system` (donnée d'exemple, pas un lien de navigation) |
+| Page 404 | ✅ statut 404 ; titre générique |
+20. **Corrigés** (`fix(seo)`) : `pageMeta` répète l'image Open Graph et Twitter (`/opengraph-image`, 1200×630) ; `sign-in`, `sign-up`, `forgot-password`, `reset-password` ont un titre et une description EN/FR (`reset-password` en `noindex`, l'URL porte un jeton) ; le lien d'exemple pointe vers `/docs/answers`. Non traités : canonical de `/`, descriptions courtes de deux pages docs, titre de la 404, présence de `/design-system` dans le sitemap (page vitrine). **À vérifier après déploiement** (`og:image` sur `/pricing`, titre de `/sign-in`).
+
+### U4, U5, V5 — cibles tactiles, mouvement réduit, réactivité du dashboard (2026-10-21)
+**U4 — cibles tactiles ≥ 24×24 px (mobile) : ✅.** Audit `target-size` de Lighthouse en émulation mobile : **0 élément en défaut sur 13 pages**, 4 publiques (`/`, `/pricing`, `/docs/getting-started`, `/sign-in`) et 9 du dashboard avec la session de `test1` (`/agents`, page agent, `…/sources`, `…/playground`, `…/widget`, `…/settings`, `/conversations`, `/analytics`, `/settings`). Non couvert : états ouverts (menus, tiroirs, modales) et le widget lui-même.
+**U5 — reduced motion : ⚠️ conforme au choix assumé, pas à la lettre du test.** `styles/globals.css` réduit à 0,01 ms toutes les animations et transitions sous `prefers-reduced-motion`, **sauf** les éléments `.anim-keep` et `.wave-bar` (loader et animations de la landing, conservés volontairement). Le widget : ouverture/fermeture instantanées (décision BLK-9). Le critère « aucune animation non essentielle » est donc tenu pour l'application et le widget, pas pour la landing (maquette du hero, citation au scroll). Test visuel non fait (nécessite d'activer « réduire les animations » côté système).
+**V5 — dashboard interactif < 2 s (P2) : ❌ en mesure simulée, non concluant.** Lighthouse mobile avec session, TTI simulé : `/agents` 3,7 s, page agent 3,2 s, sources 3,5 s, playground 3,1 s, widget 4,1 s, settings 3,4 s, conversations 3,4 s, analytics 3,3 s, `/settings` 3,1 s (perf 69 à 98 ; la page `…/widget` est la plus lente, 69). Le TTI simulé applique un ralentissement 4G + CPU ×4 : ce n'est pas le ressenti réel, mais c'est au-dessus du seuil quoi qu'il en soit (même cause que la remarque 17 : rendu à la demande + démarrages à froid).
+Autres constats du dashboard : accessibilité **100 sur les 9 pages** ; bonnes pratiques 93 à 98 à cause de requêtes `GET /api/conversations/pending-count` en **401** dans la console (probablement un artefact de l'audit, la requête JS de la page n'emportant pas la session injectée par Lighthouse : à confirmer en navigation réelle, console ouverte) ; audit `label-content-name-mismatch` (non pondéré) sur le lien du logo « Back to website ».
+21. **Nom accessible des liens-logo** (« Back to website », « Back to home », « Home », « Cancel ») ne contenant pas le texte visible « Sigilla » (WCAG 2.5.3) : **corrigé** (`Sigilla — …` dans l'app shell, l'authentification, la page d'erreur, la 404 et l'assistant de création). À vérifier après déploiement.
+
 ### État des corrections de la 2e série (déployées en prod)
 | Remarque | État | Commit | Vérification |
 |---|---|---|---|

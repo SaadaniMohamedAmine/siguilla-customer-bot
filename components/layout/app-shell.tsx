@@ -111,7 +111,7 @@ export function AppShell({
         <div className="p-6">
           <Link
             href="/"
-            aria-label={t("backToSite")}
+            aria-label={`Sigilla — ${t("backToSite")}`}
             title={t("backToSite")}
             className="inline-block transition-opacity duration-200 hover:opacity-80"
           >
@@ -222,7 +222,7 @@ export function AppShell({
 
       {/* Mobile : barre du haut + tiroir latéral */}
       <header className="border-border bg-bg/90 fixed inset-x-0 top-0 z-30 flex h-14 items-center justify-between border-b px-4 backdrop-blur-md lg:hidden">
-        <Link href="/" aria-label={t("backToSite")}>
+        <Link href="/" aria-label={`Sigilla — ${t("backToSite")}`}>
           <Wordmark size="sm" />
         </Link>
         <button
