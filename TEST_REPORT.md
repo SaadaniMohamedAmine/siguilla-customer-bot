@@ -316,6 +316,67 @@ Mesure : `scrollWidth − clientWidth` de la page, puis, en cas d'écart, recher
 Restent à faire à la main : tiroirs mobiles (landing et `/agents`) ouverts, **piège du focus** (Tab ne doit pas sortir du tiroir, Échap le ferme). Le défilement de la rangée « Built for houses like » (fondu sur les bords) est voulu, pas un défaut.
 **T2 : ⚠️ en cours** (3 défauts de défilement corrigés, à re-mesurer ; tiroirs et focus à tester).
 
+### T2 et remarque 23 — vérification en production après déploiement (2026-10-22, Next.js 16.4.2)
+| Page | 390 | 768 | 1440 | Avant |
+|---|---|---|---|---|
+| `/` | ✅ ok | ✅ ok | ✅ ok | +15 px à 390 |
+| `/pricing` | ✅ ok | ✅ ok | ✅ ok | +123 px à 390 |
+| `/agents/<id>/widget` (concepteur, session `test1`) | ✅ ok | ✅ ok | ✅ ok | +567 px à 390, +197 px à 768 |
+| `/agents`, `/agents/new`, `/conversations`, `/analytics`, `/settings` | ✅ ok | ✅ ok | ✅ ok | ok |
+**Remarque 22 : ✅ vérifiée en prod** (plus aucun défilement horizontal). Contrôles complémentaires en prod avec Next.js 16.4.2 : `Permissions-Policy`, HSTS, `X-Frame-Options`, `nosniff`, `Referrer-Policy` présents sur les pages ; widget en CORS `*` ; `/api/chatbots` → 401 `private, no-store` ; `/`, `/sign-in`, docs, sitemap, robots, `opengraph-image` → 200. **Remarque 23 : ✅ vérifiée** (déploiement réussi, 0 vulnérabilité `npm audit`). **Tiroirs mobiles et piège du focus (landing et `/agents`, 393 px) : ✅ validé** (test manuel, testeur : l'utilisateur). **T2 : ✅** (défilement horizontal vérifié par script en prod sur 390/768/1440 px ; tiroirs et focus vérifiés à la main).
+
+### T1 et T3 — thèmes (2026-10-22, test manuel de l'utilisateur sur `<PROD>`)
+| ID | Statut | Preuve |
+|---|---|---|
+| T1 — mode clair | ✅ | pages publiques (landing, pricing, docs, légales, authentification), dashboard (agents, page agent, conversations, analytics) et aperçu du concepteur de widget : contrastes corrects, aucun texte invisible, graphiques lisibles. **Validé** (testeur : l'utilisateur). |
+| T3 — bascule de thème | ✅ | changements répétés clair/sombre : aucun flash, aucun avertissement d'hydratation dans la console. **Validé** (testeur : l'utilisateur). |
+| U2 — clavier seul | ✅ | parcours complet inscription → wizard → playground → conversation → settings, sans souris, skip link « Skip to content » fonctionnel, focus toujours visible, aucune trappe, menus ouverts et fermés au clavier. **Validé** (testeur : l'utilisateur, 2026-10-22). |
+
+### U1 — `a11y.spec.ts` (axe, WCAG 2 A et AA), sombre et clair (2026-10-22, Playwright, projet `desktop`)
+Le test d'origine ne couvrait que 4 pages en sombre. Étendu à **9 pages × 2 thèmes = 18 cas** (`/`, `/pricing`, `/docs`, `/docs/getting-started`, `/privacy`, `/terms`, `/sign-in`, `/sign-up`, `/forgot-password`), thème imposé via `localStorage`, attente de la fin des animations d'entrée (axe mesurait les éléments en plein fondu : résultats instables d'une exécution à l'autre), splash désactivé par cookie (il a son test B11).
+| Exécution | Sombre | Clair |
+|---|---|---|
+| Prod, avant correctif (fondus attendus) | ✅ 9/9 | ❌ 6/9 : `/`, `/pricing`, `/docs`, `/docs/getting-started`, `/terms` (`color-contrast`, **2,09 : #1a1214 sur #8a2438**), `/privacy` (fondu du splash, artefact) |
+| Build local avec le correctif | ✅ 9/9 | ✅ 9/9 |
+24. **Défaut réel de contraste en mode clair : le bouton « Start free » de la barre de navigation avait un texte sombre sur fond bordeaux (ratio 2,09, seuil 4,5).** Cause racine : `cn()` (`lib/utils.ts`) utilisait `tailwind-merge` sans connaître nos tailles de texte personnalisées (`text-small`, `text-body`, `text-h1`…) : il les prenait pour des couleurs et **supprimait la vraie classe de couleur** (`text-on-accent` perdu quand `text-small` suit ; `text-body` perdu quand `text-on-accent` suit). Invisible en sombre (texte hérité quasi identique). **Corrigé** par `extendTailwindMerge` déclarant les 9 tailles (choix validé par l'utilisateur : correction globale). Mesure d'impact sur 6 pages × 2 thèmes (styles calculés, prod contre build local) : 3 à 41 éléments par page changent, tous vers l'intention du code : cellules du tableau de `/pricing`, boutons et liens 16 → 14 px, liens du menu des docs 16 → 12 px, titres `h3` de `/privacy` plus contrastés, texte des boutons primaires blanc en clair. **À re-vérifier visuellement après déploiement** (`/pricing`, menu des docs, boutons).
+**U1 : ✅ sur build local (18/18) ; à relancer sur la prod après déploiement.** Le test du widget au clavier (même fichier) n'a pas été lancé : il demande la page tierce sur `localhost:4321`.
+
+### S, C, D — cohérence FR/EN et chiffres des offres (2026-10-22, script local sur les fichiers)
+| Contrôle | Résultat |
+|---|---|
+| Clés `messages/en.json` / `fr.json` | ✅ 838 / 838, aucune manquante ni en trop |
+| Variables ICU (`{n}`, `{shipping}`…) identiques EN/FR | ✅ aucune différence |
+| Traductions vides, tableaux de longueur différente, textes laissés identiques à l'anglais (> 3 caractères) | ✅ aucun |
+| Tableau des offres des docs (`content/docs/plans.md` et `fr/plans.md`) contre `lib/billing/plans.ts` (source unique du tableau comparatif et des cartes) | ✅ identique : 0 / 12 / 39 $, agents 1/5/15, sources 5/25/50, pages 25/100/100, messages 200 / 2 000 / 10 000, membres 1/3/10 ; formats FR corrects (« 2 000 », « 12 $/mois ») |
+**Non couvert par script : la qualité de la traduction française** (relecture humaine des pages, section S), et les parcours FR dans le navigateur.
+
+### V4 — réactivité du widget (2026-10-22, `<PROD>`, agent « QA Widget », 5 requêtes `/api/public/v1/chat`, Groq)
+| Essai | En-têtes | 1er mot | Total | Réponse |
+|---|---|---|---|---|
+| 1 (à froid) | 3 386 ms | **3 814 ms** | 3 855 ms | modèle |
+| 2 | 519 ms | **959 ms** | 991 ms | modèle |
+| 3 | 536 ms | **1 005 ms** | 1 007 ms | modèle |
+| 4 | 529 ms | 530 ms | 574 ms | repli (sans modèle) |
+| 5 | 1 822 ms | 1 822 ms | 1 824 ms | repli (sans modèle) |
+**Premier mot < 1,5 s (Groq) : ✅ à chaud** (0,96 s et 1,0 s sur les deux réponses du modèle). **Première requête après inactivité < 2 s : ❌** (3,4 s avant les en-têtes, 3,8 s avant le premier mot) : démarrage à froid de la fonction + base, même cause que la remarque 17. Un seul échantillon à froid ; un des replis a mis 1,8 s à chaud (variance serveur). **V4 : ⚠️ partiel (P1).**
+
+### Q (partiel) — API publique v1 documentée, sans clé valide (2026-10-23, `curl` sur `<PROD>`)
+Les 4 routes de `content/docs/api.md` existent dans le code (`/api/v1/bots`, `/chat`, `/conversations`, `/conversations/[id]`). Contrôle d'authentification :
+| Requête | Résultat |
+|---|---|
+| sans en-tête `Authorization` (4 routes) | ✅ 401 `missing_api_key` |
+| clé invalide `sk_live_invalid` (`/bots`, `/chat`, `/conversations`) | ✅ 401 `invalid_api_key` « invalid or revoked » |
+| `Bearer ` vide, schéma `Basic` | ✅ 401 `missing_api_key` |
+| en-têtes | ✅ `Cache-Control: private, no-store` |
+**Non testé : le parcours avec une clé valide** (création de clé, quotas, révocation, isolation entre organisations) : l'API est réservée aux offres Pro et plus (`api: false` en Free) et Stripe n'est pas configuré. **Q : ⚠️ partiel.**
+
+### E — pages légales (2026-10-23, contenu servi par `<PROD>`, EN et FR)
+| Contrôle | Résultat |
+|---|---|
+| `/privacy` | ✅ cite les sous-traitants (Groq, Gemini/Google, Neon, Vercel, Stripe, Notion), cookies, suppression des données, contact ; « Last updated : October 15, 2026 » ; version FR « Dernière mise à jour : 15 octobre 2026 » |
+| `/terms` | ✅ présente, datée ; ⚠️ **très courte (≈ 870 caractères)** : ni responsabilité, ni résiliation, ni droit applicable, ni remboursement |
+25. **Observations sur les pages légales** (non bloquantes pour un projet vitrine) : `/terms` ne couvre ni limitation de responsabilité, ni résiliation, ni droit applicable, ni remboursement des offres payantes ; `/privacy` n'indique ni durée de conservation ni les connexions GitHub (proposée à la connexion) ; l'adresse de contact affichée est une adresse Gmail personnelle. *Priorité : basse.*
+
 ### Dépendances — `npm audit` (2026-10-22)
 23. **Next.js `16.4.0` (version installée) est signalé par `npm audit --omit=dev` comme vulnérable** : plage affectée `16.0.0 – 16.4.0`, correctif `16.4.2` (mise à jour mineure, non majeure). Avis : exécution de code à distance non authentifiée dans l'API d'optimisation d'images avec des SVG (critique, GHSA-2464-fhr4-w9xw), exécution de code à distance dans les fonctions `use cache` renvoyant des tableaux typés (critique, GHSA-673q-mjm6-r5xr), déni de service avec les Server Actions de l'App Router (élevé, GHSA-p3m5-59mp-jv5r). **Effet immédiat constaté :** `next build` en local s'arrête sur ce contrôle de sécurité (il passait plus tôt dans la journée), ce qui bloque la vérification locale des correctifs ci-dessus ; le build Vercel risque la même chose. **Exposition réelle du projet non évaluée** (usage de `use cache`, des images SVG optimisées et des Server Actions à vérifier). *Priorité : haute (sécurité + déploiement).* **Traité (2026-10-22, sur la branche de reporting, à la demande de l'utilisateur) : `next` et `eslint-config-next` passés de `16.4.0` à `16.4.2`**, versions exactes, seuls paquets modifiés dans le lockfile (cœur, binaires par plateforme, config ESLint). Exposition relue dans le code : aucun `use cache`, aucun `next/image` ni configuration d'images, une seule Server Action (`lib/actions/locale.ts`, changement de langue) ; l'exposition réelle paraît limitée, sans garantie (le point d'optimisation d'images existe par défaut). Contrôles : `eslint` 0 erreur (1 avertissement `_request` inutilisé), `typecheck` OK, **223 tests OK**, **`npm run build` OK** (le contrôle de sécurité ne bloque plus), **widget 4,98 kB gzip**, **`npm audit --omit=dev` : 0 vulnérabilité**. Vérifié sur un build de production local : en-têtes de sécurité identiques (CSP, HSTS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy sur les pages ; absents du widget), widget en CORS `*` avec son cache, `/api/chatbots` → 401 `private, no-store`, `/`, `/sign-in`, docs, sitemap, robots, `opengraph-image` → 200, titre de `/sign-in` correct, et **plus aucun défilement horizontal sur `/` et `/pricing` à 390 px** (`scrollWidth` 390). **À re-vérifier après déploiement.**
 
