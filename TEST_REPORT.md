@@ -360,6 +360,23 @@ Le test d'origine ne couvrait que 4 pages en sombre. Étendu à **9 pages × 2 t
 | 5 | 1 822 ms | 1 822 ms | 1 824 ms | repli (sans modèle) |
 **Premier mot < 1,5 s (Groq) : ✅ à chaud** (0,96 s et 1,0 s sur les deux réponses du modèle). **Première requête après inactivité < 2 s : ❌** (3,4 s avant les en-têtes, 3,8 s avant le premier mot) : démarrage à froid de la fonction + base, même cause que la remarque 17. Un seul échantillon à froid ; un des replis a mis 1,8 s à chaud (variance serveur). **V4 : ⚠️ partiel (P1).**
 
+### Q (partiel) — API publique v1 documentée, sans clé valide (2026-10-23, `curl` sur `<PROD>`)
+Les 4 routes de `content/docs/api.md` existent dans le code (`/api/v1/bots`, `/chat`, `/conversations`, `/conversations/[id]`). Contrôle d'authentification :
+| Requête | Résultat |
+|---|---|
+| sans en-tête `Authorization` (4 routes) | ✅ 401 `missing_api_key` |
+| clé invalide `sk_live_invalid` (`/bots`, `/chat`, `/conversations`) | ✅ 401 `invalid_api_key` « invalid or revoked » |
+| `Bearer ` vide, schéma `Basic` | ✅ 401 `missing_api_key` |
+| en-têtes | ✅ `Cache-Control: private, no-store` |
+**Non testé : le parcours avec une clé valide** (création de clé, quotas, révocation, isolation entre organisations) : l'API est réservée aux offres Pro et plus (`api: false` en Free) et Stripe n'est pas configuré. **Q : ⚠️ partiel.**
+
+### E — pages légales (2026-10-23, contenu servi par `<PROD>`, EN et FR)
+| Contrôle | Résultat |
+|---|---|
+| `/privacy` | ✅ cite les sous-traitants (Groq, Gemini/Google, Neon, Vercel, Stripe, Notion), cookies, suppression des données, contact ; « Last updated : October 15, 2026 » ; version FR « Dernière mise à jour : 15 octobre 2026 » |
+| `/terms` | ✅ présente, datée ; ⚠️ **très courte (≈ 870 caractères)** : ni responsabilité, ni résiliation, ni droit applicable, ni remboursement |
+25. **Observations sur les pages légales** (non bloquantes pour un projet vitrine) : `/terms` ne couvre ni limitation de responsabilité, ni résiliation, ni droit applicable, ni remboursement des offres payantes ; `/privacy` n'indique ni durée de conservation ni les connexions GitHub (proposée à la connexion) ; l'adresse de contact affichée est une adresse Gmail personnelle. *Priorité : basse.*
+
 ### Dépendances — `npm audit` (2026-10-22)
 23. **Next.js `16.4.0` (version installée) est signalé par `npm audit --omit=dev` comme vulnérable** : plage affectée `16.0.0 – 16.4.0`, correctif `16.4.2` (mise à jour mineure, non majeure). Avis : exécution de code à distance non authentifiée dans l'API d'optimisation d'images avec des SVG (critique, GHSA-2464-fhr4-w9xw), exécution de code à distance dans les fonctions `use cache` renvoyant des tableaux typés (critique, GHSA-673q-mjm6-r5xr), déni de service avec les Server Actions de l'App Router (élevé, GHSA-p3m5-59mp-jv5r). **Effet immédiat constaté :** `next build` en local s'arrête sur ce contrôle de sécurité (il passait plus tôt dans la journée), ce qui bloque la vérification locale des correctifs ci-dessus ; le build Vercel risque la même chose. **Exposition réelle du projet non évaluée** (usage de `use cache`, des images SVG optimisées et des Server Actions à vérifier). *Priorité : haute (sécurité + déploiement).* **Traité (2026-10-22, sur la branche de reporting, à la demande de l'utilisateur) : `next` et `eslint-config-next` passés de `16.4.0` à `16.4.2`**, versions exactes, seuls paquets modifiés dans le lockfile (cœur, binaires par plateforme, config ESLint). Exposition relue dans le code : aucun `use cache`, aucun `next/image` ni configuration d'images, une seule Server Action (`lib/actions/locale.ts`, changement de langue) ; l'exposition réelle paraît limitée, sans garantie (le point d'optimisation d'images existe par défaut). Contrôles : `eslint` 0 erreur (1 avertissement `_request` inutilisé), `typecheck` OK, **223 tests OK**, **`npm run build` OK** (le contrôle de sécurité ne bloque plus), **widget 4,98 kB gzip**, **`npm audit --omit=dev` : 0 vulnérabilité**. Vérifié sur un build de production local : en-têtes de sécurité identiques (CSP, HSTS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy sur les pages ; absents du widget), widget en CORS `*` avec son cache, `/api/chatbots` → 401 `private, no-store`, `/`, `/sign-in`, docs, sitemap, robots, `opengraph-image` → 200, titre de `/sign-in` correct, et **plus aucun défilement horizontal sur `/` et `/pricing` à 390 px** (`scrollWidth` 390). **À re-vérifier après déploiement.**
 
