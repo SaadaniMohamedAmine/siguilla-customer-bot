@@ -106,7 +106,7 @@ export function WidgetDesigner({ chatbot, canRemoveBadge }: { chatbot: Chatbot; 
   }
 
   return (
-    <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,440px)_minmax(0,1fr)]">
+    <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,440px)_minmax(0,1fr)]">
       <div className="flex flex-col gap-5">
         <Section title={t("appearance")}>
           <div>

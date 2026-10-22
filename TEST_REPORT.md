@@ -293,6 +293,32 @@ Une même page répond entre 0,5 et 5,7 s : rendu à la demande (remarque 17) + 
 Autres constats du dashboard : accessibilité **100 sur les 9 pages** ; bonnes pratiques 93 à 98 à cause de requêtes `GET /api/conversations/pending-count` en **401** dans la console (probablement un artefact de l'audit, la requête JS de la page n'emportant pas la session injectée par Lighthouse : à confirmer en navigation réelle, console ouverte) ; audit `label-content-name-mismatch` (non pondéré) sur le lien du logo « Back to website ».
 21. **Nom accessible des liens-logo** (« Back to website », « Back to home », « Home », « Cancel ») ne contenant pas le texte visible « Sigilla » (WCAG 2.5.3) : **corrigé** (`Sigilla — …` dans l'app shell, l'authentification, la page d'erreur, la 404 et l'assistant de création). À vérifier après déploiement.
 
+### Vérification en prod des remarques 20 et 21 (2026-10-22, `curl` sur `<PROD>` après déploiement)
+| Contrôle | Résultat |
+|---|---|
+| `og:image` + `twitter:image` sur `/pricing`, `/docs/answers`, `/sign-in`, `/sign-up`, `/forgot-password`, `/reset-password` | ✅ présents (avant : seulement `/`) ; `/opengraph-image` répond 200 `image/png` |
+| Titres des pages d'authentification | ✅ « Sign in — Sigilla », « Create your account — Sigilla », « Forgot your password — Sigilla », « Reset your password — Sigilla » |
+| `/reset-password` | ✅ `<meta name="robots" content="noindex">` ; les trois autres restent indexables |
+| Lien `/docs/faq` dans `/design-system` | ✅ plus aucune occurrence |
+| Liens-logo | ✅ `aria-label="Sigilla — Back to home"` (authentification) ; sélecteur de langue `Switch language (EN)` |
+**Remarques 19, 20 et 21 : ✅ vérifiées en prod** (a11y `/` à 100 mesuré après la remarque 19 ; pas de nouvelle mesure Lighthouse pour 20 et 21, contrôles HTML uniquement).
+
+### T2 — 390 / 768 / 1440 px (2026-10-22, Chrome headless piloté par script sur `<PROD>`, 30 pages × 3 largeurs ; captures manuelles de l'utilisateur à 393 px)
+Mesure : `scrollWidth − clientWidth` de la page, puis, en cas d'écart, recherche de l'élément fautif en le masquant et en remesurant. Pages publiques (20) sans session ; dashboard (10) avec la session de `test1` (1re passe : redirigée vers `/sign-in`, donc refaite avec le cookie posé dans le navigateur).
+| Page | 390 | 768 | 1440 | Cause |
+|---|---|---|---|---|
+| `/` | ❌ +15 px | ok | ok | grille « How it works » à colonne implicite `auto` : les 4 étapes font 381 px de large + le texte de l'étape 4 coupé (visible sur la capture de l'utilisateur) |
+| `/pricing` | ❌ +123 px | ok | ok | cellules `sr-only` (absolues) du tableau comparatif qui échappaient au `overflow-x-auto` car le conteneur n'était pas `relative` |
+| `/agents/<id>/widget` (concepteur) | ❌ +567 px | ❌ +197 px | ok | grille deux colonnes sans `grid-cols-1` sous `lg` : colonne étirée à 941 px |
+| 17 autres pages publiques (docs ×10, légales, design system, authentification ×4) | ok | ok | ok | — |
+| 9 autres pages du dashboard (`/agents`, `/agents/new`, page agent, sources, playground, settings agent, `/conversations`, `/analytics`, `/settings`) | ok | ok | ok | — |
+22. **Défilement horizontal sur `/` et `/pricing` à 390 px, et sur le concepteur de widget à 390 et 768 px : corrigé** (`449934c` : `relative` sur le conteneur du tableau, `grid-cols-1` et `min-w-0` sur la grille des étapes ; `ccfb45d` : `grid-cols-1` sur le concepteur). Chaque correctif a été **vérifié sur la page réelle en injectant le même CSS** (`scrollWidth` 405 / 513 / 957 → 390), mais pas encore en production déployée. **À re-mesurer après déploiement.**
+Restent à faire à la main : tiroirs mobiles (landing et `/agents`) ouverts, **piège du focus** (Tab ne doit pas sortir du tiroir, Échap le ferme). Le défilement de la rangée « Built for houses like » (fondu sur les bords) est voulu, pas un défaut.
+**T2 : ⚠️ en cours** (3 défauts de défilement corrigés, à re-mesurer ; tiroirs et focus à tester).
+
+### Dépendances — `npm audit` (2026-10-22)
+23. **Next.js `16.4.0` (version installée) est signalé par `npm audit --omit=dev` comme vulnérable** : plage affectée `16.0.0 – 16.4.0`, correctif `16.4.2` (mise à jour mineure, non majeure). Avis : exécution de code à distance non authentifiée dans l'API d'optimisation d'images avec des SVG (critique, GHSA-2464-fhr4-w9xw), exécution de code à distance dans les fonctions `use cache` renvoyant des tableaux typés (critique, GHSA-673q-mjm6-r5xr), déni de service avec les Server Actions de l'App Router (élevé, GHSA-p3m5-59mp-jv5r). **Effet immédiat constaté :** `next build` en local s'arrête sur ce contrôle de sécurité (il passait plus tôt dans la journée), ce qui bloque la vérification locale des correctifs ci-dessus ; le build Vercel risque la même chose. **Exposition réelle du projet non évaluée** (usage de `use cache`, des images SVG optimisées et des Server Actions à vérifier). *Priorité : haute (sécurité + déploiement).* **Traité (2026-10-22, sur la branche de reporting, à la demande de l'utilisateur) : `next` et `eslint-config-next` passés de `16.4.0` à `16.4.2`**, versions exactes, seuls paquets modifiés dans le lockfile (cœur, binaires par plateforme, config ESLint). Exposition relue dans le code : aucun `use cache`, aucun `next/image` ni configuration d'images, une seule Server Action (`lib/actions/locale.ts`, changement de langue) ; l'exposition réelle paraît limitée, sans garantie (le point d'optimisation d'images existe par défaut). Contrôles : `eslint` 0 erreur (1 avertissement `_request` inutilisé), `typecheck` OK, **223 tests OK**, **`npm run build` OK** (le contrôle de sécurité ne bloque plus), **widget 4,98 kB gzip**, **`npm audit --omit=dev` : 0 vulnérabilité**. Vérifié sur un build de production local : en-têtes de sécurité identiques (CSP, HSTS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy sur les pages ; absents du widget), widget en CORS `*` avec son cache, `/api/chatbots` → 401 `private, no-store`, `/`, `/sign-in`, docs, sitemap, robots, `opengraph-image` → 200, titre de `/sign-in` correct, et **plus aucun défilement horizontal sur `/` et `/pricing` à 390 px** (`scrollWidth` 390). **À re-vérifier après déploiement.**
+
 ### État des corrections de la 2e série (déployées en prod)
 | Remarque | État | Commit | Vérification |
 |---|---|---|---|

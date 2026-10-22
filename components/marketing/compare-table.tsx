@@ -24,7 +24,7 @@ export async function CompareTable() {
   ];
 
   return (
-    <div className="border-border overflow-x-auto rounded-md border">
+    <div className="border-border relative overflow-x-auto rounded-md border">
       <table className="w-full min-w-[540px] border-collapse text-left">
         <caption className="sr-only">{t("compareTitle")}</caption>
         <thead>
