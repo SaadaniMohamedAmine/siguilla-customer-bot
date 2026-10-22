@@ -39,12 +39,12 @@ export function HowItWorks({ eyebrow, title }: { eyebrow: string; title: string 
         <h2 className="text-h1 text-text mx-auto mt-3 max-w-2xl font-serif">{title}</h2>
       </div>
 
-      <div ref={ref} className="mt-16 grid gap-10 lg:grid-cols-4">
+      <div ref={ref} className="mt-16 grid grid-cols-1 gap-10 lg:grid-cols-4">
         {STEPS.map((s, i) => {
           const lit = visible;
           const delay = `${i * STEP_MS}ms`;
           return (
-            <div key={s.n} className="relative pl-7 lg:pt-7 lg:pl-0">
+            <div key={s.n} className="relative min-w-0 pl-7 lg:pt-7 lg:pl-0">
               <span
                 aria-hidden
                 className={cn(
