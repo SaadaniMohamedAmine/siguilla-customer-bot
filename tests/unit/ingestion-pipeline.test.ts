@@ -32,7 +32,7 @@ const h = vi.hoisted(() => {
     loadPdfSections: vi.fn(),
     discoverUrls: vi.fn(),
     crawlPage: vi.fn(),
-    loadRobots: vi.fn(async () => (_path: string) => true),
+    loadRobots: vi.fn(async (): Promise<(path: string) => boolean> => () => true),
     loadNotionPage: vi.fn(),
     assertGlobalChunkBudget: vi.fn(async () => {}),
   };
