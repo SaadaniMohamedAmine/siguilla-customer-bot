@@ -462,6 +462,44 @@ Les pourcentages annoncés jusqu'ici (jusqu'à « 80 % ») étaient une **estima
 | Y (5) | Y2, Y5 | Y1, Y3, Y4 |
 **Bilan : environ 102 tests sur 216 évalués (≈ 47 %), dont environ 95 réussis (≈ 44 %).** Le verdict GO n'est pas atteignable tant que les tests P0/P1 non testés ci-dessus ne sont pas passés. Les sections B à L et X à Y concentrent l'essentiel du reste.
 
+### Bloc de tests C, D, Y, J, K, L, P, Q (2026-10-23, `<PROD>`, scripts jetables ; écritures uniquement sur l'organisation `test2`, plan Pro simulé par la base puis remis en Free, jamais la démo)
+| ID | Statut | Preuve |
+|---|---|---|
+| C1, C2 | ✅ | Free 0 $, Pro 12 $ (« Most chosen »), Team 39 $ ; tableau comparatif identique à `PLAN_LIMITS` (agents 1/5/15, sources 5/25/50, membres 1/3/10) |
+| C4 | ✅ | déconnecté : `router.push("/sign-up?plan=<id>")` (code) ; C5 : session de Checkout créée pour un owner connecté (voir billing) |
+| C6 | ✅ après correctif | l'entrée FAQ « Is this a real product? » (projet de portfolio, Stripe en mode test) manquait : ajoutée EN/FR (`8ee4506`) |
+| C7 | ✅ | aucun `trial`, `SLA`, `VPC`, `webhook(s)`, `99.8` dans `Home`, `Pricing`, `HomeVisuals` (EN et FR) |
+| D1, D5, D7 | ✅ | 10 pages docs en FR (`lang="fr"`, titres traduits) ; `/docs/xyz` → 404 |
+| D2 | ✅ | recherche ouverte au clavier (Ctrl+K) et au clic ; Entrée ouvre la page, Échap ferme ; liste des résultats non relevée précisément |
+| D3 | ❌ → corrigé | **4 liens de « On this page » de `/docs/api` pointaient vers `#object-object`** (id calculé par `String(children)` sur un titre contenant du code : les 5 titres de l'API avaient le même id). Corrigé (`88bdcbd`) ; vérifié sur un build local : 6 ids uniques, tous les liens résolus. **À re-tester après déploiement** |
+| D6 | ⚠️ → corrigé | nombres de la doc contre le code : 6 chunks (`TOP_K`), PDF 10 Mo, 2 replis avant handoff, 60 s de cache config, < 5 Ko, forme des erreurs : conformes ; **le délai de propagation « une minute » était faux** (stale-while-revalidate 600 s) : doc EN/FR corrigée (`b8f7c93`) |
+| D4 | ⏳ | test de copie non concluant (le script a cliqué le bouton « copier le lien » du titre) : à refaire |
+| Y1 | ✅ | `/`, `/pricing`, `/docs/getting-started` : `og:title`, `og:description`, `og:type`, `og:url`, image PNG **1200×630** servie en 200, `twitter:card` et `twitter:image` |
+| Y3 | ✅ | un bloc JSON-LD `SoftwareApplication`, JSON valide, `@context` schema.org (seul `name` présent, pas d'`url`) |
+| Y4 | ✅ | `/favicon.ico`, `/icon` (32×32), `/apple-icon` (180×180), `/manifest.webmanifest` valide (`display: standalone`, 2 icônes, `theme_color`) ; pas de `start_url` |
+| J1, J2 | ✅ | PDF 2 pages → ready, 2 chunks ; PDF 35 pages → ready, 35 pages, 35 chunks |
+| J3 | ✅ | PDF de 11 Mo refusé à l'émission du jeton Blob (« File is too large… 10485760 bytes ») |
+| J4 | ✅ | faux PDF (octets `MZ…`) → source `failed`, erreur `processing_failed`, aucun plantage (message affiché brut côté API) |
+| J15 | ✅ | 5e source acceptée, 6e refusée (403 `sources_limit`, côté client : « Failed to retrieve the client token ») |
+| J7 | ❌ → corrigé | `POST …/sources {type:"url", url:"pas-une-url"}` → **500 Internal error**. Cause : `toErrorResponse` traitait toute erreur Zod comme une panne. Corrigé pour **toutes** les routes (400 `invalid_request`), et la route sources répond `400 invalid_url` (`0d03c8b`). URL injoignable non retestée (limite de sources atteinte) |
+| J14, J17 | ✅ | source supprimée : blob en 404 ; 0 chunk sans embedding dans toute la base |
+| K1 | ✅ | « The Candle Rouge costs 12 euros [1]. », 1 citation (`xss-test.pdf`, p.1), fournisseur Groq |
+| K2 | ✅ | « What's the weather in Paris? » : repli, score 0,51 < 0,75, `provider: null` (aucun appel au modèle) |
+| K3 | ✅ (avec réserve) | à 0,75 la question française est refusée (score 0,55-0,60) ; à 0,50 : « La bougie Candle Rouge coûte 12 euros [1]. » (réponse en français, citation conservée) |
+| K4 | ✅ (avec réserve) | suites « And how long does shipping take? » / « What about its delivery time? » répondues à 0,50 (score 0,61-0,64) ; à 0,75 elles tombent en repli ; la recherche n'utilise pas l'historique (score identique avec ou sans) |
+| K9 | ✅ | 1 200 caractères → 400 `invalid_request` (le plan attendait `too_long` ; le widget/API public bornent à 1 000 caractères avant `answer()`) |
+28. **Seuil par défaut de 0,75 trop haut pour des formulations naturelles** : une question en français sur une source anglaise (0,55-0,60), une question de suivi courte (0,61-0,64) ou une paraphrase passent sous le seuil et reçoivent le repli, alors que le Playground à 0,50 répond correctement. Réglable par agent. *Priorité : moyenne (qualité perçue).*
+| L7, L8 | ✅ | 2 replis d'affilée : `handoffSuggested: true`, statut `handoff_requested` en base sans clic, `pending-count` du dashboard = 2 ; `POST /handoff` avec email → `visitorEmail` enregistré |
+| L10 | ✅ | `messageCount = 2000/2000` : le chat public émet l'événement d'erreur `quota_exceeded` (que le widget affiche en « resting ») |
+| P8 | ✅ | à 1 800/2 000 : « You've used 90% of this month's messages » ; à 2 000 : `/api/v1/chat` → 429 `quota_exceeded` |
+| P9 | ✅ | `usagePeriodStart` au mois précédent : la requête passe, compteur remis à 1, période 2026-10 |
+| P7 | ❌ | Pro → Free avec 3 agents : **rien n'est supprimé** (✅), création d'un 4e agent → 403 `agents_limit` (✅), compteur « 3 of 1 agents » ; **mais aucun bandeau « agents paused » et aucun blocage du widget des agents en excès** : le code ne contient que le texte « Over your plan limit » sur les barres d'usage. Écart avec le plan |
+| Q1 | ✅ | clé `sk_live_…` montrée à la création, la liste n'expose que le début `sk_liv` |
+| Q4 | ✅ | `stream: true` : `text/event-stream`, `meta` → `token` → `done` (12 événements) |
+| Q8 | ❌ → corrigé | **une clé valide répondait 401 `invalid_api_key` dès la 8e-11e requête** (7 réponses 200 puis 57 réponses 401 sur 64 appels) : le plugin de clés d'API de Better Auth limite par défaut à **10 requêtes par 24 h par clé** ; notre limiteur de 60 par minute n'était jamais atteint et la doc promettait autre chose. Désactivé (`rateLimit: { enabled: false }`, `d5b8200`) ; aucune clé existante en base. **À re-tester après déploiement (attendu : 429 `rate_limited` après 60 appels)** |
+| Q9 | ✅ / ⏳ | 400 : `{ error: { code: "invalid_request", message } }` ; format du 429 à revérifier après correctif |
+29. **Les routes `/api/chatbots/*` renvoyaient 500 pour tout corps invalide** (erreur Zod) : corrigé globalement dans `toErrorResponse` (400 `invalid_request`).
+
 ### Dépendances — `npm audit` (2026-10-22)
 23. **Next.js `16.4.0` (version installée) est signalé par `npm audit --omit=dev` comme vulnérable** : plage affectée `16.0.0 – 16.4.0`, correctif `16.4.2` (mise à jour mineure, non majeure). Avis : exécution de code à distance non authentifiée dans l'API d'optimisation d'images avec des SVG (critique, GHSA-2464-fhr4-w9xw), exécution de code à distance dans les fonctions `use cache` renvoyant des tableaux typés (critique, GHSA-673q-mjm6-r5xr), déni de service avec les Server Actions de l'App Router (élevé, GHSA-p3m5-59mp-jv5r). **Effet immédiat constaté :** `next build` en local s'arrête sur ce contrôle de sécurité (il passait plus tôt dans la journée), ce qui bloque la vérification locale des correctifs ci-dessus ; le build Vercel risque la même chose. **Exposition réelle du projet non évaluée** (usage de `use cache`, des images SVG optimisées et des Server Actions à vérifier). *Priorité : haute (sécurité + déploiement).* **Traité (2026-10-22, sur la branche de reporting, à la demande de l'utilisateur) : `next` et `eslint-config-next` passés de `16.4.0` à `16.4.2`**, versions exactes, seuls paquets modifiés dans le lockfile (cœur, binaires par plateforme, config ESLint). Exposition relue dans le code : aucun `use cache`, aucun `next/image` ni configuration d'images, une seule Server Action (`lib/actions/locale.ts`, changement de langue) ; l'exposition réelle paraît limitée, sans garantie (le point d'optimisation d'images existe par défaut). Contrôles : `eslint` 0 erreur (1 avertissement `_request` inutilisé), `typecheck` OK, **223 tests OK**, **`npm run build` OK** (le contrôle de sécurité ne bloque plus), **widget 4,98 kB gzip**, **`npm audit --omit=dev` : 0 vulnérabilité**. Vérifié sur un build de production local : en-têtes de sécurité identiques (CSP, HSTS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy sur les pages ; absents du widget), widget en CORS `*` avec son cache, `/api/chatbots` → 401 `private, no-store`, `/`, `/sign-in`, docs, sitemap, robots, `opengraph-image` → 200, titre de `/sign-in` correct, et **plus aucun défilement horizontal sur `/` et `/pricing` à 390 px** (`scrollWidth` 390). **À re-vérifier après déploiement.**
 
