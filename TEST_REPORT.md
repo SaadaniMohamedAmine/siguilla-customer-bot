@@ -397,7 +397,29 @@ La note du projet disait Stripe « non configuré » : **c'est faux, il l'est** 
 | `POST /api/billing/checkout` (`pro`, `team`) sur la prod | ✅ 200, session Stripe Checkout `cs_test_…` créée (variables Vercel présentes) ; `bogus` → 400 `invalid_plan` |
 | `POST /api/billing/portal` (`test1`) | ✅ 200, URL `billing.stripe.com` |
 26. **Le compte Stripe de test est partagé avec 7 autres projets** (8 webhooks, 5 abonnements actifs hors Sigilla probable) : chaque événement de test d'un autre projet ne touche pas Sigilla (URLs distinctes), mais les listes du tableau de bord Stripe mélangent les projets. **Le portail n'autorise pas le changement d'offre** : à activer (Stripe → Réglages → Facturation → Portail client → « Les clients peuvent changer d'offre », avec Sigilla Pro et Sigilla Team) si Pro ↔ Team doit marcher depuis le portail. *Priorité : moyenne.*
-**Non testé :** le cycle complet (paiement avec la carte de test, mise à niveau de l'offre par webhook, résiliation, idempotence) : à faire à la main.
+#### Cycle de paiement réel en mode test (2026-10-23, `test2`, Chrome piloté par script sur la page Stripe, carte `4242 4242 4242 4242`)
+| Étape | Résultat |
+|---|---|
+| Avant | `test2` en Free : « 1 of 1 agents » |
+| `POST /api/billing/checkout` (`pro`) puis paiement sur la page Stripe (« S'abonner à Sigilla Pro, 12,00 $US par mois ») | ✅ retour sur l'application après paiement |
+| Stripe après paiement | ✅ client créé, abonnement **active / 12 $**, événements `checkout.session.completed`, `customer.subscription.created` |
+| Webhook en prod → application | ✅ `test2` passe à **« 1 of 5 agents »** (offre Pro appliquée en moins de 10 s) |
+| Portail pour l'abonné Pro (page Stripe lue après chargement complet) | ✅ « Sigilla Pro, 12,00 $US par mois », prochaine facturation le 23 novembre 2026, Visa •••• 4242, « Annuler l'abonnement », historique « Payée » ; ❌ **aucun bouton pour changer d'offre** |
+| `POST /api/billing/checkout` (`team`) pour un abonné actif | renvoie vers le portail (`billing.stripe.com`) : **l'utilisateur ne peut donc pas passer de Pro à Team** |
+**Remarque 26 confirmée : le passage Pro → Team est impossible depuis le portail** (`subscription_update` désactivé dans la configuration par défaut du portail du compte). **Branding :** la page de paiement et le portail s'affichent au nom de « environnement de test **Pulse AI Code** » (nom d'entreprise du compte Stripe, partagé avec d'autres projets), pas « Sigilla ».
+**Non testé :** résiliation et retour en Free (événement `customer.subscription.deleted`), idempotence du webhook (rejeu d'un même événement), changement Pro ↔ Team (impossible tant que la remarque 26 n'est pas traitée). L'abonnement de test de `test2` est **volontairement laissé actif** pour ces tests ; à résilier à la clôture.
+
+### Q — API publique v1 avec clé valide (2026-10-23, `<PROD>`, `test1` Free et `test2` Pro)
+| Contrôle | Résultat |
+|---|---|
+| Création de clé avec `test1` (Free) | ✅ 403 `api_requires_pro` |
+| Création de clé avec `test2` (Pro) | ✅ 200, clé `sk_live_…` |
+| `GET /api/v1/bots` avec la clé | ✅ 200, liste les agents de l'organisation de `test2` uniquement |
+| `POST /api/v1/chat` (`stream: false`) | ✅ 200, « The Candle Rouge costs 12 euros [1]. » avec citation |
+| `GET /api/v1/conversations?botId=…`, `GET /api/v1/conversations/[id]` | ✅ 200, la conversation créée par l'API y figure avec ses messages |
+| **Isolation** : chat et conversations sur le bot de `test1` avec la clé de `test2` | ✅ 404 `not_found` (aucune fuite entre organisations) |
+| Révocation (`DELETE /api/keys?id=`) puis nouvel appel avec la même clé | ✅ 200 puis 401 `invalid_api_key` |
+**Q : ✅.** (Les quotas de messages par offre et le limiteur de débit de l'API v1 n'ont pas été testés.)
 
 ### Dépendances — `npm audit` (2026-10-22)
 23. **Next.js `16.4.0` (version installée) est signalé par `npm audit --omit=dev` comme vulnérable** : plage affectée `16.0.0 – 16.4.0`, correctif `16.4.2` (mise à jour mineure, non majeure). Avis : exécution de code à distance non authentifiée dans l'API d'optimisation d'images avec des SVG (critique, GHSA-2464-fhr4-w9xw), exécution de code à distance dans les fonctions `use cache` renvoyant des tableaux typés (critique, GHSA-673q-mjm6-r5xr), déni de service avec les Server Actions de l'App Router (élevé, GHSA-p3m5-59mp-jv5r). **Effet immédiat constaté :** `next build` en local s'arrête sur ce contrôle de sécurité (il passait plus tôt dans la journée), ce qui bloque la vérification locale des correctifs ci-dessus ; le build Vercel risque la même chose. **Exposition réelle du projet non évaluée** (usage de `use cache`, des images SVG optimisées et des Server Actions à vérifier). *Priorité : haute (sécurité + déploiement).* **Traité (2026-10-22, sur la branche de reporting, à la demande de l'utilisateur) : `next` et `eslint-config-next` passés de `16.4.0` à `16.4.2`**, versions exactes, seuls paquets modifiés dans le lockfile (cœur, binaires par plateforme, config ESLint). Exposition relue dans le code : aucun `use cache`, aucun `next/image` ni configuration d'images, une seule Server Action (`lib/actions/locale.ts`, changement de langue) ; l'exposition réelle paraît limitée, sans garantie (le point d'optimisation d'images existe par défaut). Contrôles : `eslint` 0 erreur (1 avertissement `_request` inutilisé), `typecheck` OK, **223 tests OK**, **`npm run build` OK** (le contrôle de sécurité ne bloque plus), **widget 4,98 kB gzip**, **`npm audit --omit=dev` : 0 vulnérabilité**. Vérifié sur un build de production local : en-têtes de sécurité identiques (CSP, HSTS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy sur les pages ; absents du widget), widget en CORS `*` avec son cache, `/api/chatbots` → 401 `private, no-store`, `/`, `/sign-in`, docs, sitemap, robots, `opengraph-image` → 200, titre de `/sign-in` correct, et **plus aucun défilement horizontal sur `/` et `/pricing` à 390 px** (`scrollWidth` 390). **À re-vérifier après déploiement.**
