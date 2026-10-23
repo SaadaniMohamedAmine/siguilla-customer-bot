@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getStripe } from "@/lib/stripe/client";
+import { getStripe, portalConfiguration } from "@/lib/stripe/client";
 import { requireOrgApi, toErrorResponse, HttpError } from "@/lib/session";
 
 export async function POST(_request: NextRequest) {
@@ -10,6 +10,7 @@ export async function POST(_request: NextRequest) {
     const stripe = getStripe();
     const portal = await stripe.billingPortal.sessions.create({
       customer: org.stripeCustomerId,
+      ...portalConfiguration(),
       return_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings?tab=billing`,
     });
     return NextResponse.json({ data: { url: portal.url } });
