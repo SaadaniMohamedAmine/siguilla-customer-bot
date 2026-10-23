@@ -435,6 +435,33 @@ Configuration de portail **dédiée à Sigilla** créée dans Stripe (`bpc_1UToo
 | Révocation (`DELETE /api/keys?id=`) puis nouvel appel avec la même clé | ✅ 200 puis 401 `invalid_api_key` |
 **Q : ✅.** (Les quotas de messages par offre et le limiteur de débit de l'API v1 n'ont pas été testés.)
 
+### Couverture réelle par rapport au plan 9B (216 tests, recomptage du 2026-10-23 avec le fichier de référence)
+Les pourcentages annoncés jusqu'ici (jusqu'à « 80 % ») étaient une **estimation faite sans le plan** et étaient trop optimistes. Recomptage : un test compte comme « testé » s'il figure dans ce rapport (ou validé par l'utilisateur pour les familles M, N, O, R, S1, T, U2).
+| Section | Testés | Non testés (identifiants du plan) |
+|---|---|---|
+| A (6) | A1, A2 | A3 (e2e sur la prod, P0), A4, A5, A6 |
+| B (15) | B1, B2, B5, B7, B11, B15 | B3, B4, B6 (P0), B8, B9, B10, B12, B13, B14 |
+| C (7) | — | C1 à C7 (C1, C2, C5, C7 : P0) |
+| D (7) | — | D1 à D7 (D6 : P0) |
+| E (2) | E1, E2 (contenu relu) | — |
+| F (15) | F5, F8 (partiel), F10, F12 | F1 (P0), F2, F3, F4, F6, F7 (P0), F9, F11, F13, F14 (P0), F15 |
+| G (8) | G7 | G1 (P0), G2, G3, G4 (P0), G5, G6, G8 |
+| H (8) | H1 à H5 | H6, H7 (bloqué à l'origine par le limiteur), H8 |
+| I (10) | I6 (UI), I8 | I1 (P0), I2, I3, I4, I5, I7, I9, I10 |
+| J (18) | J2 (partiel), J5, J8, J14, J16 | J1 (P0), J3, J4, J6, J7, J9 à J13, J15 (P0), J17, J18 |
+| K (13) | K5, K6, K13 | K1 (P0), K2 (P0), K3, K4, K7, K8 (P0, local), K9 à K12 |
+| L (23) | L1 à L6, L19 à L22 | L7 (P0), L8, L9 (P0), L10 (P0), L11, L12, L13 (P0), L14 (P0), L15, L16, L17, L18, L23 |
+| M, N, O, R (6 + 10 + 6 + 6) | tous (validés par l'utilisateur) | — |
+| P (10) | P1, P2, P3, P5, P10 | P4 (idempotence), P6, P7, P8 (P0), P9 |
+| Q (9) | Q2, Q3, Q5, Q7 | Q1, Q4, Q6, Q8, Q9 |
+| S (5) | S1, S3 | S2, S4, S5 |
+| T (3), W (7) | tous | — |
+| U (5) | U1, U2, U4, U5 (partiel) | U3 (NVDA) |
+| V (5) | V1 à V5 évalués (V3 ✅, V1/V2/V5 ❌ acceptés, V4 partiel) | — |
+| X (7) | X5, X7 | X1 (P0), X2, X3, X4, X6 (P0) |
+| Y (5) | Y2, Y5 | Y1, Y3, Y4 |
+**Bilan : environ 102 tests sur 216 évalués (≈ 47 %), dont environ 95 réussis (≈ 44 %).** Le verdict GO n'est pas atteignable tant que les tests P0/P1 non testés ci-dessus ne sont pas passés. Les sections B à L et X à Y concentrent l'essentiel du reste.
+
 ### Dépendances — `npm audit` (2026-10-22)
 23. **Next.js `16.4.0` (version installée) est signalé par `npm audit --omit=dev` comme vulnérable** : plage affectée `16.0.0 – 16.4.0`, correctif `16.4.2` (mise à jour mineure, non majeure). Avis : exécution de code à distance non authentifiée dans l'API d'optimisation d'images avec des SVG (critique, GHSA-2464-fhr4-w9xw), exécution de code à distance dans les fonctions `use cache` renvoyant des tableaux typés (critique, GHSA-673q-mjm6-r5xr), déni de service avec les Server Actions de l'App Router (élevé, GHSA-p3m5-59mp-jv5r). **Effet immédiat constaté :** `next build` en local s'arrête sur ce contrôle de sécurité (il passait plus tôt dans la journée), ce qui bloque la vérification locale des correctifs ci-dessus ; le build Vercel risque la même chose. **Exposition réelle du projet non évaluée** (usage de `use cache`, des images SVG optimisées et des Server Actions à vérifier). *Priorité : haute (sécurité + déploiement).* **Traité (2026-10-22, sur la branche de reporting, à la demande de l'utilisateur) : `next` et `eslint-config-next` passés de `16.4.0` à `16.4.2`**, versions exactes, seuls paquets modifiés dans le lockfile (cœur, binaires par plateforme, config ESLint). Exposition relue dans le code : aucun `use cache`, aucun `next/image` ni configuration d'images, une seule Server Action (`lib/actions/locale.ts`, changement de langue) ; l'exposition réelle paraît limitée, sans garantie (le point d'optimisation d'images existe par défaut). Contrôles : `eslint` 0 erreur (1 avertissement `_request` inutilisé), `typecheck` OK, **223 tests OK**, **`npm run build` OK** (le contrôle de sécurité ne bloque plus), **widget 4,98 kB gzip**, **`npm audit --omit=dev` : 0 vulnérabilité**. Vérifié sur un build de production local : en-têtes de sécurité identiques (CSP, HSTS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy sur les pages ; absents du widget), widget en CORS `*` avec son cache, `/api/chatbots` → 401 `private, no-store`, `/`, `/sign-in`, docs, sitemap, robots, `opengraph-image` → 200, titre de `/sign-in` correct, et **plus aucun défilement horizontal sur `/` et `/pricing` à 390 px** (`scrollWidth` 390). **À re-vérifier après déploiement.**
 
