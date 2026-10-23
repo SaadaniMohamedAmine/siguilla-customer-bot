@@ -472,6 +472,10 @@
       {
         "q": "Can I remove the “Sealed by Sigilla” badge?",
         "a": "Yes, on Pro and Team."
+      },
+      {
+        "q": "Is this a real product?",
+        "a": "Sigilla is a portfolio project, built to show how a sealed-answer support agent works. Everything you see is real and working, but payments run in Stripe test mode: no real card is ever charged."
       }
     ]
   },

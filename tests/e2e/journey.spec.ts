@@ -21,7 +21,8 @@ test("full journey: sign-up -> wizard -> upload -> widget -> handoff -> resolve"
   await expect(page).toHaveURL(/step=2/, { timeout: 10_000 });
 
   // Upload du PDF de test (2 pages, contenu shipping Atelier Lune)
-  await page.getByRole("button", { name: /add source/i }).click();
+  // L'état vide et l'en-tête proposent chacun un bouton « Add source » : on prend le premier.
+  await page.getByRole("button", { name: /add source/i }).first().click();
   const fileInput = page.locator('input[type="file"]').first();
   await fileInput.setInputFiles(path.join(process.cwd(), "tests/fixtures/atelier-shipping.pdf"));
   await expect(page.getByText(/ready/i)).toBeVisible({ timeout: 60_000 });
@@ -49,10 +50,11 @@ test("full journey: sign-up -> wizard -> upload -> widget -> handoff -> resolve"
     await page.keyboard.press("Enter");
     await page.waitForTimeout(3000);
   }
-  const emailInput = page.locator('input[type="email"]');
+  // Chaque repli affiche sa carte « Talk to a human » : après deux questions hors sujet il y a deux champs, on prend le dernier.
+  const emailInput = page.locator('input[type="email"]').last();
   await expect(emailInput).toBeVisible({ timeout: 10_000 });
   await emailInput.fill("visitor@example.com");
-  await page.getByRole("button", { name: /talk to a human/i }).click();
+  await page.getByRole("button", { name: /talk to a human/i }).last().click();
 
   // Retour dashboard : badge de handoff, take over, réponse visible dans le widget
   await page.goto("/conversations");

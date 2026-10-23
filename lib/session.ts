@@ -1,6 +1,7 @@
 import "server-only";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { ZodError } from "zod";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
@@ -54,6 +55,8 @@ export async function requireOrgApi(opts?: { write?: boolean }) {
 
 export function toErrorResponse(error: unknown) {
   if (error instanceof HttpError) return Response.json({ error: error.message }, { status: error.status });
+  // Corps de requête invalide (Zod) : erreur du client, pas du serveur.
+  if (error instanceof ZodError) return Response.json({ error: "invalid_request" }, { status: 400 });
   console.error("[api]", error);
   return Response.json({ error: "Internal error" }, { status: 500 });
 }

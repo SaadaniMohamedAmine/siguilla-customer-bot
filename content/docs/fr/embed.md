@@ -14,7 +14,7 @@ Pour la sécurité, indiquez les domaines sur lesquels votre widget peut appara�
 
 ## Mise en cache
 
-La configuration du widget est mise en cache pendant 60 secondes. Les changements que vous publiez depuis le designer de widget peuvent prendre jusqu'à une minute pour atteindre les visiteurs déjà présents sur votre site.
+La configuration du widget est mise en cache pendant 60 secondes, puis actualisée en arrière-plan pendant 10 minutes au maximum. Les changements que vous publiez depuis le designer de widget apparaissent en général en une minute, et au plus en une dizaine de minutes, pour les visiteurs déjà présents sur votre site.
 
 > **Astuce** — rechargez la page au bout d'une minute pour voir vos derniers changements.
 

@@ -409,6 +409,20 @@ La note du projet disait Stripe « non configuré » : **c'est faux, il l'est** 
 **Remarque 26 confirmée : le passage Pro → Team est impossible depuis le portail** (`subscription_update` désactivé dans la configuration par défaut du portail du compte). **Branding :** la page de paiement et le portail s'affichent au nom de « environnement de test **Pulse AI Code** » (nom d'entreprise du compte Stripe, partagé avec d'autres projets), pas « Sigilla ».
 **Non testé :** résiliation et retour en Free (événement `customer.subscription.deleted`), idempotence du webhook (rejeu d'un même événement), changement Pro ↔ Team (impossible tant que la remarque 26 n'est pas traitée). L'abonnement de test de `test2` est **volontairement laissé actif** pour ces tests ; à résilier à la clôture.
 
+#### Correctif de la remarque 26 et fin du cycle (2026-10-23, `<PROD>` après déploiement de `c124b91`, `test2`)
+Configuration de portail **dédiée à Sigilla** créée dans Stripe (`bpc_1UTooFLk…`, métadonnée `project: sigilla`) : mêmes réglages que le portail par défaut + changement d'offre entre Pro et Team (prorata) ; **le portail par défaut du compte n'a pas été modifié** (toujours par défaut, toujours sans changement d'offre, 1 → 2 configurations). Les routes `checkout` et `portal` la passent via `STRIPE_PORTAL_CONFIG_ID` (variable ajoutée dans Vercel, Production, non sensible ; sans elle, repli sur le portail par défaut).
+| Étape | Résultat |
+|---|---|
+| Portail d'un abonné Pro | ✅ titre « Sigilla — manage your plan » (configuration dédiée utilisée) et bouton **« Modifier l'abonnement »** (absent avant) ; page « Mettre à jour votre abonnement » : Sigilla Pro (actuel) 12 $ et Sigilla Team 39 $ |
+| Sélection de Team, confirmation (« Ce que vous paierez tous les mois : 39,00 $US ») | ✅ portail : « Sigilla Team 39,00 $US par mois » |
+| Après la bascule | ✅ Stripe : abonnement **active / 39 $** ; application : **« 1 of 15 agents »** (offre Team appliquée par le webhook) |
+| Résiliation depuis le portail (« Annuler l'abonnement ») | ✅ « Annulation le 23 nov., votre service prendra fin le 23 novembre 2026 » ; l'application **reste en Team** (« 1 of 15 agents »), comme attendu jusqu'à la fin de la période |
+| Résiliation immédiate (API Stripe) → `customer.subscription.deleted` | ✅ Stripe : canceled ; application : **retour en Free** (« 1 of 1 agents ») |
+| Webhook sans signature / signature invalide | ✅ 400 `Missing signature` / 400 `Invalid signature` |
+**Remarque 26 : ✅ corrigée et vérifiée en prod** (Pro → Team possible, Team → résiliation → Free). **P : ✅ sur le cycle complet** (paiement, mise à niveau, changement d'offre, résiliation en fin de période, résiliation immédiate).
+**Limites :** (1) **idempotence du webhook non testée en bout en bout** : le `STRIPE_WEBHOOK_SECRET` local diffère de celui de Vercel (un événement signé localement est refusé en 400), donc impossible de rejouer le même événement ; elle repose sur le code (`stripeEvent.create` avec l'identifiant de l'événement en clé : un doublon répond `200 {duplicate: true}` sans retraiter). (2) Un événement dont le traitement échoue est quand même marqué traité (l'enregistrement précède le traitement et l'erreur est avalée) : un échec transitoire ne serait pas rejoué. (3) L'abonnement de `test2` est résilié, `test2` est de nouveau en **Free** (état initial restauré) ; le client Stripe de test et ses factures restent dans le compte de test partagé.
+27. **Le traitement du webhook n'est pas rejouable après un échec** : `app/api/webhooks/stripe/route.ts` crée la ligne `StripeEvent` avant le traitement puis répond toujours 200, même si le traitement échoue (erreur seulement journalisée). Une panne passagère de la base pendant un paiement laisserait l'organisation en Free sans nouvelle tentative de Stripe. *Priorité : moyenne.*
+
 ### Q — API publique v1 avec clé valide (2026-10-23, `<PROD>`, `test1` Free et `test2` Pro)
 | Contrôle | Résultat |
 |---|---|
@@ -420,6 +434,86 @@ La note du projet disait Stripe « non configuré » : **c'est faux, il l'est** 
 | **Isolation** : chat et conversations sur le bot de `test1` avec la clé de `test2` | ✅ 404 `not_found` (aucune fuite entre organisations) |
 | Révocation (`DELETE /api/keys?id=`) puis nouvel appel avec la même clé | ✅ 200 puis 401 `invalid_api_key` |
 **Q : ✅.** (Les quotas de messages par offre et le limiteur de débit de l'API v1 n'ont pas été testés.)
+
+### Couverture réelle par rapport au plan 9B (216 tests, recomptage du 2026-10-23 avec le fichier de référence)
+Les pourcentages annoncés jusqu'ici (jusqu'à « 80 % ») étaient une **estimation faite sans le plan** et étaient trop optimistes. Recomptage : un test compte comme « testé » s'il figure dans ce rapport (ou validé par l'utilisateur pour les familles M, N, O, R, S1, T, U2).
+| Section | Testés | Non testés (identifiants du plan) |
+|---|---|---|
+| A (6) | A1, A2 | A3 (e2e sur la prod, P0), A4, A5, A6 |
+| B (15) | B1, B2, B5, B7, B11, B15 | B3, B4, B6 (P0), B8, B9, B10, B12, B13, B14 |
+| C (7) | — | C1 à C7 (C1, C2, C5, C7 : P0) |
+| D (7) | — | D1 à D7 (D6 : P0) |
+| E (2) | E1, E2 (contenu relu) | — |
+| F (15) | F5, F8 (partiel), F10, F12 | F1 (P0), F2, F3, F4, F6, F7 (P0), F9, F11, F13, F14 (P0), F15 |
+| G (8) | G7 | G1 (P0), G2, G3, G4 (P0), G5, G6, G8 |
+| H (8) | H1 à H5 | H6, H7 (bloqué à l'origine par le limiteur), H8 |
+| I (10) | I6 (UI), I8 | I1 (P0), I2, I3, I4, I5, I7, I9, I10 |
+| J (18) | J2 (partiel), J5, J8, J14, J16 | J1 (P0), J3, J4, J6, J7, J9 à J13, J15 (P0), J17, J18 |
+| K (13) | K5, K6, K13 | K1 (P0), K2 (P0), K3, K4, K7, K8 (P0, local), K9 à K12 |
+| L (23) | L1 à L6, L19 à L22 | L7 (P0), L8, L9 (P0), L10 (P0), L11, L12, L13 (P0), L14 (P0), L15, L16, L17, L18, L23 |
+| M, N, O, R (6 + 10 + 6 + 6) | tous (validés par l'utilisateur) | — |
+| P (10) | P1, P2, P3, P5, P10 | P4 (idempotence), P6, P7, P8 (P0), P9 |
+| Q (9) | Q2, Q3, Q5, Q7 | Q1, Q4, Q6, Q8, Q9 |
+| S (5) | S1, S3 | S2, S4, S5 |
+| T (3), W (7) | tous | — |
+| U (5) | U1, U2, U4, U5 (partiel) | U3 (NVDA) |
+| V (5) | V1 à V5 évalués (V3 ✅, V1/V2/V5 ❌ acceptés, V4 partiel) | — |
+| X (7) | X5, X7 | X1 (P0), X2, X3, X4, X6 (P0) |
+| Y (5) | Y2, Y5 | Y1, Y3, Y4 |
+**Bilan : environ 102 tests sur 216 évalués (≈ 47 %), dont environ 95 réussis (≈ 44 %).** Le verdict GO n'est pas atteignable tant que les tests P0/P1 non testés ci-dessus ne sont pas passés. Les sections B à L et X à Y concentrent l'essentiel du reste.
+
+### Bloc de tests C, D, Y, J, K, L, P, Q (2026-10-23, `<PROD>`, scripts jetables ; écritures uniquement sur l'organisation `test2`, plan Pro simulé par la base puis remis en Free, jamais la démo)
+| ID | Statut | Preuve |
+|---|---|---|
+| C1, C2 | ✅ | Free 0 $, Pro 12 $ (« Most chosen »), Team 39 $ ; tableau comparatif identique à `PLAN_LIMITS` (agents 1/5/15, sources 5/25/50, membres 1/3/10) |
+| C4 | ✅ | déconnecté : `router.push("/sign-up?plan=<id>")` (code) ; C5 : session de Checkout créée pour un owner connecté (voir billing) |
+| C6 | ✅ après correctif | l'entrée FAQ « Is this a real product? » (projet de portfolio, Stripe en mode test) manquait : ajoutée EN/FR (`8ee4506`) |
+| C7 | ✅ | aucun `trial`, `SLA`, `VPC`, `webhook(s)`, `99.8` dans `Home`, `Pricing`, `HomeVisuals` (EN et FR) |
+| D1, D5, D7 | ✅ | 10 pages docs en FR (`lang="fr"`, titres traduits) ; `/docs/xyz` → 404 |
+| D2 | ✅ | recherche ouverte au clavier (Ctrl+K) et au clic ; Entrée ouvre la page, Échap ferme ; liste des résultats non relevée précisément |
+| D3 | ❌ → corrigé | **4 liens de « On this page » de `/docs/api` pointaient vers `#object-object`** (id calculé par `String(children)` sur un titre contenant du code : les 5 titres de l'API avaient le même id). Corrigé (`88bdcbd`) ; vérifié sur un build local : 6 ids uniques, tous les liens résolus. **À re-tester après déploiement** |
+| D6 | ⚠️ → corrigé | nombres de la doc contre le code : 6 chunks (`TOP_K`), PDF 10 Mo, 2 replis avant handoff, 60 s de cache config, < 5 Ko, forme des erreurs : conformes ; **le délai de propagation « une minute » était faux** (stale-while-revalidate 600 s) : doc EN/FR corrigée (`b8f7c93`) |
+| D4 | ⏳ | test de copie non concluant (le script a cliqué le bouton « copier le lien » du titre) : à refaire |
+| Y1 | ✅ | `/`, `/pricing`, `/docs/getting-started` : `og:title`, `og:description`, `og:type`, `og:url`, image PNG **1200×630** servie en 200, `twitter:card` et `twitter:image` |
+| Y3 | ✅ | un bloc JSON-LD `SoftwareApplication`, JSON valide, `@context` schema.org (seul `name` présent, pas d'`url`) |
+| Y4 | ✅ | `/favicon.ico`, `/icon` (32×32), `/apple-icon` (180×180), `/manifest.webmanifest` valide (`display: standalone`, 2 icônes, `theme_color`) ; pas de `start_url` |
+| J1, J2 | ✅ | PDF 2 pages → ready, 2 chunks ; PDF 35 pages → ready, 35 pages, 35 chunks |
+| J3 | ✅ | PDF de 11 Mo refusé à l'émission du jeton Blob (« File is too large… 10485760 bytes ») |
+| J4 | ✅ | faux PDF (octets `MZ…`) → source `failed`, erreur `processing_failed`, aucun plantage (message affiché brut côté API) |
+| J15 | ✅ | 5e source acceptée, 6e refusée (403 `sources_limit`, côté client : « Failed to retrieve the client token ») |
+| J7 | ❌ → corrigé | `POST …/sources {type:"url", url:"pas-une-url"}` → **500 Internal error**. Cause : `toErrorResponse` traitait toute erreur Zod comme une panne. Corrigé pour **toutes** les routes (400 `invalid_request`), et la route sources répond `400 invalid_url` (`0d03c8b`). URL injoignable non retestée (limite de sources atteinte) |
+| J14, J17 | ✅ | source supprimée : blob en 404 ; 0 chunk sans embedding dans toute la base |
+| K1 | ✅ | « The Candle Rouge costs 12 euros [1]. », 1 citation (`xss-test.pdf`, p.1), fournisseur Groq |
+| K2 | ✅ | « What's the weather in Paris? » : repli, score 0,51 < 0,75, `provider: null` (aucun appel au modèle) |
+| K3 | ✅ (avec réserve) | à 0,75 la question française est refusée (score 0,55-0,60) ; à 0,50 : « La bougie Candle Rouge coûte 12 euros [1]. » (réponse en français, citation conservée) |
+| K4 | ✅ (avec réserve) | suites « And how long does shipping take? » / « What about its delivery time? » répondues à 0,50 (score 0,61-0,64) ; à 0,75 elles tombent en repli ; la recherche n'utilise pas l'historique (score identique avec ou sans) |
+| K9 | ✅ | 1 200 caractères → 400 `invalid_request` (le plan attendait `too_long` ; le widget/API public bornent à 1 000 caractères avant `answer()`) |
+28. **Seuil par défaut de 0,75 trop haut pour des formulations naturelles** : une question en français sur une source anglaise (0,55-0,60), une question de suivi courte (0,61-0,64) ou une paraphrase passent sous le seuil et reçoivent le repli, alors que le Playground à 0,50 répond correctement. Réglable par agent. *Priorité : moyenne (qualité perçue).*
+| L7, L8 | ✅ | 2 replis d'affilée : `handoffSuggested: true`, statut `handoff_requested` en base sans clic, `pending-count` du dashboard = 2 ; `POST /handoff` avec email → `visitorEmail` enregistré |
+| L10 | ✅ | `messageCount = 2000/2000` : le chat public émet l'événement d'erreur `quota_exceeded` (que le widget affiche en « resting ») |
+| P8 | ✅ | à 1 800/2 000 : « You've used 90% of this month's messages » ; à 2 000 : `/api/v1/chat` → 429 `quota_exceeded` |
+| P9 | ✅ | `usagePeriodStart` au mois précédent : la requête passe, compteur remis à 1, période 2026-10 |
+| P7 | ❌ | Pro → Free avec 3 agents : **rien n'est supprimé** (✅), création d'un 4e agent → 403 `agents_limit` (✅), compteur « 3 of 1 agents » ; **mais aucun bandeau « agents paused » et aucun blocage du widget des agents en excès** : le code ne contient que le texte « Over your plan limit » sur les barres d'usage. Écart avec le plan |
+| Q1 | ✅ | clé `sk_live_…` montrée à la création, la liste n'expose que le début `sk_liv` |
+| Q4 | ✅ | `stream: true` : `text/event-stream`, `meta` → `token` → `done` (12 événements) |
+| Q8 | ❌ → corrigé | **une clé valide répondait 401 `invalid_api_key` dès la 8e-11e requête** (7 réponses 200 puis 57 réponses 401 sur 64 appels) : le plugin de clés d'API de Better Auth limite par défaut à **10 requêtes par 24 h par clé** ; notre limiteur de 60 par minute n'était jamais atteint et la doc promettait autre chose. Désactivé (`rateLimit: { enabled: false }`, `d5b8200`) ; aucune clé existante en base. **À re-tester après déploiement (attendu : 429 `rate_limited` après 60 appels)** |
+| Q9 | ✅ / ⏳ | 400 : `{ error: { code: "invalid_request", message } }` ; format du 429 à revérifier après correctif |
+29. **Les routes `/api/chatbots/*` renvoyaient 500 pour tout corps invalide** (erreur Zod) : corrigé globalement dans `toErrorResponse` (400 `invalid_request`).
+
+### Suite du bloc : A, X, D4, J7, R5 (2026-10-24, `<PROD>`)
+| ID | Statut | Preuve |
+|---|---|---|
+| A3 | ✅ | e2e contre la prod : `landing` (desktop + mobile), `demo`, `tenancy` (2 tests) : 5/5 ; `a11y` : 18/18 (voir U1) ; `journey` (inscription → wizard → PDF → widget → handoff) : ✅ après correction du test (deux champs « Talk to a human » et deux boutons « Add source » rendaient les sélecteurs ambigus, `.last()` / `.first()`). `billing.spec.ts` non lancé : le cycle Stripe a été fait en réel (voir P). `widget-third-party` non lancé (demande la page tierce sur `localhost:4321`) |
+| A4 | ✅ | les checks GitHub des PR #1 à #23 (workflow `CI`) se sont exécutés et sont passés (confirmé par l'utilisateur à chaque merge) |
+| A5 | ✅ après ajout de tests | couverture avant : `lib/ingestion` 36 %, `lib/public` 42 % ; après 6 fichiers de tests (guards, store, pdf, trigger, pipeline, Notion, CORS) : **`lib/rag` 82,7 %, `lib/ingestion` 88 %, `lib/billing` 84 %, `lib/public` 100 %, `rate-limit.ts` 80 %** ; global 52,6 % ; **267 tests** (avant : 223) |
+| A6 | ❌ | JS chargé par `/` en prod (somme des scripts, compressé) : **283 Ko gzip / 247 Ko brotli** pour un objectif < 130 Ko ; `/pricing` 282 Ko, `/sign-in` 294 Ko, docs 288 Ko. Next 16 n'affiche plus « First Load JS » dans la sortie du build |
+| X5, X6 | ✅ | pas de `vercel.json` ni de cron ; services : Vercel, Neon, Groq, Gemini, Stripe (test), Notion, Vercel Blob uniquement (aucun Upstash, Redis, Sentry, e-mailing, etc.) |
+| X4 | ⚠️ | Notion est configuré en prod (`NOTION_CLIENT_ID/SECRET`) ; si la variable manquait, `/api/notion/connect` construirait l'URL avec `client_id=undefined` sans message clair (cas non atteignable en prod) |
+| D4 | ⚠️ | boutons « copier » : `/docs/api` 4/4 blocs copiés à l'identique ; `/docs/embed` 1/2 (clic automatisé sans effet sur le 2e bloc) : à confirmer à la main |
+| J7 | ✅ | domaine inexistant → 400 `invalid_url` (refusé dès la création, résolution DNS) ; page 404 → source `failed`, erreur `no_content`, en 5 s |
+| R5 (partiel) | ✅ | 11 comptes `e2e+…@example.com` (créés par `journey`) supprimés par la vraie fonction « supprimer mon compte » (`/api/auth/delete-user`) : utilisateur, organisation, agents et conversations tous à 0 ensuite ; base propre (0 compte e2e, 0 organisation « E2E… »). Suppression du blob d'un PDF non vérifiée dans ce cas (ces comptes n'avaient pas de source) |
+30. **Deux cartes « Talk to a human » empilées** après deux réponses de repli successives (une par repli) : probablement voulu, mais redondant à l'écran. *Priorité : basse.*
+31. **JS de première charge ≈ 283 Ko gzip sur toutes les pages publiques** (2 fois l'objectif du plan) : framework + bibliothèques (toasts, requêtes, Radix, icônes, i18n) chargés partout ; pistes : chargements différés des composants hors écran, messages i18n par page. *Priorité : moyenne (rejoint V1/V2 et la remarque 17).*
 
 ### Dépendances — `npm audit` (2026-10-22)
 23. **Next.js `16.4.0` (version installée) est signalé par `npm audit --omit=dev` comme vulnérable** : plage affectée `16.0.0 – 16.4.0`, correctif `16.4.2` (mise à jour mineure, non majeure). Avis : exécution de code à distance non authentifiée dans l'API d'optimisation d'images avec des SVG (critique, GHSA-2464-fhr4-w9xw), exécution de code à distance dans les fonctions `use cache` renvoyant des tableaux typés (critique, GHSA-673q-mjm6-r5xr), déni de service avec les Server Actions de l'App Router (élevé, GHSA-p3m5-59mp-jv5r). **Effet immédiat constaté :** `next build` en local s'arrête sur ce contrôle de sécurité (il passait plus tôt dans la journée), ce qui bloque la vérification locale des correctifs ci-dessus ; le build Vercel risque la même chose. **Exposition réelle du projet non évaluée** (usage de `use cache`, des images SVG optimisées et des Server Actions à vérifier). *Priorité : haute (sécurité + déploiement).* **Traité (2026-10-22, sur la branche de reporting, à la demande de l'utilisateur) : `next` et `eslint-config-next` passés de `16.4.0` à `16.4.2`**, versions exactes, seuls paquets modifiés dans le lockfile (cœur, binaires par plateforme, config ESLint). Exposition relue dans le code : aucun `use cache`, aucun `next/image` ni configuration d'images, une seule Server Action (`lib/actions/locale.ts`, changement de langue) ; l'exposition réelle paraît limitée, sans garantie (le point d'optimisation d'images existe par défaut). Contrôles : `eslint` 0 erreur (1 avertissement `_request` inutilisé), `typecheck` OK, **223 tests OK**, **`npm run build` OK** (le contrôle de sécurité ne bloque plus), **widget 4,98 kB gzip**, **`npm audit --omit=dev` : 0 vulnérabilité**. Vérifié sur un build de production local : en-têtes de sécurité identiques (CSP, HSTS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy sur les pages ; absents du widget), widget en CORS `*` avec son cache, `/api/chatbots` → 401 `private, no-store`, `/`, `/sign-in`, docs, sitemap, robots, `opengraph-image` → 200, titre de `/sign-in` correct, et **plus aucun défilement horizontal sur `/` et `/pricing` à 390 px** (`scrollWidth` 390). **À re-vérifier après déploiement.**

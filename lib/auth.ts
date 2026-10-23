@@ -161,7 +161,9 @@ export const auth = betterAuth({
         },
       },
     }),
-    apiKey({ references: "organization" }),
+    // Notre propre limiteur (lib/api-auth.ts : 60 requêtes/min/clé) fait foi ; celui du plugin vaut 10 requêtes par 24 h par défaut
+    // et répondait « clé invalide » dès la 11e requête de la journée.
+    apiKey({ references: "organization", rateLimit: { enabled: false } }),
     nextCookies(), // toujours en dernier
   ],
 });

@@ -30,7 +30,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const { id } = await params;
     const { org } = await requireOrgApi({ write: true });
     const chatbot = await loadOwnedChatbot(id, org.id);
-    const body = SourceCreate.parse(await request.json());
+    const raw = await request.json().catch(() => null);
+    // Une URL qui n’en est pas une est une `invalid_url` (même code que les URL internes refusées), pas une erreur de forme.
+    if (raw?.type === "url" && (typeof raw.url !== "string" || !normalizeUrl(raw.url)))
+      return Response.json({ error: "invalid_url" }, { status: 400 });
+    const body = SourceCreate.parse(raw);
 
     try {
       await assertCanAddSource(org.id, chatbot.id, body.type);

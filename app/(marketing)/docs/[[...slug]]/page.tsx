@@ -1,3 +1,4 @@
+import { isValidElement } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Markdown from "react-markdown";
@@ -16,6 +17,14 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@/lib/icons";
 
 export function generateStaticParams() {
   return [{ slug: [] }, ...DOCS_ORDER.map((slug) => ({ slug: [slug] }))];
+}
+
+/** Texte brut d’un titre markdown, y compris le code en ligne (`String(children)` donnait « [object Object] » et le même id pour tous ces titres). */
+function textOf(node: React.ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(textOf).join("");
+  if (isValidElement(node)) return textOf((node.props as { children?: React.ReactNode }).children);
+  return "";
 }
 
 export async function generateMetadata({ params }: PageProps<"/docs/[[...slug]]">): Promise<Metadata> {
@@ -54,12 +63,12 @@ export default async function DocsPage({ params }: PageProps<"/docs/[[...slug]]"
             components={{
               h1: (p) => <h1 className="text-h1 text-text font-serif" {...p} />,
               h2: ({ children }) => (
-                <DocHeading level={2} id={slugifyHeading(String(children))}>
+                <DocHeading level={2} id={slugifyHeading(textOf(children))}>
                   {children}
                 </DocHeading>
               ),
               h3: ({ children }) => (
-                <DocHeading level={3} id={slugifyHeading(String(children))}>
+                <DocHeading level={3} id={slugifyHeading(textOf(children))}>
                   {children}
                 </DocHeading>
               ),
