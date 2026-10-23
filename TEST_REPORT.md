@@ -409,6 +409,20 @@ La note du projet disait Stripe « non configuré » : **c'est faux, il l'est** 
 **Remarque 26 confirmée : le passage Pro → Team est impossible depuis le portail** (`subscription_update` désactivé dans la configuration par défaut du portail du compte). **Branding :** la page de paiement et le portail s'affichent au nom de « environnement de test **Pulse AI Code** » (nom d'entreprise du compte Stripe, partagé avec d'autres projets), pas « Sigilla ».
 **Non testé :** résiliation et retour en Free (événement `customer.subscription.deleted`), idempotence du webhook (rejeu d'un même événement), changement Pro ↔ Team (impossible tant que la remarque 26 n'est pas traitée). L'abonnement de test de `test2` est **volontairement laissé actif** pour ces tests ; à résilier à la clôture.
 
+#### Correctif de la remarque 26 et fin du cycle (2026-10-23, `<PROD>` après déploiement de `c124b91`, `test2`)
+Configuration de portail **dédiée à Sigilla** créée dans Stripe (`bpc_1UTooFLk…`, métadonnée `project: sigilla`) : mêmes réglages que le portail par défaut + changement d'offre entre Pro et Team (prorata) ; **le portail par défaut du compte n'a pas été modifié** (toujours par défaut, toujours sans changement d'offre, 1 → 2 configurations). Les routes `checkout` et `portal` la passent via `STRIPE_PORTAL_CONFIG_ID` (variable ajoutée dans Vercel, Production, non sensible ; sans elle, repli sur le portail par défaut).
+| Étape | Résultat |
+|---|---|
+| Portail d'un abonné Pro | ✅ titre « Sigilla — manage your plan » (configuration dédiée utilisée) et bouton **« Modifier l'abonnement »** (absent avant) ; page « Mettre à jour votre abonnement » : Sigilla Pro (actuel) 12 $ et Sigilla Team 39 $ |
+| Sélection de Team, confirmation (« Ce que vous paierez tous les mois : 39,00 $US ») | ✅ portail : « Sigilla Team 39,00 $US par mois » |
+| Après la bascule | ✅ Stripe : abonnement **active / 39 $** ; application : **« 1 of 15 agents »** (offre Team appliquée par le webhook) |
+| Résiliation depuis le portail (« Annuler l'abonnement ») | ✅ « Annulation le 23 nov., votre service prendra fin le 23 novembre 2026 » ; l'application **reste en Team** (« 1 of 15 agents »), comme attendu jusqu'à la fin de la période |
+| Résiliation immédiate (API Stripe) → `customer.subscription.deleted` | ✅ Stripe : canceled ; application : **retour en Free** (« 1 of 1 agents ») |
+| Webhook sans signature / signature invalide | ✅ 400 `Missing signature` / 400 `Invalid signature` |
+**Remarque 26 : ✅ corrigée et vérifiée en prod** (Pro → Team possible, Team → résiliation → Free). **P : ✅ sur le cycle complet** (paiement, mise à niveau, changement d'offre, résiliation en fin de période, résiliation immédiate).
+**Limites :** (1) **idempotence du webhook non testée en bout en bout** : le `STRIPE_WEBHOOK_SECRET` local diffère de celui de Vercel (un événement signé localement est refusé en 400), donc impossible de rejouer le même événement ; elle repose sur le code (`stripeEvent.create` avec l'identifiant de l'événement en clé : un doublon répond `200 {duplicate: true}` sans retraiter). (2) Un événement dont le traitement échoue est quand même marqué traité (l'enregistrement précède le traitement et l'erreur est avalée) : un échec transitoire ne serait pas rejoué. (3) L'abonnement de `test2` est résilié, `test2` est de nouveau en **Free** (état initial restauré) ; le client Stripe de test et ses factures restent dans le compte de test partagé.
+27. **Le traitement du webhook n'est pas rejouable après un échec** : `app/api/webhooks/stripe/route.ts` crée la ligne `StripeEvent` avant le traitement puis répond toujours 200, même si le traitement échoue (erreur seulement journalisée). Une panne passagère de la base pendant un paiement laisserait l'organisation en Free sans nouvelle tentative de Stripe. *Priorité : moyenne.*
+
 ### Q — API publique v1 avec clé valide (2026-10-23, `<PROD>`, `test1` Free et `test2` Pro)
 | Contrôle | Résultat |
 |---|---|
