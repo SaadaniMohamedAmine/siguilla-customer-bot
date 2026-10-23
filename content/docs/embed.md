@@ -14,7 +14,7 @@ For security, set the domains where your widget is allowed to appear (Settings o
 
 ## Caching
 
-The widget's configuration is cached for 60 seconds. Changes you publish from the Widget designer can take up to a minute to reach visitors already on your site.
+The widget's configuration is cached for 60 seconds, then refreshed in the background for up to 10 more minutes. Changes you publish from the Widget designer usually appear within a minute, and at most within about ten minutes, for visitors already on your site.
 
 > **Tip** — refresh the page after a minute to see your latest widget changes.
 
