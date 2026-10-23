@@ -6,6 +6,7 @@ import { CHAT_PER_MINUTE, CHAT_PER_DAY } from "@/lib/public/limits";
 import { answer } from "@/lib/rag/answer";
 import { sseResponse } from "@/lib/rag/sse";
 import { assertWithinQuota, incrementMessageUsage } from "@/lib/billing/usage";
+import { isAgentPaused } from "@/lib/billing/paused";
 import type { StreamEvent } from "@/lib/rag/types";
 
 export const maxDuration = 60;
@@ -56,6 +57,11 @@ export async function POST(request: NextRequest) {
   const perDay = await rateLimit(`chat:day:${body.pk}:${ip}`, CHAT_PER_DAY, 24 * 60 * 60_000);
   if (!perDay.ok) {
     return sseResponse(errorStream("rate_limited"), { headers: corsHeaders(origin) });
+  }
+
+  // Agent au-delà de la limite de l'offre (rétrogradation) : même état « resting » que le quota dépassé, sans changer le widget.
+  if (await isAgentPaused(bot.organizationId, bot.organization.plan, bot.id)) {
+    return sseResponse(errorStream("quota_exceeded"), { headers: corsHeaders(origin) });
   }
 
   try {

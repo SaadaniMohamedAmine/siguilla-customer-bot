@@ -5,6 +5,7 @@ import { authenticateApiKey, apiError, ApiError } from "@/lib/api-auth";
 import { answer } from "@/lib/rag/answer";
 import { sseResponse } from "@/lib/rag/sse";
 import { assertWithinQuota, incrementMessageUsage } from "@/lib/billing/usage";
+import { isAgentPaused } from "@/lib/billing/paused";
 import type { StreamEvent, Citation } from "@/lib/rag/types";
 
 export const maxDuration = 60;
@@ -35,6 +36,9 @@ export async function POST(request: NextRequest) {
 
     const bot = await prisma.chatbot.findFirst({ where: { id: body.botId, organizationId: org.id } });
     if (!bot) throw new ApiError(404, "not_found", "Bot not found.");
+
+    if (await isAgentPaused(org.id, org.plan, bot.id))
+      throw new ApiError(403, "agent_paused", "This agent is paused: your plan allows fewer agents. Upgrade or delete some.");
 
     try {
       await assertWithinQuota(org.id);

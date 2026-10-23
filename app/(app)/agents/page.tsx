@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/db";
 import { requireOrgPage } from "@/lib/session";
 import { getPlanLimits } from "@/lib/billing/plans";
+import { splitByPlanLimit } from "@/lib/billing/paused";
 import { daysAgo } from "@/lib/time";
 import { Button } from "@/components/ui/button";
 import { AgentsGrid, type AgentItem } from "@/components/agents/agents-grid";
@@ -31,6 +32,10 @@ export default async function AgentsPage() {
     },
   });
 
+  // Agents au-delà de la limite de l’offre (après une rétrogradation) : les plus anciens restent actifs, les autres sont en pause.
+  const oldestFirst = [...agents].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime() || a.id.localeCompare(b.id));
+  const pausedIds = new Set(splitByPlanLimit(oldestFirst, limits.agents).paused.map((a) => a.id));
+
   const items: AgentItem[] = await Promise.all(
     agents.map(async (agent) => {
       const convFilter = {
@@ -56,6 +61,7 @@ export default async function AgentsPage() {
           description: agent.description,
           status: agent.status,
           publicKey: agent.publicKey,
+          paused: pausedIds.has(agent.id),
         },
         metrics: {
           sources: agent._count.dataSources,
@@ -141,7 +147,17 @@ export default async function AgentsPage() {
           </Link>
         </div>
       ) : (
-        <AgentsGrid items={items} atLimit={atLimit} limit={limits.agents} />
+        <>
+          {pausedIds.size > 0 ? (
+            <div role="status" className="border-warning/40 bg-warning/10 mb-6 flex flex-wrap items-center justify-between gap-3 rounded-md border px-4 py-3">
+              <p className="text-body text-text">{tAgents("pausedBanner", { n: pausedIds.size, limit: limits.agents })}</p>
+              <Link href="/settings?tab=billing" className="text-small text-link underline underline-offset-4">
+                {tAgents("pausedAction")}
+              </Link>
+            </div>
+          ) : null}
+          <AgentsGrid items={items} atLimit={atLimit} limit={limits.agents} />
+        </>
       )}
     </div>
   );
