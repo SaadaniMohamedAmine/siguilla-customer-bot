@@ -31,10 +31,14 @@ async function main() {
     return;
   }
   writeFileSync("demo-urls-backup.json", JSON.stringify({ from: FROM, to: TO, chunks, sources }, null, 1));
-  await prisma.$transaction([
-    ...chunks.map((c) => prisma.chunk.update({ where: { id: c.id }, data: { sourceUrl: c.sourceUrl!.replace(FROM, TO) } })),
-    ...sources.map((s) => prisma.dataSource.update({ where: { id: s.id }, data: { url: s.url!.replace(FROM, TO) } })),
-  ]);
+  // Tout ou rien : une seule transaction interactive, avec un délai large (≈ 50 écritures sur le réseau dépassent les 5 s par défaut).
+  await prisma.$transaction(
+    async (tx) => {
+      for (const c of chunks) await tx.chunk.update({ where: { id: c.id }, data: { sourceUrl: c.sourceUrl!.replace(FROM, TO) } });
+      for (const s of sources) await tx.dataSource.update({ where: { id: s.id }, data: { url: s.url!.replace(FROM, TO) } });
+    },
+    { timeout: 120_000, maxWait: 20_000 },
+  );
   console.log(`Fait. Sauvegarde : demo-urls-backup.json (pour revenir en arrière, échangez --from et --to).`);
   await prisma.$disconnect();
 }
