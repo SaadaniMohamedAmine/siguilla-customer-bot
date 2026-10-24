@@ -296,7 +296,8 @@ async function main() {
       for (const slug of slugs) {
         const md = readMarkdown(dir, slug);
         const title = titleOf(md);
-        const url = `${process.env.NEXT_PUBLIC_APP_URL}${urlPrefix}/${slug}`;
+        // SEED_BASE_URL permet de semer la base de production depuis un poste local sans y écrire des adresses `localhost`.
+        const url = `${process.env.SEED_BASE_URL ?? process.env.NEXT_PUBLIC_APP_URL}${urlPrefix}/${slug}`;
         const source = await prisma.dataSource.create({
           data: {
             chatbotId,
