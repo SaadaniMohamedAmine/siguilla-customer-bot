@@ -3,13 +3,16 @@ import Stripe from "stripe";
 let stripeSingleton: Stripe | null = null;
 
 /** Lazy : évite d'instancier au chargement du module (build) avec une clé absente. */
+export class StripeNotConfiguredError extends Error {
+  constructor() {
+    super("STRIPE_SECRET_KEY is not set — add your Stripe test keys to .env.local before using billing.");
+    this.name = "StripeNotConfiguredError";
+  }
+}
+
 export function getStripe(): Stripe {
   if (!stripeSingleton) {
-    if (!process.env.STRIPE_SECRET_KEY) {
-      throw new Error(
-        "STRIPE_SECRET_KEY is not set — add your Stripe test keys to .env.local before using billing.",
-      );
-    }
+    if (!process.env.STRIPE_SECRET_KEY) throw new StripeNotConfiguredError();
     stripeSingleton = new Stripe(process.env.STRIPE_SECRET_KEY);
   }
   return stripeSingleton;

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import type Stripe from "stripe";
-import { getStripe } from "@/lib/stripe/client";
+import { getStripe, StripeNotConfiguredError } from "@/lib/stripe/client";
 import { prisma } from "@/lib/db";
 
 export const runtime = "nodejs";
@@ -17,7 +17,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const signature = request.headers.get("stripe-signature");
   if (!signature) return NextResponse.json({ error: "Missing signature" }, { status: 400 });
 
-  const stripe = getStripe();
+  let stripe: ReturnType<typeof getStripe>;
+  try {
+    stripe = getStripe();
+  } catch (err) {
+    if (err instanceof StripeNotConfiguredError) return NextResponse.json({ error: "billing_unavailable" }, { status: 503 });
+    throw err;
+  }
   let event: Stripe.Event;
   try {
     event = stripe.webhooks.constructEvent(rawBody, signature, process.env.STRIPE_WEBHOOK_SECRET!);
