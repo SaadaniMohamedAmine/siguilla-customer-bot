@@ -92,7 +92,17 @@ export async function answer(input: AnswerInput): Promise<AnswerResult> {
     return { events: tooLong(), retrieved: [] };
   }
 
-  const retrieved = await retrieve(bot.id, question);
+  let retrieved: Awaited<ReturnType<typeof retrieve>>;
+  try {
+    retrieved = await retrieve(bot.id, question);
+  } catch (error) {
+    // Embedding de la question impossible (Gemini indisponible, clé invalide…) : erreur propre dans le flux, pas un HTTP 500.
+    console.error("[rag] retrieval failed", error);
+    async function* unavailable(): AsyncGenerator<StreamEvent> {
+      yield { type: "error", code: "unavailable" };
+    }
+    return { events: unavailable(), retrieved: [] };
+  }
   const topScore = retrieved[0]?.score ?? null;
   const declined = topScore === null || topScore < threshold;
 

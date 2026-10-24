@@ -9,6 +9,7 @@ const state: {
   streamPieces: string[];
   streamProvider: "groq" | "gemini";
   streamThrows: boolean;
+  retrieveThrows: boolean;
 } = {
   chatbot: { id: "bot1", name: "Bot", instructions: null, similarityThreshold: 0.75 },
   conversation: { id: "conv1", status: "bot", fallbackStreak: 0 },
@@ -17,6 +18,7 @@ const state: {
   streamPieces: [],
   streamProvider: "groq",
   streamThrows: false,
+  retrieveThrows: false,
 };
 
 const messageCreate = vi.fn(async (args: { data: Record<string, unknown> }) => ({
@@ -49,7 +51,12 @@ vi.mock("@/lib/db", () => ({
     analyticsEvent: { create: analyticsEventCreate },
   },
 }));
-vi.mock("@/lib/rag/retrieve", () => ({ retrieve: vi.fn(async () => state.retrieved) }));
+vi.mock("@/lib/rag/retrieve", () => ({
+  retrieve: vi.fn(async () => {
+    if (state.retrieveThrows) throw new Error("embedding service unavailable");
+    return state.retrieved;
+  }),
+}));
 vi.mock("@/lib/ai/orchestrator", () => ({
   streamAnswer: vi.fn(async () => {
     if (state.streamThrows) throw new Error("groq and gemini both down");
@@ -86,6 +93,7 @@ describe("answer()", () => {
     state.streamPieces = [];
     state.streamProvider = "groq";
     state.streamThrows = false;
+    state.retrieveThrows = false;
   });
 
   it("declines below the similarity threshold without ever calling streamAnswer", async () => {
@@ -126,6 +134,14 @@ describe("answer()", () => {
     const saved = messageCreate.mock.calls.at(-1)?.[0].data as { content: string; fallback: boolean };
     expect(saved.content).toBe("Sigilla is a no-code support platform [1].");
     expect(saved.fallback).toBe(false);
+  });
+
+  it("answers with a clean unavailable error, not an exception, when the question cannot be embedded", async () => {
+    state.retrieveThrows = true;
+    const { streamAnswer } = await import("@/lib/ai/orchestrator");
+    const events = await drain(baseInput);
+    expect(events).toEqual([{ type: "error", code: "unavailable" }]);
+    expect(streamAnswer).not.toHaveBeenCalled();
   });
 
   it("silences the bot entirely while a conversation is in human mode", async () => {

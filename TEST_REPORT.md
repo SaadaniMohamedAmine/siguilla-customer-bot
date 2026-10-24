@@ -547,6 +547,62 @@ Vérification sur un build local branché sur l'organisation `test2` (3 agents, 
 Nettoyage : les 2 comptes et leurs organisations supprimés (0 compte `qa+fg-…`, 0 organisation restante). Non testés ici : F3 (jauge de force, UI), F6/F7 (OAuth), F9 (lien de réinitialisation), G7 (déjà fait), tests visuels de la page d'invitation.
 32. **Les routes API renvoyaient 500 pour toute erreur Better Auth** (droits insuffisants, etc.) : `toErrorResponse` garde maintenant le statut de l'erreur.
 
+### Re-tests en production de P7 et G5 (2026-10-24, après déploiement de `ed22645` et `5e85a15`)
+| ID | Statut | Preuve |
+|---|---|---|
+| P7 | ✅ | organisation `test2` : en Pro, 3 agents répondent tous ; passage en Free (limite 1) : l'agent le plus ancien répond, les 2 autres sont bloqués (`quota_exceeded`, état « resting » du widget) ; `/agents` : bandeau « 2 agents are paused: your plan allows 1. » + 2 badges « Paused » + 1 « Live » ; en français « 2 agents sont en pause : votre offre en autorise 1. » ; retour en Pro : agent débloqué, bandeau disparu. Rien n'a été supprimé. Nettoyage : agents de test supprimés, `test2` en Free avec son seul agent |
+| G5 | ✅ | comptes jetables : membre → clés d'API 403 ; administrateur → création 200 et liste 200 ; propriétaire → 200 ; comptes supprimés (0 restant) |
+Le routage `v1/chat` renvoie `agent_paused` (403) seulement quand l'offre autorise l'API et que l'agent dépasse la limite (ex. Team → Pro avec plus de 5 agents) : non testé en prod (cas rare), couvert par la règle unitaire.
+
+### B, K10-K12, L, L18 — landing, Playground et widget (2026-10-24, `<PROD>`, Chrome piloté par script + API avec `test2`)
+| ID | Statut | Preuve |
+|---|---|---|
+| B3, B4 | ✅ | mention « Illustrative brands » présente ; les 4 étapes « How it works » présentes |
+| B6 | ✅ | la landing renvoie vers `/atelier-lune` et `/ledgerline` (cartes cliquables) ; les deux sites chargent leur widget et répondent (voir L2/L4) |
+| B8 | ✅ | « Ask the concierge » ouvre le panneau du widget (confirme aussi que le correctif d'isolation CSS du conteneur n'a pas cassé `openConcierge`) |
+| B9, B10 | ✅ | navigation : `/#how`, `/pricing`, `/docs` en 200, `/demo` en 307 ; pied de page : 9 liens valides, « © 2026 Sigilla » |
+| B14 | ✅ | 404 : « This page has left the house. » + lien « Return home » |
+| K10 | ✅ | l'en-tête d'inspection renvoie les passages retrouvés avec des scores à 4 décimales, décroissants, titre et extrait ; seuil 0,95 → repli ; seuil 0,50 (question en français) → réponse ; seuil enregistré inchangé (0,75) |
+| K11 | ✅ | sans `conversationId` : nouvelle conversation ; avec : même conversation |
+| K12 | ✅ | 17 conversations du Playground en base, **0** dans la boîte de réception, **0** événement d'analytics créé |
+| L2 | ✅ / ⚠️ | Atelier Lune : launcher, accueil « Good evening. How may I help you today? », 3 suggestions, `aria-live` ; **Ledgerline : accueil correct mais 0 suggestion** (le seed n'en définit pas) |
+| L3 | ✅ | flux SSE en plusieurs événements (voir Q4) ; l'échantillonnage navigateur est arrivé après la fin de la réponse (133 caractères en moins de 450 ms) |
+| L4 | ✅ pour les sceaux, ❌ pour les liens | sceau numéroté et « Sealed by 1 source » affichés ; **le lien de la source pointait vers `http://localhost:3000/atelier-lune/shipping`** (voir remarque 33) |
+| L11 | ✅ | rechargement en pleine conversation : 1 message visiteur et 2 du bot restaurés |
+| L12 | ✅ | `localStorage` et `sessionStorage` qui lèvent une exception : le launcher apparaît et le panneau s'ouvre |
+| L13 | ✅ | 390×844 : panneau plein écran (415×899, `position: fixed`), champ de saisie visible, fermeture OK |
+| L14 | ✅ | Tab atteint le launcher, Entrée ouvre, le focus reste piégé dans le panneau sur 12 Tab, Échap ferme et rend le focus au launcher |
+| L18 | ✅ | agent Free avec `showBadge: false` enregistré (PATCH 200) → configuration publique `badge: true` (forcé côté serveur) ; configuration d'origine restaurée |
+33. **Toutes les citations des 3 agents de démonstration (landing, Atelier Lune, Ledgerline) pointaient vers `http://localhost:3000/…` sur la prod** : le seed avait été lancé en local avec `NEXT_PUBLIC_APP_URL=http://localhost:3000` sur la base partagée. Mesure : **26 passages et 22 sources** concernés, aucune autre adresse en base. Conséquence : chaque lien de source cliqué par un visiteur menait à une adresse inexistante (P0 : promesse « chaque réponse est scellée par sa source »). **Correctif de code fait** : `prisma/seed.ts` utilise `SEED_BASE_URL` s'il est défini (documenté dans `.env.example`). **Correction des données appliquée le 2026-10-24 sur autorisation explicite de l’utilisateur** (le premier essai a été refusé par le garde-fou de l’environnement puis le second a échoué sur le délai de 5 s des transactions, sans rien modifier : état vérifié inchangé) : `scripts/fix-demo-urls.ts --apply` en une seule transaction interactive, sauvegarde `demo-urls-backup.json` (ignorée par Git), **26 passages et 22 sources corrigés, 0 restant**. Seul le préfixe a changé, uniquement pour les organisations de démonstration. **Re-test L4 en prod : ✅** Atelier Lune → `https://siguilla-customer-bot.vercel.app/atelier-lune/shipping` (200), Ledgerline → `/ledgerline/security` et `/ledgerline/getting-started` (200), concierge de la landing → `/docs/citations` (200). **Remarque 33 : ✅ corrigée.**
+34. **Le widget de Ledgerline n'a aucune suggestion** : `prisma/seed.ts` définit des suggestions pour la landing et Atelier Lune mais pas pour Ledgerline. *Priorité : basse.*
+
+### X1-X3 — pannes simulées (2026-10-24, **uniquement en local** : `npx next start` avec la variable modifiée dans l'environnement du processus, `.env.local` et la production intacts)
+| ID | Statut | Preuve |
+|---|---|---|
+| K8, X1 | ✅ | `GROQ_MODEL=modele-inexistant-xyz` : journal « Groq streaming failed to start… falling back to Gemini » ; réponse « The Candle Rouge costs 12 euros [1]. » ; `provider: "gemini"` dans l'événement final **et** `Message.provider = "gemini"` en base. (1er essai : Gemini a répondu 503 « forte demande », aléa externe ; la route a alors émis l'erreur propre ; 2e essai concluant) |
+| X2 (chat) | ❌ → corrigé ✅ | `GEMINI_API_KEY` invalide : avant, la question ne pouvait pas être vectorisée et la route répondait **HTTP 500** ; maintenant HTTP 200 avec l'événement `{"type":"error","code":"unavailable"}`, sans texte ni plantage. Test unitaire ajouté (274 tests) |
+| X2 (ingestion) | ✅ | source URL avec Gemini indisponible : statut `failed`, erreur `processing_failed`, 0 chunk, en 6 s ; aucun plantage |
+| X3 | ❌ → corrigé ✅ | `STRIPE_SECRET_KEY` vide : `/`, `/pricing`, `/settings?tab=billing`, `/agents` répondent 200 ; avant, checkout, portail et webhook répondaient **500** ; maintenant **503 `billing_unavailable`** (classe `StripeNotConfiguredError`) |
+35. **Le chat public renvoyait HTTP 500 si la question ne pouvait pas être vectorisée** (corrigé, `53bc7b1`) et **la facturation répondait 500 sans configuration Stripe** (corrigé). Comportement non reproductible en production sans la casser (§0.3) : couvert par les tests unitaires et la simulation locale ; à re-vérifier après déploiement uniquement pour la non-régression.
+
+### H, J, S, L23, K7, P4 — démo, re-synchronisation, français, CLS (2026-10-24, `<PROD>`)
+| ID | Statut | Preuve |
+|---|---|---|
+| H1 | ✅ | `GET /demo` → 307 vers `/agents` en 2,5 s, cookie de session posé, sans formulaire ; 2 agents visibles (Atelier Lune — Concierge, Ledgerline — Help Center) |
+| H4, H5 | ✅ | session de démonstration : création d'agent 403, renommage d'agent 403, renommage de l'organisation par l'API Better Auth 403 |
+| H6 | ✅ | 11 questions du Playground en 10 s : 11 réponses complètes (HTTP 200) ; au-delà de 20 appels par minute : 429 `{"error":"rate_limited"}` propre (testé avec des corps vides, sans appel au modèle). Les 11 conversations de test créées dans l'organisation de démonstration ont été supprimées ensuite (uniquement celles-ci) |
+| H8 | ✅ | « Maison Démo » avant/après les tentatives d'écriture : 2 agents, 205 conversations (hors Playground), 1 « Needs human », 603 événements d'analytics, nom inchangé |
+| J6 | ✅ | crawl de `/` du site de production (robots.txt : `Disallow` sur `/agents`, `/conversations`, `/analytics`, `/settings`, `/api`, `/demo`, `/atelier-lune`, `/ledgerline`) : 18 pages indexées (`/`, `/pricing`, `/docs…`), **0 page interdite indexée** |
+| J12 | ✅ | PDF de 35 pages, re-synchronisation sans changement : 35 chunks, **identifiants identiques** (aucun chunk recréé, donc 0 nouvel embedding) |
+| J13 | ✅ | 2 empreintes de passages falsifiées puis re-synchronisation : **2 passages recréés, 2 obsolètes purgés, 33 sur 35 inchangés**, aucune empreinte falsifiée restante |
+| J14 (suite) | ✅ | blob du PDF de test supprimé avec la source (0 fichier restant dans le store) ; le CDN a encore servi le fichier quelques secondes après la suppression (propagation) |
+| S2 | ✅ (code) | la langue est un cookie `locale` (`path=/`, 1 an), indépendant de la session : conservé après rechargement et déconnexion |
+| S4 | ✅ (code) | dates, heures, temps relatifs et nombres passent par `Intl` avec la langue de l'utilisateur (`formatRelative`, `toLocaleString(locale)`…) ; formats FR du tableau des offres vérifiés (« 2 000 », « 12 $/mois ») |
+| S5 | ✅ | 7 pages en français (`/`, `/pricing`, docs, connexion, inscription, mot de passe oublié, confidentialité) à 390 et 1440 px : aucun débordement horizontal, aucun libellé anglais restant, aucun bouton tronqué (les éléments signalés sont le lien d'accès rapide caché et des cartes à image rognée) |
+| L23 | ✅ | Lighthouse mobile sur `/atelier-lune` : **CLS 0**, aucun décalage de mise en page, performance 94 |
+| K7 | ✅ (unitaire) | `[9]` avec 6 sources retiré de l'affichage et du texte enregistré : `citations.test.ts` (« removes a marker referencing an id beyond the number of sources ») |
+| P4 | ⚠️ partiel | idempotence : test unitaire « ignores an event it has already processed » ; non rejouable en production (le secret de webhook local diffère de celui de Vercel), voir remarque 27 |
+
 ### Dépendances — `npm audit` (2026-10-22)
 23. **Next.js `16.4.0` (version installée) est signalé par `npm audit --omit=dev` comme vulnérable** : plage affectée `16.0.0 – 16.4.0`, correctif `16.4.2` (mise à jour mineure, non majeure). Avis : exécution de code à distance non authentifiée dans l'API d'optimisation d'images avec des SVG (critique, GHSA-2464-fhr4-w9xw), exécution de code à distance dans les fonctions `use cache` renvoyant des tableaux typés (critique, GHSA-673q-mjm6-r5xr), déni de service avec les Server Actions de l'App Router (élevé, GHSA-p3m5-59mp-jv5r). **Effet immédiat constaté :** `next build` en local s'arrête sur ce contrôle de sécurité (il passait plus tôt dans la journée), ce qui bloque la vérification locale des correctifs ci-dessus ; le build Vercel risque la même chose. **Exposition réelle du projet non évaluée** (usage de `use cache`, des images SVG optimisées et des Server Actions à vérifier). *Priorité : haute (sécurité + déploiement).* **Traité (2026-10-22, sur la branche de reporting, à la demande de l'utilisateur) : `next` et `eslint-config-next` passés de `16.4.0` à `16.4.2`**, versions exactes, seuls paquets modifiés dans le lockfile (cœur, binaires par plateforme, config ESLint). Exposition relue dans le code : aucun `use cache`, aucun `next/image` ni configuration d'images, une seule Server Action (`lib/actions/locale.ts`, changement de langue) ; l'exposition réelle paraît limitée, sans garantie (le point d'optimisation d'images existe par défaut). Contrôles : `eslint` 0 erreur (1 avertissement `_request` inutilisé), `typecheck` OK, **223 tests OK**, **`npm run build` OK** (le contrôle de sécurité ne bloque plus), **widget 4,98 kB gzip**, **`npm audit --omit=dev` : 0 vulnérabilité**. Vérifié sur un build de production local : en-têtes de sécurité identiques (CSP, HSTS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy sur les pages ; absents du widget), widget en CORS `*` avec son cache, `/api/chatbots` → 401 `private, no-store`, `/`, `/sign-in`, docs, sitemap, robots, `opengraph-image` → 200, titre de `/sign-in` correct, et **plus aucun défilement horizontal sur `/` et `/pricing` à 390 px** (`scrollWidth` 390). **À re-vérifier après déploiement.**
 

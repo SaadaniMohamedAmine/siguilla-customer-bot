@@ -58,3 +58,4 @@ next-env.d.ts
 
 # Local test credentials (never commit)
 TEST_USERS.md
+demo-urls-backup.json
