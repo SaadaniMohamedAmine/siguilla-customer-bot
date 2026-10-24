@@ -2,6 +2,7 @@ import "server-only";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
+import { APIError } from "better-auth/api";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
@@ -55,6 +56,8 @@ export async function requireOrgApi(opts?: { write?: boolean }) {
 
 export function toErrorResponse(error: unknown) {
   if (error instanceof HttpError) return Response.json({ error: error.message }, { status: error.status });
+  // Erreur renvoyée par Better Auth (droits insuffisants, etc.) : on garde son statut au lieu d’un 500.
+  if (error instanceof APIError) return Response.json({ error: error.message }, { status: error.statusCode });
   // Corps de requête invalide (Zod) : erreur du client, pas du serveur.
   if (error instanceof ZodError) return Response.json({ error: "invalid_request" }, { status: 400 });
   console.error("[api]", error);

@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 import { responseError } from "@/lib/api";
 import { useApiError } from "@/lib/use-api-error";
 
-export type AgentCardAgent = { id: string; name: string; description: string | null; status: string; publicKey: string };
+export type AgentCardAgent = { id: string; name: string; description: string | null; status: string; publicKey: string; paused?: boolean };
 export type AgentCardMetrics = {
   sources: number;
   conversations: number;
@@ -147,9 +147,15 @@ export function AgentCard({
             </span>
             <div className="min-w-0">
               <h2 className="text-h3 text-text truncate font-serif">{agent.name}</h2>
-              <StatusPill tone={agent.status === "live" ? "success" : "neutral"} className="mt-1">
-                {agent.status === "live" ? t("live") : t("draft")}
-              </StatusPill>
+              {agent.paused ? (
+                <StatusPill tone="warning" className="mt-1">
+                  {t("paused")}
+                </StatusPill>
+              ) : (
+                <StatusPill tone={agent.status === "live" ? "success" : "neutral"} className="mt-1">
+                  {agent.status === "live" ? t("live") : t("draft")}
+                </StatusPill>
+              )}
             </div>
           </div>
 

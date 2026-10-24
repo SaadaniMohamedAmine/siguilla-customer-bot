@@ -4,6 +4,8 @@ import { nextCookies } from "better-auth/next-js";
 import { organization } from "better-auth/plugins";
 import { APIError, createAuthMiddleware, getSessionFromCtx } from "better-auth/api";
 import { apiKey } from "@better-auth/api-key";
+import { createAccessControl } from "better-auth/plugins/access";
+import { defaultStatements, adminAc, memberAc, ownerAc } from "better-auth/plugins/organization/access";
 import { prisma } from "@/lib/db";
 import { prepareAccountDeletion } from "@/lib/account";
 import { MEMBERS_LIMIT_CODE, hasFreeSeat } from "@/lib/billing/seats";
@@ -26,6 +28,16 @@ function slugify(input: string) {
     .replace(/[\s_-]+/g, "-")
     .slice(0, 40);
 }
+
+// Rôles d’organisation : par défaut seul le propriétaire peut créer des clés d’API (le plugin refuse l’administrateur avec une
+// erreur), alors que Sigilla réserve la gestion des clés aux propriétaires ET administrateurs ; les membres n’y ont pas accès.
+const API_KEY_ACTIONS = ["create", "read", "update", "delete"] as const;
+const ac = createAccessControl({ ...defaultStatements, apiKey: API_KEY_ACTIONS });
+const orgRoles = {
+  owner: ac.newRole({ ...ownerAc.statements, apiKey: [...API_KEY_ACTIONS] }),
+  admin: ac.newRole({ ...adminAc.statements, apiKey: [...API_KEY_ACTIONS] }),
+  member: ac.newRole({ ...memberAc.statements }),
+};
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
@@ -133,6 +145,8 @@ export const auth = betterAuth({
   },
   plugins: [
     organization({
+      ac,
+      roles: orgRoles,
       creatorRole: "owner",
       // Pas d'email : l'invitation est partagée par lien copiable (UI Phase 6).
       sendInvitationEmail: async () => {},
