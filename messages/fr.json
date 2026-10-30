@@ -45,6 +45,7 @@
     "allowedDomains": "Domaines autorisés",
     "domainPlaceholder": "exemple.com",
     "domainHint": "Appuyez sur Entrée ou sur la virgule pour ajouter un domaine.",
+    "invalidDomain": "Saisissez un domaine valide, par exemple exemple.com ou *.exemple.com.",
     "domainWarning": "Aucune restriction de domaine : votre widget peut être intégré sur n'importe quel site. Ajoutez vos domaines pour le restreindre.",
     "removeDomain": "Retirer {domain}",
     "publishTitle": "Publication",
