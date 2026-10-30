@@ -640,3 +640,8 @@ Parcours réalisé à la main sur la page `/widget-preview` (vrai widget, domain
 ### F6 — connexion Google (2026-10-30, `<PROD>`) : ✅ Validé (testeur : l'utilisateur)
 Depuis `/sign-in`, « Continue with Google » avec le compte Google du testeur : redirection vers `/agents`, session ouverte, organisation personnelle créée automatiquement (« mohamed amine saadani's Org »), plan **Free**, nom et avatar Google affichés en bas à gauche, écran « Your first agent awaits ».
 - Donnée créée en prod : un compte réel (testeur) + son organisation personnelle. À conserver ou supprimer au choix du testeur à la clôture (§6.1).
+
+### F7 — connexion GitHub (2026-10-30, `<PROD>`) : ✅ Validé (testeur : l'utilisateur)
+Depuis `/sign-in`, « Continue with GitHub » : retour sur `/agents`, session ouverte, organisation personnelle créée (« Saadani Mohamed Amine's Org »), plan **Free**, nom et avatar GitHub affichés ; `/settings` affiche le profil (nom, e-mail GitHub, avatar), thème, zone de danger.
+- Le compte GitHub utilise une adresse différente de celle du compte Google (F6) : **deux comptes distincts** créés, aucune liaison automatique attendue. La liaison de comptes à adresse identique n'a pas été testée.
+- Données créées en prod : un 2ᵉ compte réel (testeur) + organisation personnelle, à supprimer ou conserver à la clôture (§6.1).
