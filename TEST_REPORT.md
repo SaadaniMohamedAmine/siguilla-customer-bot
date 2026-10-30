@@ -693,3 +693,9 @@ Bloc HTML : le bouton passe en « Copied » et colle exactement `<script src="ht
 ### U3 — lecteur d'écran, parcours sign-in, création d'agent, table des sources, widget (2026-10-30) : ✅ Validé (testeur : l'utilisateur)
 
 ### L15 — lecteur d'écran, ouverture du widget et question (2026-10-30) : ✅ Validé (testeur : l'utilisateur)
+
+### §6.1 — nettoyage de la production, comptes de test (2026-10-30)
+Suppression **autorisée par le testeur** de 5 comptes de test (simulation d'abord, puis exécution avec les fonctions de l'application `prepareAccountDeletion` + suppression de l'utilisateur) : `mohamedaminesaadani79+qa1@gmail.com` (organisation Pro, abonnement Stripe de test actif), `debug+1791980908361@example.com`, `qa-test@`, `qa-flow@`, `qa-final@example.com`.
+- Base : **11 → 6 comptes** ; restent `test1@`, `test2@`, `test3@sigilla.app` (conservés pour les tests automatiques e2e/tenance jusqu'au smoke final) et les 3 comptes de la démo « Maison Démo » (intacts).
+- Stripe (mode test) : l'abonnement de `+qa1` est **annulé** ; la configuration de facturation n'a pas été modifiée (webhook `https://siguilla-customer-bot.vercel.app/api/webhooks/stripe` toujours `enabled`), les nouveaux comptes peuvent s'abonner normalement. Le client Stripe `+qa1` reste dans le compte de test (sans abonnement).
+- Les comptes Google et GitHub créés pendant F6/F7 n'apparaissaient déjà plus dans la base au moment du nettoyage.
