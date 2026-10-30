@@ -689,3 +689,7 @@ Bloc HTML : le bouton passe en « Copied » et colle exactement `<script src="ht
 - **Remarque 38 (cosmétique) :** la page Stripe Checkout affiche le nom du compte Stripe partagé (« environnement de test Pulse AI Code ») et non « Sigilla » ; à corriger dans les réglages de marque du compte Stripe avant une vraie mise en production (sans effet sur le code).
 - **Remarque 39 (cosmétique) :** le compteur de la carte Notion affiche « 1 pages synced » (pas de pluriel géré) et compte le nombre de sources Notion (1) plutôt que de pages synchronisées (2).
 - **Donnée créée en prod :** abonnement Stripe de test Pro actif pour `+qa1` (client Stripe créé) → **à annuler à la clôture (§6.1)**.
+
+### U3 — lecteur d'écran, parcours sign-in, création d'agent, table des sources, widget (2026-10-30) : ✅ Validé (testeur : l'utilisateur)
+
+### L15 — lecteur d'écran, ouverture du widget et question (2026-10-30) : ✅ Validé (testeur : l'utilisateur)
