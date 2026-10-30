@@ -636,3 +636,7 @@ Parcours réalisé à la main sur la page `/widget-preview` (vrai widget, domain
 - Le message humain (« Test One ») apparaît dans le widget **sans rechargement**.
 - Question suivante du visiteur (« Bonjour ? ») : **aucune réponse du bot** (mode humain respecté).
 - Remarque : une première réponse a été envoyée par erreur dans une ancienne conversation (#DECF, 14/10) ; ce n'est pas un défaut, la liste mélange anciennes et nouvelles conversations.
+
+### F6 — connexion Google (2026-10-30, `<PROD>`) : ✅ Validé (testeur : l'utilisateur)
+Depuis `/sign-in`, « Continue with Google » avec le compte Google du testeur : redirection vers `/agents`, session ouverte, organisation personnelle créée automatiquement (« mohamed amine saadani's Org »), plan **Free**, nom et avatar Google affichés en bas à gauche, écran « Your first agent awaits ».
+- Donnée créée en prod : un compte réel (testeur) + son organisation personnelle. À conserver ou supprimer au choix du testeur à la clôture (§6.1).
