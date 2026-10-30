@@ -19,6 +19,7 @@ import { toast } from "@/components/ui/toast";
 import { CloseIcon, WarningIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { responseError } from "@/lib/api";
+import { DOMAIN_PATTERN } from "@/lib/validation/chatbot";
 import { useApiError } from "@/lib/use-api-error";
 
 type Chatbot = {
@@ -102,6 +103,10 @@ export function AgentSettingsForm({ chatbot }: { chatbot: Chatbot }) {
   function addDomain() {
     const value = domainInput.trim().toLowerCase();
     if (!value) return;
+    if (!DOMAIN_PATTERN.test(value)) {
+      toast.error(t("invalidDomain"));
+      return;
+    }
     if (!domains.includes(value)) setDomains([...domains, value]);
     setDomainInput("");
   }

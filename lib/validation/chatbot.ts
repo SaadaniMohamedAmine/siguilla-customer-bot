@@ -1,6 +1,9 @@
 import { z } from "zod";
 import { WidgetConfig } from "@/lib/widget/config";
 
+/** Domaine autorisé : `exemple.com`, `*.exemple.com`, ou `localhost` (avec port facultatif). Partagé avec le formulaire. */
+export const DOMAIN_PATTERN = /^(\*\.)?[a-z0-9.-]+\.[a-z]{2,}$|^localhost(:\d+)?$/;
+
 export const ChatbotCreate = z.object({
   name: z.string().trim().min(2).max(60),
 });
@@ -16,7 +19,7 @@ export const ChatbotUpdate = z.object({
         .string()
         .trim()
         .toLowerCase()
-        .regex(/^(\*\.)?[a-z0-9.-]+\.[a-z]{2,}$|^localhost(:\d+)?$/),
+        .regex(DOMAIN_PATTERN),
     )
     .max(10)
     .optional(),
