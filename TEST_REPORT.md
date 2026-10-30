@@ -648,3 +648,8 @@ Depuis `/sign-in`, « Continue with GitHub » : retour sur `/agents`, session ou
 
 ### F3 — jauge de force du mot de passe (2026-10-30, `/sign-up` prod) : ✅ Validé (testeur : l'utilisateur)
 Saisie progressive dans le champ mot de passe : `abc` → 1 segment rouge, « Weak » + message « Use at least 8 characters. » ; `abcdefgh` → 1 segment rouge, « Weak » ; `Abcdefgh12` → 2 segments jaunes, « Fair » ; `Abcdefgh12!xyz` → 3 segments verts, « Strong ». La jauge monte à chaque palier, le libellé et la couleur changent.
+
+### F9 — réinitialisation du mot de passe (2026-10-30, `<PROD>`, compte `+qa1`) : ✅ Validé (testeur : l'utilisateur)
+Inscription par e-mail et mot de passe : connexion directe, organisation « QA Reset's Org », plan Free. `/forgot-password` : la demande part (`request-password-reset` → 200, 243 ms) et la page affiche « Check your inbox — If an account exists, a reset link is on its way » (message neutre, sans révéler si le compte existe). `/reset-password` sans jeton valide affiche « This link isn't valid » avec « Request a new link ».
+- **Conception connue (remarque 36) :** aucun fournisseur d'e-mail n'est branché (contrainte « 0 $, aucun nouveau service »). `sendResetPassword` (lib/auth.ts:51) journalise le lien côté serveur au lieu de l'envoyer ; l'absence d'e-mail dans la boîte du testeur est donc le comportement prévu, pas une panne. Pour un vrai utilisateur en production, la réinitialisation n'est pas utilisable de bout en bout tant qu'un fournisseur d'e-mail n'est pas choisi (décision à prendre en phase 10).
+- Donnée créée en prod : compte `mohamedaminesaadani79+qa1@gmail.com` à supprimer à la clôture (§6.1).
