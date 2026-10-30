@@ -88,13 +88,26 @@
 - [x] **`landing.spec.ts`** — passe en live.
 - [x] **Lighthouse** — 100/100/100 (a11y/best practices/SEO) sur landing (desktop+mobile), pricing, docs, sign-in, sign-up, terms, `/agents`, détail agent, analytics, conversations, settings, widget designer. Perf non mesurée (serveur dev non représentatif ; à refaire sur un vrai déploiement).
 - [x] **Audit WCAG** : dashboard (agents, analytics, conversations, settings, widget designer, sources) + 2 nouveaux états widget (fallback/handoff, mobile plein écran). **10 bugs réels trouvés et corrigés** — voir `DECISIONS.md` pour le détail complet (heading-order ×2, touch target trop petit, `<main>` manquant, liens non distinguables, comboboxes sans nom accessible, switches sans nom accessible, input couleur sans label, hydration mismatch ×2, lien cassé `/agents//sources`, contraste du bouton handoff sur une couleur preset). Pas fait : lecteur d'écran réel (VoiceOver/NVDA).
-- [ ] **Injection indirecte** (contenu crawlé contenant la charge malveillante, pas juste la question du visiteur) — seule l'injection directe a été testée.
-- [ ] **`scripts/audit-tenancy.ts`** — pas écrit ; l'isolation a été vérifiée par revue manuelle ciblée + 1 test e2e sur 1 agent, pas un balayage systématique des ~34 routes.
-- [ ] **CI GitHub Actions** (`.github/workflows/ci.yml`) — écrit, jamais déclenché pour de vrai (se déclenchera à l'ouverture de la PR).
-- [ ] **`QA.md`** — matrice créée (16 parcours × dark/light × EN/FR × desktop/mobile), volontairement laissée **non remplie** pour que l'utilisateur la fasse lui-même.
-- [ ] **securityheaders.com** — CSP/HSTS ajoutés et vérifiés sans erreur console en local, jamais validés sur l'outil externe (nécessite un déploiement public).
-- [ ] Couverture Vitest réelle de `lib/**` : ~27%, pas les 70% visés (voir `DECISIONS.md` pour la liste des modules couverts vs non couverts).
+- [x] **Injection indirecte** (K6, 2026-10-21, voir `TEST_REPORT.md`) — (contenu crawlé contenant la charge malveillante, pas juste la question du visiteur) — seule l'injection directe a été testée.
+- [x] **`scripts/audit-tenancy.ts`** (écrit et exécuté contre la prod, W1, 2026-10-21 : 31 sondes, 0 fuite) — — pas écrit ; l'isolation a été vérifiée par revue manuelle ciblée + 1 test e2e sur 1 agent, pas un balayage systématique des ~34 routes.
+- [x] **CI GitHub Actions** (déclenchée à l'ouverture des PR, observée dès la PR #12) — (`.github/workflows/ci.yml`) — écrit, jamais déclenché pour de vrai (se déclenchera à l'ouverture de la PR).
+- [x] **`QA.md`** (parcours couverts par la campagne 9B, voir la section de clôture de `QA.md`) — — matrice créée (16 parcours × dark/light × EN/FR × desktop/mobile), volontairement laissée **non remplie** pour que l'utilisateur la fasse lui-même.
+- [x] **securityheaders.com** (W2, 2026-10-21 : note A, `unsafe-inline` encore présent dans la CSP, remarque 14) — — CSP/HSTS ajoutés et vérifiés sans erreur console en local, jamais validés sur l'outil externe (nécessite un déploiement public).
+- [x] Couverture Vitest réelle de `lib/**` (mesurée en fin de campagne : lib/rag 82,7 %, ingestion 88 %, billing 84 %, public 100 %, rate-limit 80 % ; 274 tests) — : ~27%, pas les 70% visés (voir `DECISIONS.md` pour la liste des modules couverts vs non couverts).
 
 ---
 
 *Phases suivantes (déploiement, portfolio…) : ajouter une section ici à la clôture de chaque phase, avant de passer à la suivante — ne pas attendre la fin du projet pour commencer à lister.*
+
+---
+
+## Clôture Phase 9B — 2026-10-30
+
+Campagne de 216 tests sur la production close (≈ 212 évalués, ≈ 199 réussis, ≈ 13 en échec ou acceptés). Le détail de chaque test est dans `TEST_REPORT.md`. Ce qui reste à faire **après** cette campagne :
+
+- [ ] **Phase 10, performance** : servir statiquement les pages publiques (landing, pricing, docs, connexion) et réduire le JS de première charge (≈ 283 Ko gzip, objectif 130 Ko) ; Lighthouse mobile perf ≥ 95 (V1, V2, A6) — accepté en l'état pour le portfolio (remarques 17 et 31).
+- [ ] **Phase 10, e-mail** : brancher un fournisseur d'e-mail pour la réinitialisation du mot de passe (le lien n'est aujourd'hui que journalisé côté serveur, remarque 36) — contrainte « 0 $, aucun nouveau service » à arbitrer.
+- [ ] **CSP sans `unsafe-inline`** (remarque 14), **seuil de similarité par défaut** trop haut pour le français et les questions de suivi (remarque 28), **webhook Stripe non rejouable** après un échec transitoire (remarque 27), **pages légales** minimales (remarque 25).
+- [ ] **Compte Stripe partagé** : le paiement affiche le nom d'un autre projet (« Pulse AI Code ») ; renommer l'entreprise dans le tableau de bord Stripe avant une vraie mise en production (remarque 38).
+- [ ] **Re-tests de l'e2e** `billing.spec.ts` / `tenancy.spec.ts` après suppression éventuelle de `test1` à `test3` (conservés à la clôture pour cette raison ; mots de passe dans l'historique Git, risque accepté).
+- [ ] **Améliorations cosmétiques** : texte du bandeau des domaines autorisés pour `localhost` (37), pluriel du compteur Notion (39), suggestions de l'agent Ledgerline (34), deux cartes « Talk to a human » empilées (30).

@@ -4,6 +4,20 @@
 
 ---
 
+## Phase 9B — clôture de la campagne de test sur la production — 2026-10-30
+
+**Verdict : GO pour le portfolio, décision du testeur.** 216 tests ; ≈ 212 évalués, ≈ 199 réussis, ≈ 13 en échec ou acceptés (suivi courant ; les ≈ 4 tests restants n'ont pas été identifiés un par un). La règle du plan était « GO seulement si 100 % des P0 et P1 passent » ; elle est **assouplie sur un seul point** par décision explicite du testeur (le projet est une pièce de portfolio, pas un service payant) : le bloc **performance**.
+
+- **Performance (V1 en P0 ; V2, V4, V5, A6 en P1) — acceptée en l'état.** Lighthouse mobile 2026-10-21 : `/` 90, `/pricing` 85, `/docs/getting-started` 94, `/sign-in` 55 (accessibilité 100, bonnes pratiques 96-100, SEO 100) ; JS de première charge ≈ 283 Ko gzip pour 130 Ko visés. Cause établie : pages rendues à la demande + démarrages à froid des fonctions (le délai avant le premier octet varie de 0,5 à 5,7 s pour une même page), pas le front (TBT 30-150 ms, CLS 0). Remède = pages publiques statiques + moins de JS partagé, **reporté en Phase 10** ; décision prise pour ne pas réécrire le rendu à la clôture d'une campagne de test.
+- **Réinitialisation du mot de passe : pas d'e-mail.** Aucun fournisseur d'e-mail (contrainte « 0 $, aucun nouveau service ») : `sendResetPassword` journalise le lien. La page, la demande et la page de lien invalide sont testées (F9, validé par le testeur) ; un vrai utilisateur ne peut pas aller au bout sans fournisseur. À arbitrer en Phase 10.
+- **Pages locales et domaines autorisés.** En production, `localhost` et `127.0.0.1` ne sont acceptés que si `localhost` figure explicitement dans les domaines autorisés de l'agent (un domaine vide n'ouvre que les vrais domaines) ; choix de sécurité conservé, texte du bandeau du designer à nuancer.
+- **Défaut corrigé pendant la clôture :** un domaine invalide dans les réglages d'un agent (ex. `pas un domaine`) était refusé avec le message générique ; le formulaire valide désormais avec le même motif que l'API (`DOMAIN_PATTERN`, `lib/validation/chatbot.ts`) — re-testé en production après déploiement.
+- **Comptes de test supprimés en production** (2026-10-30, avec l'accord du testeur) : `+qa1`, `debug+…`, `qa-test`, `qa-flow`, `qa-final` (abonnement Stripe de test annulé). **Conservés** : `test1` à `test3` (utilisés par les e2e `billing`/`tenancy`, mots de passe dans l'historique Git — risque accepté) et les 3 comptes de la démo. La configuration Stripe (webhook, prix) n'a pas été touchée.
+- **Compte Stripe partagé avec d'autres projets** : le paiement affiche le nom de l'entreprise du compte (« Pulse AI Code ») ; à renommer avant une vraie mise en production (remarque 38).
+- **Seuil de similarité par défaut (0,75)** conservé : trop haut pour le français et les questions de suivi (remarque 28), les utilisateurs peuvent le baisser dans le Playground et les réglages de l'agent (plancher 0,50). Décision de valeur par défaut à revoir en Phase 10.
+
+---
+
 ## Phase 9B — corrections issues du smoke test sur la prod — 2026-10-20
 
 **Branche `feat-testing-prod-version-and-reporting`, un commit par correctif ; `npm run check` vert (209 tests), rien n'est encore déployé ni re-testé sur la prod** (voir le tableau « État des corrections » de `TEST_REPORT.md`). Le smoke test de la PR #12 a fait remonter huit retouches ; choix pris :
