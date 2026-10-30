@@ -630,3 +630,9 @@ Le routage `v1/chat` renvoie `agent_paused` (403) seulement quand l'offre autori
 - Couverture lib/rag, lib/ingestion, lib/billing, lib/public : — %
 - Isolation : **31 sondes, 0 fuite** (W1, `npm run audit:tenancy -- --destructive`, 2026-10-21, contre `<PROD>`)
 - Tests unitaires : 198 (50 au départ de la phase)
+
+### L9 — réponse humaine visible dans le widget (2026-10-30, `<PROD>`, agent « RAG Test », compte `test1`) : ✅ Validé (testeur : l'utilisateur)
+Parcours réalisé à la main sur la page `/widget-preview` (vrai widget, domaine de l'application) : 2 questions hors sujet → 2 replis → bouton « Talk to a human » → conversation « Visitor #75B0 » apparue dans l'inbox (« Handoff requested », « Needs human »), puis réponse « Bonjour, je suis un humain 2 » depuis le dashboard (prise en main automatique, « Test One joined »).
+- Le message humain (« Test One ») apparaît dans le widget **sans rechargement**.
+- Question suivante du visiteur (« Bonjour ? ») : **aucune réponse du bot** (mode humain respecté).
+- Remarque : une première réponse a été envoyée par erreur dans une ancienne conversation (#DECF, 14/10) ; ce n'est pas un défaut, la liste mélange anciennes et nouvelles conversations.
