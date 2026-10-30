@@ -1,8 +1,32 @@
 # Sigilla — TEST_REPORT.md
 
-**Verdict : NO-GO (campagne en cours)** — 2026-10-18 — P0 0/0 · P1 0/0 · P2 0/0
+**Verdict : GO pour le portfolio — décision du testeur (2026-10-30)** — ≈ 212 tests évalués sur 216 (≈ 98 %), ≈ 199 réussis (≈ 92 %), ≈ 13 en échec ou acceptés ; P0 tous validés (V1 : voir ci-dessous) ; voir « Verdict final » ci-dessous.
 
 > Légende : ✅ vérifié sur `<PROD>` · 🟡 code fait, **re-test sur `<PROD>` en attente** · ⏳ à faire · ❌ échec
+
+
+## Verdict final (2026-10-30)
+
+**GO pour le portfolio, décision du testeur.** Le plan exigeait 100 % des P0 et P1 ; un seul point est assoupli, par décision explicite du testeur parce que le projet est une pièce de portfolio : le bloc **performance** (V1 en P0 ; V2, V4, V5, A6 en P1, même cause). **V1 : validé par décision du testeur** (« on est bon, achevé à 100 % »).
+
+| Indicateur | Valeur |
+|---|---|
+| Tests évalués | ≈ 212 / 216 (≈ 98 %) — suivi courant, les ≈ 4 restants n'ont pas été identifiés par identifiant |
+| Réussis | ≈ 199 / 216 (≈ 92 %) |
+| En échec ou acceptés | ≈ 13 (surtout performance, plus quelques P1 acceptés) |
+| Isolation entre organisations | 31 sondes, 0 fuite (W1) |
+| Tests unitaires | 274 verts ; couverture lib/rag 82,7 %, ingestion 88 %, billing 84 %, public 100 %, rate-limit 80 % |
+| Widget | 4,98 kB gzip (limite 5 kB) |
+| Accessibilité | Lighthouse 100 sur les pages mesurées ; axe sombre + clair sur 9 pages ; lecteur d'écran validé par le testeur (U3, L15) |
+| Lighthouse mobile (mesure du 2026-10-21) | `/` 90 · `/pricing` 85 · `/docs/getting-started` 94 · `/sign-in` 55 (perf) ; JS de première charge ≈ 283 Ko gzip pour 130 Ko visés |
+
+**Mesures de performance : non refaites depuis le 2026-10-21** ; la cause est établie (rendu à la demande et démarrages à froid, pas le front) et le remède (pages publiques statiques) est reporté en Phase 10.
+
+**Journée du 2026-10-30 :** L9, F3, F6, F7, F9, I1 à I5, I7, I9, I10, L17, D4, J9 à J11, U3, L15 validés par le testeur (détail plus bas) ; défaut mineur D-I7 corrigé (`80dd659`) et re-testé en production ; comptes de test supprimés (§6.1) ; smoke final ci-dessous.
+
+**Smoke final sur `<PROD>` (2026-10-30, après déploiement) :** 11 pages publiques en 200, `/demo` en 307, `/sitemap.xml` et `/robots.txt` en 200 ; 6 en-têtes de sécurité présents ; webhook Stripe avec fausse signature → 400 ; les 3 agents de démonstration répondent chacun avec une citation (liens en 200, aucun `localhost`) ; re-test D-I7 : « Enter a valid domain… » affiché à la place du message générique, aucune valeur ajoutée, rien enregistré.
+
+**Restent ouverts (Phase 10, non bloquants pour le portfolio) :** remarques 14 (CSP `unsafe-inline`), 17 et 31 (performance et JS), 25 (pages légales), 27 (webhook non rejouable), 28 (seuil par défaut), 30, 34, 36 (pas de fournisseur d'e-mail), 37, 38, 39. Voir `DECISIONS.md` et `PENDING_TESTS.md`.
 
 ## Bloquants (§2)
 Branche `fix-phase-9b-blockers` (PR #12, fusionnée le 2026-10-19). Preuves : `npm run check` vert (198 tests unitaires) + smoke test sur `<PROD>` du 2026-10-19 (voir « Résultats »). Validés en production : BLK-1 (UI), BLK-2, BLK-3, BLK-9, BLK-10. Restent à re-tester : BLK-5 (G7), BLK-6 (I8), BLK-7 (F10) ; BLK-8 validé pour le texte, pas pour la lisibilité du toast.

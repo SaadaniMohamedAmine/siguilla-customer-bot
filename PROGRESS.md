@@ -3,7 +3,7 @@
 > Project 07 / 30 — *Every answer, sealed by its source.*
 > Références : [SIGILLA-PRD.md](./SIGILLA-PRD.md) · [Audit design](./project-07-sigilla-design-audit-recommendations.md)
 
-**Statut global : 129/151 tâches (85 %)** — cadrage, design, fichiers de délégation, Phase 2 (P1) à Phase 7 (P6) terminées, Phase 8 (P7) à 90 % (copy FR du marketing non fait), Phase 9 (P8) à 82 % (tests, sécurité, design, Lighthouse, WCAG et e2e parcours complet faits et vérifiés en direct ; restent l'injection indirecte via contenu crawlé et la QA manuelle, laissée à l'utilisateur).
+**Statut global : 132/151 tâches (87 %)** — cadrage, design, fichiers de délégation, Phase 2 (P1) à Phase 9 (P8) terminées ; la campagne de test 9B (216 tests, 2026-10-18 → 2026-10-30) est close avec le verdict **GO pour le portfolio** (décision du testeur, voir `TEST_REPORT.md`) ; restent la Phase 10 (déploiement définitif, zéro maintenance), la Phase 11 (présentation portfolio) et 1 tâche de la Phase 1.
 
 | Phase | Avancement |
 |---|---|
@@ -16,8 +16,8 @@
 | Phase 5 (P4) — Widget embeddable | 16/16 — 100 % ✅ |
 | Phase 6 (P5) — Dashboard, conversations, handoff, analytics | 15/15 — 100 % ✅ |
 | Phase 7 (P6) — Billing, quotas, API | 12/12 — 100 % ✅ |
-| Phase 8 (P7) — Landing, démo, docs | 9/10 — 90 % |
-| Phase 9 (P8) — Qualité, sécurité, performance | 9/11 — 82 % |
+| Phase 8 (P7) — Landing, démo, docs | 10/10 — 100 % ✅ |
+| Phase 9 (P8) — Qualité, sécurité, performance | 11/11 — 100 % ✅ |
 | Phase 10 — Déploiement et zéro maintenance | 0/10 — 0 % |
 | Phase 11 — Présentation portfolio | 0/8 — 0 % |
 
@@ -161,7 +161,7 @@
 - [x] Pricing (+ bannière carte test Stripe) + FAQ
 - [x] Docs : démarrage, embed, personnalisation, handoff, référence API
 - [x] Pages privacy et terms (requises pour Notion OAuth)
-- [ ] Copy final EN + FR corrigé selon l'audit (aucune promesse hors scope)
+- [x] Copy final EN + FR corrigé selon l'audit (aucune promesse hors scope) — relecture FR validée par l'utilisateur (2026-10-23, `TEST_REPORT.md` S, M, N, O, R)
 - [x] SEO : metadata, Open Graph dynamique, `sitemap.ts`, `robots.ts`, JSON-LD
 - [x] Bannières README dark / light
 
@@ -173,10 +173,12 @@
 - [x] Lighthouse 100/100/100 (a11y/best practices/SEO) sur toutes les pages vérifiées (landing, pricing, docs, sign-in/up, terms, dashboard, analytics, conversations, settings, widget designer) — perf non mesurée (dev server, non représentatif)
 - [x] Audit WCAG 2.1 AA (contrastes, clavier, lecteurs d'écran) dashboard + widget — 10 bugs réels trouvés et corrigés en live (voir DECISIONS.md)
 - [x] Audit sécurité : isolation par org, en-têtes (CSP, HSTS), secrets serveur, signatures webhook, HMAC
-- [ ] Test de prompt injection sur contenu crawlé (indirect — le test direct via message visiteur est fait)
+- [x] Test de prompt injection sur contenu crawlé (indirect) — K6, 2026-10-21 ; le test direct via message visiteur est fait (K5)
 - [x] Test de charge léger du widget (rate limit + quotas)
-- [ ] QA manuelle complète : EN/FR, dark/light, mobile/desktop (laissé volontairement à l'utilisateur)
+- [x] QA manuelle complète : EN/FR, dark/light, mobile/desktop — faite par l'utilisateur pendant la campagne 9B (voir `TEST_REPORT.md` et `QA.md`)
 - [x] Conformité à l'audit design (zéro Material Symbol, zéro token MD3)
+
+**Clôture 9B (2026-10-30).** Campagne de 216 tests sur la production : ≈ 212 évalués, ≈ 199 réussis, ≈ 13 en échec ou acceptés. Isolation entre organisations : 31 sondes, 0 fuite. Widget 4,98 kB gzip, 274 tests unitaires, couverture lib/rag 82,7 %, ingestion 88 %, billing 84 %, public 100 %, rate-limit 80 %. **Le Lighthouse performance (≥ 95) n'est pas atteint** (mobile : `/` 90, `/pricing` 85, `/docs` 94, `/sign-in` 55 ; JS de première charge ≈ 283 Ko gzip pour 130 Ko visés) : cause = rendu à la demande + démarrages à froid ; **accepté par le testeur pour un projet vitrine**, refonte statique reportée en Phase 10. Détail et verdict : `TEST_REPORT.md`.
 
 ## Phase 10 — Déploiement et zéro maintenance
 - [ ] Variables d'env de production sur Vercel
@@ -189,6 +191,8 @@
 - [ ] Test de résilience : Groq indisponible → fallback Gemini
 - [ ] Vercel Analytics + logs structurés
 - [ ] Vérification finale de bout en bout sur l'URL de production
+
+**Reports de la campagne 9B (non comptés dans les 10 tâches ci-dessus) :** rendu statique des pages publiques (Lighthouse perf, JS de première charge, remarques 17 et 31) ; choix d'un fournisseur d'e-mail pour la réinitialisation du mot de passe (remarque 36) ; durcissement de la CSP sans `unsafe-inline` (remarque 14) ; seuil de similarité par défaut (remarque 28) ; pages légales étoffées (remarque 25) ; nom du compte Stripe affiché au paiement (remarque 38).
 
 ## Phase 11 — Présentation portfolio
 - [ ] README premium (bannière, GIF du widget, captures, architecture, stack, décisions, liens)
