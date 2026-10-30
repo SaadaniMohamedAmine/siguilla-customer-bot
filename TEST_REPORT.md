@@ -645,3 +645,6 @@ Depuis `/sign-in`, « Continue with Google » avec le compte Google du testeur :
 Depuis `/sign-in`, « Continue with GitHub » : retour sur `/agents`, session ouverte, organisation personnelle créée (« Saadani Mohamed Amine's Org »), plan **Free**, nom et avatar GitHub affichés ; `/settings` affiche le profil (nom, e-mail GitHub, avatar), thème, zone de danger.
 - Le compte GitHub utilise une adresse différente de celle du compte Google (F6) : **deux comptes distincts** créés, aucune liaison automatique attendue. La liaison de comptes à adresse identique n'a pas été testée.
 - Données créées en prod : un 2ᵉ compte réel (testeur) + organisation personnelle, à supprimer ou conserver à la clôture (§6.1).
+
+### F3 — jauge de force du mot de passe (2026-10-30, `/sign-up` prod) : ✅ Validé (testeur : l'utilisateur)
+Saisie progressive dans le champ mot de passe : `abc` → 1 segment rouge, « Weak » + message « Use at least 8 characters. » ; `abcdefgh` → 1 segment rouge, « Weak » ; `Abcdefgh12` → 2 segments jaunes, « Fair » ; `Abcdefgh12!xyz` → 3 segments verts, « Strong ». La jauge monte à chaque palier, le libellé et la couleur changent.
